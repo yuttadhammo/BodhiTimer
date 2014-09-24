@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.yuttadhammo.BodhiTimer"
+    android:versionCode="52"
+    android:versionName="3.3.2" >
+
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="20" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+        <activity
+            android:name="org.yuttadhammo.BodhiTimer.TimerActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="org.yuttadhammo.BodhiTimer.NNumberPicker"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name="org.yuttadhammo.BodhiTimer.TimerPrefActivity"
+            android:label="@string/preferences"
+            android:theme="@style/Theme.Holo" />
+        <activity
+            android:name="org.yuttadhammo.BodhiTimer.ANumberPicker"
+            android:label="@string/advanced"
+            android:theme="@style/Theme.Holo" />
+
+        <receiver android:name="org.yuttadhammo.BodhiTimer.widget.BodhiAppWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="org.yuttadhammo.BodhiTimer.ACTION_CLOCK_UPDATE" />
+                <action android:name="org.yuttadhammo.BodhiTimer.ACTION_CLOCK_CANCEL" />
+                <action android:name="android.intent.action.TIME_CHANGED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/bodhi_appwidget_info" />
+        </receiver>
+
+        <activity android:name="org.yuttadhammo.BodhiTimer.widget.AppWidgetConfigure" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name="org.yuttadhammo.BodhiTimer.TimerReceiver" />
+    </application>
+
+</manifest>

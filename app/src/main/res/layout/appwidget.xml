@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+	android:id="@+id/mainLayout"
+	android:padding="@dimen/widget_margin"
+	android:background="#00000000"
+	android:layout_height="match_parent">
+	
+	<ImageView
+		android:id="@+id/backImage"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:padding="0dp"
+		android:src="@drawable/widget_background_black_square"
+	/>
+    
+    <ImageView
+		android:id="@+id/mainImage"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center"
+		android:padding="12dp"
+		android:adjustViewBounds="true"
+		android:scaleType="centerInside"
+		android:src="@drawable/leaf"
+	/>
+   	<TextView 
+		android:id="@+id/time"
+	    android:layout_width="match_parent" 
+	    android:layout_height="match_parent" 
+		android:text=""
+		android:textColor="#FFFFFFFF"
+		android:textSize="50sp"
+		android:gravity="center" 
+		/>
+</RelativeLayout>
+

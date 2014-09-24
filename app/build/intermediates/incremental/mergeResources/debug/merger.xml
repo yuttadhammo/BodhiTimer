@@ -1,0 +1,1143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="20.0.0" >
+        <source path="/home/noah/bodhitimer/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/res" />
+    </dataSet>
+    <dataSet config="main" >
+        <source path="/home/noah/bodhitimer/app/src/main/res" >
+            <file
+                name="icon"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/icon.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="leaf"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/leaf.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="preferences"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/preferences.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ensow_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/ensow_black.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ensow"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/ensow.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="stop"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/stop.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="pause_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/pause_black.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="play"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/play.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="preferences_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/preferences_black.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="play_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/play_black.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="set_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/set_black.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="pause"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/pause.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="stop_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/stop_black.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="set"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-hdpi/set.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                path="/home/noah/bodhitimer/app/src/main/res/values-de/strings.xml"
+                qualifiers="de" >
+                <string name="close" >Schließen
+                </string>
+                <string name="zero" >00
+                </string>
+                <string name="about" >Info
+                </string>
+                <string name="hide_time" >Zeit verstecken
+                </string>
+                <string name="play_sound_desc" >Spielt den aktuellen Timer-Ton ab.
+                </string>
+                <string name="fullscreen_desc" >Verstecke die Statusanzeige während das Programm läuft.
+                </string>
+                <string name="H" >Std
+                </string>
+                <string name="warning_title" >Warnung
+                </string>
+                <string name="color_theme" >Kreis Theme
+                </string>
+                <string name="hide_time_desc" >Nicht die verbleibende Zeit anzeigen.
+                </string>
+                <string name="about_title" >Über Bodhi Timer
+                </string>
+                <string name="M" >Min
+                </string>
+                <string name="playing_sound_desc" >Klicken um den aktuellen Ton zu stoppen.
+                </string>
+                <string name="auto_clear_desc" >Benachrichtigung nach ein paar Sekunden automatisch löschen.
+                </string>
+                <string name="play_sound" >Teste Ton
+                </string>
+                <string name="led_notification" >LED Benachrichtigung
+                </string>
+                <string name="override_sound" >Individuellen Ton erzwingen
+                </string>
+                <string name="notification_vibrate" >Vibration bei Benachrichtigung
+                </string>
+                <string name="color_theme_desc" >(Klick das Blatt des Bodhibaums um die Kreisanimation zu wechseln)
+                </string>
+                <string name="playing_sound" >Ton stoppen
+                </string>
+                <string name="about_desc" >Über Bodhi Timer
+                </string>
+                <string name="led_notification_desc" >Lässt die LED während der Benachrichtigung blinken.
+                </string>
+                <string name="notification_sound_desc" >Ton der bei Ablauf des Timers gepielt wird.
+                </string>
+                <string name="bmp_url" >Individuelles Bild auswählen
+                </string>
+                <string name="auto_clear" >Automatisch löschen
+                </string>
+                <string name="Stop" >Zurücksetzen
+                </string>
+                <string name="custom_bmp" >Benutze individuelles Bild
+                </string>
+                <string name="set" >Setzen
+                </string>
+                <string name="prefs" >Einstellungen
+                </string>
+                <string name="Start" >Timer setzen
+                </string>
+                <string name="Notification" >Timer abgelaufen!
+                </string>
+                <string name="notification" >Benachrichtigung
+                </string>
+                <string name="repeat_timer_desc" >Setze Timer nach Ablauf automatisch zurück.
+                </string>
+                <string name="app_name" >Bodhi Timer
+                </string>
+                <string name="repeat_timer" >Wiederhole Timer
+                </string>
+                <string name="pause" >Pause
+                </string>
+                <string name="notification_vibrate_desc" >Vibriere bei Ablauf des Timers.
+                </string>
+                <string name="stay_awake_desc" >Das Telefon nicht einschlafen lassen.
+                </string>
+                <string name="S" >Sek
+                </string>
+                <string name="fullscreen" >Vollbild
+                </string>
+                <string name="notification_sound" >Timer-Ton
+                </string>
+                <string name="visual" >Erscheinungsbild
+                </string>
+                <string name="InputTitle" >Stunde:Min:Sek
+                </string>
+                <string name="warning_button" >OK
+                </string>
+                <string name="stay_awake" >Wach bleiben
+                </string>
+                <string name="warning_text" >Das Telefon ist im lautlosen Modus! Vibration und Töne werden unterdrückt!
+                </string>
+                <string name="nag_dialog_desc" >Zeige ein Popup-Fenster das Telefon auf lautlos gestellt ist.
+                </string>
+                <string name="nag_dialog" >Popup-Fenster
+                </string>
+                <string name="misc" >Sonstiges
+                </string>
+                <string name="override_sound_desc" >Nur auswählen, falls das Setzen eines Tons fehlschlägt.
+                </string>
+            </file>
+            <file
+                name="bowl"
+                path="/home/noah/bodhitimer/app/src/main/res/raw/bowl.ogg"
+                qualifiers=""
+                type="raw" />
+            <file
+                name="bell1"
+                path="/home/noah/bodhitimer/app/src/main/res/raw/bell1.ogg"
+                qualifiers=""
+                type="raw" />
+            <file
+                name="gong"
+                path="/home/noah/bodhitimer/app/src/main/res/raw/gong.ogg"
+                qualifiers=""
+                type="raw" />
+            <file
+                name="bell"
+                path="/home/noah/bodhitimer/app/src/main/res/raw/bell.ogg"
+                qualifiers=""
+                type="raw" />
+            <file
+                name="gallery_item_color"
+                path="/home/noah/bodhitimer/app/src/main/res/color/gallery_item_color.xml"
+                qualifiers=""
+                type="color" />
+            <file
+                name="preferences"
+                path="/home/noah/bodhitimer/app/src/main/res/xml/preferences.xml"
+                qualifiers=""
+                type="xml" />
+            <file
+                name="bodhi_appwidget_info"
+                path="/home/noah/bodhitimer/app/src/main/res/xml/bodhi_appwidget_info.xml"
+                qualifiers=""
+                type="xml" />
+            <file
+                name="leaf"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/leaf.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="preferences"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/preferences.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ensow_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/ensow_black.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ensow"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/ensow.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="stop"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/stop.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="pause_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/pause_black.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="play"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/play.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="preferences_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/preferences_black.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="play_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/play_black.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="set_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/set_black.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="pause"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/pause.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="stop_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/stop_black.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="set"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-mdpi/set.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="icon"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/icon.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="wwhite"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/wwhite.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="leaf"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/leaf.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="preferences"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/preferences.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="wblack"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/wblack.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ensow_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/ensow_black.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ensow"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/ensow.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="stop"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/stop.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="pause_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/pause_black.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="wblacks"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/wblacks.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="play"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/play.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="preferences_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/preferences_black.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="play_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/play_black.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="set_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/set_black.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="wwhites"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/wwhites.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="pause"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/pause.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="stop_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/stop_black.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="set"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-xhdpi/set.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                path="/home/noah/bodhitimer/app/src/main/res/values-v14/dimens.xml"
+                qualifiers="v14" >
+                <dimen name="widget_margin" >0dp
+                </dimen>
+            </file>
+            <file
+                path="/home/noah/bodhitimer/app/src/main/res/values-v11/styles.xml"
+                qualifiers="v11" >
+
+                <style
+                    name="Theme.Holo"
+                    parent="@android:style/Theme.Holo" >
+                </style>
+            </file>
+            <file
+                name="widget_background_white"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable/widget_background_white.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="icon"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable/icon.png"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="glass"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable/glass.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="widget_background_black_square"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable/widget_background_black_square.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="widget_background_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable/widget_background_black.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="widget_background_white_square"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable/widget_background_white_square.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="notification"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable/notification.png"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="about"
+                path="/home/noah/bodhitimer/app/src/main/res/layout/about.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="gallery_item"
+                path="/home/noah/bodhitimer/app/src/main/res/layout/gallery_item.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="adv_list_item"
+                path="/home/noah/bodhitimer/app/src/main/res/layout/adv_list_item.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="adv_number_picker"
+                path="/home/noah/bodhitimer/app/src/main/res/layout/adv_number_picker.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="main"
+                path="/home/noah/bodhitimer/app/src/main/res/layout/main.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="widget_config"
+                path="/home/noah/bodhitimer/app/src/main/res/layout/widget_config.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="appwidget"
+                path="/home/noah/bodhitimer/app/src/main/res/layout/appwidget.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="n_number_picker_dialog"
+                path="/home/noah/bodhitimer/app/src/main/res/layout/n_number_picker_dialog.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="icon"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/icon.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="leaf"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/leaf.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="preferences"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/preferences.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="ensow_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/ensow_black.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="ensow"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/ensow.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="stop"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/stop.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="pause_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/pause_black.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="play"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/play.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="preferences_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/preferences_black.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="play_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/play_black.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="set_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/set_black.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="pause"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/pause.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="stop_black"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/stop_black.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="set"
+                path="/home/noah/bodhitimer/app/src/main/res/drawable-ldpi/set.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                path="/home/noah/bodhitimer/app/src/main/res/values/arrays.xml"
+                qualifiers="" >
+                <string-array name="numbers" >
+                    <item>
+sixty
+                    </item>
+                    <item>
+fifty-nine
+                    </item>
+                    <item>
+fifty-eight
+                    </item>
+                    <item>
+fifty-seven
+                    </item>
+                    <item>
+fifty-six
+                    </item>
+                    <item>
+fifty-five
+                    </item>
+                    <item>
+fifty-four
+                    </item>
+                    <item>
+fifty-three
+                    </item>
+                    <item>
+fifty-two
+                    </item>
+                    <item>
+fifty-one
+                    </item>
+                    <item>
+fifty
+                    </item>
+                    <item>
+fourty-nine
+                    </item>
+                    <item>
+fourty-eight
+                    </item>
+                    <item>
+fourty-seven
+                    </item>
+                    <item>
+fourty-six
+                    </item>
+                    <item>
+fourty-five
+                    </item>
+                    <item>
+fourty-four
+                    </item>
+                    <item>
+fourty-three
+                    </item>
+                    <item>
+fourty-two
+                    </item>
+                    <item>
+fourty-one
+                    </item>
+                    <item>
+fourty
+                    </item>
+                    <item>
+thirty-nine
+                    </item>
+                    <item>
+thirty-eight
+                    </item>
+                    <item>
+thirty-seven
+                    </item>
+                    <item>
+thirty-six
+                    </item>
+                    <item>
+thirty-five
+                    </item>
+                    <item>
+thirty-four
+                    </item>
+                    <item>
+thirty-three
+                    </item>
+                    <item>
+thirty-two
+                    </item>
+                    <item>
+thirty-one
+                    </item>
+                    <item>
+thirty
+                    </item>
+                    <item>
+twenty-nine
+                    </item>
+                    <item>
+twenty-eight
+                    </item>
+                    <item>
+twenty-seven
+                    </item>
+                    <item>
+twenty-six
+                    </item>
+                    <item>
+twenty-five
+                    </item>
+                    <item>
+twenty-four
+                    </item>
+                    <item>
+twenty-three
+                    </item>
+                    <item>
+twenty-two
+                    </item>
+                    <item>
+twenty-one
+                    </item>
+                    <item>
+twenty
+                    </item>
+                    <item>
+nineteen
+                    </item>
+                    <item>
+eighteen
+                    </item>
+                    <item>
+seventeen
+                    </item>
+                    <item>
+sixteen
+                    </item>
+                    <item>
+fifteen
+                    </item>
+                    <item>
+fourteen
+                    </item>
+                    <item>
+thirteen
+                    </item>
+                    <item>
+twelve
+                    </item>
+                    <item>
+eleven
+                    </item>
+                    <item>
+ten
+                    </item>
+                    <item>
+nine
+                    </item>
+                    <item>
+eight
+                    </item>
+                    <item>
+seven
+                    </item>
+                    <item>
+six
+                    </item>
+                    <item>
+five
+                    </item>
+                    <item>
+four
+                    </item>
+                    <item>
+three
+                    </item>
+                    <item>
+two
+                    </item>
+                    <item>
+one
+                    </item>
+                </string-array>
+
+                <array name="themeValues" >
+                    <item>
+"3"
+                    </item>
+                    <item>
+"0"
+                    </item>
+                    <item>
+"1"
+                    </item>
+                    <item>
+"2"
+                    </item>
+                </array>
+                <array name="themes" >
+                    <item>
+Zen Enso
+                    </item>
+                    <item>
+Original Green
+                    </item>
+                    <item>
+Bright Yellow
+                    </item>
+                    <item>
+Sky
+                    </item>
+                </array>
+            </file>
+            <file
+                path="/home/noah/bodhitimer/app/src/main/res/values/colors.xml"
+                qualifiers="" >
+                <color name="themeB5" >#FFE978
+                </color>
+                <color name="dark_gray" >#3C3C3C
+                </color>
+                <color name="tea_fill" >#c9ea91
+                </color>
+                <color name="themeB3" >#C3992E
+                </color>
+                <color name="themeD1" >#000000
+                </color>
+                <color name="themeB4" >#E6C346
+                </color>
+                <color name="themeD2" >#010101
+                </color>
+                <color name="themeB1" >#1E181E
+                </color>
+                <color name="themeB2" >#303730
+                </color>
+                <color name="themeD5" >#010101
+                </color>
+                <color name="themeD3" >#000000
+                </color>
+                <color name="themeD4" >#DDDDDD
+                </color>
+                <color name="themeA3" >#c9ea91
+                </color>
+                <color name="themeA2" >#5A5A5A
+                </color>
+                <color name="themeA1" >#3C3C3C
+                </color>
+                <color name="light_gray" >#5A5A5A
+                </color>
+                <color name="tea_bg" >#101010
+                </color>
+                <color name="themeC2" >#6A737D
+                </color>
+                <color name="themeE1" >#FFFFFF
+                </color>
+                <color name="themeC3" >#9FC5C1
+                </color>
+                <color name="themeE2" >#010101
+                </color>
+                <color name="themeA4" >#7A7A7A
+                </color>
+                <color name="themeC4" >#C1D4C8
+                </color>
+                <color name="themeE3" >#FFFFFF
+                </color>
+                <color name="themeA5" >#5A5A5A
+                </color>
+                <color name="themeC5" >#DEDAB8
+                </color>
+                <color name="themeE4" >#DDDDDD
+                </color>
+                <color name="themeE5" >#010101
+                </color>
+                <color name="themeC1" >#3F3139
+                </color>
+            </file>
+            <file
+                path="/home/noah/bodhitimer/app/src/main/res/values/styles.xml"
+                qualifiers="" >
+
+                <style
+                    name="Theme.Transparent"
+                    parent="android:Theme" >
+                    <item name="android:windowIsTranslucent">
+true
+                    </item>
+                    <item name="android:windowBackground">
+@android:color/transparent
+                    </item>
+                    <item name="android:windowContentOverlay">
+@null
+                    </item>
+                    <item name="android:windowNoTitle">
+true
+                    </item>
+                    <item name="android:windowIsFloating">
+true
+                    </item>
+                </style>
+
+                <color name="shade" >#33000000
+                </color>
+
+                <style
+                    name="NPTheme"
+                    parent="@android:style/Theme.Translucent.NoTitleBar" >
+                    <item name="android:background">
+@color/shade
+                    </item>
+                </style>
+
+                <style
+                    name="Theme.Holo"
+                    parent="@android:style/Theme.Black" >
+                </style>
+            </file>
+            <file
+                path="/home/noah/bodhitimer/app/src/main/res/values/dimens.xml"
+                qualifiers="" >
+                <dimen name="widget_margin" >8dp
+                </dimen>
+                <dimen name="app_minimumsize_h" >400.0dip
+                </dimen>
+                <dimen name="app_minimumsize_w" >400.0dip
+                </dimen>
+                <dimen name="app_defaultsize_h" >400.0dip
+                </dimen>
+                <dimen name="app_defaultsize_w" >400.0dip
+                </dimen>
+            </file>
+            <file
+                path="/home/noah/bodhitimer/app/src/main/res/values/strings.xml"
+                qualifiers="" >
+                <string name="play_sound_desc" >Play the current timer sound.
+                </string>
+                <string name="is_bitmap" >fade-in image
+                </string>
+                <string name="speech_description" >Speak the time you would like to set…
+                </string>
+                <string name="one_hour" > 1 hour
+                </string>
+                <string name="warning_title" >Warning
+                </string>
+                <string name="volume_desc" >as percent of media volume setting
+                </string>
+                <string name="preferences" >Preferences
+                </string>
+                <string name="led_notification" >Enable LED Blinking
+                </string>
+                <string name="theme" >widget theme
+                </string>
+                <string name="x_hours" >" %d hours
+                </string>
+                <string name="pre1" >one
+                </string>
+                <string name="pre2" >two
+                </string>
+                <string name="pre3" >three
+                </string>
+                <string name="pre4" >four
+                </string>
+                <string name="exporting" >Exporting sounds…
+                </string>
+                <string name="Start" >Set Timer
+                </string>
+                <string name="notset" >Select time before setting preset
+                </string>
+                <string name="override_sound" >Force Custom Sound
+                </string>
+                <string name="visual" >Visual
+                </string>
+                <string name="stay_awake_desc" >Don\'t allow the phone to go to sleep.
+                </string>
+                <string name="warning_button" >OK
+                </string>
+                <string name="auto_clear_desc" >Clear notification automatically after a few seconds.
+                </string>
+                <string name="longclick" >Press and hold on button to set preset
+                </string>
+                <string name="hour" >hour
+                </string>
+                <string name="Notification" >Bodhi Timer Finished
+                </string>
+                <string name="nag_dialog" >Popup When Silent
+                </string>
+                <string name="nag_dialog_desc" >When the phone is set to silent show a popup dialog.
+                </string>
+                <string name="export_sounds_desc" >Copy built-in sound files to SD Card
+                </string>
+                <string name="notification_sound_desc" >The sound to play when the timer finishes
+                </string>
+                <string name="adv" >adv
+                </string>
+                <string name="auto_restart_desc" >Restart timer automatically when finished.
+                </string>
+                <string name="fullscreen_desc" >Hide the status bar when timer is running.
+                </string>
+                <string name="led_notification_desc" >Blink LED light during notification.
+                </string>
+                <string name="minute" >minute
+                </string>
+                <string name="about_text" >
+<![CDATA[
+			<body style="text-align:justify;font-size:16px;color:white;background-color:black;>
+				<p><b>Bodhi Timer</b> is an elegant, minimalist countdown timer.  It was designed mainly for use as a meditation timer but can easily be used for any similar purpose.</p>
+				<p><b>Set the time</b> via the clock button in the top left corner.  You may <b>set presets</b> by choosing a time then holding down on one of the three preset buttons.</p>
+				<p>You may alternatively <b>use speech to set the time</b> by long-pressing the clock button.  These behaviours can be swapped via the preference screen.</p>
+				<p><b>To set multiple consecutive timers</b>, long-click on the "adv" button in the time set screen, then create a list of times, or simply use the speech recognition, separating each time with the word "again". For example, say &quot;<b>thirty minutes again one hour</b>&quot; to set two consecutive timers, first for thirty minutes then for one hour.</p>
+				<p><b>Pause/resume</b> via the buttons in the bottom left corner and stop the timer via the button in the bottom right.  <b>Change preferences</b> via the top-right button.</p>
+				<p>Animation may be toggled between a fade-in Bodhi Leaf and one of four circle animations, chosen from the preferences screen.  The Bodhi leaf may also be substituted for a custom image via the preferences screen.</p>
+				<p>You may <b>add a timer widget</b> to your desktop via the App Drawer, or on your lockscreen (Android 4.2+).</p>
+				<p><b>Bodhi Timer</b> is free and open source software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version. <b><a href="http://www.gnu.org/licenses/gpl.html">GPL License</a></b></p>
+				<p>Get the latest version of the source code <b><a href="https://github.com/yuttadhammo/BodhiTimer">on GitHub</a></b>.</p>
+				<p>Bodhi Timer is a fork of the open source TeaTimer app by Ralph Gootee &lt;rgootee@gmail.com&gt;, which is also available <b><a href="https://github.com/ralphleon/TeaTimer">on GitHub</a></b>.</p>
+			</body>
+		]]>
+                </string>
+                <string name="auto_restart" >Auto-Restart Timer
+                </string>
+                <string name="close" >Close
+                </string>
+                <string name="add" >add
+                </string>
+                <string name="save" >save
+                </string>
+                <string name="repeat_timer_desc" >Restart timer automatically on finish.
+                </string>
+                <string name="notification_sound" >Timer Sound
+                </string>
+                <string name="switch_time" >Switch Time Input Mode
+                </string>
+                <string name="stay_awake" >Stay Awake
+                </string>
+                <string name="is_circle" >circle animation
+                </string>
+                <string name="misc" >Misc
+                </string>
+                <string name="x_mins" >" %d minutes
+                </string>
+                <string name="pre_sound" >Start Sound
+                </string>
+                <string name="play_pre_sound_desc" >Play the current start sound.
+                </string>
+                <string name="Stop" >Clear
+                </string>
+                <string name="auto_clear" >Auto-Clear Notification
+                </string>
+                <string name="bmp_or_circle" >Animation Type
+                </string>
+                <string name="notification_vibrate" >Enable Vibration
+                </string>
+                <string name="one_sec" > 1 second
+                </string>
+                <string name="cancel" >cancel
+                </string>
+                <string name="play_sound" >Test Sound
+                </string>
+                <string name="advanced" >Advanced
+                </string>
+                <string name="second" >second
+                </string>
+                <string name="override_sound_desc" >use this only if you are not able to set a custom sound for the timer
+                </string>
+                <string name="notification_vibrate_desc" >Cause the timer to trigger vibration.
+                </string>
+                <string name="about_desc" >About Bodhi Timer
+                </string>
+                <string name="notification" >Notification
+                </string>
+                <string name="about_title" >About Bodhi Timer
+                </string>
+                <string name="set" >Set
+                </string>
+                <string name="about" >About
+                </string>
+                <string name="sound" >Sound
+                </string>
+                <string name="switch_time_desc" >Clicking on clock opens speech input (otherwise on long-click).
+                </string>
+                <string name="bmp_url" >Choose Custom Image
+                </string>
+                <string name="speech_not_recognized" >Speech not recognized
+                </string>
+                <string name="repeat_timer" >Repeat Timer
+                </string>
+                <string name="choose_widget" >Choose Widget Theme:
+                </string>
+                <string name="x_secs" > %d seconds
+                </string>
+                <string name="prefs" >Preferences
+                </string>
+                <string name="playing_sound" >Stop Sound
+                </string>
+                <string name="hide_time" >Hide Time Left
+                </string>
+                <string name="M" >M
+                </string>
+                <string name="color_theme" >Choose Circle Animation
+                </string>
+                <string name="H" >H
+                </string>
+                <string name="timer_for_x" >Timer for%s
+                </string>
+                <string name="playing_sound_desc" >Click to stop the current playing sound.
+                </string>
+                <string name="zero" >00
+                </string>
+                <string name="one_min" > 1 minute
+                </string>
+                <string name="warning_text" >The phone is in silent mode! Notification vibration and sound will be suppressed.
+                </string>
+                <string name="pause" >Pause
+                </string>
+                <string name="S" >S
+                </string>
+                <string name="pre_sound_desc" >Optional sound to play when timer starts
+                </string>
+                <string name="color_theme_desc" >(Click on Bodhi leaf to switch to circle animation)
+                </string>
+                <string name="volume" >Sound Volume
+                </string>
+                <string name="fullscreen" >Full Screen
+                </string>
+                <string name="invert_colors" >Invert UI Colors
+                </string>
+                <string name="app_name" >Bodhi Timer
+                </string>
+                <string name="export_sounds" >Export Sounds
+                </string>
+                <string name="play_pre_sound" >Test Start Sound
+                </string>
+                <string name="InputTitle" >Hour:Min:Sec
+                </string>
+                <string name="hide_time_desc" >Don\'t show time left.
+                </string>
+                <string name="custom_bmp" >Use Custom Image
+                </string>
+            </file>
+            <file
+                path="/home/noah/bodhitimer/app/src/main/res/values-fr/strings.xml"
+                qualifiers="fr" >
+                <string name="about_title" >À propos de Bodhi Timer
+                </string>
+                <string name="notification_vibrate" >Notification vibrante
+                </string>
+                <string name="warning_text" >Le téléphone est en mode silencieux. Vibration et son seront supprimés.
+                </string>
+                <string name="color_theme_desc" >Sélectionner le thème visuel
+                </string>
+                <string name="close" >Fermer
+                </string>
+                <string name="notification_sound_desc" >Effet sonore de la notification.
+                </string>
+                <string name="nag_dialog_desc" >Afficher un message lorsque le téléphone est en mode silencieux.
+                </string>
+                <string name="notification_sound" >Avertissement sonore
+                </string>
+                <string name="visual" >Visuel
+                </string>
+                <string name="color_theme" >Thème
+                </string>
+                <string name="stay_awake_desc" >Empêcher le téléphone de se mettre en veille.
+                </string>
+                <string name="notification_vibrate_desc" >Faire vibrer le téléphone pour la notification.
+                </string>
+                <string name="prefs" >Préférences
+                </string>
+                <string name="Notification" >C\'est l\'heure du thé!
+                </string>
+                <string name="notification" >Notification
+                </string>
+                <string name="warning_title" >Attention
+                </string>
+                <string name="about" >À propos
+                </string>
+                <string name="led_notification" >Notification LED
+                </string>
+                <string name="Stop" >Effacer
+                </string>
+                <string name="InputTitle" >Heure:Min:Sec
+                </string>
+                <string name="misc" >Divers
+                </string>
+                <string name="led_notification_desc" >Faire clignoter les LED pour la notification.
+                </string>
+                <string name="nag_dialog" >Message
+                </string>
+                <string name="stay_awake" >Rester éveillé
+                </string>
+                <string name="warning_button" >Ok
+                </string>
+                <string name="app_name" >Bodhi Timer
+                </string>
+                <string name="Start" >Démarrer
+                </string>
+            </file>
+            <file
+                name="birds"
+                path="/home/noah/bodhitimer/app/src/main/res/raw/birds.ogg"
+                qualifiers=""
+                type="raw" />
+        </source>
+        <source path="/home/noah/bodhitimer/app/build/generated/res/rs/debug" />
+        <source path="/home/noah/bodhitimer/app/build/generated/res/generated/debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/home/noah/bodhitimer/app/src/debug/res" />
+    </dataSet>
+
+</merger>

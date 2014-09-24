@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/home/noah/bodhitimer/app/src/main/res/values-fr/strings.xml -->
+    <eat-comment />
+
+    <string name="InputTitle">Heure:Min:Sec</string>
+    <string name="Notification">C\'est l\'heure du thé!</string>
+    <string name="Start">Démarrer</string>
+    <string name="Stop">Effacer</string>
+    <string name="about">À propos</string>
+    <string name="about_title">À propos de Bodhi Timer</string>
+    <string name="app_name">Bodhi Timer</string>
+    <string name="close">Fermer</string>
+    <string name="color_theme">Thème</string>
+    <string name="color_theme_desc">Sélectionner le thème visuel</string>
+    <string name="led_notification">Notification LED</string>
+    <string name="led_notification_desc">Faire clignoter les LED pour la notification.</string>
+    <string name="misc">Divers</string>
+    <string name="nag_dialog">Message</string>
+    <string name="nag_dialog_desc">Afficher un message lorsque le téléphone est en mode silencieux.</string>
+    <string name="notification">Notification</string>
+    <string name="notification_sound">Avertissement sonore</string>
+    <string name="notification_sound_desc">Effet sonore de la notification.</string>
+    <string name="notification_vibrate">Notification vibrante</string>
+    <string name="notification_vibrate_desc">Faire vibrer le téléphone pour la notification.</string>
+    <string name="prefs">Préférences</string>
+    <string name="stay_awake">Rester éveillé</string>
+    <string name="stay_awake_desc">Empêcher le téléphone de se mettre en veille.</string>
+    <string name="visual">Visuel</string>
+    <string name="warning_button">Ok</string>
+    <string name="warning_text">Le téléphone est en mode silencieux. Vibration et son seront supprimés.</string>
+    <string name="warning_title">Attention</string>
+
+</resources>
