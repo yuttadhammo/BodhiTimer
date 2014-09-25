@@ -66,6 +66,26 @@
         <item>two</item>
         <item>one</item>
     </string-array>
+    <string-array name="sound_names">
+        <item>No Sound</item>
+        <item>Three Bells</item>
+        <item>One Bell</item>
+        <item>Gong</item>
+        <item>Singing Bowl</item>
+        <item>Bird Song</item>
+        <item>System Tone</item>
+        <item>Sound File</item>
+    </string-array>
+    <string-array name="sound_uris">
+        <item/>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell1</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/gong</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bowl</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/birds</item>
+        <item>system</item>
+        <item>file</item>
+    </string-array>
 
     <array name="themeValues">
         <item>"3"</item>
@@ -171,11 +191,13 @@
     <string name="color_theme">Choose Circle Animation</string>
     <string name="color_theme_desc">(Click on Bodhi leaf to switch to circle animation)</string>
     <string name="custom_bmp">Use Custom Image</string>
+    <string name="empty_list">empty</string>
     <string name="export_sounds">Export Sounds</string>
     <string name="export_sounds_desc">Copy built-in sound files to SD Card</string>
     <string name="exporting">Exporting sounds…</string>
     <string name="fullscreen">Full Screen</string>
     <string name="fullscreen_desc">Hide the status bar when timer is running.</string>
+    <string name="get_file_man">Please install a File Manager.</string>
     <string name="hide_time">Hide Time Left</string>
     <string name="hide_time_desc">Don\'t show time left.</string>
     <string name="hour">hour</string>
@@ -220,15 +242,18 @@
     <string name="save">save</string>
     <string name="second">second</string>
     <string name="set">Set</string>
-    <string name="sound">Sound</string>
+    <string name="sound">Sound:</string>
+    <string name="sound_file">Sound File</string>
     <string name="speech_description">Speak the time you would like to set…</string>
     <string name="speech_not_recognized">Speech not recognized</string>
     <string name="stay_awake">Stay Awake</string>
     <string name="stay_awake_desc">Don\'t allow the phone to go to sleep.</string>
     <string name="switch_time">Switch Time Input Mode</string>
     <string name="switch_time_desc">Clicking on clock opens speech input (otherwise on long-click).</string>
+    <string name="sys_def">System Default</string>
+    <string name="sys_tone">System Tone</string>
     <string name="theme">widget theme</string>
-    <string name="timer_for_x">Timer for%s</string>
+    <string name="timer_for_x">Timer for %s</string>
     <string name="visual">Visual</string>
     <string name="volume">Sound Volume</string>
     <string name="volume_desc">as percent of media volume setting</string>

@@ -1,6 +1,7 @@
 package org.yuttadhammo.BodhiTimer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -17,6 +18,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -37,24 +39,24 @@ public class TimerReceiver extends BroadcastReceiver {
 
 		NotificationManager mNM = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        if(player != null) {
+            Log.v(TAG,"Releasing media player...");
+            try{
+                player.release();
+                player = null;
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+                player = null;
+            }
+            finally {
+                // do nothing
+            }
+        }
+
         // Cancel notification and return...
         if (CANCEL_NOTIFICATION.equals(pintent.getAction())) {
             Log.v(TAG,"Cancelling notification...");
-            
-            if(player != null) {
-                Log.v(TAG,"Releasing media player...");
-                try{
-                	player.release();
-                    player = null;
-                }
-                catch(Exception e) {
-                	e.printStackTrace();
-                    player = null;
-                }
-                finally {
-                	// do nothing
-                }
-            }
             
             mNM.cancelAll();
             return;
@@ -74,15 +76,33 @@ public class TimerReceiver extends BroadcastReceiver {
 		CharSequence textLatest = String.format(context.getString(R.string.timer_for_x),setTimeStr);
 
 		// Load the settings 
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean led = settings.getBoolean("LED",true);
-        boolean vibrate = settings.getBoolean("Vibrate",true);
-        String notificationUri = settings.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean led = prefs.getBoolean("LED",true);
+        boolean vibrate = prefs.getBoolean("Vibrate",true);
+        String notificationUri = "";
+
+        boolean useAdvTime = prefs.getBoolean("useAdvTime",false);
+        String advTimeString = prefs.getString("advTimeString","");
+        String[] advTime = null;
+        int advTimeIndex = 1;
+
+        if(useAdvTime && advTimeString.length() > 0) {
+            advTime = advTimeString.split("\\^");
+            advTimeIndex = prefs.getInt("advTimeIndex", 1);
+            String[] thisAdvTime = advTime[advTimeIndex-1].split("#"); // will be of format timeInMs#pathToSound
+
+            if(thisAdvTime.length == 3)
+                notificationUri = thisAdvTime[1];
+            if(notificationUri.equals("sys_def"))
+                notificationUri = prefs.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
+        }
+        else
+            notificationUri = prefs.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
 		
 		if(notificationUri.equals("system"))
-			notificationUri = settings.getString("SystemUri", "");
+			notificationUri = prefs.getString("SystemUri", "");
 		else if(notificationUri.equals("file"))
-			notificationUri = settings.getString("FileUri", "");
+			notificationUri = prefs.getString("FileUri", "");
 
 
 		Log.v(TAG,"notification uri: "+notificationUri);
@@ -100,8 +120,8 @@ public class TimerReceiver extends BroadcastReceiver {
 			uri = Uri.parse(notificationUri);
 		
         // Vibrate
-        if(vibrate){
-        	mBuilder.setDefaults(Notification.DEFAULT_VIBRATE);    	
+        if(vibrate && uri == null){
+        	mBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
         }
 
         // Have a light
@@ -151,7 +171,12 @@ public class TimerReceiver extends BroadcastReceiver {
       		mBuilder.setSound(null);
 			
 	        try {
-	        	int currVolume = settings.getInt("tone_volume", 0);
+                if(player != null && player.isPlaying()) {
+                    player.release();
+                    player = new MediaPlayer();
+                }
+
+	        	int currVolume = prefs.getInt("tone_volume", 0);
 	        	if(currVolume != 0) {
 		        	float log1=(float)(Math.log(100-currVolume)/Math.log(100));
 		            player.setVolume(1-log1,1-log1);
@@ -167,15 +192,19 @@ public class TimerReceiver extends BroadcastReceiver {
 						mp.release();
 					}
 
-		        });
+		                });
 		        player.start();
+                if(vibrate) {
+                    Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(1000);
+                }
 	        } catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
       	}
       	
-        if (settings.getBoolean("AutoClear", false)) {
+        if (prefs.getBoolean("AutoClear", false)) {
             // Determine duration of notification sound
             int duration = 5000;
             if (uri != null) {
@@ -203,18 +232,24 @@ public class TimerReceiver extends BroadcastReceiver {
                          pendingCancelIntent);
         }
 
-        boolean useAdvTime = settings.getBoolean("useAdvTime",false);
-        String advTimeString = settings.getString("advTimeString","");
         if(useAdvTime && advTimeString.length() > 0) {
-            String[] advTime = advTimeString.split("\\^");
+            Intent broadcast = new Intent();
 
-            int advTimeIndex = settings.getInt("advTimeIndex",0);
-
+            SharedPreferences.Editor editor = prefs.edit();
             if(advTimeIndex < advTime.length) {
+                editor.putInt("advTimeIndex", advTimeIndex + 1);
 
                 String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
 
                 int time = Integer.parseInt(thisAdvTime[0]);
+
+                broadcast.putExtra("time", time);
+
+                // Save new time
+                editor.putLong("TimeStamp", new Date().getTime() + time);
+                editor.putInt("LastTime", time);
+
+                // editor.putString("NotificationUri", thisAdvTime[1]);
 
                 mNM.cancelAll();
                 Log.v(TAG, "Starting next iteration of the timer service ...");
@@ -224,24 +259,19 @@ public class TimerReceiver extends BroadcastReceiver {
                 AlarmManager mAlarmMgr = (AlarmManager) context
                         .getSystemService(Context.ALARM_SERVICE);
                 mAlarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
-
-                // Save new time
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putLong("TimeStamp", new Date().getTime() + time);
-
-               // editor.putString("NotificationUri", thisAdvTime[1]);
-
-                editor.putInt("advTimeIndex", advTimeIndex + 1);
-
-                editor.apply();
-
-                Intent broadcast = new Intent();
-                broadcast.putExtra("time", time);
-                broadcast.setAction(BROADCAST_RESET);
-                context.sendBroadcast(broadcast);
             }
+            else {
+                broadcast.putExtra("stop",true);
+                editor.putInt("advTimeIndex", 1);
+
+            }
+            broadcast.setAction(BROADCAST_RESET);
+            context.sendBroadcast(broadcast);
+
+            editor.apply();
+
         }
-        else if (settings.getBoolean("AutoRestart", false)) {
+        else if (prefs.getBoolean("AutoRestart", false)) {
         	int time = pintent.getIntExtra("SetTime", 0);
         	if (time != 0) {
 
@@ -255,8 +285,9 @@ public class TimerReceiver extends BroadcastReceiver {
                 mAlarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
 
                 // Save new time
-                SharedPreferences.Editor editor = settings.edit();
+                SharedPreferences.Editor editor = prefs.edit();
                 editor.putLong("TimeStamp", new Date().getTime() + time);
+                editor.putInt("LastTime", time);
                 editor.apply();
 
                 Intent broadcast = new Intent();
@@ -267,8 +298,7 @@ public class TimerReceiver extends BroadcastReceiver {
             }
         }
 
-        if(!useAdvTime)
-		    mNotificationManager.notify(0, mBuilder.build());
+        mNotificationManager.notify(0, mBuilder.build());
 
         Log.d(TAG,"ALARM: alarm finished");
 

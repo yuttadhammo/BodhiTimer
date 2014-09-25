@@ -13,9 +13,10 @@
         android:layout_height="match_parent" />
     <TextView
         android:id="@+id/sound"
+        android:text="@string/sys_def"
         android:paddingLeft="4dp"
         android:layout_width="0dp"
-        android:layout_weight="0"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:layout_height="match_parent" />
     <Button

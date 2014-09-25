@@ -117,13 +117,13 @@
                 </string>
                 <string name="color_theme_desc" >(Klick das Blatt des Bodhibaums um die Kreisanimation zu wechseln)
                 </string>
-                <string name="playing_sound" >Ton stoppen
-                </string>
                 <string name="about_desc" >Über Bodhi Timer
                 </string>
-                <string name="led_notification_desc" >Lässt die LED während der Benachrichtigung blinken.
+                <string name="playing_sound" >Ton stoppen
                 </string>
                 <string name="notification_sound_desc" >Ton der bei Ablauf des Timers gepielt wird.
+                </string>
+                <string name="led_notification_desc" >Lässt die LED während der Benachrichtigung blinken.
                 </string>
                 <string name="bmp_url" >Individuelles Bild auswählen
                 </string>
@@ -175,9 +175,9 @@
                 </string>
                 <string name="nag_dialog" >Popup-Fenster
                 </string>
-                <string name="misc" >Sonstiges
-                </string>
                 <string name="override_sound_desc" >Nur auswählen, falls das Setzen eines Tons fehlschlägt.
+                </string>
+                <string name="misc" >Sonstiges
                 </string>
             </file>
             <file
@@ -715,6 +715,32 @@ two
 one
                     </item>
                 </string-array>
+                <string-array name="sound_names" >
+                    <item>
+No Sound
+                    </item>
+                    <item>
+Three Bells
+                    </item>
+                    <item>
+One Bell
+                    </item>
+                    <item>
+Gong
+                    </item>
+                    <item>
+Singing Bowl
+                    </item>
+                    <item>
+Bird Song
+                    </item>
+                    <item>
+System Tone
+                    </item>
+                    <item>
+Sound File
+                    </item>
+                </string-array>
 
                 <array name="themeValues" >
                     <item>
@@ -744,6 +770,31 @@ Bright Yellow
 Sky
                     </item>
                 </array>
+
+                <string-array name="sound_uris" >
+                    <item/>
+                    <item>
+android.resource://org.yuttadhammo.BodhiTimer/raw/bell
+                    </item>
+                    <item>
+android.resource://org.yuttadhammo.BodhiTimer/raw/bell1
+                    </item>
+                    <item>
+android.resource://org.yuttadhammo.BodhiTimer/raw/gong
+                    </item>
+                    <item>
+android.resource://org.yuttadhammo.BodhiTimer/raw/bowl
+                    </item>
+                    <item>
+android.resource://org.yuttadhammo.BodhiTimer/raw/birds
+                    </item>
+                    <item>
+system
+                    </item>
+                    <item>
+file
+                    </item>
+                </string-array>
             </file>
             <file
                 path="/home/noah/bodhitimer/app/src/main/res/values/colors.xml"
@@ -754,13 +805,13 @@ Sky
                 </color>
                 <color name="tea_fill" >#c9ea91
                 </color>
-                <color name="themeB3" >#C3992E
-                </color>
                 <color name="themeD1" >#000000
                 </color>
-                <color name="themeB4" >#E6C346
+                <color name="themeB3" >#C3992E
                 </color>
                 <color name="themeD2" >#010101
+                </color>
+                <color name="themeB4" >#E6C346
                 </color>
                 <color name="themeB1" >#1E181E
                 </color>
@@ -794,11 +845,11 @@ Sky
                 </color>
                 <color name="themeC4" >#C1D4C8
                 </color>
-                <color name="themeE3" >#FFFFFF
+                <color name="themeC5" >#DEDAB8
                 </color>
                 <color name="themeA5" >#5A5A5A
                 </color>
-                <color name="themeC5" >#DEDAB8
+                <color name="themeE3" >#FFFFFF
                 </color>
                 <color name="themeE4" >#DDDDDD
                 </color>
@@ -852,13 +903,13 @@ true
                 qualifiers="" >
                 <dimen name="widget_margin" >8dp
                 </dimen>
-                <dimen name="app_minimumsize_h" >400.0dip
-                </dimen>
                 <dimen name="app_minimumsize_w" >400.0dip
                 </dimen>
-                <dimen name="app_defaultsize_h" >400.0dip
+                <dimen name="app_minimumsize_h" >400.0dip
                 </dimen>
                 <dimen name="app_defaultsize_w" >400.0dip
+                </dimen>
+                <dimen name="app_defaultsize_h" >400.0dip
                 </dimen>
             </file>
             <file
@@ -872,11 +923,13 @@ true
                 </string>
                 <string name="one_hour" > 1 hour
                 </string>
-                <string name="warning_title" >Warning
-                </string>
                 <string name="volume_desc" >as percent of media volume setting
                 </string>
+                <string name="warning_title" >Warning
+                </string>
                 <string name="preferences" >Preferences
+                </string>
+                <string name="empty_list" >empty
                 </string>
                 <string name="led_notification" >Enable LED Blinking
                 </string>
@@ -890,17 +943,17 @@ true
                 </string>
                 <string name="pre3" >three
                 </string>
+                <string name="Start" >Set Timer
+                </string>
                 <string name="pre4" >four
                 </string>
                 <string name="exporting" >Exporting sounds…
                 </string>
-                <string name="Start" >Set Timer
-                </string>
                 <string name="notset" >Select time before setting preset
                 </string>
-                <string name="override_sound" >Force Custom Sound
-                </string>
                 <string name="visual" >Visual
+                </string>
+                <string name="override_sound" >Force Custom Sound
                 </string>
                 <string name="stay_awake_desc" >Don\'t allow the phone to go to sleep.
                 </string>
@@ -922,9 +975,9 @@ true
                 </string>
                 <string name="notification_sound_desc" >The sound to play when the timer finishes
                 </string>
-                <string name="adv" >adv
-                </string>
                 <string name="auto_restart_desc" >Restart timer automatically when finished.
+                </string>
+                <string name="adv" >adv
                 </string>
                 <string name="fullscreen_desc" >Hide the status bar when timer is running.
                 </string>
@@ -970,6 +1023,8 @@ true
                 </string>
                 <string name="x_mins" >" %d minutes
                 </string>
+                <string name="get_file_man" >Please install a File Manager.
+                </string>
                 <string name="pre_sound" >Start Sound
                 </string>
                 <string name="play_pre_sound_desc" >Play the current start sound.
@@ -978,9 +1033,9 @@ true
                 </string>
                 <string name="auto_clear" >Auto-Clear Notification
                 </string>
-                <string name="bmp_or_circle" >Animation Type
-                </string>
                 <string name="notification_vibrate" >Enable Vibration
+                </string>
+                <string name="bmp_or_circle" >Animation Type
                 </string>
                 <string name="one_sec" > 1 second
                 </string>
@@ -988,41 +1043,45 @@ true
                 </string>
                 <string name="play_sound" >Test Sound
                 </string>
-                <string name="advanced" >Advanced
-                </string>
                 <string name="second" >second
+                </string>
+                <string name="advanced" >Advanced
                 </string>
                 <string name="override_sound_desc" >use this only if you are not able to set a custom sound for the timer
                 </string>
                 <string name="notification_vibrate_desc" >Cause the timer to trigger vibration.
                 </string>
-                <string name="about_desc" >About Bodhi Timer
-                </string>
                 <string name="notification" >Notification
+                </string>
+                <string name="about_desc" >About Bodhi Timer
                 </string>
                 <string name="about_title" >About Bodhi Timer
                 </string>
-                <string name="set" >Set
+                <string name="sound" >Sound:
                 </string>
                 <string name="about" >About
                 </string>
-                <string name="sound" >Sound
+                <string name="set" >Set
                 </string>
                 <string name="switch_time_desc" >Clicking on clock opens speech input (otherwise on long-click).
                 </string>
-                <string name="bmp_url" >Choose Custom Image
-                </string>
                 <string name="speech_not_recognized" >Speech not recognized
                 </string>
-                <string name="repeat_timer" >Repeat Timer
+                <string name="bmp_url" >Choose Custom Image
                 </string>
-                <string name="choose_widget" >Choose Widget Theme:
+                <string name="sound_file" >Sound File
                 </string>
                 <string name="x_secs" > %d seconds
                 </string>
-                <string name="prefs" >Preferences
+                <string name="choose_widget" >Choose Widget Theme:
+                </string>
+                <string name="repeat_timer" >Repeat Timer
+                </string>
+                <string name="sys_tone" >System Tone
                 </string>
                 <string name="playing_sound" >Stop Sound
+                </string>
+                <string name="prefs" >Preferences
                 </string>
                 <string name="hide_time" >Hide Time Left
                 </string>
@@ -1032,7 +1091,7 @@ true
                 </string>
                 <string name="H" >H
                 </string>
-                <string name="timer_for_x" >Timer for%s
+                <string name="timer_for_x" >Timer for %s
                 </string>
                 <string name="playing_sound_desc" >Click to stop the current playing sound.
                 </string>
@@ -1054,17 +1113,19 @@ true
                 </string>
                 <string name="fullscreen" >Full Screen
                 </string>
-                <string name="invert_colors" >Invert UI Colors
-                </string>
                 <string name="app_name" >Bodhi Timer
                 </string>
-                <string name="export_sounds" >Export Sounds
+                <string name="invert_colors" >Invert UI Colors
                 </string>
                 <string name="play_pre_sound" >Test Start Sound
+                </string>
+                <string name="export_sounds" >Export Sounds
                 </string>
                 <string name="InputTitle" >Hour:Min:Sec
                 </string>
                 <string name="hide_time_desc" >Don\'t show time left.
+                </string>
+                <string name="sys_def" >System Default
                 </string>
                 <string name="custom_bmp" >Use Custom Image
                 </string>
@@ -1116,11 +1177,11 @@ true
                 </string>
                 <string name="led_notification_desc" >Faire clignoter les LED pour la notification.
                 </string>
-                <string name="nag_dialog" >Message
-                </string>
                 <string name="stay_awake" >Rester éveillé
                 </string>
                 <string name="warning_button" >Ok
+                </string>
+                <string name="nag_dialog" >Message
                 </string>
                 <string name="app_name" >Bodhi Timer
                 </string>

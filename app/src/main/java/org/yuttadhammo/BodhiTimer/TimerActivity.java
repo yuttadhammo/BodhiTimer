@@ -49,6 +49,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -98,8 +99,9 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 
 	private TimerAnimation mTimerAnimation;
 	private TextView mTimerLabel;
-	
-	private Bitmap mPlayBitmap,mPauseBitmap;
+    private TextView mAltLabel;
+
+    private Bitmap mPlayBitmap,mPauseBitmap;
 
 	private AlarmManager mAlarmMgr;
 
@@ -133,6 +135,9 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 	
 	private boolean invertColors = false;
     private String advTimeString = "";
+    private String advTimeStringLeft = "";
+    private boolean useAdvTime = false;
+    private int advTimeIndex;
 
     /** Called when the activity is first created.
      *	{ @inheritDoc} 
@@ -178,6 +183,7 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
         		getResources(), R.drawable.play);
    
 		mTimerLabel = (TextView)findViewById(R.id.text_top);
+		mAltLabel = (TextView)findViewById(R.id.text_alt);
 
 		mTimerAnimation = (TimerAnimation)findViewById(R.id.mainImage);
 		mTimerAnimation.setOnClickListener(this);
@@ -268,17 +274,18 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 			widget = true;
 			getIntent().removeExtra("set");
 		}
-    	
-    	try {
-			mTimerAnimation.resetAnimationList();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        
-		if (prefs.getBoolean("hideTime", false))
+
+        animationIndex = prefs.getInt("DrawingIndex",0);
+
+        try {
+            mTimerAnimation.setIndex(animationIndex);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (prefs.getBoolean("hideTime", false))
 			mTimerLabel.setVisibility(View.INVISIBLE);
 		else
 			mTimerLabel.setVisibility(View.VISIBLE);
@@ -337,16 +344,38 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
     	// assumes the data has already been loaded?   
         mLastTime = prefs.getInt("LastTime",0);
 		
-        Log.d(TAG,"Last Time: "+mLastTime);
-       
-        animationIndex = prefs.getInt("DrawingIndex",0);
-        
-        mTimerAnimation.setIndex(animationIndex);
+        Log.d(TAG, "Last Time: " + mLastTime);
         int state = prefs.getInt("State",STOPPED);
     	if(state == STOPPED)
     		cancelNotification();
 
-    	switch(state)
+        checkWhetherAdvTime(false);
+
+        useAdvTime = prefs.getBoolean("useAdvTime", false);
+
+        if(useAdvTime) {
+
+            advTimeString = prefs.getString("advTimeString", "");
+            if (advTimeString != null && advTimeString.length() != 0) {
+                String[] advTime = advTimeString.split("\\^");
+
+                ArrayList<String> arr = new ArrayList<String>();
+
+                int cnt = state == STOPPED ? 1 : prefs.getInt("advTimeIndex", 1);
+
+                advTimeStringLeft = "";
+
+                for (int i = cnt; i < advTime.length; i++) {
+                    arr.add(TimerUtils.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
+                }
+
+                advTimeStringLeft = TextUtils.join("\n", arr);
+                mAltLabel.setText(advTimeStringLeft);
+            }
+        }
+
+
+        switch(state)
         {
         	case RUNNING:
 	        	Log.i(TAG,"Resume while running: "+ prefs.getLong("TimeStamp", -1));
@@ -431,11 +460,15 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
     	}
     	else {
     		float p = (mLastTime != 0) ? (mTime/(float)mLastTime) : 0;
-    		int alpha = (int)(255*p);
+    		int alpha = Math.round(255*p);
+            alpha = alpha > 255 ? 255 : alpha;
+
     		String alphas = Integer.toHexString(alpha);
     		alphas = alphas.length() == 1?"0"+alphas:alphas;
-    		
-    		int color = Color.parseColor("#"+alphas+(invertColors?"FFFFFF":"000000"));
+
+            String colors = "#"+alphas+(invertColors?"FFFFFF":"000000");
+
+    		int color = Color.parseColor(colors);
     		blackView.setBackgroundColor(color);
     		blackView.setVisibility(View.VISIBLE);
     	}
@@ -448,10 +481,6 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
      */
 	public void updateLabel(int time){
 		if(time == 0) {
-            if(prefs.getBoolean("useAdvTime",false)) {
-                mTimerLabel.setText(getString(R.string.adv));
-                return;
-            }
             time = mLastTime;
         }
 		
@@ -485,6 +514,9 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
                 widget = false;
                 return;
             }
+
+            useAdvTime = true;
+
             String[] advTime = advTimeString.split("\\^");
 
             String[] thisAdvTime = advTime[0].split("#"); // will be of format timeInMs#pathToSound
@@ -499,6 +531,17 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
             // set index to 1, because we're doing the first one already
 
             editor.putInt("advTimeIndex",1);
+
+            ArrayList<String> arr = new ArrayList<String>();
+
+            advTimeStringLeft = "";
+
+            for(int i = 1; i < advTime.length; i++) {
+                arr.add(TimerUtils.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
+            }
+
+            advTimeStringLeft = TextUtils.join("\n", arr);
+            mAltLabel.setText(advTimeStringLeft);
 
         }
         else {
@@ -568,8 +611,9 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 	        SharedPreferences.Editor editor = prefs.edit();
 	        editor.putInt("State", state);
 	        editor.apply();
-			mCurrentState = state;		
-		}
+			mCurrentState = state;
+
+        }
 		
 		switch(state)
 		{
@@ -624,12 +668,34 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 		editor.putLong("TimeStamp", timeStamp);
         editor.apply();
 
+        if(useAdvTime) {
+            String[] advTime = advTimeString.split("\\^");
+
+            ArrayList<String> arr = new ArrayList<String>();
+
+            advTimeStringLeft = "";
+
+            advTimeIndex = prefs.getInt("advTimeIndex",1);
+
+            Log.d(TAG,"time index: "+advTimeIndex);
+
+            if(advTimeIndex < advTime.length){
+
+                for (int i = advTimeIndex; i < advTime.length; i++) {
+                    arr.add(TimerUtils.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
+                }
+            }
+            advTimeStringLeft = TextUtils.join("\n", arr);
+        }
+
 		// Start external service
 		if(service) {
             if (LOG)
                 Log.v(TAG, "ALARM: Starting the timer service: " + TimerUtils.time2humanStr(context, mTime));
 
             Intent intent = new Intent(this, TimerReceiver.class);
+            intent.putExtra("SetTime", mTime);
+
             mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             if (Build.VERSION.SDK_INT >= 19) {
                 mAlarmMgr.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + mTime, mPendingIntent);
@@ -659,10 +725,6 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 	private void timerStop()
 	{		
 		if(LOG) Log.v(TAG,"Timer stopped");
-
-        Editor editor = prefs.edit();
-        editor.putInt("advTimeCount", 0);
-        editor.apply();
 
 		clearTime();
         stopAlarmTimer();
@@ -796,8 +858,8 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 						timerResume();
 						break;
 					case STOPPED:
-                        checkWhetherAdvTime();
 						playPreSound();
+                        checkWhetherAdvTime(true);
 						timerStart(mLastTime,true);
 						break;
 				}
@@ -806,6 +868,7 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 			case R.id.cancelButton:
 				
 				stopAlarmTimer();
+
 				// We need to be careful to not cancel timers
 				// that are not running (e.g. if we're paused)
 				switch(mCurrentState){
@@ -820,16 +883,19 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 						clearTime();
 						enterState(STOPPED);
 						break;
-				}	
+				}
+                checkWhetherAdvTime(true);
 
 			    break;
 		}
 	}
 
 
-    private void checkWhetherAdvTime() {
-        if(mCurrentState != STOPPED || !prefs.getBoolean("useAdvTime", false))
+    private void checkWhetherAdvTime(boolean reset) {
+        if(mCurrentState != STOPPED || !prefs.getBoolean("useAdvTime", false)) {
+            mAltLabel.setText("");
             return;
+        }
 
         advTimeString = prefs.getString("advTimeString","");
         if(advTimeString == null || advTimeString.length() == 0)
@@ -842,13 +908,25 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 
         Editor editor = prefs.edit();
 
-        // switch timer to use advanced time
-
-        editor.putBoolean("useAdvTime",true);
-
         // set index to 1, because we're doing the first one already
 
-        editor.putInt("advTimeIndex",1);
+        if(reset) {
+            editor.putInt("advTimeIndex", 1);
+        }
+
+        advTimeIndex = prefs.getInt("advTimeIndex", 1);
+
+        ArrayList<String> arr = new ArrayList<String>();
+
+        advTimeStringLeft = "";
+
+        for(int i = advTimeIndex; i < advTime.length; i++) {
+            arr.add(TimerUtils.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
+        }
+
+        advTimeStringLeft = TextUtils.join("\n", arr);
+
+        mAltLabel.setText(advTimeStringLeft);
 
         int hour = number[0];
         int min = number[1];
@@ -1046,7 +1124,11 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
         @Override
         public void onReceive(Context context, Intent intent) {
             timerStop();
-            Log.d(TAG, "received: "+intent.getIntExtra("time",999));
+            checkWhetherAdvTime(false);
+            Log.d(TAG, "received: " + intent.getIntExtra("time", 999));
+            if(intent.getBooleanExtra("stop",false))
+                return;
+
             mLastTime = intent.getIntExtra("time",mLastTime);
             mTime = mLastTime;
             timerStart(mTime,true);

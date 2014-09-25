@@ -1,8 +1,14 @@
 package org.yuttadhammo.BodhiTimer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -17,7 +23,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +35,7 @@ import java.util.List;
 public class ANumberPicker extends Activity {
 
     private String TAG = "ANumberPicker";
-    private Context context;
+    private Activity context;
     private SharedPreferences prefs;
     private MyAdapter adapter;
     private String advTimeString;
@@ -37,10 +45,20 @@ public class ANumberPicker extends Activity {
     ListView listView;
     private List<String> advTimeList;
 
+    String customUri = "sys_def";
+    String customSound = "";
+    private TextView uriText;
+    private DialogInterface mDialog;
+
+    private final int SELECT_RINGTONE = 0;
+    private final int SELECT_FILE = 1;
+
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         this.context = this;
+
+        customSound = getString(R.string.sys_def);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         advTimeString = prefs.getString("advTimeString","");
@@ -53,6 +71,8 @@ public class ANumberPicker extends Activity {
         hours = (EditText) findViewById(R.id.hours);
         mins = (EditText) findViewById(R.id.mins);
         secs = (EditText) findViewById(R.id.secs);
+
+        uriText = (TextView) findViewById(R.id.uri);
 
         hours.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -84,7 +104,82 @@ public class ANumberPicker extends Activity {
             }
         });
 
+        uriText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+                        context);
+                builderSingle.setIcon(R.drawable.icon);
+
+                //builderSingle.setTitle("Select One Name:-");
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.select_dialog_singlechoice);
+                arrayAdapter.add(getString(R.string.sys_def));
+
+                String[] sounds = getResources().getStringArray(R.array.sound_names);
+
+                for(String s: sounds) {
+                    arrayAdapter.add(s);
+                }
+
+                builderSingle.setNegativeButton(getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                builderSingle.setAdapter(arrayAdapter,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                if(which > 0) {
+                                    customUri = getResources().getStringArray(R.array.sound_uris)[which - 1];
+                                    customSound = getResources().getStringArray(R.array.sound_names)[which - 1];
+                                }
+
+                                if(which == 0) {
+                                    customUri = "sys_def";
+                                    customSound = getString(R.string.sys_def);
+                                }
+                                else if(customUri.equals("system")) {
+                                    mDialog = dialog;
+                                    Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
+                                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
+                                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+                                    context.startActivityForResult(intent, SELECT_RINGTONE);
+                                }
+                                else if(customUri.equals("file")) {
+                                    mDialog = dialog;
+
+                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                    intent.setType("audio/*");
+                                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                                    try {
+                                        context.startActivityForResult(Intent.createChooser(intent, "Select Sound File"), SELECT_FILE);
+                                    }
+                                    catch (ActivityNotFoundException ex) {
+                                        Toast.makeText(context, getString(R.string.get_file_man),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                uriText.setText(arrayAdapter.getItem(which));
+                                dialog.dismiss();
+                            }
+                        });
+                builderSingle.show();
+            }
+        });
+
         listView = (ListView) findViewById(R.id.timesList);
+        TextView emptyText = (TextView)findViewById(android.R.id.empty);
+        listView.setEmptyView(emptyText);
 
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,8 +215,13 @@ public class ANumberPicker extends Activity {
         });
 
 
-        String[] advTime = advTimeString.split("\\^");
-        advTimeList = Arrays.asList(advTime);
+        if(advTimeString.equals("")) {
+            advTimeList = null;
+        }
+        else {
+            String[] advTime = advTimeString.split("\\^");
+            advTimeList = Arrays.asList(advTime);
+        }
         adapter = new MyAdapter(context, R.layout.adv_list_item, advTimeList);
         listView.setAdapter(adapter);
     }
@@ -137,7 +237,7 @@ public class ANumberPicker extends Activity {
 
         int time =  h*60*60*1000 + m*60*1000 + s*1000;
 
-        advTimeString += (advTimeString.length() == 0 ? "":"^")+time+"#"+prefs.getString("NotificationUri","android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
+        advTimeString += (advTimeString.length() == 0 ? "":"^")+time+"#"+customUri+"#"+customSound;
         updateDataSet();
         hours.setText("");
         mins.setText("");
@@ -145,8 +245,13 @@ public class ANumberPicker extends Activity {
     }
 
     private void updateDataSet() {
-        String[] advTime = advTimeString.split("\\^");
-        advTimeList = Arrays.asList(advTime);
+        if(advTimeString.equals("")) {
+            advTimeList = new ArrayList<String>();
+        }
+        else {
+            String[] advTime = advTimeString.split("\\^");
+            advTimeList = Arrays.asList(advTime);
+        }
         adapter = new MyAdapter(context, R.layout.adv_list_item, advTimeList);
         listView.setAdapter(adapter);
         Log.d(TAG, "advTimeString: " + advTimeString);
@@ -182,7 +287,13 @@ public class ANumberPicker extends Activity {
                     time.setText(ts);
                 }
             }
+            if (p.length > 2 && p[2].length() > 0) {
+                TextView sound = (TextView) rowView.findViewById(R.id.sound);
 
+                if (sound != null) {
+                    sound.setText(p[2]);
+                }
+            }
             Button b = (Button) rowView.findViewById(R.id.delete);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -206,4 +317,38 @@ public class ANumberPicker extends Activity {
         }
         updateDataSet();
     }
+
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
+        if (resultCode == Activity.RESULT_OK) {
+            Uri uri = null;
+
+            switch(requestCode) {
+                case SELECT_RINGTONE:
+                    uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                    if (uri != null) {
+                        customUri = uri.toString();
+                        customSound = getString(R.string.sys_tone);
+                    } else {
+                        customUri = "sys_def";
+                        customSound = getString(R.string.sys_def);
+                    }
+                    break;
+                case SELECT_FILE:
+                    // Get the Uri of the selected file
+                    uri = intent.getData();
+                    if (uri != null) {
+                        customUri = uri.toString();
+                        customSound = getString(R.string.sound_file);
+                    } else {
+                        customUri = "sys_def";
+                        customSound = getString(R.string.sys_def);
+                    }
+                    break;
+            }
+            mDialog.dismiss();
+        }
+    }
+
 }

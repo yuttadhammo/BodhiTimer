@@ -14,7 +14,7 @@
 	<string name="warning_title">Warning</string>
 	<string name="warning_button">OK</string>
 	
-	<string name="timer_for_x">Timer for%s</string>
+	<string name="timer_for_x">Timer for %s</string>
 	<string name="x_hours">" %d hours</string>
 	<string name="one_hour"> 1 hour</string>
 	<string name="x_mins">" %d minutes</string>
@@ -38,7 +38,7 @@
 	<!-- Preferences -->
 	
 	<string name="preferences">Preferences</string>
-	<string name="sound">Sound</string>
+	<string name="sound">Sound:</string>
 	<string name="notification_sound">Timer Sound</string>
 	<string name="notification_sound_desc">The sound to play when the timer finishes</string>
 
@@ -156,6 +156,12 @@
     <string name="add">add</string>
     <string name="save">save</string>
     <string name="cancel">cancel</string>
+    <string name="empty_list">empty</string>
+
+    <string name="sys_def">System Default</string>
+    <string name="get_file_man">Please install a File Manager.</string>
+    <string name="sys_tone">System Tone</string>
+    <string name="sound_file">Sound File</string>
 
 </resources>
 

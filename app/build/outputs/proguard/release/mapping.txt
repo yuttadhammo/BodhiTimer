@@ -1792,11 +1792,12 @@ org.yuttadhammo.BodhiTimer.TimerActivity -> org.yuttadhammo.BodhiTimer.TimerActi
     long timeStamp -> y
     boolean invertColors -> z
     java.lang.String advTimeString -> A
-    java.util.Timer mTimer -> B
-    android.os.Handler mHandler -> C
-    int VOICE_RECOGNITION_REQUEST_CODE -> D
-    int NUMBERPICK_REQUEST_CODE -> E
-    android.content.BroadcastReceiver receiver -> F
+    java.lang.String advTimeStringLeft -> B
+    java.util.Timer mTimer -> C
+    android.os.Handler mHandler -> D
+    int VOICE_RECOGNITION_REQUEST_CODE -> E
+    int NUMBERPICK_REQUEST_CODE -> F
+    android.content.BroadcastReceiver receiver -> G
     void onCreate(android.os.Bundle) -> onCreate
     void onPause() -> onPause
     void onResume() -> onResume

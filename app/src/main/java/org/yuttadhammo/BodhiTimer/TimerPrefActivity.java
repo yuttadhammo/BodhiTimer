@@ -81,18 +81,9 @@ public class TimerPrefActivity extends PreferenceActivity
         ListPreference pretone = (ListPreference)findPreference("PreSoundUri");
         preplay = (Preference)findPreference("playPreSound");
 
-    	CharSequence [] entries = {"No Sound","Three Bells","One Bell","Gong","Singing Bowl","Bird Song","System Tone","Sound File"};
-    	final CharSequence [] entryValues = {
-    			"",
-    			"android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell,
-    			"android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell1,
-    			"android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.gong,
-                "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bowl,
-                "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.birds,
-    			"system",
-    			"file"
-    		};
-    	
+    	String [] entries = getResources().getStringArray(R.array.sound_names);
+    	final String [] entryValues = getResources().getStringArray(R.array.sound_uris);
+
     	//Default value
     	if(tone.getValue() == null) tone.setValue((String)entryValues[1]);
     	tone.setDefaultValue((String)entryValues[1]);

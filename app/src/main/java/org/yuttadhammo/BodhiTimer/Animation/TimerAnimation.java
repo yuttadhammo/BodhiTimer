@@ -20,7 +20,7 @@ import android.widget.ImageView;
 
 public class TimerAnimation extends ImageView implements OnClickListener, OnSharedPreferenceChangeListener
 {		
-	Vector<TimerDrawing> mDrawings = null;
+	Vector<TimerDrawing> mDrawings = new Vector<TimerDrawing>();
 	int mIndex = 0;
 	int mLastTime =0,mLastMax=0;
 	
@@ -68,18 +68,13 @@ public class TimerAnimation extends ImageView implements OnClickListener, OnShar
 		setOnClickListener(this);
 	}
 
-	public void resetAnimationList() throws FileNotFoundException {
-		mDrawings = new Vector<TimerDrawing>();
-		mDrawings.add(new BodhiLeaf(mContext));
-		mDrawings.add(new CircleAnimation(mContext));
-	}
-	
-	/**
-	 * TODO eventually we'll want to move this index into the preferences
-	 * @param i
-	 */
-	public void setIndex(int i){
-		if(i < 0 || i >= mDrawings.size()) i = 0;
+	public void setIndex(int i) throws FileNotFoundException {
+
+        mDrawings = new Vector<TimerDrawing>();
+        mDrawings.add(new BodhiLeaf(mContext));
+        mDrawings.add(new CircleAnimation(mContext));
+
+        if(i < 0 || i >= mDrawings.size()) i = 0;
 		mIndex = i;
 		invalidate();
 	}

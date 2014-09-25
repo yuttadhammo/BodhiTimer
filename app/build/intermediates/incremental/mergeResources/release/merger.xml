@@ -1037,7 +1037,7 @@ true
                 </string>
                 <string name="H" >H
                 </string>
-                <string name="timer_for_x" >Timer for%s
+                <string name="timer_for_x" >Timer for %s
                 </string>
                 <string name="playing_sound_desc" >Click to stop the current playing sound.
                 </string>
@@ -1121,11 +1121,11 @@ true
                 </string>
                 <string name="led_notification_desc" >Faire clignoter les LED pour la notification.
                 </string>
-                <string name="nag_dialog" >Message
-                </string>
                 <string name="stay_awake" >Rester éveillé
                 </string>
                 <string name="warning_button" >Ok
+                </string>
+                <string name="nag_dialog" >Message
                 </string>
                 <string name="app_name" >Bodhi Timer
                 </string>

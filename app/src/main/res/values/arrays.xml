@@ -77,5 +77,25 @@
 		<item>three</item>
 		<item>two</item>
 		<item>one</item>        
-    </string-array>      
+    </string-array>
+    <string-array name="sound_names">
+        <item>No Sound</item>
+        <item>Three Bells</item>
+        <item>One Bell</item>
+        <item>Gong</item>
+        <item>Singing Bowl</item>
+        <item>Bird Song</item>
+        <item>System Tone</item>
+        <item>Sound File</item>
+    </string-array>
+    <string-array name="sound_uris">
+        <item></item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell1</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/gong</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bowl</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/birds</item>
+        <item>system</item>
+        <item>file</item>
+    </string-array>
 </resources>

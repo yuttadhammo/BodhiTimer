@@ -228,7 +228,7 @@
     <string name="switch_time">Switch Time Input Mode</string>
     <string name="switch_time_desc">Clicking on clock opens speech input (otherwise on long-click).</string>
     <string name="theme">widget theme</string>
-    <string name="timer_for_x">Timer for%s</string>
+    <string name="timer_for_x">Timer for %s</string>
     <string name="visual">Visual</string>
     <string name="volume">Sound Volume</string>
     <string name="volume_desc">as percent of media volume setting</string>

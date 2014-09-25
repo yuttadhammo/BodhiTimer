@@ -24,14 +24,26 @@
     
    	<TextView 
 		android:id="@+id/text_top"
-	    android:layout_width="match_parent" 
-	    android:layout_height="match_parent"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
 	    android:textColor="#FFFFFF"
 		android:text=""
 		android:textSize="50sp"
-		android:gravity="center" 
+		android:gravity="center"
+        android:layout_centerInParent="true"
 		/>
-	<ImageButton 
+    <TextView
+        android:id="@+id/text_alt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:text=""
+        android:textSize="30sp"
+        android:gravity="center"
+        android:singleLine="false"
+        android:layout_below="@id/text_top"
+        />
+	<ImageButton
 	    android:contentDescription="@string/set"
 		android:id="@+id/setButton"
 		android:layout_height="wrap_content"

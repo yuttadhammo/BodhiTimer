@@ -179,6 +179,7 @@ org.yuttadhammo.BodhiTimer.R$id: int sec_cont
 org.yuttadhammo.BodhiTimer.R$id: int secs
 org.yuttadhammo.BodhiTimer.R$id: int setButton
 org.yuttadhammo.BodhiTimer.R$id: int sound
+org.yuttadhammo.BodhiTimer.R$id: int text_alt
 org.yuttadhammo.BodhiTimer.R$id: int text_hour
 org.yuttadhammo.BodhiTimer.R$id: int text_min
 org.yuttadhammo.BodhiTimer.R$id: int text_sec
