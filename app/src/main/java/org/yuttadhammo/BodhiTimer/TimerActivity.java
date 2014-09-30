@@ -155,6 +155,9 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
         scheduleClient = new ScheduleClient(this);
         scheduleClient.doBindService();
 
+        Intent intent = new Intent(this, TimerReceiver.class);
+        mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         setContentView(R.layout.main);
         //RelativeLayout main = (RelativeLayout)findViewById(R.id.mainLayout);
         
