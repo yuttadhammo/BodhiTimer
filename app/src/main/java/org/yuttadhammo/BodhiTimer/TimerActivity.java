@@ -13,6 +13,7 @@ package org.yuttadhammo.BodhiTimer;
 
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.NNumberPicker.OnNNumberPickedListener;
+import org.yuttadhammo.BodhiTimer.Service.ScheduleClient;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -139,6 +140,8 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
     private boolean useAdvTime = false;
     private int advTimeIndex;
 
+    private ScheduleClient scheduleClient;
+
     /** Called when the activity is first created.
      *	{ @inheritDoc} 
      */
@@ -147,6 +150,11 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
     public void onCreate(Bundle savedInstanceState)
     {    	
     	super.onCreate(savedInstanceState);
+
+        // Create a new service client and bind our activity to this service
+        scheduleClient = new ScheduleClient(this);
+        scheduleClient.doBindService();
+
         setContentView(R.layout.main);
         //RelativeLayout main = (RelativeLayout)findViewById(R.id.mainLayout);
         
@@ -397,7 +405,16 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 		widget = false;
 	}
 
+    @Override
+    protected void onStop() {
+        // When our activity is stopped ensure we also stop the connection to the service
+        // this stops us leaking our activity into the system *bad*
+        Log.d(TAG,"service stopped");
 
+        if(scheduleClient != null)
+            scheduleClient.doUnbindService();
+        super.onStop();
+    }
 
     /** {@inheritDoc} */
     public void onClick(View v)
@@ -737,16 +754,8 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
             if (LOG)
                 Log.v(TAG, "ALARM: Starting the timer service: " + TimerUtils.time2humanStr(context, mTime));
 
-            Intent intent = new Intent(this, TimerReceiver.class);
-            intent.putExtra("SetTime", mTime);
+            scheduleClient.setAlarmForNotification(mTime);
 
-            mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            if (Build.VERSION.SDK_INT >= 19) {
-                mAlarmMgr.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + mTime, mPendingIntent);
-            }
-            else {
-                mAlarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + mTime, mPendingIntent);
-            }
 		}
 
 		mTimer.schedule(
