@@ -26,8 +26,10 @@
 	<string name="minute">minute</string>
 	<string name="second">second</string>
 	<string name="speech_description">Speak the time you would like to set…</string>
-	<string name="speech_not_recognized">Speech not recognized</string>
-							
+    <string name="speech_not_recognized">Speech not recognized</string>
+    <string name="adv_speech_recognized">Recognized time list</string>
+    <string name="speech_recognized">Recognized: %s</string>
+
 	<string name="prefs">Preferences</string>
 
 	<!-- Widget -->

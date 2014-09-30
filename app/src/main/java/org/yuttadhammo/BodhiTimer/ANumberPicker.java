@@ -216,7 +216,7 @@ public class ANumberPicker extends Activity {
 
 
         if(advTimeString.equals("")) {
-            advTimeList = null;
+            advTimeList = new ArrayList<String>();
         }
         else {
             String[] advTime = advTimeString.split("\\^");

@@ -98,15 +98,14 @@ public class TimerReceiver extends BroadcastReceiver {
         }
         else
             notificationUri = prefs.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
-		
-		if(notificationUri.equals("system"))
+
+        Log.v(TAG,"notification uri: "+notificationUri);
+
+        if(notificationUri.equals("system"))
 			notificationUri = prefs.getString("SystemUri", "");
 		else if(notificationUri.equals("file"))
 			notificationUri = prefs.getString("FileUri", "");
 
-
-		Log.v(TAG,"notification uri: "+notificationUri);
-		
 		NotificationCompat.Builder mBuilder =
 	        new NotificationCompat.Builder(context.getApplicationContext())
 	        .setSmallIcon(R.drawable.notification)

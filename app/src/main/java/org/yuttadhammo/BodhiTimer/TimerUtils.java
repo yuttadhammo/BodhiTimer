@@ -143,7 +143,7 @@ public class TimerUtils {
         for(String string : strings) {
             int atime = str2timeString(activity,string);
             if(atime > 0)
-                stringArray.add(atime+"#");
+                stringArray.add(atime+"#sys_def#"+activity.getString(R.string.sys_def));
         }
 
         out = TextUtils.join("^",stringArray);

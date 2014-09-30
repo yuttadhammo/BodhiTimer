@@ -485,7 +485,10 @@ public class TimerPrefActivity extends PreferenceActivity
     }    
     @Override
     public void onResume() {
-		if(settings.getBoolean("FULLSCREEN", false))
+
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        if(settings.getBoolean("FULLSCREEN", false))
 			getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN, LayoutParams.FLAG_FULLSCREEN);
     	else
         	getWindow().clearFlags(LayoutParams.FLAG_FULLSCREEN); 

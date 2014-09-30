@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.yuttadhammo.BodhiTimer"
-      android:versionName="4.1.0" android:versionCode="56">
+      android:versionName="4.1.2" android:versionCode="58">
     
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -36,7 +36,8 @@
         <activity android:label="@string/advanced"
             android:name=".ANumberPicker"
             android:theme="@style/Theme.Holo"
-            />
+            android:windowSoftInputMode="adjustResize"
+        />
 		<receiver android:name=".widget.BodhiAppWidgetProvider" >
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -54,6 +55,6 @@
 		    </intent-filter>
 		</activity>  	 	
 		<receiver android:name=".TimerReceiver" ></receiver>
-  	
+        <service android:name=".Service.ScheduleService" />
 	</application>
 </manifest> 

@@ -351,30 +351,6 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 
         checkWhetherAdvTime(false);
 
-        useAdvTime = prefs.getBoolean("useAdvTime", false);
-
-        if(useAdvTime) {
-
-            advTimeString = prefs.getString("advTimeString", "");
-            if (advTimeString != null && advTimeString.length() != 0) {
-                String[] advTime = advTimeString.split("\\^");
-
-                ArrayList<String> arr = new ArrayList<String>();
-
-                int cnt = state == STOPPED ? 1 : prefs.getInt("advTimeIndex", 1);
-
-                advTimeStringLeft = "";
-
-                for (int i = cnt; i < advTime.length; i++) {
-                    arr.add(TimerUtils.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
-                }
-
-                advTimeStringLeft = TextUtils.join("\n", arr);
-                mAltLabel.setText(advTimeStringLeft);
-            }
-        }
-
-
         switch(state)
         {
         	case RUNNING:
@@ -421,13 +397,78 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 		widget = false;
 	}
 
-	@SuppressLint("NewApi")
-	private void setLowProfile() {
-    	if(android.os.Build.VERSION.SDK_INT >= 14) {
-	    	View rootView = getWindow().getDecorView();
-	    	rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-        }		
-	}
+
+
+    /** {@inheritDoc} */
+    public void onClick(View v)
+    {
+
+        setLowProfile();
+
+        if(mCurrentState == STOPPED) {
+            if(prePlayer != null) {
+                prePlayer.release();
+            }
+
+            cancelNotification();
+        }
+
+        switch(v.getId()){
+            case R.id.setButton:
+                Log.i("Timer","set button clicked");
+                if(prefs.getBoolean("SwitchTimeMode", false))
+                    startVoiceRecognitionActivity();
+                else
+                    showNumberPicker();
+                break;
+
+            case R.id.prefButton:
+                Log.i("Timer","pref button clicked");
+                widget = false;
+                startActivity(new Intent(this, TimerPrefActivity.class));
+                break;
+
+
+            case R.id.pauseButton:
+                switch(mCurrentState){
+                    case RUNNING:
+                        timerPause();
+                        break;
+                    case PAUSED:
+                        timerResume();
+                        break;
+                    case STOPPED:
+                        playPreSound();
+                        checkWhetherAdvTime(true);
+                        timerStart(mLastTime,true);
+                        break;
+                }
+                break;
+
+            case R.id.cancelButton:
+
+                stopAlarmTimer();
+
+                // We need to be careful to not cancel timers
+                // that are not running (e.g. if we're paused)
+                switch(mCurrentState){
+                    case RUNNING:
+                        if(prePlayer != null) {
+                            prePlayer.release();
+                        }
+                        cancelNotification();
+                        timerStop();
+                        break;
+                    case PAUSED:
+                        clearTime();
+                        enterState(STOPPED);
+                        break;
+                }
+                checkWhetherAdvTime(true);
+
+                break;
+        }
+    }
 
 	@Override
     public boolean onKeyDown(int keycode, KeyEvent e) {
@@ -438,6 +479,14 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
             return true;
         }
         return super.onKeyDown(keycode, e);
+    }
+
+    @SuppressLint("NewApi")
+    private void setLowProfile() {
+        if(android.os.Build.VERSION.SDK_INT >= 14) {
+            View rootView = getWindow().getDecorView();
+            rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        }
     }
 
     private void showNumberPicker() {
@@ -532,13 +581,10 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 
             editor.putInt("advTimeIndex",1);
 
-            ArrayList<String> arr = new ArrayList<String>();
 
             advTimeStringLeft = "";
 
-            for(int i = 1; i < advTime.length; i++) {
-                arr.add(TimerUtils.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
-            }
+            ArrayList<String> arr = makeAdvLeftArray(advTime);
 
             advTimeStringLeft = TextUtils.join("\n", arr);
             mAltLabel.setText(advTimeStringLeft);
@@ -681,9 +727,7 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 
             if(advTimeIndex < advTime.length){
 
-                for (int i = advTimeIndex; i < advTime.length; i++) {
-                    arr.add(TimerUtils.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
-                }
+                arr = makeAdvLeftArray(advTime);
             }
             advTimeStringLeft = TextUtils.join("\n", arr);
         }
@@ -818,81 +862,8 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 		}
 	}
 
-
-	/** {@inheritDoc} */
-	public void onClick(View v) 
-	{
-
-		setLowProfile();
-		
-		if(mCurrentState == STOPPED) {
-			if(prePlayer != null) {
-				prePlayer.release();
-			}
-
-			cancelNotification();
-		}
-		
-		switch(v.getId()){
-			case R.id.setButton:
-				Log.i("Timer","set button clicked");
-				if(prefs.getBoolean("SwitchTimeMode", false))
-					startVoiceRecognitionActivity();
-				else
-					showNumberPicker();
-				break;
-
-			case R.id.prefButton:
-				Log.i("Timer","pref button clicked");
-				widget = false;
-				startActivity(new Intent(this, TimerPrefActivity.class));	
-				break;
-			
-			
-			case R.id.pauseButton:
-				switch(mCurrentState){
-					case RUNNING:
-						timerPause();
-						break;
-					case PAUSED:
-						timerResume();
-						break;
-					case STOPPED:
-						playPreSound();
-                        checkWhetherAdvTime(true);
-						timerStart(mLastTime,true);
-						break;
-				}
-				break;
-			
-			case R.id.cancelButton:
-				
-				stopAlarmTimer();
-
-				// We need to be careful to not cancel timers
-				// that are not running (e.g. if we're paused)
-				switch(mCurrentState){
-					case RUNNING:
-						if(prePlayer != null) {
-							prePlayer.release();
-						}
-						cancelNotification();
-						timerStop();
-						break;
-					case PAUSED:
-						clearTime();
-						enterState(STOPPED);
-						break;
-				}
-                checkWhetherAdvTime(true);
-
-			    break;
-		}
-	}
-
-
     private void checkWhetherAdvTime(boolean reset) {
-        if(mCurrentState != STOPPED || !prefs.getBoolean("useAdvTime", false)) {
+        if(!prefs.getBoolean("useAdvTime", false)) {
             mAltLabel.setText("");
             return;
         }
@@ -912,17 +883,14 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 
         if(reset) {
             editor.putInt("advTimeIndex", 1);
+            advTimeIndex = 1;
         }
-
-        advTimeIndex = prefs.getInt("advTimeIndex", 1);
-
-        ArrayList<String> arr = new ArrayList<String>();
+        else
+            advTimeIndex = prefs.getInt("advTimeIndex", 1);
 
         advTimeStringLeft = "";
 
-        for(int i = advTimeIndex; i < advTime.length; i++) {
-            arr.add(TimerUtils.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
-        }
+        ArrayList<String> arr = makeAdvLeftArray(advTime);
 
         advTimeStringLeft = TextUtils.join("\n", arr);
 
@@ -954,6 +922,17 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
         editor.apply();
     }
 
+    private ArrayList<String> makeAdvLeftArray(String[] advTime) {
+        ArrayList<String> arr = new ArrayList<String>();
+        for(int i = advTimeIndex; i < advTime.length; i++) {
+            if(arr.size() >= 2 && advTime.length - i > 1) {
+                arr.add("...");
+                break;
+            }
+            arr.add(TimerUtils.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
+        }
+        return arr;
+    }
 
 
     /**
@@ -1085,7 +1064,7 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
                         Editor editor = prefs.edit();
                         editor.putString("advTimeString",complexTime);
                         editor.apply();
-                        Toast.makeText(this, match, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.adv_speech_recognized), Toast.LENGTH_SHORT).show();
                         int[] values = {-1,-1,-1};
                         onNumbersPicked(values);
                         break;
@@ -1095,8 +1074,8 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
                     int speechTime = TimerUtils.str2timeString(this, match);
                     if (speechTime != 0) {
                         int[] values = TimerUtils.time2Array(speechTime);
-                        //Toast.makeText(this, TimerUtils.time2humanStr(this, speechTime), Toast.LENGTH_SHORT).show();
-                        Toast.makeText(this, match, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, String.format(getString(R.string.speech_recognized),TimerUtils.time2humanStr(this, speechTime)), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(this, match, Toast.LENGTH_SHORT).show();
                         onNumbersPicked(values);
                         break;
                     } else
