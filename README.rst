@@ -41,3 +41,4 @@ Features
 - vibration and LED blinking options
 
 - free and open source: https://github.com/yuttadhammo/BodhiTimer
+- licensed under the GPL 3+: https://www.gnu.org/licenses/gpl.html
