@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,7 +19,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -25,7 +26,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -33,18 +33,19 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.provider.MediaStore;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.webkit.WebView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class TimerPrefActivity extends PreferenceActivity 
 {
 	private static final String TAG = TimerPrefActivity.class.getSimpleName();
-	private SharedPreferences settings;
+	private SharedPreferences prefs;
 	private Context context;
 	private static Activity activity;
 	private MediaPlayer player;
@@ -59,7 +60,9 @@ public class TimerPrefActivity extends PreferenceActivity
 	
 	private String lastToneType;
 	private String lastPreToneType;
-	
+
+    private TextToSpeech tts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +70,10 @@ public class TimerPrefActivity extends PreferenceActivity
         context = this;
         activity = this;
 
-        settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		if(settings.getBoolean("FULLSCREEN", false))
+        tts = new TextToSpeech(this,null);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		if(prefs.getBoolean("FULLSCREEN", false))
 			getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN, LayoutParams.FLAG_FULLSCREEN);
        
         // Load the preferences from an XML resource
@@ -92,15 +97,15 @@ public class TimerPrefActivity extends PreferenceActivity
 		tone.setEntryValues(entryValues);
 
     	if(pretone.getValue() == null) pretone.setValue((String)entryValues[0]);
-    	pretone.setDefaultValue((String)entryValues[0]);
+    	pretone.setDefaultValue((String) entryValues[0]);
     	
     	pretone.setEntries(entries);
     	pretone.setEntryValues(entryValues);
 		
     	player = new MediaPlayer();
     	
-    	lastToneType = settings.getString("NotificationUri", (String)entryValues[1]);
-    	lastPreToneType = settings.getString("NotificationUri", (String)entryValues[0]);
+    	lastToneType = prefs.getString("NotificationUri", (String)entryValues[1]);
+    	lastPreToneType = prefs.getString("NotificationUri", (String)entryValues[0]);
     	
     	tone.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
@@ -135,6 +140,28 @@ public class TimerPrefActivity extends PreferenceActivity
     	                        Toast.LENGTH_SHORT).show();
     	            }
     	        }
+    	    	else if(newValue.toString().equals("tts")) {
+                    final EditText input = new EditText(context);
+                    input.setText(prefs.getString("tts_string",""));
+                    new AlertDialog.Builder(context)
+                            .setTitle(getString(R.string.input_text))
+                            .setMessage(getString(R.string.input_text_desc))
+                            .setView(input)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    if(input.getText().toString().equals(""))
+                                        return;
+
+                                    Editor editor = prefs.edit();
+                                    editor.putString("tts_string", input.getText().toString());
+                                    editor.apply();
+                                }
+                            }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // Do nothing.
+                        }
+                    }).show();
+    	        }
     	    	else
     	            lastToneType = (String) newValue;
     	    		
@@ -144,152 +171,184 @@ public class TimerPrefActivity extends PreferenceActivity
     	});
 
     	play.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-    		@Override
-			public boolean onPreferenceClick(final Preference preference) {
-    			if(player.isPlaying()) {
-    				player.stop();
-    				play.setTitle(context.getString(R.string.play_sound));
-    				play.setSummary(context.getString(R.string.play_sound_desc));
-    				preplay.setTitle(context.getString(R.string.play_pre_sound));
-    				preplay.setSummary(context.getString(R.string.play_pre_sound_desc));
-    				return false;
-    			}
-    			
+
+            @Override
+            public boolean onPreferenceClick(final Preference preference) {
+                if (player.isPlaying()) {
+                    player.stop();
+                    play.setTitle(context.getString(R.string.play_sound));
+                    play.setSummary(context.getString(R.string.play_sound_desc));
+                    preplay.setTitle(context.getString(R.string.play_pre_sound));
+                    preplay.setSummary(context.getString(R.string.play_pre_sound_desc));
+                    return false;
+                }
+
                 try {
-                    String notificationUri = settings.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
-					if(notificationUri.equals("system"))
-						notificationUri = settings.getString("SystemUri", "");
-					else if(notificationUri.equals("file"))
-						notificationUri = settings.getString("FileUri", "");
-					if(notificationUri.equals(""))
-						return false;
-					Log.v(TAG,"Playing Uri: "+notificationUri);
+                    String notificationUri = prefs.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
+                    if (notificationUri.equals("system"))
+                        notificationUri = prefs.getString("SystemUri", "");
+                    else if (notificationUri.equals("file"))
+                        notificationUri = prefs.getString("FileUri", "");
+                    else if (notificationUri.equals("tts")) {
+                        notificationUri = "";
+                        final String ttsString = prefs.getString("tts_string",context.getString(R.string.timer_done));
+                        tts.speak(ttsString, TextToSpeech.QUEUE_ADD, null);
+                    }
+                    if (notificationUri.equals(""))
+                        return false;
+                    Log.v(TAG, "Playing Uri: " + notificationUri);
                     player.reset();
-    	        	int currVolume = settings.getInt("tone_volume", 0);
-    	        	if(currVolume != 0) {
-    		        	float log1=(float)(Math.log(100-currVolume)/Math.log(100));
-    		            player.setVolume(1-log1,1-log1);
-    	        	}
+                    int currVolume = prefs.getInt("tone_volume", 0);
+                    if (currVolume != 0) {
+                        float log1 = (float) (Math.log(100 - currVolume) / Math.log(100));
+                        player.setVolume(1 - log1, 1 - log1);
+                    }
                     player.setDataSource(context, Uri.parse(notificationUri));
                     player.prepare();
-	                player.setLooping(false);
-	                player.setOnCompletionListener(new OnCompletionListener(){
-						@Override
-						public void onCompletion(MediaPlayer mp) {
-		    				preference.setTitle(context.getString(R.string.play_sound));
-		    				preference.setSummary(context.getString(R.string.play_sound_desc));
-						}
-	                });
-	                player.start();
-					preference.setTitle(context.getString(R.string.playing_sound));
-					preference.setSummary(context.getString(R.string.playing_sound_desc));
+                    player.setLooping(false);
+                    player.setOnCompletionListener(new OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            preference.setTitle(context.getString(R.string.play_sound));
+                            preference.setSummary(context.getString(R.string.play_sound_desc));
+                        }
+                    });
+                    player.start();
+                    preference.setTitle(context.getString(R.string.playing_sound));
+                    preference.setSummary(context.getString(R.string.playing_sound_desc));
                 } catch (IOException e) {
-					// TODO Auto-generated catch block
-                	
-					e.printStackTrace();
-				}
-				
-                return false;
-			}
+                    // TODO Auto-generated catch block
 
-    	});
+                    e.printStackTrace();
+                }
+
+                return false;
+            }
+
+        });
   
     	// pre play tone
     	
        	
     	pretone.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-    	    	if(player.isPlaying()) {
-    				play.setTitle(context.getString(R.string.play_sound));
-    				play.setSummary(context.getString(R.string.play_sound_desc));
-    				preplay.setTitle(context.getString(R.string.play_pre_sound));
-    				preplay.setSummary(context.getString(R.string.play_pre_sound_desc));
 
-    	    		player.stop();      
-    	    	}
-    	    	if(newValue.toString().equals("system")) {
-    	    		Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-    	    		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
-    	    		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
-    	    		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
-    	    		activity.startActivityForResult(intent, SELECT_PRE_RINGTONE);
-    	    	}
-    	    	else if(newValue.toString().equals("file")) {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (player.isPlaying()) {
+                    play.setTitle(context.getString(R.string.play_sound));
+                    play.setSummary(context.getString(R.string.play_sound_desc));
+                    preplay.setTitle(context.getString(R.string.play_pre_sound));
+                    preplay.setSummary(context.getString(R.string.play_pre_sound_desc));
 
-    	            Intent intent = new Intent(Intent.ACTION_GET_CONTENT); 
-    	            intent.setType("audio/*"); 
-    	            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    player.stop();
+                }
+                if (newValue.toString().equals("system")) {
+                    Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+                    activity.startActivityForResult(intent, SELECT_PRE_RINGTONE);
+                } else if (newValue.toString().equals("file")) {
 
-    	            try {
-    	            	activity.startActivityForResult(Intent.createChooser(intent, "Select Sound File"), SELECT_PRE_FILE);
-    	            } 
-    	            catch (ActivityNotFoundException ex) {
-    	                Toast.makeText(activity, "Please install a File Manager.", 
-    	                        Toast.LENGTH_SHORT).show();
-    	            }
-    	        }
-    	    	else
-    	            lastPreToneType = (String) newValue;
-    	    		
-				return true;
-			}
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("audio/*");
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-    	});
+                    try {
+                        activity.startActivityForResult(Intent.createChooser(intent, "Select Sound File"), SELECT_PRE_FILE);
+                    } catch (ActivityNotFoundException ex) {
+                        Toast.makeText(activity, "Please install a File Manager.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else if(newValue.toString().equals("tts")) {
+                    final EditText input = new EditText(context);
+                    input.setText(prefs.getString("tts_string_pre",""));
+
+                    new AlertDialog.Builder(context)
+                            .setTitle(getString(R.string.input_text))
+                            .setMessage(getString(R.string.input_text_desc))
+                            .setView(input)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    if(input.getText().toString().equals(""))
+                                        return;
+
+                                    Editor editor = prefs.edit();
+                                    editor.putString("tts_string_pre",input.getText().toString());
+                                    editor.apply();
+                                }
+                            }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // Do nothing.
+                        }
+                    }).show();
+                }
+                else
+                    lastPreToneType = (String) newValue;
+
+                return true;
+            }
+
+        });
 
     	preplay.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-    		@Override
-			public boolean onPreferenceClick(final Preference preference) {
-    			if(player.isPlaying()) {
-    				player.stop();
-    				play.setTitle(context.getString(R.string.play_sound));
-    				play.setSummary(context.getString(R.string.play_sound_desc));
-    				preplay.setTitle(context.getString(R.string.play_pre_sound));
-    				preplay.setSummary(context.getString(R.string.play_pre_sound_desc));
-    				return false;
-    			}
-    			
+
+            @Override
+            public boolean onPreferenceClick(final Preference preference) {
+                if (player.isPlaying()) {
+                    player.stop();
+                    play.setTitle(context.getString(R.string.play_sound));
+                    play.setSummary(context.getString(R.string.play_sound_desc));
+                    preplay.setTitle(context.getString(R.string.play_pre_sound));
+                    preplay.setSummary(context.getString(R.string.play_pre_sound_desc));
+                    return false;
+                }
+
                 try {
-                    String preSoundUri = settings.getString("PreSoundUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
-					if(preSoundUri.equals("system"))
-						preSoundUri = settings.getString("SystemUri", "");
-					else if(preSoundUri.equals("file"))
-						preSoundUri = settings.getString("FileUri", "");
-					if(preSoundUri.equals(""))
-						return false;
-					Log.v(TAG,"Playing Uri: "+preSoundUri);
+                    String preSoundUri = prefs.getString("PreSoundUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
+                    if (preSoundUri.equals("system"))
+                        preSoundUri = prefs.getString("SystemUri", "");
+                    else if (preSoundUri.equals("file"))
+                        preSoundUri = prefs.getString("FileUri", "");
+                    else if (preSoundUri.equals("tts")) {
+                        preSoundUri = "";
+                        final String ttsString = prefs.getString("tts_string_pre",context.getString(R.string.timer_done));
+                        tts.speak(ttsString, TextToSpeech.QUEUE_ADD, null);
+                    }
+
+                    if (preSoundUri.equals(""))
+                        return false;
+                    Log.v(TAG, "Playing Uri: " + preSoundUri);
                     player.reset();
-    	        	int currVolume = settings.getInt("tone_volume", 0);
-    	        	if(currVolume != 0) {
-    		        	float log1=(float)(Math.log(100-currVolume)/Math.log(100));
-    		            player.setVolume(1-log1,1-log1);
-    	        	}
+                    int currVolume = prefs.getInt("tone_volume", 0);
+                    if (currVolume != 0) {
+                        float log1 = (float) (Math.log(100 - currVolume) / Math.log(100));
+                        player.setVolume(1 - log1, 1 - log1);
+                    }
                     player.setDataSource(context, Uri.parse(preSoundUri));
                     player.prepare();
-	                player.setLooping(false);
-	                player.setOnCompletionListener(new OnCompletionListener(){
-						@Override
-						public void onCompletion(MediaPlayer mp) {
-		    				preference.setTitle(context.getString(R.string.play_sound));
-		    				preference.setSummary(context.getString(R.string.play_sound_desc));
-						}
-	                });
-	                player.start();
-					preference.setTitle(context.getString(R.string.playing_sound));
-					preference.setSummary(context.getString(R.string.playing_sound_desc));
+                    player.setLooping(false);
+                    player.setOnCompletionListener(new OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            preference.setTitle(context.getString(R.string.play_sound));
+                            preference.setSummary(context.getString(R.string.play_sound_desc));
+                        }
+                    });
+                    player.start();
+                    preference.setTitle(context.getString(R.string.playing_sound));
+                    preference.setSummary(context.getString(R.string.playing_sound_desc));
                 } catch (IOException e) {
-					// TODO Auto-generated catch block
-                	
-					e.printStackTrace();
-				}
-				
-                return false;
-			}
+                    // TODO Auto-generated catch block
 
-    	});
+                    e.printStackTrace();
+                }
+
+                return false;
+            }
+
+        });
     	
         Preference about = (Preference)findPreference("aboutPref");
 
@@ -326,16 +385,16 @@ public class TimerPrefActivity extends PreferenceActivity
         
         bmpUrl.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-    			Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-    			photoPickerIntent.setType("image/*");
-    			startActivityForResult(photoPickerIntent, SELECT_PHOTO );
-	            return true;
-				   			
-			}
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                return true;
 
-    	});
+            }
+
+        });
     	
 
         customBmp.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -367,7 +426,7 @@ public class TimerPrefActivity extends PreferenceActivity
     	});
 
         final Preference indexPref = (Preference)findPreference("DrawingIndex");
-		int dIndex = settings.getInt("DrawingIndex", 0);
+		int dIndex = prefs.getInt("DrawingIndex", 0);
 		if(dIndex == 0)
 			indexPref.setSummary(getString(R.string.is_bitmap));
 		else
@@ -377,7 +436,7 @@ public class TimerPrefActivity extends PreferenceActivity
 
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				int dIndex = settings.getInt("DrawingIndex", 0);
+				int dIndex = prefs.getInt("DrawingIndex", 0);
 				dIndex++;
 				dIndex %= 2;
 				
@@ -387,7 +446,7 @@ public class TimerPrefActivity extends PreferenceActivity
 				else {
 					indexPref.setSummary(getString(R.string.is_circle));
 				}
-		        Editor mSettingsEdit = settings.edit();
+		        Editor mSettingsEdit = prefs.edit();
         		mSettingsEdit.putInt("DrawingIndex", dIndex);
         		mSettingsEdit.commit();
 	            return true;
@@ -476,19 +535,34 @@ public class TimerPrefActivity extends PreferenceActivity
 
     @Override
     public void onPause() {
-    	if(player.isPlaying()) {
-    		player.stop();
-			play.setTitle(context.getString(R.string.play_sound));
-			play.setSummary(context.getString(R.string.play_sound_desc));
-    	}
-		super.onPause();
+        if (player.isPlaying()) {
+            player.stop();
+            play.setTitle(context.getString(R.string.play_sound));
+            play.setSummary(context.getString(R.string.play_sound_desc));
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy(){
+
+
+        //Close the Text to Speech Library
+        if(tts != null) {
+
+            tts.stop();
+            tts.shutdown();
+            Log.d(TAG, "TTSService Destroyed");
+        }
+
+		super.onDestroy();
     }    
     @Override
     public void onResume() {
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        if(settings.getBoolean("FULLSCREEN", false))
+        if(prefs.getBoolean("FULLSCREEN", false))
 			getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN, LayoutParams.FLAG_FULLSCREEN);
     	else
         	getWindow().clearFlags(LayoutParams.FLAG_FULLSCREEN); 
@@ -501,7 +575,7 @@ public class TimerPrefActivity extends PreferenceActivity
     {
     	if (resultCode == Activity.RESULT_OK) {
 	    	Uri uri = null;
-	        Editor mSettingsEdit = settings.edit();
+	        Editor mSettingsEdit = prefs.edit();
 	        switch(requestCode) {
 	        	case SELECT_RINGTONE :
 		        	uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);

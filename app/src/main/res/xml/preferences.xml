@@ -94,6 +94,11 @@
                 android:title="@string/switch_time"
                 android:summary="@string/switch_time_desc"
                 android:defaultValue="False" />
+        <CheckBoxPreference
+                android:key="SpeakTime"
+                android:title="@string/speak_time"
+                android:summary="@string/speak_time_desc"
+                android:defaultValue="False" />
 		<CheckBoxPreference
 			android:key="WakeLock"
 			android:title="@string/stay_awake"

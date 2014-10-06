@@ -87,6 +87,7 @@
         <item>Bird Song</item>
         <item>System Tone</item>
         <item>Sound File</item>
+        <item>Text To Speech</item>
     </string-array>
     <string-array name="sound_uris">
         <item></item>
@@ -97,5 +98,6 @@
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/birds</item>
         <item>system</item>
         <item>file</item>
+        <item>tts</item>
     </string-array>
 </resources>

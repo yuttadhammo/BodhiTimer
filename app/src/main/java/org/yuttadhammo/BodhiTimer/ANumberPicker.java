@@ -58,9 +58,16 @@ public class ANumberPicker extends Activity {
         super.onCreate(savedInstanceState);
         this.context = this;
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        if(prefs.getBoolean("FULLSCREEN", false))
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        else
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         customSound = getString(R.string.sys_def);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
         advTimeString = prefs.getString("advTimeString","");
 
         setContentView(R.layout.adv_number_picker);

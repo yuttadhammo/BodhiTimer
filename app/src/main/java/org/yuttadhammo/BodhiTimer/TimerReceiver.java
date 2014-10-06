@@ -1,8 +1,6 @@
 package org.yuttadhammo.BodhiTimer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 import android.app.AlarmManager;
@@ -16,13 +14,12 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
-import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.text.TextUtils;
 import android.util.Log;
 
 public class TimerReceiver extends BroadcastReceiver {
@@ -31,6 +28,8 @@ public class TimerReceiver extends BroadcastReceiver {
 	public static MediaPlayer player;
 
     public static String BROADCAST_RESET = "org.yuttadhammo.BodhiTimer.RESTART";
+
+    private TextToSpeech tts;
 
     @Override
 	public void onReceive(Context context, Intent pintent) 
@@ -105,6 +104,13 @@ public class TimerReceiver extends BroadcastReceiver {
 			notificationUri = prefs.getString("SystemUri", "");
 		else if(notificationUri.equals("file"))
 			notificationUri = prefs.getString("FileUri", "");
+        else if (notificationUri.equals("tts")) {
+            notificationUri = "";
+            final String ttsString = prefs.getString("tts_string",context.getString(R.string.timer_done));
+            Intent ttsIntent = new Intent(context,TTSService.class);
+            ttsIntent.putExtra("spoken_text", ttsString);
+            context.startService(ttsIntent);
+        }
 
 		NotificationCompat.Builder mBuilder =
 	        new NotificationCompat.Builder(context.getApplicationContext())
@@ -115,7 +121,7 @@ public class TimerReceiver extends BroadcastReceiver {
 		Uri uri = null;
 
 		// Play a sound!
-        if(notificationUri != "")
+        if(!notificationUri.equals(""))
 			uri = Uri.parse(notificationUri);
 		
         // Vibrate

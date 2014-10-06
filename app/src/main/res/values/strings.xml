@@ -164,6 +164,11 @@
     <string name="get_file_man">Please install a File Manager.</string>
     <string name="sys_tone">System Tone</string>
     <string name="sound_file">Sound File</string>
+    <string name="speak_time_desc">Audible playback when recogizing speech</string>
+    <string name="speak_time">Speak Recognized Time</string>
+    <string name="timer_done">timer finished</string>
+    <string name="input_text">Text To Speech</string>
+    <string name="input_text_desc">Input text to be spoken</string>
 
 </resources>
 

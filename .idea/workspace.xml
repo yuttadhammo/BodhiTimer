@@ -94,19 +94,83 @@
       <file leaf-file-name="TimerPrefActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerPrefActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="7335" max-vertical-offset="8595">
-              <caret line="489" column="0" selection-start-line="489" selection-start-column="0" selection-end-line="489" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TimerUtils.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerUtils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2175" max-vertical-offset="3045">
-              <caret line="145" column="86" selection-start-line="145" selection-start-column="86" selection-end-line="145" selection-end-column="86" />
-              <folding />
+            <state vertical-scroll-proportion="-9.925926" vertical-offset="7862" max-vertical-offset="9705">
+              <caret line="542" column="24" selection-start-line="542" selection-start-column="24" selection-end-line="542" selection-end-column="24" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3784#6802#0" expanded="true" />
+                <element signature="e#3972#4010#0" expanded="true" />
+                <element signature="e#4037#4080#0" expanded="true" />
+                <element signature="e#4108#4150#0" expanded="true" />
+                <element signature="e#4180#4227#0" expanded="true" />
+                <element signature="e#5648#5678#0" expanded="true" />
+                <element signature="e#5720#5755#0" expanded="true" />
+                <element signature="e#5869#6408#0" expanded="true" />
+                <element signature="e#6377#6378#0" expanded="true" />
+                <element signature="e#6453#6670#0" expanded="true" />
+                <element signature="e#6647#6648#0" expanded="true" />
+                <element signature="e#6793#6794#0" expanded="true" />
+                <element signature="e#6845#9678#0" expanded="true" />
+                <element signature="e#7089#7127#0" expanded="true" />
+                <element signature="e#7166#7209#0" expanded="true" />
+                <element signature="e#7249#7291#0" expanded="true" />
+                <element signature="e#7333#7380#0" expanded="true" />
+                <element signature="e#8057#8095#0" expanded="true" />
+                <element signature="e#8890#9252#0" expanded="true" />
+                <element signature="e#9068#9106#0" expanded="true" />
+                <element signature="e#9159#9202#0" expanded="true" />
+                <element signature="e#9229#9230#0" expanded="true" />
+                <element signature="e#9331#9372#0" expanded="true" />
+                <element signature="e#9417#9463#0" expanded="true" />
+                <element signature="e#9666#9667#0" expanded="true" />
+                <element signature="e#9764#12975#0" expanded="true" />
+                <element signature="e#9986#10024#0" expanded="true" />
+                <element signature="e#10063#10106#0" expanded="true" />
+                <element signature="e#10146#10188#0" expanded="true" />
+                <element signature="e#10230#10277#0" expanded="true" />
+                <element signature="e#11790#11820#0" expanded="true" />
+                <element signature="e#11862#11897#0" expanded="true" />
+                <element signature="e#12011#12553#0" expanded="true" />
+                <element signature="e#12522#12523#0" expanded="true" />
+                <element signature="e#12598#12815#0" expanded="true" />
+                <element signature="e#12792#12793#0" expanded="true" />
+                <element signature="e#12963#12964#0" expanded="true" />
+                <element signature="e#13021#15815#0" expanded="true" />
+                <element signature="e#13265#13303#0" expanded="true" />
+                <element signature="e#13342#13385#0" expanded="true" />
+                <element signature="e#13425#13467#0" expanded="true" />
+                <element signature="e#13509#13556#0" expanded="true" />
+                <element signature="e#14205#14243#0" expanded="true" />
+                <element signature="e#15027#15389#0" expanded="true" />
+                <element signature="e#15205#15243#0" expanded="true" />
+                <element signature="e#15296#15339#0" expanded="true" />
+                <element signature="e#15366#15367#0" expanded="true" />
+                <element signature="e#15468#15509#0" expanded="true" />
+                <element signature="e#15554#15600#0" expanded="true" />
+                <element signature="e#15803#15804#0" expanded="true" />
+                <element signature="e#15936#16918#0" expanded="true" />
+                <element signature="e#16246#16276#0" expanded="true" />
+                <element signature="e#16491#16522#0" expanded="true" />
+                <element signature="e#16582#16607#0" expanded="true" />
+                <element signature="e#16909#16910#0" expanded="true" />
+                <element signature="e#17207#17590#0" expanded="true" />
+                <element signature="e#17578#17579#0" expanded="true" />
+                <element signature="e#17648#17922#0" expanded="true" />
+                <element signature="e#17913#17914#0" expanded="true" />
+                <element signature="e#18070#18443#0" expanded="true" />
+                <element signature="e#18434#18435#0" expanded="true" />
+                <element signature="e#18618#18647#0" expanded="true" />
+                <element signature="e#18681#18710#0" expanded="true" />
+                <element signature="e#18769#19311#0" expanded="true" />
+                <element signature="e#19012#19041#0" expanded="true" />
+                <element signature="e#19087#19116#0" expanded="true" />
+                <element signature="e#19302#19303#0" expanded="true" />
+                <element signature="e#19430#22644#0" expanded="true" />
+                <element signature="e#20031#20060#0" expanded="true" />
+                <element signature="e#22635#22636#0" expanded="true" />
+                <element signature="e#22792#22830#0" expanded="true" />
+                <element signature="e#22861#22904#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -114,19 +178,73 @@
       <file leaf-file-name="TimerActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.074074" vertical-offset="1213" max-vertical-offset="15900">
-              <caret line="157" column="54" selection-start-line="157" selection-start-column="46" selection-end-line="157" selection-end-column="54" />
+            <state vertical-scroll-proportion="-12.296296" vertical-offset="4243" max-vertical-offset="16620">
+              <caret line="369" column="0" selection-start-line="365" selection-start-column="0" selection-end-line="369" selection-end-column="0" />
+              <folding>
+                <element signature="e#24478#24516#0" expanded="true" />
+                <element signature="e#25138#25314#0" expanded="true" />
+                <element signature="e#25291#25292#0" expanded="true" />
+                <element signature="e#27231#27239#0" expanded="true" />
+                <element signature="e#29122#29284#0" expanded="true" />
+                <element signature="e#29272#29273#0" expanded="true" />
+                <element signature="e#29403#29524#0" expanded="true" />
+                <element signature="e#29517#29518#0" expanded="true" />
+                <element signature="e#29942#29980#0" expanded="true" />
+                <element signature="e#31822#32385#0" expanded="true" />
+                <element signature="e#32088#32129#0" expanded="true" />
+                <element signature="e#32354#32355#0" expanded="true" />
+                <element signature="e#32459#32500#0" expanded="true" />
+                <element signature="e#32983#33020#0" expanded="true" />
+                <element signature="e#33269#33306#0" expanded="true" />
+                <element signature="e#33565#33606#0" expanded="true" />
+                <element signature="e#34062#34529#0" expanded="true" />
+                <element signature="e#34522#34523#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TimerReceiver.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerReceiver.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1091" max-vertical-offset="4440">
+              <caret line="109" column="50" selection-start-line="109" selection-start-column="50" selection-end-line="109" selection-end-column="50" />
+              <folding>
+                <element signature="e#2205#2243#0" expanded="true" />
+                <element signature="e#2287#2326#0" expanded="true" />
+                <element signature="e#3906#3944#0" expanded="true" />
+                <element signature="e#6899#7079#0" expanded="true" />
+                <element signature="e#7057#7058#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ANumberPicker.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/ANumberPicker.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.39198607" vertical-offset="285" max-vertical-offset="4605">
+              <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ANumberPicker.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/ANumberPicker.java">
+      <file leaf-file-name="TTSService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TTSService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="675" max-vertical-offset="5400">
-              <caret line="45" column="12" selection-start-line="45" selection-start-column="12" selection-end-line="45" selection-end-column="12" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="450" max-vertical-offset="1125">
+              <caret line="41" column="59" selection-start-line="41" selection-start-column="54" selection-end-line="41" selection-end-column="59" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#465#466#0" expanded="true" />
+                <element signature="e#516#517#0" expanded="true" />
+                <element signature="e#729#745#0" expanded="true" />
+                <element signature="e#940#1203#0" expanded="true" />
+                <element signature="e#1188#1189#0" expanded="true" />
+                <element signature="e#1598#1599#0" expanded="true" />
+                <element signature="e#1625#1626#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -134,13 +252,19 @@
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="990">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1005">
               <caret line="3" column="57" selection-start-line="3" selection-start-column="57" selection-end-line="3" selection-end-column="57" />
-              <folding>
-                <element signature="e#830#848#0" expanded="true" />
-                <element signature="e#1355#1376#0" expanded="true" />
-                <element signature="e#1509#1527#0" expanded="true" />
-              </folding>
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TextToSpeech.class" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/android/platforms/android-20/android.jar!/android/speech/tts/TextToSpeech.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-16.37037" vertical-offset="1913" max-vertical-offset="2490">
+              <caret line="158" column="44" selection-start-line="158" selection-start-column="44" selection-end-line="158" selection-end-column="44" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -148,35 +272,9 @@
       <file leaf-file-name="ScheduleClient.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/ScheduleClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="656" max-vertical-offset="1230">
-              <caret line="62" column="25" selection-start-line="62" selection-start-column="25" selection-end-line="62" selection-end-column="25" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#721#722#0" expanded="true" />
-                <element signature="e#755#756#0" expanded="true" />
-                <element signature="e#1777#1778#0" expanded="true" />
-                <element signature="e#1821#1822#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="adv_number_picker.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/adv_number_picker.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-17.038462" vertical-offset="1207" max-vertical-offset="1770">
-              <caret line="110" column="42" selection-start-line="110" selection-start-column="42" selection-end-line="110" selection-end-column="42" />
-              <folding>
-                <element signature="e#1761#1774#0" expanded="true" />
-                <element signature="e#2333#2348#0" expanded="true" />
-                <element signature="e#2666#2683#0" expanded="true" />
-                <element signature="e#3095#3111#0" expanded="true" />
-                <element signature="e#3564#3578#0" expanded="true" />
-                <element signature="e#4052#4072#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="1080">
+              <caret line="58" column="48" selection-start-line="58" selection-start-column="48" selection-end-line="58" selection-end-column="48" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -184,12 +282,9 @@
       <file leaf-file-name="ScheduleService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/ScheduleService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="191" max-vertical-offset="765">
-              <caret line="43" column="14" selection-start-line="43" selection-start-column="14" selection-end-line="43" selection-end-column="14" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+              <caret line="44" column="5" selection-start-line="44" selection-start-column="5" selection-end-line="44" selection-end-column="5" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#395#396#0" expanded="true" />
-                <element signature="e#446#447#0" expanded="true" />
                 <element signature="e#816#817#0" expanded="true" />
                 <element signature="e#846#847#0" expanded="true" />
               </folding>
@@ -200,20 +295,8 @@
       <file leaf-file-name="AlarmTask.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/AlarmTask.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="251" max-vertical-offset="825">
-              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TimerReceiver.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerReceiver.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.7247387" vertical-offset="0" max-vertical-offset="4260">
-              <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="705">
+              <caret line="39" column="32" selection-start-line="39" selection-start-column="25" selection-end-line="39" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -919,26 +1002,30 @@
         <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/widget/BodhiAppWidgetProvider.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Animation/TimerAnimation.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/arrays.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/adv_list_item.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerUtils.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerReceiver.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerPrefActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/ANumberPicker.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/ScheduleService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/AlarmTask.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/ScheduleClient.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/adv_number_picker.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/xml/preferences.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/arrays.xml" />
+        <option value="$PROJECT_DIR$/app/build/generated/source/r/debug/org/yuttadhammo/BodhiTimer/R.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/ScheduleClient.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/ScheduleService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerReceiver.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TTS.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TTSService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerPrefActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/ANumberPicker.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1920" />
+    <option name="x" value="49" />
     <option name="y" value="24" />
-    <option name="width" value="1920" />
+    <option name="width" value="1871" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -983,9 +1070,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1260,6 +1344,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1476,15 +1563,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="24" width="1920" height="1056" extended-state="6" />
+    <frame x="49" y="24" width="1871" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960597" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32943678" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32943678" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32943678" sideWeight="0.50027335" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
@@ -1495,17 +1582,17 @@
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.36131775" sideWeight="0.49972662" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968834" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32943678" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25612354" sideWeight="0.49946865" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25587752" sideWeight="0.49946865" order="1" side_tool="false" content_ui="tabs" x="913" y="533" width="142" height="38" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24920128" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21049754" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="889" y="240" width="455" height="601" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32943678" sideWeight="0.49972662" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32943678" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960597" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1526,64 +1613,35 @@
     </option>
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/NNumberPicker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5700">
-          <caret line="215" column="17" selection-start-line="215" selection-start-column="17" selection-end-line="215" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerPrefActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1245" max-vertical-offset="8685">
-          <caret line="83" column="103" selection-start-line="83" selection-start-column="103" selection-end-line="83" selection-end-column="103" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/arrays.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="1290">
-          <caret line="5" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/adv_number_picker.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="667" max-vertical-offset="1290">
-          <caret line="66" column="18" selection-start-line="66" selection-start-column="18" selection-end-line="66" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1485" max-vertical-offset="2520">
-          <caret line="122" column="79" selection-start-line="122" selection-start-column="44" selection-end-line="122" selection-end-column="79" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="69" max-vertical-offset="3045">
-          <caret line="18" column="39" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="15045" max-vertical-offset="15930">
           <caret line="1003" column="63" selection-start-line="1003" selection-start-column="63" selection-end-line="1003" selection-end-column="63" />
-          <folding />
+          <folding>
+            <element signature="e#24478#24516#0" expanded="true" />
+            <element signature="e#25138#25314#0" expanded="true" />
+            <element signature="e#25291#25292#0" expanded="true" />
+            <element signature="e#27231#27239#0" expanded="true" />
+            <element signature="e#29122#29284#0" expanded="true" />
+            <element signature="e#29272#29273#0" expanded="true" />
+            <element signature="e#29403#29524#0" expanded="true" />
+            <element signature="e#29517#29518#0" expanded="true" />
+            <element signature="e#29942#29980#0" expanded="true" />
+            <element signature="e#31822#32385#0" expanded="true" />
+            <element signature="e#32088#32129#0" expanded="true" />
+            <element signature="e#32354#32355#0" expanded="true" />
+            <element signature="e#32459#32500#0" expanded="true" />
+            <element signature="e#32983#33020#0" expanded="true" />
+            <element signature="e#33269#33306#0" expanded="true" />
+            <element signature="e#33565#33606#0" expanded="true" />
+            <element signature="e#34062#34529#0" expanded="true" />
+            <element signature="e#34522#34523#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1591,11 +1649,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="975">
           <caret line="3" column="55" selection-start-line="3" selection-start-column="55" selection-end-line="3" selection-end-column="55" />
-          <folding>
-            <element signature="e#830#848#0" expanded="true" />
-            <element signature="e#1355#1376#0" expanded="true" />
-            <element signature="e#1509#1527#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1625,7 +1679,26 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="8379" max-vertical-offset="14055">
           <caret line="633" column="84" selection-start-line="633" selection-start-column="84" selection-end-line="633" selection-end-column="84" />
-          <folding />
+          <folding>
+            <element signature="e#24478#24516#0" expanded="true" />
+            <element signature="e#25138#25314#0" expanded="true" />
+            <element signature="e#25291#25292#0" expanded="true" />
+            <element signature="e#27231#27239#0" expanded="true" />
+            <element signature="e#29122#29284#0" expanded="true" />
+            <element signature="e#29272#29273#0" expanded="true" />
+            <element signature="e#29403#29524#0" expanded="true" />
+            <element signature="e#29517#29518#0" expanded="true" />
+            <element signature="e#29942#29980#0" expanded="true" />
+            <element signature="e#31822#32385#0" expanded="true" />
+            <element signature="e#32088#32129#0" expanded="true" />
+            <element signature="e#32354#32355#0" expanded="true" />
+            <element signature="e#32459#32500#0" expanded="true" />
+            <element signature="e#32983#33020#0" expanded="true" />
+            <element signature="e#33269#33306#0" expanded="true" />
+            <element signature="e#33565#33606#0" expanded="true" />
+            <element signature="e#34062#34529#0" expanded="true" />
+            <element signature="e#34522#34523#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1640,11 +1713,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="990">
           <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding>
-            <element signature="e#830#848#0" expanded="true" />
-            <element signature="e#1355#1376#0" expanded="true" />
-            <element signature="e#1509#1527#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1670,14 +1739,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/n_number_picker_dialog.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-16.461538" vertical-offset="2152" max-vertical-offset="3345">
           <caret line="172" column="44" selection-start-line="172" selection-start-column="44" selection-end-line="172" selection-end-column="44" />
           <folding />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/android/sources/android-17/android/view/View.java">
@@ -1786,14 +1855,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/main.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="352" max-vertical-offset="1545">
           <caret line="39" column="22" selection-start-line="39" selection-start-column="22" selection-end-line="39" selection-end-column="22" />
           <folding />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="jar://$USER_HOME$/android/platforms/android-20/android.jar!/android/content/Intent.class">
@@ -1810,37 +1879,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/arrays.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="971" max-vertical-offset="1590">
-          <caret line="89" column="0" selection-start-line="87" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/adv_list_item.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="480">
           <caret line="18" column="32" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
           <folding />
         </state>
       </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="2640">
           <caret line="29" column="48" selection-start-line="29" selection-start-column="48" selection-end-line="29" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerPrefActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5903" max-vertical-offset="7395">
-          <caret line="489" column="0" selection-start-line="489" selection-start-column="0" selection-end-line="489" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1853,102 +1906,251 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/ANumberPicker.java">
+    <entry file="jar://$USER_HOME$/android/platforms/android-20/android.jar!/android/app/AlarmManager.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="79" max-vertical-offset="4500">
-          <caret line="45" column="12" selection-start-line="45" selection-start-column="12" selection-end-line="45" selection-end-column="12" />
-          <folding />
+        <state vertical-scroll-proportion="0.71254355" vertical-offset="11" max-vertical-offset="585">
+          <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/adv_number_picker.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1207" max-vertical-offset="1770">
+          <caret line="110" column="42" selection-start-line="110" selection-start-column="42" selection-end-line="110" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
       <provider editor-type-id="android-designer">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/arrays.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-17.038462" vertical-offset="1207" max-vertical-offset="1770">
-          <caret line="110" column="42" selection-start-line="110" selection-start-column="42" selection-end-line="110" selection-end-column="42" />
-          <folding>
-            <element signature="e#1761#1774#0" expanded="true" />
-            <element signature="e#2333#2348#0" expanded="true" />
-            <element signature="e#2666#2683#0" expanded="true" />
-            <element signature="e#3095#3111#0" expanded="true" />
-            <element signature="e#3564#3578#0" expanded="true" />
-            <element signature="e#4052#4072#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="994" max-vertical-offset="1620">
+          <caret line="100" column="17" selection-start-line="100" selection-start-column="17" selection-end-line="100" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/xml/preferences.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="990" max-vertical-offset="1815">
+          <caret line="98" column="44" selection-start-line="98" selection-start-column="44" selection-end-line="98" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/generated/source/r/debug/org/yuttadhammo/BodhiTimer/R.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.028625954" vertical-offset="1605" max-vertical-offset="4035">
+          <caret line="113" column="48" selection-start-line="113" selection-start-column="48" selection-end-line="113" selection-end-column="48" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/ScheduleClient.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="656" max-vertical-offset="1230">
-          <caret line="62" column="25" selection-start-line="62" selection-start-column="25" selection-end-line="62" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#721#722#0" expanded="true" />
-            <element signature="e#755#756#0" expanded="true" />
-            <element signature="e#1777#1778#0" expanded="true" />
-            <element signature="e#1821#1822#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="1080">
+          <caret line="58" column="48" selection-start-line="58" selection-start-column="48" selection-end-line="58" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/android/platforms/android-20/android.jar!/android/content/Context.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="3458" max-vertical-offset="4500">
+          <caret line="244" column="50" selection-start-line="244" selection-start-column="50" selection-end-line="244" selection-end-column="50" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/ScheduleService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="191" max-vertical-offset="765">
-          <caret line="43" column="14" selection-start-line="43" selection-start-column="14" selection-end-line="43" selection-end-column="14" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+          <caret line="44" column="5" selection-start-line="44" selection-start-column="5" selection-end-line="44" selection-end-column="5" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#395#396#0" expanded="true" />
-            <element signature="e#446#447#0" expanded="true" />
             <element signature="e#816#817#0" expanded="true" />
             <element signature="e#846#847#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/android/platforms/android-20/android.jar!/android/app/AlarmManager.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71254355" vertical-offset="11" max-vertical-offset="585">
-          <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
-          <caret line="3" column="57" selection-start-line="3" selection-start-column="57" selection-end-line="3" selection-end-column="57" />
-          <folding>
-            <element signature="e#830#848#0" expanded="true" />
-            <element signature="e#1355#1376#0" expanded="true" />
-            <element signature="e#1509#1527#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.074074" vertical-offset="1213" max-vertical-offset="15900">
-          <caret line="157" column="54" selection-start-line="157" selection-start-column="46" selection-end-line="157" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/Service/AlarmTask.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="251" max-vertical-offset="825">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="131" max-vertical-offset="705">
+          <caret line="39" column="32" selection-start-line="39" selection-start-column="25" selection-end-line="39" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/android/platforms/android-20/android.jar!/android/app/Service.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5557491" vertical-offset="341" max-vertical-offset="915">
+          <caret line="45" column="22" selection-start-line="45" selection-start-column="22" selection-end-line="45" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/android/platforms/android-20/android.jar!/android/speech/tts/TextToSpeech.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.37037" vertical-offset="1913" max-vertical-offset="2490">
+          <caret line="158" column="44" selection-start-line="158" selection-start-column="44" selection-end-line="158" selection-end-column="44" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerReceiver.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.7247387" vertical-offset="0" max-vertical-offset="4260">
-          <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1091" max-vertical-offset="4440">
+          <caret line="109" column="50" selection-start-line="109" selection-start-column="50" selection-end-line="109" selection-end-column="50" />
+          <folding>
+            <element signature="e#2205#2243#0" expanded="true" />
+            <element signature="e#2287#2326#0" expanded="true" />
+            <element signature="e#3906#3944#0" expanded="true" />
+            <element signature="e#6899#7079#0" expanded="true" />
+            <element signature="e#7057#7058#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TTSService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="450" max-vertical-offset="1125">
+          <caret line="41" column="59" selection-start-line="41" selection-start-column="54" selection-end-line="41" selection-end-column="59" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#465#466#0" expanded="true" />
+            <element signature="e#516#517#0" expanded="true" />
+            <element signature="e#729#745#0" expanded="true" />
+            <element signature="e#940#1203#0" expanded="true" />
+            <element signature="e#1188#1189#0" expanded="true" />
+            <element signature="e#1598#1599#0" expanded="true" />
+            <element signature="e#1625#1626#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerPrefActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.925926" vertical-offset="7862" max-vertical-offset="9705">
+          <caret line="542" column="24" selection-start-line="542" selection-start-column="24" selection-end-line="542" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3784#6802#0" expanded="true" />
+            <element signature="e#3972#4010#0" expanded="true" />
+            <element signature="e#4037#4080#0" expanded="true" />
+            <element signature="e#4108#4150#0" expanded="true" />
+            <element signature="e#4180#4227#0" expanded="true" />
+            <element signature="e#5648#5678#0" expanded="true" />
+            <element signature="e#5720#5755#0" expanded="true" />
+            <element signature="e#5869#6408#0" expanded="true" />
+            <element signature="e#6377#6378#0" expanded="true" />
+            <element signature="e#6453#6670#0" expanded="true" />
+            <element signature="e#6647#6648#0" expanded="true" />
+            <element signature="e#6793#6794#0" expanded="true" />
+            <element signature="e#6845#9678#0" expanded="true" />
+            <element signature="e#7089#7127#0" expanded="true" />
+            <element signature="e#7166#7209#0" expanded="true" />
+            <element signature="e#7249#7291#0" expanded="true" />
+            <element signature="e#7333#7380#0" expanded="true" />
+            <element signature="e#8057#8095#0" expanded="true" />
+            <element signature="e#8890#9252#0" expanded="true" />
+            <element signature="e#9068#9106#0" expanded="true" />
+            <element signature="e#9159#9202#0" expanded="true" />
+            <element signature="e#9229#9230#0" expanded="true" />
+            <element signature="e#9331#9372#0" expanded="true" />
+            <element signature="e#9417#9463#0" expanded="true" />
+            <element signature="e#9666#9667#0" expanded="true" />
+            <element signature="e#9764#12975#0" expanded="true" />
+            <element signature="e#9986#10024#0" expanded="true" />
+            <element signature="e#10063#10106#0" expanded="true" />
+            <element signature="e#10146#10188#0" expanded="true" />
+            <element signature="e#10230#10277#0" expanded="true" />
+            <element signature="e#11790#11820#0" expanded="true" />
+            <element signature="e#11862#11897#0" expanded="true" />
+            <element signature="e#12011#12553#0" expanded="true" />
+            <element signature="e#12522#12523#0" expanded="true" />
+            <element signature="e#12598#12815#0" expanded="true" />
+            <element signature="e#12792#12793#0" expanded="true" />
+            <element signature="e#12963#12964#0" expanded="true" />
+            <element signature="e#13021#15815#0" expanded="true" />
+            <element signature="e#13265#13303#0" expanded="true" />
+            <element signature="e#13342#13385#0" expanded="true" />
+            <element signature="e#13425#13467#0" expanded="true" />
+            <element signature="e#13509#13556#0" expanded="true" />
+            <element signature="e#14205#14243#0" expanded="true" />
+            <element signature="e#15027#15389#0" expanded="true" />
+            <element signature="e#15205#15243#0" expanded="true" />
+            <element signature="e#15296#15339#0" expanded="true" />
+            <element signature="e#15366#15367#0" expanded="true" />
+            <element signature="e#15468#15509#0" expanded="true" />
+            <element signature="e#15554#15600#0" expanded="true" />
+            <element signature="e#15803#15804#0" expanded="true" />
+            <element signature="e#15936#16918#0" expanded="true" />
+            <element signature="e#16246#16276#0" expanded="true" />
+            <element signature="e#16491#16522#0" expanded="true" />
+            <element signature="e#16582#16607#0" expanded="true" />
+            <element signature="e#16909#16910#0" expanded="true" />
+            <element signature="e#17207#17590#0" expanded="true" />
+            <element signature="e#17578#17579#0" expanded="true" />
+            <element signature="e#17648#17922#0" expanded="true" />
+            <element signature="e#17913#17914#0" expanded="true" />
+            <element signature="e#18070#18443#0" expanded="true" />
+            <element signature="e#18434#18435#0" expanded="true" />
+            <element signature="e#18618#18647#0" expanded="true" />
+            <element signature="e#18681#18710#0" expanded="true" />
+            <element signature="e#18769#19311#0" expanded="true" />
+            <element signature="e#19012#19041#0" expanded="true" />
+            <element signature="e#19087#19116#0" expanded="true" />
+            <element signature="e#19302#19303#0" expanded="true" />
+            <element signature="e#19430#22644#0" expanded="true" />
+            <element signature="e#20031#20060#0" expanded="true" />
+            <element signature="e#22635#22636#0" expanded="true" />
+            <element signature="e#22792#22830#0" expanded="true" />
+            <element signature="e#22861#22904#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1005">
+          <caret line="3" column="57" selection-start-line="3" selection-start-column="57" selection-end-line="3" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.296296" vertical-offset="4243" max-vertical-offset="16620">
+          <caret line="369" column="0" selection-start-line="365" selection-start-column="0" selection-end-line="369" selection-end-column="0" />
+          <folding>
+            <element signature="e#24478#24516#0" expanded="true" />
+            <element signature="e#25138#25314#0" expanded="true" />
+            <element signature="e#25291#25292#0" expanded="true" />
+            <element signature="e#27231#27239#0" expanded="true" />
+            <element signature="e#29122#29284#0" expanded="true" />
+            <element signature="e#29272#29273#0" expanded="true" />
+            <element signature="e#29403#29524#0" expanded="true" />
+            <element signature="e#29517#29518#0" expanded="true" />
+            <element signature="e#29942#29980#0" expanded="true" />
+            <element signature="e#31822#32385#0" expanded="true" />
+            <element signature="e#32088#32129#0" expanded="true" />
+            <element signature="e#32354#32355#0" expanded="true" />
+            <element signature="e#32459#32500#0" expanded="true" />
+            <element signature="e#32983#33020#0" expanded="true" />
+            <element signature="e#33269#33306#0" expanded="true" />
+            <element signature="e#33565#33606#0" expanded="true" />
+            <element signature="e#34062#34529#0" expanded="true" />
+            <element signature="e#34522#34523#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/ANumberPicker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39198607" vertical-offset="285" max-vertical-offset="4605">
+          <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
           <folding />
         </state>
       </provider>

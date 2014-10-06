@@ -18,6 +18,8 @@ import org.yuttadhammo.BodhiTimer.Service.ScheduleClient;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,6 +52,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -142,6 +145,8 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 
     private ScheduleClient scheduleClient;
 
+    private TextToSpeech tts;
+
     /** Called when the activity is first created.
      *	{ @inheritDoc} 
      */
@@ -154,6 +159,8 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
         // Create a new service client and bind our activity to this service
         scheduleClient = new ScheduleClient(this);
         scheduleClient.doBindService();
+
+        tts = new TextToSpeech(this,null);
 
         Intent intent = new Intent(this, TimerReceiver.class);
         mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -257,7 +264,17 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
         editor.commit();
 
     }
-   
+    @Override
+    public void onDestroy(){
+        //Close the Text to Speech Library
+        if(tts != null) {
+
+            tts.stop();
+            tts.shutdown();
+            Log.d(TAG, "TTSService Destroyed");
+        }
+        super.onDestroy();
+    }
 
     /** {@inheritDoc} */
 	@SuppressLint("NewApi")
@@ -840,6 +857,11 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 			uriString = prefs.getString("PreSystemUri", "");
 		else if(uriString.equals("file"))
 			uriString = prefs.getString("PreFileUri", "");
+		else if(uriString.equals("tts")) {
+            uriString = "";
+            final String ttsString = prefs.getString("tts_string_pre",context.getString(R.string.timer_done));
+            tts.speak(ttsString, TextToSpeech.QUEUE_ADD, null);
+        }
 
         if(uriString.equals(""))
         	return;
@@ -1055,7 +1077,7 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 		}
 	}
 
-	/**
+    /**
 	 * Handle the results from the recognition activity.
 	 */
 	@Override
@@ -1076,6 +1098,19 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
                         Editor editor = prefs.edit();
                         editor.putString("advTimeString",complexTime);
                         editor.apply();
+                        if(prefs.getBoolean("SpeakTime",false)) {
+                            tts = new TextToSpeech(this,new TextToSpeech.OnInitListener() {
+
+                                @Override
+                                public void onInit(int status) {
+                                    if(status == TextToSpeech.SUCCESS){
+                                        tts.speak(getString(R.string.adv_speech_recognized), TextToSpeech.QUEUE_ADD, null);
+                                    }
+                                    else
+                                        Log.e("error", "Initilization Failed!");
+                                }
+                            });
+                        }
                         Toast.makeText(this, getString(R.string.adv_speech_recognized), Toast.LENGTH_SHORT).show();
                         int[] values = {-1,-1,-1};
                         onNumbersPicked(values);
@@ -1083,11 +1118,15 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
                     }
                 }
                 else {
-                    int speechTime = TimerUtils.str2timeString(this, match);
+                    final int speechTime = TimerUtils.str2timeString(this, match);
                     if (speechTime != 0) {
                         int[] values = TimerUtils.time2Array(speechTime);
                         Toast.makeText(this, String.format(getString(R.string.speech_recognized),TimerUtils.time2humanStr(this, speechTime)), Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(this, match, Toast.LENGTH_SHORT).show();
+                        if(prefs.getBoolean("SpeakTime",false)) {
+                            Log.d(TAG, "Speaking time");
+                            tts.speak(String.format(getString(R.string.speech_recognized),TimerUtils.time2humanStr(context, speechTime)), TextToSpeech.QUEUE_ADD, null);
+                        }
+
                         onNumbersPicked(values);
                         break;
                     } else
