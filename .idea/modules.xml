@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bodhitimer.iml" filepath="$PROJECT_DIR$/bodhitimer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BodhiTimer.iml" filepath="$PROJECT_DIR$/.idea/modules/BodhiTimer.iml" group="BodhiTimer" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="BodhiTimer/app" />
     </modules>
   </component>
 </project>
-
