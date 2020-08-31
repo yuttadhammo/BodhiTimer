@@ -25,10 +25,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0a68f233-c887-4ef5-8ed8-6ed8737c2054" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/yuttadhammo/BodhiTimer/TimerReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +155,7 @@
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="memory.settings.postsync.last.time.stamp" value="1598870789735" />
     <property name="options.lastSelected" value="preferences.keymap" />
     <property name="options.searchVisible" value="true" />
@@ -402,22 +405,22 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="119" y="68" width="1344" height="624" key="#PSD" timestamp="1598872464868">
+    <state x="119" y="68" width="1344" height="624" key="#PSD" timestamp="1598872974884">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
-    <state x="119" y="68" width="1344" height="624" key="#PSD/0.27.1600.873@0.27.1600.873" timestamp="1598872464868" />
+    <state x="119" y="68" width="1344" height="624" key="#PSD/0.27.1600.873@0.27.1600.873" timestamp="1598872974884" />
     <state x="331" y="292" width="927" height="349" key="#com.intellij.structuralsearch.plugin.ui.StructuralSearchDialog" timestamp="1598869629697">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
     <state x="331" y="292" width="927" height="349" key="#com.intellij.structuralsearch.plugin.ui.StructuralSearchDialog/0.27.1600.873@0.27.1600.873" timestamp="1598869629697" />
-    <state x="537" y="299" width="515" height="336" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1598872656421">
+    <state x="537" y="299" width="515" height="336" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1598873038989">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
-    <state x="537" y="299" width="515" height="336" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.27.1600.873@0.27.1600.873" timestamp="1598872656421" />
-    <state x="564" y="206" width="462" height="521" key="FileChooserDialogImpl" timestamp="1598869719577">
+    <state x="537" y="299" width="515" height="336" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.27.1600.873@0.27.1600.873" timestamp="1598873038989" />
+    <state x="564" y="206" width="462" height="521" key="FileChooserDialogImpl" timestamp="1598872853959">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
-    <state x="564" y="206" width="462" height="521" key="FileChooserDialogImpl/0.27.1600.873@0.27.1600.873" timestamp="1598869719577" />
+    <state x="564" y="206" width="462" height="521" key="FileChooserDialogImpl/0.27.1600.873@0.27.1600.873" timestamp="1598872853959" />
     <state x="289" y="98" width="1022" height="737" key="SettingsEditor" timestamp="1598872445529">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
