@@ -25,17 +25,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0a68f233-c887-4ef5-8ed8-6ed8737c2054" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bodhitimer.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,10 +158,11 @@
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="http.proxy" />
     <property name="show.do.not.copy.http.proxy.settings.to.gradle" value="true" />
   </component>
@@ -408,30 +402,34 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="119" y="68" width="1344" height="624" key="#PSD" timestamp="1598872259062">
+    <state x="119" y="68" width="1344" height="624" key="#PSD" timestamp="1598872464868">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
-    <state x="119" y="68" width="1344" height="624" key="#PSD/0.27.1600.873@0.27.1600.873" timestamp="1598872259062" />
+    <state x="119" y="68" width="1344" height="624" key="#PSD/0.27.1600.873@0.27.1600.873" timestamp="1598872464868" />
     <state x="331" y="292" width="927" height="349" key="#com.intellij.structuralsearch.plugin.ui.StructuralSearchDialog" timestamp="1598869629697">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
     <state x="331" y="292" width="927" height="349" key="#com.intellij.structuralsearch.plugin.ui.StructuralSearchDialog/0.27.1600.873@0.27.1600.873" timestamp="1598869629697" />
+    <state x="537" y="299" width="515" height="336" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1598872656421">
+      <screen x="0" y="27" width="1600" height="873" />
+    </state>
+    <state x="537" y="299" width="515" height="336" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.27.1600.873@0.27.1600.873" timestamp="1598872656421" />
     <state x="564" y="206" width="462" height="521" key="FileChooserDialogImpl" timestamp="1598869719577">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
     <state x="564" y="206" width="462" height="521" key="FileChooserDialogImpl/0.27.1600.873@0.27.1600.873" timestamp="1598869719577" />
-    <state x="289" y="98" width="1022" height="737" key="SettingsEditor" timestamp="1598871474609">
+    <state x="289" y="98" width="1022" height="737" key="SettingsEditor" timestamp="1598872445529">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
-    <state x="289" y="98" width="1022" height="737" key="SettingsEditor/0.27.1600.873@0.27.1600.873" timestamp="1598871474609" />
+    <state x="289" y="98" width="1022" height="737" key="SettingsEditor/0.27.1600.873@0.27.1600.873" timestamp="1598872445529" />
     <state x="100" y="127" width="1400" height="673" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1598871645708">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
     <state x="100" y="127" width="1400" height="673" key="com.android.tools.idea.avdmanager.AvdListDialog/0.27.1600.873@0.27.1600.873" timestamp="1598871645708" />
-    <state x="463" y="214" width="672" height="678" key="search.everywhere.popup" timestamp="1598871374959">
+    <state x="463" y="214" width="672" height="678" key="search.everywhere.popup" timestamp="1598872431686">
       <screen x="0" y="27" width="1600" height="873" />
     </state>
-    <state x="463" y="214" width="672" height="678" key="search.everywhere.popup/0.27.1600.873@0.27.1600.873" timestamp="1598871374959" />
+    <state x="463" y="214" width="672" height="678" key="search.everywhere.popup/0.27.1600.873@0.27.1600.873" timestamp="1598872431686" />
   </component>
   <component name="masterDetails">
     <states>
