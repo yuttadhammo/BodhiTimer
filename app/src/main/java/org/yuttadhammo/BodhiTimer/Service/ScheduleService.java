@@ -17,8 +17,6 @@
 
 package org.yuttadhammo.BodhiTimer.Service;
 
-import java.util.Calendar;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;

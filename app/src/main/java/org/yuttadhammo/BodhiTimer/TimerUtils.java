@@ -17,137 +17,133 @@
 
 package org.yuttadhammo.BodhiTimer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
 import android.util.Log;
 
-public class TimerUtils {
-	
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-	private static String TAG = "TimerUtils";
+public class TimerUtils {
+
+
+    private static String TAG = "TimerUtils";
 
     public static String TIME_SEPARATOR = " again ";
 
-	/**
-	 * Returns the suggested text size for the string. A hack.
-	 * @param str the time string
-	 * @return the suggested text size to accommodate the string
-	 */
-	public static int textSize(String str)
-	{
-		if(str.length() > 7){ 
-			return 50;
-		}
-		else if(str.length() == 7){
-			return 55;
-		}
-		else{
-			return 80;
-		}
-	}
- 
-	
-	/** Converts a millisecond time to a string time
-	 * @param time is the time in milliseconds
-	 * @return the formated string
-	 */
-	public static String[] time2str(int ms){
-		int[] time = time2Array(ms);
- 
-		if(time[0] == 0 && time[1] == 0 && time[2] == 0){
-			return new String[] {};
-		}
-		else if(time[0] == 0 && time[1] == 0){
-			return new String[] {String.format("%01d",time[2])};
-		}
-		else if(time[0] == 0){
-			return new String[] {String.format("%01d",time[1]),String.format("%02d",time[2])};
-		}
-		else {
-			return new String[] {String.format("%01d",time[0]),String.format("%02d",time[1]),String.format("%02d",time[2])};
-		}
-	}
-
-	/** Creates a time vector
-	 *  @param ms the time in milliseconds
-	 *  @return [hour,minutes,seconds,ms]
-	 */
-	public static int [] time2Array(int time)
-	{
-		int ms = time % 1000;
-		int seconds = (int) (time / 1000);  // 3550000 / 1000 = 3550
-		int minutes = seconds / 60; // 59.16666
-		int hours = minutes / 60; // 0.9
- 
-		if(hours > 60)
-			hours = 60;
-		
-		minutes = minutes % 60; 
-   		seconds = seconds % 60;
-   		
-		int [] timeVec = new int[4];
-		timeVec[0] = hours;
-		timeVec[1] = minutes;
-		timeVec[2] = seconds;
-		timeVec[3] = ms;
-		return timeVec;
-	}
- 
-	public static String time2humanStr(Context context, int time)
-	{
-		int [] timeVec = time2Array(time);
-		int hour = timeVec[0], minutes=timeVec[1], seconds=timeVec[2];
-		
-		//Log.v(TAG,"Times: "+hour+" "+minutes+" "+seconds);
-   		
-		String r = "";
-   		
-   		// string formating
-   		if(hour != 0){	
-   			if(hour != 1)
-   				r += String.format(context.getString(R.string.x_hours), hour);
-   			else
-   				r += context.getString(R.string.one_hour);
-   		}
-   		if (minutes != 0) {
-	   		if(r.length() != 0)
-	   			r+= ", ";
-   			if(minutes != 1)
-   				r += String.format(context.getString(R.string.x_mins), minutes);
-   			else
-   				r += context.getString(R.string.one_min);
-   		}
-   		if (seconds != 0) {
-	   		if(r.length() != 0)
-	   			r+= ", ";
-   			if(seconds != 1)
-   				r += String.format(context.getString(R.string.x_secs), seconds);
-   			else
-   				r += context.getString(R.string.one_sec);
-   		}
-   		
-   		return r;
-	}
+    /**
+     * Returns the suggested text size for the string. A hack.
+     *
+     * @param str the time string
+     * @return the suggested text size to accommodate the string
+     */
+    public static int textSize(String str) {
+        if (str.length() > 7) {
+            return 50;
+        } else if (str.length() == 7) {
+            return 55;
+        } else {
+            return 80;
+        }
+    }
 
 
-	public static String time2hms(int time) {
-		String[] str = time2str(time);
-		if(str.length == 3)
-			return(str[0]+":"+str[1]+":"+str[2]);
-		else if(str.length == 2)
-			return(str[0]+":"+str[1]);
-		else if(str.length == 1)
-			return(str[0]);
-		else
-			return("");
-	}
+    /**
+     * Converts a millisecond time to a string time
+     *
+     * @param time is the time in milliseconds
+     * @return the formated string
+     */
+    public static String[] time2str(int ms) {
+        int[] time = time2Array(ms);
+
+        if (time[0] == 0 && time[1] == 0 && time[2] == 0) {
+            return new String[]{};
+        } else if (time[0] == 0 && time[1] == 0) {
+            return new String[]{String.format("%01d", time[2])};
+        } else if (time[0] == 0) {
+            return new String[]{String.format("%01d", time[1]), String.format("%02d", time[2])};
+        } else {
+            return new String[]{String.format("%01d", time[0]), String.format("%02d", time[1]), String.format("%02d", time[2])};
+        }
+    }
+
+    /**
+     * Creates a time vector
+     *
+     * @param ms the time in milliseconds
+     * @return [hour, minutes, seconds, ms]
+     */
+    public static int[] time2Array(int time) {
+        int ms = time % 1000;
+        int seconds = (int) (time / 1000);  // 3550000 / 1000 = 3550
+        int minutes = seconds / 60; // 59.16666
+        int hours = minutes / 60; // 0.9
+
+        if (hours > 60)
+            hours = 60;
+
+        minutes = minutes % 60;
+        seconds = seconds % 60;
+
+        int[] timeVec = new int[4];
+        timeVec[0] = hours;
+        timeVec[1] = minutes;
+        timeVec[2] = seconds;
+        timeVec[3] = ms;
+        return timeVec;
+    }
+
+    public static String time2humanStr(Context context, int time) {
+        int[] timeVec = time2Array(time);
+        int hour = timeVec[0], minutes = timeVec[1], seconds = timeVec[2];
+
+        //Log.v(TAG,"Times: "+hour+" "+minutes+" "+seconds);
+
+        String r = "";
+
+        // string formating
+        if (hour != 0) {
+            if (hour != 1)
+                r += String.format(context.getString(R.string.x_hours), hour);
+            else
+                r += context.getString(R.string.one_hour);
+        }
+        if (minutes != 0) {
+            if (r.length() != 0)
+                r += ", ";
+            if (minutes != 1)
+                r += String.format(context.getString(R.string.x_mins), minutes);
+            else
+                r += context.getString(R.string.one_min);
+        }
+        if (seconds != 0) {
+            if (r.length() != 0)
+                r += ", ";
+            if (seconds != 1)
+                r += String.format(context.getString(R.string.x_secs), seconds);
+            else
+                r += context.getString(R.string.one_sec);
+        }
+
+        return r;
+    }
+
+
+    public static String time2hms(int time) {
+        String[] str = time2str(time);
+        if (str.length == 3)
+            return (str[0] + ":" + str[1] + ":" + str[2]);
+        else if (str.length == 2)
+            return (str[0] + ":" + str[1]);
+        else if (str.length == 1)
+            return (str[0]);
+        else
+            return ("");
+    }
 
     public static String str2complexTimeString(Activity activity, String numberString) {
         String out = "";
@@ -157,13 +153,13 @@ public class TimerUtils {
 
         String[] strings = numberString.split(TIME_SEPARATOR);
 
-        for(String string : strings) {
-            int atime = str2timeString(activity,string);
-            if(atime > 0)
-                stringArray.add(atime+"#sys_def#"+activity.getString(R.string.sys_def));
+        for (String string : strings) {
+            int atime = str2timeString(activity, string);
+            if (atime > 0)
+                stringArray.add(atime + "#sys_def#" + activity.getString(R.string.sys_def));
         }
 
-        out = TextUtils.join("^",stringArray);
+        out = TextUtils.join("^", stringArray);
 
         return out;
     }
@@ -173,19 +169,19 @@ public class TimerUtils {
         final String[] numbers = res.getStringArray(R.array.numbers);
         int position = 0;
         String newString = numberString;
-        for(String number : numbers) {
-        	int num = 60 - position++;
-        	newString = newString.replaceAll(number, Integer.toString(num));
+        for (String number : numbers) {
+            int num = 60 - position++;
+            newString = newString.replaceAll(number, Integer.toString(num));
         }
-        
-        Pattern HOUR = Pattern.compile("([0-9]+) "+activity.getString(R.string.hour));
-        Pattern MINUTE = Pattern.compile("([0-9]+) "+activity.getString(R.string.minute));
-        Pattern SECOND = Pattern.compile("([0-9]+) "+activity.getString(R.string.second));
-        
+
+        Pattern HOUR = Pattern.compile("([0-9]+) " + activity.getString(R.string.hour));
+        Pattern MINUTE = Pattern.compile("([0-9]+) " + activity.getString(R.string.minute));
+        Pattern SECOND = Pattern.compile("([0-9]+) " + activity.getString(R.string.second));
+
         int hours = 0;
         int minutes = 0;
         int seconds = 0;
-        
+
         Matcher m = HOUR.matcher(newString);
         while (m.find()) {
             String match = m.group(1);
@@ -204,12 +200,12 @@ public class TimerUtils {
             seconds += Integer.parseInt(match);
         }
 
-		Log.d(TAG,"Got numbers: "+ hours + " hours, " + minutes + " minutes, "+seconds+" seconds");
-        
-        int total = hours*60*60*1000 + minutes*60*1000 + seconds*1000;
-        if (total > 60*60*60*1000 + 59*60*1000 + 59*1000)
-        	total = 60*60*60*1000 + 59*60*1000 + 59*1000;
+        Log.d(TAG, "Got numbers: " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds");
+
+        int total = hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000;
+        if (total > 60 * 60 * 60 * 1000 + 59 * 60 * 1000 + 59 * 1000)
+            total = 60 * 60 * 60 * 1000 + 59 * 60 * 1000 + 59 * 1000;
         return total;
-	}
+    }
 
 }

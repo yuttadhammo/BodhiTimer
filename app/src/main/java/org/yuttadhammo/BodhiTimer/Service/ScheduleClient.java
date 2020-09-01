@@ -17,8 +17,6 @@
 
 package org.yuttadhammo.BodhiTimer.Service;
 
-import java.util.Calendar;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -71,10 +69,11 @@ public class ScheduleClient {
 
     /**
      * Tell our service to set an alarm for the given date
+     *
      * @param time time to set service for
      */
-    public void setAlarmForNotification(int time){
-        if(mBoundService == null)
+    public void setAlarmForNotification(int time) {
+        if (mBoundService == null)
             return;
 
         mBoundService.setAlarm(time);

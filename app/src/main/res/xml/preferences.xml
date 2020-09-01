@@ -1,115 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/sound"/>
-            
-		<ListPreference
-			android:key="NotificationUri"
-			android:title="@string/notification_sound"
-			android:summary="@string/notification_sound_desc"
-			/>
-		<Preference
-			android:title="@string/play_sound"
-			android:summary="@string/play_sound_desc"
-			android:key="playSound" />
-		<org.yuttadhammo.BodhiTimer.VolumePreference
-			android:key="tone_volume"
-			android:title="@string/volume"
-			android:summary="@string/volume_desc"
-			android:max="100"
-			/>
-		<ListPreference
-			android:key="PreSoundUri"
-			android:title="@string/pre_sound"
-			android:summary="@string/pre_sound_desc"
-			/>			
-		<Preference
-			android:title="@string/play_pre_sound"
-			android:summary="@string/play_pre_sound_desc"
-			android:key="playPreSound" />
-		
-    <PreferenceCategory android:title="@string/notification"/>
-		<CheckBoxPreference
-                android:key="Vibrate"
-                android:title="@string/notification_vibrate"
-                android:summary="@string/notification_vibrate_desc"
-                android:defaultValue="True" />
-        
-        <CheckBoxPreference
-                android:key="LED"
-                android:title="@string/led_notification"
-                android:summary="@string/led_notification_desc" 
-                android:defaultValue="True" />
-        <CheckBoxPreference
-                android:key="AutoClear"
-                android:title="@string/auto_clear"
-                android:summary="@string/auto_clear_desc"
-                android:defaultValue="False" />
-	    <CheckBoxPreference
-			android:key="NagSilent"
-			android:title="@string/nag_dialog"
-			android:summary="@string/nag_dialog_desc" 
-			android:defaultValue="True" />
-        		
+    <PreferenceCategory android:title="@string/sound" />
+
+    <ListPreference
+        android:key="NotificationUri"
+        android:title="@string/notification_sound"
+        android:summary="@string/notification_sound_desc" />
+    <Preference
+        android:title="@string/play_sound"
+        android:summary="@string/play_sound_desc"
+        android:key="playSound" />
+    <org.yuttadhammo.BodhiTimer.VolumePreference
+        android:key="tone_volume"
+        android:title="@string/volume"
+        android:summary="@string/volume_desc"
+        android:max="100" />
+    <ListPreference
+        android:key="PreSoundUri"
+        android:title="@string/pre_sound"
+        android:summary="@string/pre_sound_desc" />
+    <Preference
+        android:title="@string/play_pre_sound"
+        android:summary="@string/play_pre_sound_desc"
+        android:key="playPreSound" />
+
+    <PreferenceCategory android:title="@string/notification" />
+    <CheckBoxPreference
+        android:key="Vibrate"
+        android:title="@string/notification_vibrate"
+        android:summary="@string/notification_vibrate_desc"
+        android:defaultValue="True" />
+
+    <CheckBoxPreference
+        android:key="LED"
+        android:title="@string/led_notification"
+        android:summary="@string/led_notification_desc"
+        android:defaultValue="True" />
+    <CheckBoxPreference
+        android:key="AutoClear"
+        android:title="@string/auto_clear"
+        android:summary="@string/auto_clear_desc"
+        android:defaultValue="False" />
+    <CheckBoxPreference
+        android:key="NagSilent"
+        android:title="@string/nag_dialog"
+        android:summary="@string/nag_dialog_desc"
+        android:defaultValue="True" />
+
     <PreferenceCategory android:title="@string/visual" />
-        <Preference
-			android:title="@string/bmp_or_circle"
-			android:key="DrawingIndex" />   
- 		<CheckBoxPreference
-			android:title="@string/custom_bmp"
-			android:key="custom_bmp" /> 
-        <Preference
-			android:title="@string/bmp_url"
-			android:key="bmp_url" />   
-	    <ListPreference
-			android:title="@string/color_theme"
-			android:summary="@string/color_theme_desc"
-			android:key="Theme"
-			android:entries="@array/themes"
-			android:defaultValue="3"
-			android:entryValues="@array/themeValues" />
-        <CheckBoxPreference
-			android:key="FULLSCREEN"
-			android:title="@string/fullscreen"
-			android:summary="@string/fullscreen_desc" 
-			android:defaultValue="False" />
-        <CheckBoxPreference
-			android:key="hideTime"
-			android:title="@string/hide_time"
-			android:summary="@string/hide_time_desc" 
-			android:defaultValue="False" />	        
- 		<CheckBoxPreference
-			android:title="@string/invert_colors"
-			android:key="invert_colors" /> 
+    <Preference
+        android:title="@string/bmp_or_circle"
+        android:key="DrawingIndex" />
+    <CheckBoxPreference
+        android:title="@string/custom_bmp"
+        android:key="custom_bmp" />
+    <Preference
+        android:title="@string/bmp_url"
+        android:key="bmp_url" />
+    <ListPreference
+        android:title="@string/color_theme"
+        android:summary="@string/color_theme_desc"
+        android:key="Theme"
+        android:entries="@array/themes"
+        android:defaultValue="3"
+        android:entryValues="@array/themeValues" />
+    <CheckBoxPreference
+        android:key="FULLSCREEN"
+        android:title="@string/fullscreen"
+        android:summary="@string/fullscreen_desc"
+        android:defaultValue="False" />
+    <CheckBoxPreference
+        android:key="hideTime"
+        android:title="@string/hide_time"
+        android:summary="@string/hide_time_desc"
+        android:defaultValue="False" />
+    <CheckBoxPreference
+        android:title="@string/invert_colors"
+        android:key="invert_colors" />
     <PreferenceCategory android:title="@string/misc" />
-        <CheckBoxPreference
-                android:key="AutoRestart"
-                android:title="@string/auto_restart"
-                android:summary="@string/auto_restart_desc"
-                android:defaultValue="False" />
-        <CheckBoxPreference
-                android:key="SwitchTimeMode"
-                android:title="@string/switch_time"
-                android:summary="@string/switch_time_desc"
-                android:defaultValue="False" />
-        <CheckBoxPreference
-                android:key="SpeakTime"
-                android:title="@string/speak_time"
-                android:summary="@string/speak_time_desc"
-                android:defaultValue="False" />
-		<CheckBoxPreference
-			android:key="WakeLock"
-			android:title="@string/stay_awake"
-			android:summary="@string/stay_awake_desc" 
-			android:defaultValue="False" />
-		<Preference
-			android:title="@string/about"
-			android:summary="@string/about_desc"
-			android:key="aboutPref" />	
-		<Preference
-			android:title="@string/export_sounds"
-			android:summary="@string/export_sounds_desc"
-			android:key="exportPref" />	
+    <CheckBoxPreference
+        android:key="AutoRestart"
+        android:title="@string/auto_restart"
+        android:summary="@string/auto_restart_desc"
+        android:defaultValue="False" />
+    <CheckBoxPreference
+        android:key="SwitchTimeMode"
+        android:title="@string/switch_time"
+        android:summary="@string/switch_time_desc"
+        android:defaultValue="False" />
+    <CheckBoxPreference
+        android:key="SpeakTime"
+        android:title="@string/speak_time"
+        android:summary="@string/speak_time_desc"
+        android:defaultValue="False" />
+    <CheckBoxPreference
+        android:key="WakeLock"
+        android:title="@string/stay_awake"
+        android:summary="@string/stay_awake_desc"
+        android:defaultValue="False" />
+    <Preference
+        android:title="@string/about"
+        android:summary="@string/about_desc"
+        android:key="aboutPref" />
+    <Preference
+        android:title="@string/export_sounds"
+        android:summary="@string/export_sounds_desc"
+        android:key="exportPref" />
 </PreferenceScreen>

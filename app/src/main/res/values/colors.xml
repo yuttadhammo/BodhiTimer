@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="tea_fill">#c9ea91</color>
-	<color name="tea_bg">#101010</color>
-	<color name="dark_gray">#3C3C3C</color>
-	<color name="light_gray">#5A5A5A</color>
+    <color name="tea_fill">#c9ea91</color>
+    <color name="tea_bg">#101010</color>
+    <color name="dark_gray">#3C3C3C</color>
+    <color name="light_gray">#5A5A5A</color>
 
-	<!-- Original Theme -->
-	<color name="themeA1">#3C3C3C</color>
-	<color name="themeA2">#5A5A5A</color>
-	<color name="themeA3">#c9ea91</color>
-	<color name="themeA4">#7A7A7A</color>
-	<color name="themeA5">#5A5A5A</color>
-	
-	<!-- Burnt orange Theme -->
-	<color name="themeB1">#1E181E</color>
-	<color name="themeB2">#303730</color>
-	<color name="themeB3">#C3992E</color>
-	<color name="themeB4">#E6C346</color>
-	<color name="themeB5">#FFE978</color>
-	
-	<!-- Air -->
-	<color name="themeC1">#3F3139</color>
-	<color name="themeC2">#6A737D</color>
-	<color name="themeC3">#9FC5C1</color>
-	<color name="themeC4">#C1D4C8</color>
-	<color name="themeC5">#DEDAB8</color>
-	
-	
-	<!-- Enso -->
-	<color name="themeD1">#000000</color>
-	<color name="themeD2">#010101</color>
-	<color name="themeD3">#000000</color>
-	<color name="themeD4">#DDDDDD</color>
-	<color name="themeD5">#010101</color>
+    <!-- Original Theme -->
+    <color name="themeA1">#3C3C3C</color>
+    <color name="themeA2">#5A5A5A</color>
+    <color name="themeA3">#c9ea91</color>
+    <color name="themeA4">#7A7A7A</color>
+    <color name="themeA5">#5A5A5A</color>
 
-	<!-- Enso Black -->
-	<color name="themeE1">#FFFFFF</color>
-	<color name="themeE2">#010101</color>
-	<color name="themeE3">#FFFFFF</color>
-	<color name="themeE4">#DDDDDD</color>
-	<color name="themeE5">#010101</color>
-	
-		
+    <!-- Burnt orange Theme -->
+    <color name="themeB1">#1E181E</color>
+    <color name="themeB2">#303730</color>
+    <color name="themeB3">#C3992E</color>
+    <color name="themeB4">#E6C346</color>
+    <color name="themeB5">#FFE978</color>
+
+    <!-- Air -->
+    <color name="themeC1">#3F3139</color>
+    <color name="themeC2">#6A737D</color>
+    <color name="themeC3">#9FC5C1</color>
+    <color name="themeC4">#C1D4C8</color>
+    <color name="themeC5">#DEDAB8</color>
+
+
+    <!-- Enso -->
+    <color name="themeD1">#000000</color>
+    <color name="themeD2">#010101</color>
+    <color name="themeD3">#000000</color>
+    <color name="themeD4">#DDDDDD</color>
+    <color name="themeD5">#010101</color>
+
+    <!-- Enso Black -->
+    <color name="themeE1">#FFFFFF</color>
+    <color name="themeE2">#010101</color>
+    <color name="themeE3">#FFFFFF</color>
+    <color name="themeE4">#DDDDDD</color>
+    <color name="themeE5">#010101</color>
+
+
 </resources>
 

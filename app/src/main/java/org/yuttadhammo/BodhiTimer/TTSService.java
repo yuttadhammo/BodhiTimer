@@ -24,7 +24,6 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import java.util.HashMap;
-import java.util.Locale;
 
 /**
  * Created by noah on 10/6/14.
@@ -40,26 +39,25 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener {
 
     @Override
     public void onInit(int status) {
-        Log.e("TTSService","initializing TTSService");
+        Log.e("TTSService", "initializing TTSService");
         if (status == TextToSpeech.SUCCESS) {
-            HashMap<String,String> hashAudio = new HashMap<String, String>();
+            HashMap<String, String> hashAudio = new HashMap<String, String>();
             hashAudio.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "english");
 
 
-            Log.e("TTSService","speaking: "+spokenText);
+            Log.e("TTSService", "speaking: " + spokenText);
 
             mTts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override
                 public void onUtteranceCompleted(String s) {
-                    Log.d("TTSService","utterance completed");
+                    Log.d("TTSService", "utterance completed");
                     stopSelf();
                 }
             });
 
             mTts.speak(spokenText, TextToSpeech.QUEUE_FLUSH, hashAudio);
-        }
-        else
-            Log.e("TTSService","error initializing TTSService");
+        } else
+            Log.e("TTSService", "error initializing TTSService");
     }
 
     @Override
@@ -77,10 +75,10 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener {
     }
 
     @Override
-    public int onStartCommand (Intent intent, int flags, int startId){
+    public int onStartCommand(Intent intent, int flags, int startId) {
 
         spokenText = intent.getStringExtra("spoken_text");
-        Log.d("TTSService",spokenText );
+        Log.d("TTSService", spokenText);
 
         return START_STICKY;
     }

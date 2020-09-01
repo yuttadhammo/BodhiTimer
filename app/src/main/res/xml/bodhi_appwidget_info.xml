@@ -4,10 +4,8 @@
     android:minHeight="120dp"
     android:updatePeriodMillis="86400000"
     android:previewImage="@drawable/leaf"
-    android:configure="org.yuttadhammo.BodhiTimer.widget.AppWidgetConfigure" 
+    android:configure="org.yuttadhammo.BodhiTimer.widget.AppWidgetConfigure"
     android:initialLayout="@layout/appwidget"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen|keyguard"
-    android:initialKeyguardLayout="@layout/appwidget"
-    >
-</appwidget-provider>
+    android:initialKeyguardLayout="@layout/appwidget"></appwidget-provider>

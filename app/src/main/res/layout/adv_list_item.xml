@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="40dp"
-   >
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="40dp">
+
     <TextView
         android:id="@+id/time"
         android:paddingLeft="4dp"
@@ -11,6 +12,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:layout_height="match_parent" />
+
     <TextView
         android:id="@+id/sound"
         android:text="@string/sys_def"
@@ -19,6 +21,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:layout_height="match_parent" />
+
     <Button
         android:id="@+id/delete"
         android:text="x"

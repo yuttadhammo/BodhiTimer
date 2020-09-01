@@ -17,8 +17,6 @@
 
 package org.yuttadhammo.BodhiTimer.Service;
 
-import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -30,14 +28,14 @@ import org.yuttadhammo.BodhiTimer.TimerReceiver;
 /**
  * Set an alarm for the date passed into the constructor
  * When the alarm is raised it will start the NotifyService
- *
+ * <p>
  * This uses the android build in alarm manager *NOTE* if the phone is turned off this alarm will be cancelled
- *
+ * <p>
  * This will run on it's own thread.
  *
  * @author paul.blundell
  */
-public class AlarmTask implements Runnable{
+public class AlarmTask implements Runnable {
     // The date selected for the alarm
     private final int time;
     // The android system alarm manager
@@ -59,8 +57,7 @@ public class AlarmTask implements Runnable{
         PendingIntent mPendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (Build.VERSION.SDK_INT >= 19) {
             mAlarmMgr.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
-        }
-        else {
+        } else {
             mAlarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
         }
     }

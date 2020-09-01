@@ -1,125 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation"
-    >
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">Bodhi Timer</string>
-	<string name="Start">Set Timer</string>
-	<string name="Stop">Clear</string>
+    <string name="Start">Set Timer</string>
+    <string name="Stop">Clear</string>
 
-	<string name="Notification">Bodhi Timer Finished</string>
-	<string name="InputTitle">Hour:Min:Sec</string>
+    <string name="Notification">Bodhi Timer Finished</string>
+    <string name="InputTitle">Hour:Min:Sec</string>
 
-	<string name="warning_text">The phone is in silent mode! Notification vibration and sound will be suppressed.</string>
-	<string name="warning_title">Warning</string>
-	<string name="warning_button">OK</string>
-	
-	<string name="timer_for_x">Timer for %s</string>
-	<string name="x_hours">" %d hours</string>
-	<string name="one_hour"> 1 hour</string>
-	<string name="x_mins">" %d minutes</string>
-	<string name="one_min"> 1 minute</string>
-	<string name="x_secs"> %d seconds</string>
-	<string name="one_sec"> 1 second</string>
+    <string name="warning_text">The phone is in silent mode! Notification vibration and sound will be suppressed.</string>
+    <string name="warning_title">Warning</string>
+    <string name="warning_button">OK</string>
 
-	<string name="hour">hour</string>
-	<string name="minute">minute</string>
-	<string name="second">second</string>
-	<string name="speech_description">Speak the time you would like to set…</string>
+    <string name="timer_for_x">Timer for %s</string>
+    <string name="x_hours">" %d hours</string>
+    <string name="one_hour"> 1 hour</string>
+    <string name="x_mins">" %d minutes</string>
+    <string name="one_min"> 1 minute</string>
+    <string name="x_secs"> %d seconds</string>
+    <string name="one_sec"> 1 second</string>
+
+    <string name="hour">hour</string>
+    <string name="minute">minute</string>
+    <string name="second">second</string>
+    <string name="speech_description">Speak the time you would like to set…</string>
     <string name="speech_not_recognized">Speech not recognized</string>
     <string name="adv_speech_recognized">Recognized time list</string>
     <string name="speech_recognized">Recognized: %s</string>
 
-	<string name="prefs">Preferences</string>
+    <string name="prefs">Preferences</string>
 
-	<!-- Widget -->
-	
-	<string name="choose_widget">Choose Widget Theme:</string>
-	<string name="theme">widget theme</string>
-				
-	<!-- Preferences -->
-	
-	<string name="preferences">Preferences</string>
-	<string name="sound">Sound:</string>
-	<string name="notification_sound">Timer Sound</string>
-	<string name="notification_sound_desc">The sound to play when the timer finishes</string>
+    <!-- Widget -->
 
-	<string name="play_sound">Test Sound</string>
-	<string name="play_sound_desc">Play the current timer sound.</string>
+    <string name="choose_widget">Choose Widget Theme:</string>
+    <string name="theme">widget theme</string>
 
-	<string name="playing_sound">Stop Sound</string>
-	<string name="playing_sound_desc">Click to stop the current playing sound.</string>
+    <!-- Preferences -->
 
-	<string name="pre_sound">Start Sound</string>
-	<string name="pre_sound_desc">Optional sound to play when timer starts</string>
-	
-	<string name="play_pre_sound">Test Start Sound</string>
-	<string name="play_pre_sound_desc">Play the current start sound.</string>
-		
-	<string name="volume">Sound Volume</string>
-	<string name="volume_desc">as percent of media volume setting</string>
-			
-		
-	<string name="notification">Notification</string>
-	<string name="notification_vibrate">Enable Vibration</string>
-	<string name="notification_vibrate_desc">Cause the timer to trigger vibration.</string>
-	
-	<string name="led_notification">Enable LED Blinking</string>
-	<string name="led_notification_desc">Blink LED light during notification.</string>
+    <string name="preferences">Preferences</string>
+    <string name="sound">Sound:</string>
+    <string name="notification_sound">Timer Sound</string>
+    <string name="notification_sound_desc">The sound to play when the timer finishes</string>
 
-	<string name="auto_clear">Auto-Clear Notification</string>
-	<string name="auto_clear_desc">Clear notification automatically after a few seconds.</string>
-	<string name="auto_restart">Auto-Restart Timer</string>
-	<string name="auto_restart_desc">Restart timer automatically when finished.</string>
-		
-	<string name="visual">Visual</string>
+    <string name="play_sound">Test Sound</string>
+    <string name="play_sound_desc">Play the current timer sound.</string>
 
-	<string name="is_bitmap">fade-in image</string>
-	<string name="is_circle">circle animation</string>
-	<string name="bmp_or_circle">Animation Type</string>
-		
-	<string name="custom_bmp">Use Custom Image</string>
-	<string name="bmp_url">Choose Custom Image</string>
+    <string name="playing_sound">Stop Sound</string>
+    <string name="playing_sound_desc">Click to stop the current playing sound.</string>
 
-	<string name="invert_colors">Invert UI Colors</string>
+    <string name="pre_sound">Start Sound</string>
+    <string name="pre_sound_desc">Optional sound to play when timer starts</string>
 
-	<string name="color_theme">Choose Circle Animation</string>
-	<string name="color_theme_desc">(Click on Bodhi leaf to switch to circle animation)</string>
-	
-	<string name="fullscreen">Full Screen</string>
-	<string name="fullscreen_desc">Hide the status bar when timer is running.</string>
-	
-	<string name="hide_time">Hide Time Left</string>
-	<string name="hide_time_desc">Don\'t show time left.</string>
-	
-	<string name="misc">Misc</string>
-	
-	<string name="nag_dialog">Popup When Silent</string>
-	<string name="nag_dialog_desc">When the phone is set to silent show a popup dialog.</string>
-	
-	<string name="repeat_timer">Repeat Timer</string>
-	<string name="repeat_timer_desc">Restart timer automatically on finish.</string>
-		
-	<string name="stay_awake">Stay Awake</string>
-	<string name="stay_awake_desc">Don\'t allow the phone to go to sleep.</string>
+    <string name="play_pre_sound">Test Start Sound</string>
+    <string name="play_pre_sound_desc">Play the current start sound.</string>
 
-	<string name="switch_time">Switch Time Input Mode</string>
-	<string name="switch_time_desc">Clicking on clock opens speech input (otherwise on long-click).</string>
-	
-	<string name="override_sound">Force Custom Sound</string>
-	<string name="override_sound_desc">use this only if you are not able to set a custom sound for the timer</string>
-		
-	<string name="about_desc">About Bodhi Timer</string>
+    <string name="volume">Sound Volume</string>
+    <string name="volume_desc">as percent of media volume setting</string>
 
-	<string name="export_sounds">Export Sounds</string>
-	<string name="export_sounds_desc">Copy built-in sound files to SD Card</string>
-	<string name="exporting">Exporting sounds…</string>
-				
-	<!-- About -->
-	<string name="close">Close</string>
-	<string name="about">About</string>
-	<string name="about_title">About Bodhi Timer</string>
-	<string name="about_text">
+
+    <string name="notification">Notification</string>
+    <string name="notification_vibrate">Enable Vibration</string>
+    <string name="notification_vibrate_desc">Cause the timer to trigger vibration.</string>
+
+    <string name="led_notification">Enable LED Blinking</string>
+    <string name="led_notification_desc">Blink LED light during notification.</string>
+
+    <string name="auto_clear">Auto-Clear Notification</string>
+    <string name="auto_clear_desc">Clear notification automatically after a few seconds.</string>
+    <string name="auto_restart">Auto-Restart Timer</string>
+    <string name="auto_restart_desc">Restart timer automatically when finished.</string>
+
+    <string name="visual">Visual</string>
+
+    <string name="is_bitmap">fade-in image</string>
+    <string name="is_circle">circle animation</string>
+    <string name="bmp_or_circle">Animation Type</string>
+
+    <string name="custom_bmp">Use Custom Image</string>
+    <string name="bmp_url">Choose Custom Image</string>
+
+    <string name="invert_colors">Invert UI Colors</string>
+
+    <string name="color_theme">Choose Circle Animation</string>
+    <string name="color_theme_desc">(Click on Bodhi leaf to switch to circle animation)</string>
+
+    <string name="fullscreen">Full Screen</string>
+    <string name="fullscreen_desc">Hide the status bar when timer is running.</string>
+
+    <string name="hide_time">Hide Time Left</string>
+    <string name="hide_time_desc">Don\'t show time left.</string>
+
+    <string name="misc">Misc</string>
+
+    <string name="nag_dialog">Popup When Silent</string>
+    <string name="nag_dialog_desc">When the phone is set to silent show a popup dialog.</string>
+
+    <string name="repeat_timer">Repeat Timer</string>
+    <string name="repeat_timer_desc">Restart timer automatically on finish.</string>
+
+    <string name="stay_awake">Stay Awake</string>
+    <string name="stay_awake_desc">Don\'t allow the phone to go to sleep.</string>
+
+    <string name="switch_time">Switch Time Input Mode</string>
+    <string name="switch_time_desc">Clicking on clock opens speech input (otherwise on long-click).</string>
+
+    <string name="override_sound">Force Custom Sound</string>
+    <string name="override_sound_desc">use this only if you are not able to set a custom sound for the timer</string>
+
+    <string name="about_desc">About Bodhi Timer</string>
+
+    <string name="export_sounds">Export Sounds</string>
+    <string name="export_sounds_desc">Copy built-in sound files to SD Card</string>
+    <string name="exporting">Exporting sounds…</string>
+
+    <!-- About -->
+    <string name="close">Close</string>
+    <string name="about">About</string>
+    <string name="about_title">About Bodhi Timer</string>
+    <string name="about_text">
 		<![CDATA[
 			<body style="text-align:justify;font-size:16px;color:white;background-color:black;>
 				<p><b>Bodhi Timer</b> is an elegant, minimalist countdown timer.  It was designed mainly for use as a meditation timer but can easily be used for any similar purpose.</p>
@@ -135,24 +132,24 @@
 			</body>
 		]]>
 	</string>
-	
-	<!-- Timer -->
-		
-	<string name="longclick">Press and hold on button to set preset</string>	
-	<string name="notset">Select time before setting preset</string>	
-	
-	<string name="zero">00</string>	
-	<string name="set">Set</string>	
-	<string name="pause">Pause</string>	
-			
-	<string name="H">H</string>	
-	<string name="M">M</string>	
-	<string name="S">S</string>	
 
-	<string name="pre1">one</string>
-	<string name="pre2">two</string>
-	<string name="pre3">three</string>
-	<string name="pre4">four</string>
+    <!-- Timer -->
+
+    <string name="longclick">Press and hold on button to set preset</string>
+    <string name="notset">Select time before setting preset</string>
+
+    <string name="zero">00</string>
+    <string name="set">Set</string>
+    <string name="pause">Pause</string>
+
+    <string name="H">H</string>
+    <string name="M">M</string>
+    <string name="S">S</string>
+
+    <string name="pre1">one</string>
+    <string name="pre2">two</string>
+    <string name="pre3">three</string>
+    <string name="pre4">four</string>
     <string name="adv">adv</string>
     <string name="advanced">Advanced</string>
     <string name="add">add</string>

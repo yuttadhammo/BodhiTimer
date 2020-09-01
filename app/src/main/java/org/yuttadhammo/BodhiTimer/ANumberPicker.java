@@ -70,14 +70,13 @@ public class ANumberPicker extends Activity {
     private final int SELECT_RINGTONE = 0;
     private final int SELECT_FILE = 1;
 
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = this;
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if(prefs.getBoolean("FULLSCREEN", false))
+        if (prefs.getBoolean("FULLSCREEN", false))
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -85,7 +84,7 @@ public class ANumberPicker extends Activity {
 
         customSound = getString(R.string.sys_def);
 
-        advTimeString = prefs.getString("advTimeString","");
+        advTimeString = prefs.getString("advTimeString", "");
 
         setContentView(R.layout.adv_number_picker);
         Button add = (Button) findViewById(R.id.add);
@@ -100,7 +99,7 @@ public class ANumberPicker extends Activity {
 
         hours.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                if(s.length() >= 2) {
+                if (s.length() >= 2) {
                     mins.requestFocus();
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 }
@@ -115,7 +114,7 @@ public class ANumberPicker extends Activity {
 
         mins.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                if(s.length() >= 2) {
+                if (s.length() >= 2) {
                     secs.requestFocus();
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 }
@@ -142,7 +141,7 @@ public class ANumberPicker extends Activity {
 
                 String[] sounds = getResources().getStringArray(R.array.sound_names);
 
-                for(String s: sounds) {
+                for (String s : sounds) {
                     arrayAdapter.add(s);
                 }
 
@@ -160,24 +159,22 @@ public class ANumberPicker extends Activity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                if(which > 0) {
+                                if (which > 0) {
                                     customUri = getResources().getStringArray(R.array.sound_uris)[which - 1];
                                     customSound = getResources().getStringArray(R.array.sound_names)[which - 1];
                                 }
 
-                                if(which == 0) {
+                                if (which == 0) {
                                     customUri = "sys_def";
                                     customSound = getString(R.string.sys_def);
-                                }
-                                else if(customUri.equals("system")) {
+                                } else if (customUri.equals("system")) {
                                     mDialog = dialog;
                                     Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
                                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
                                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
                                     context.startActivityForResult(intent, SELECT_RINGTONE);
-                                }
-                                else if(customUri.equals("file")) {
+                                } else if (customUri.equals("file")) {
                                     mDialog = dialog;
 
                                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -186,8 +183,7 @@ public class ANumberPicker extends Activity {
 
                                     try {
                                         context.startActivityForResult(Intent.createChooser(intent, "Select Sound File"), SELECT_FILE);
-                                    }
-                                    catch (ActivityNotFoundException ex) {
+                                    } catch (ActivityNotFoundException ex) {
                                         Toast.makeText(context, getString(R.string.get_file_man),
                                                 Toast.LENGTH_SHORT).show();
                                     }
@@ -202,7 +198,7 @@ public class ANumberPicker extends Activity {
         });
 
         listView = (ListView) findViewById(R.id.timesList);
-        TextView emptyText = (TextView)findViewById(android.R.id.empty);
+        TextView emptyText = (TextView) findViewById(android.R.id.empty);
         listView.setEmptyView(emptyText);
 
         clear.setOnClickListener(new View.OnClickListener() {
@@ -232,17 +228,16 @@ public class ANumberPicker extends Activity {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("advTimeString",advTimeString);
+                editor.putString("advTimeString", advTimeString);
                 editor.apply();
                 finish();
             }
         });
 
 
-        if(advTimeString.equals("")) {
+        if (advTimeString.equals("")) {
             advTimeList = new ArrayList<String>();
-        }
-        else {
+        } else {
             String[] advTime = advTimeString.split("\\^");
             advTimeList = Arrays.asList(advTime);
         }
@@ -255,13 +250,13 @@ public class ANumberPicker extends Activity {
         String ms = mins.getText().toString();
         String ss = secs.getText().toString();
 
-        int h = hs.length() > 0 ? Integer.parseInt(hs):0;
-        int m = ms.length() > 0 ? Integer.parseInt(ms):0;
-        int s = ss.length() > 0 ? Integer.parseInt(ss):0;
+        int h = hs.length() > 0 ? Integer.parseInt(hs) : 0;
+        int m = ms.length() > 0 ? Integer.parseInt(ms) : 0;
+        int s = ss.length() > 0 ? Integer.parseInt(ss) : 0;
 
-        int time =  h*60*60*1000 + m*60*1000 + s*1000;
+        int time = h * 60 * 60 * 1000 + m * 60 * 1000 + s * 1000;
 
-        advTimeString += (advTimeString.length() == 0 ? "":"^")+time+"#"+customUri+"#"+customSound;
+        advTimeString += (advTimeString.length() == 0 ? "" : "^") + time + "#" + customUri + "#" + customSound;
         updateDataSet();
         hours.setText("");
         mins.setText("");
@@ -269,17 +264,16 @@ public class ANumberPicker extends Activity {
     }
 
     private void updateDataSet() {
-        if(advTimeString.equals("")) {
+        if (advTimeString.equals("")) {
             advTimeList = new ArrayList<String>();
-        }
-        else {
+        } else {
             String[] advTime = advTimeString.split("\\^");
             advTimeList = Arrays.asList(advTime);
         }
         adapter = new MyAdapter(context, R.layout.adv_list_item, advTimeList);
         listView.setAdapter(adapter);
         Log.d(TAG, "advTimeString: " + advTimeString);
-        Log.d(TAG,"adapter items: "+adapter.getCount());
+        Log.d(TAG, "adapter items: " + adapter.getCount());
 
     }
 
@@ -334,10 +328,10 @@ public class ANumberPicker extends Activity {
     private void removeItem(int p) {
         String[] times = advTimeString.split("\\^");
         advTimeString = "";
-        for(int i = 0; i < times.length; i++) {
-            if(i == p)
+        for (int i = 0; i < times.length; i++) {
+            if (i == p)
                 continue;
-            advTimeString += (advTimeString.length() == 0?"":"^")+times[i];
+            advTimeString += (advTimeString.length() == 0 ? "" : "^") + times[i];
         }
         updateDataSet();
     }
@@ -348,7 +342,7 @@ public class ANumberPicker extends Activity {
         if (resultCode == Activity.RESULT_OK) {
             Uri uri = null;
 
-            switch(requestCode) {
+            switch (requestCode) {
                 case SELECT_RINGTONE:
                     uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                     if (uri != null) {

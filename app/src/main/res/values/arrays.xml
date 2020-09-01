@@ -1,82 +1,79 @@
-<?xml version="1.0" encoding="utf-8"?> 
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation"
-    >
-	<array name="themes"> 
-        <item>Zen Enso</item> 
-        <item>Original Green</item> 
-        <item>Bright Yellow</item> 
-        <item>Sky</item> 
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <array name="themes">
+        <item>Zen Enso</item>
+        <item>Original Green</item>
+        <item>Bright Yellow</item>
+        <item>Sky</item>
     </array>
-     
-    <array name="themeValues"> 
+
+    <array name="themeValues">
         <item>"3"</item>
         <item>"0"</item>
         <item>"1"</item>
         <item>"2"</item>
     </array>
     <string-array name="numbers">
-		<item>sixty</item>
-		<item>fifty-nine</item>
-		<item>fifty-eight</item>
-		<item>fifty-seven</item>
-		<item>fifty-six</item>
-		<item>fifty-five</item>
-		<item>fifty-four</item>
-		<item>fifty-three</item>
-		<item>fifty-two</item>
-		<item>fifty-one</item>
-		<item>fifty</item>
-		<item>fourty-nine</item>
-		<item>fourty-eight</item>
-		<item>fourty-seven</item>
-		<item>fourty-six</item>
-		<item>fourty-five</item>
-		<item>fourty-four</item>
-		<item>fourty-three</item>
-		<item>fourty-two</item>
-		<item>fourty-one</item>
-		<item>fourty</item>
-		<item>thirty-nine</item>
-		<item>thirty-eight</item>
-		<item>thirty-seven</item>
-		<item>thirty-six</item>
-		<item>thirty-five</item>
-		<item>thirty-four</item>
-		<item>thirty-three</item>
-		<item>thirty-two</item>
-		<item>thirty-one</item>
-		<item>thirty</item>
-		<item>twenty-nine</item>
-		<item>twenty-eight</item>
-		<item>twenty-seven</item>
-		<item>twenty-six</item>
-		<item>twenty-five</item>
-		<item>twenty-four</item>
-		<item>twenty-three</item>
-		<item>twenty-two</item>
-		<item>twenty-one</item>
-		<item>twenty</item>
-		<item>nineteen</item>
-		<item>eighteen</item>
-		<item>seventeen</item>
-		<item>sixteen</item>
-		<item>fifteen</item>
-		<item>fourteen</item>
-		<item>thirteen</item>
-		<item>twelve</item>
-		<item>eleven</item>
-		<item>ten</item>
-		<item>nine</item>
-		<item>eight</item>
-		<item>seven</item>
-		<item>six</item>
-		<item>five</item>
-		<item>four</item>
-		<item>three</item>
-		<item>two</item>
-		<item>one</item>        
+        <item>sixty</item>
+        <item>fifty-nine</item>
+        <item>fifty-eight</item>
+        <item>fifty-seven</item>
+        <item>fifty-six</item>
+        <item>fifty-five</item>
+        <item>fifty-four</item>
+        <item>fifty-three</item>
+        <item>fifty-two</item>
+        <item>fifty-one</item>
+        <item>fifty</item>
+        <item>fourty-nine</item>
+        <item>fourty-eight</item>
+        <item>fourty-seven</item>
+        <item>fourty-six</item>
+        <item>fourty-five</item>
+        <item>fourty-four</item>
+        <item>fourty-three</item>
+        <item>fourty-two</item>
+        <item>fourty-one</item>
+        <item>fourty</item>
+        <item>thirty-nine</item>
+        <item>thirty-eight</item>
+        <item>thirty-seven</item>
+        <item>thirty-six</item>
+        <item>thirty-five</item>
+        <item>thirty-four</item>
+        <item>thirty-three</item>
+        <item>thirty-two</item>
+        <item>thirty-one</item>
+        <item>thirty</item>
+        <item>twenty-nine</item>
+        <item>twenty-eight</item>
+        <item>twenty-seven</item>
+        <item>twenty-six</item>
+        <item>twenty-five</item>
+        <item>twenty-four</item>
+        <item>twenty-three</item>
+        <item>twenty-two</item>
+        <item>twenty-one</item>
+        <item>twenty</item>
+        <item>nineteen</item>
+        <item>eighteen</item>
+        <item>seventeen</item>
+        <item>sixteen</item>
+        <item>fifteen</item>
+        <item>fourteen</item>
+        <item>thirteen</item>
+        <item>twelve</item>
+        <item>eleven</item>
+        <item>ten</item>
+        <item>nine</item>
+        <item>eight</item>
+        <item>seven</item>
+        <item>six</item>
+        <item>five</item>
+        <item>four</item>
+        <item>three</item>
+        <item>two</item>
+        <item>one</item>
     </string-array>
     <string-array name="sound_names">
         <item>No Sound</item>
@@ -84,7 +81,7 @@
         <item>One Bell</item>
         <item>Gong</item>
         <item>Singing Bowl High</item>
-		<item>Singing Bowl Low</item>
+        <item>Singing Bowl Low</item>
         <item>Bird Song</item>
         <item>System Tone</item>
         <item>Sound File</item>
@@ -96,7 +93,7 @@
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell1</item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/gong</item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bowl</item>
-		<item>android.resource://org.yuttadhammo.BodhiTimer/raw/bowl_low</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bowl_low</item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/birds</item>
         <item>system</item>
         <item>file</item>
