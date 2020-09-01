@@ -83,7 +83,8 @@
         <item>Three Bells</item>
         <item>One Bell</item>
         <item>Gong</item>
-        <item>Singing Bowl</item>
+        <item>Singing Bowl High</item>
+		<item>Singing Bowl Low</item>
         <item>Bird Song</item>
         <item>System Tone</item>
         <item>Sound File</item>
@@ -95,6 +96,7 @@
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell1</item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/gong</item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bowl</item>
+		<item>android.resource://org.yuttadhammo.BodhiTimer/raw/bowl_low</item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/birds</item>
         <item>system</item>
         <item>file</item>

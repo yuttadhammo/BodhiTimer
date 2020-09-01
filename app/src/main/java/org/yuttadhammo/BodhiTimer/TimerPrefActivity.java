@@ -510,8 +510,8 @@ public class TimerPrefActivity extends PreferenceActivity
 
     			    InputStream in = null;
     			    OutputStream out = null;
-    			    int[] sounds = {R.raw.bell,R.raw.bell1,R.raw.bowl,R.raw.gong};
-    			    String[] soundNames = {"bell","bell1","bowl","gong"};
+    			    int[] sounds = {R.raw.bell,R.raw.bell1,R.raw.bowl,R.raw.gong, R.raw.singingbowl};
+    			    String[] soundNames = {"bell","bell1","bowl","gong", "bowl_low"};
 	        		downloadProgressDialog.setMax(sounds.length);
     			    for(int idx = 0;idx < sounds.length; idx++) {
                         Log.i(TAG,"exporting "+soundNames[idx]); 
