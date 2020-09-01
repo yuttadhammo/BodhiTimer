@@ -434,11 +434,16 @@ public class TimerPrefActivity extends PreferenceActivity {
         });
 
         final Preference indexPref = (Preference) findPreference("DrawingIndex");
+        final Preference themePref = (Preference) findPreference("Theme");
+
         int dIndex = prefs.getInt("DrawingIndex", 0);
-        if (dIndex == 0)
+        if (dIndex == 0) {
             indexPref.setSummary(getString(R.string.is_bitmap));
-        else
+            themePref.setEnabled(false);
+        } else {
             indexPref.setSummary(getString(R.string.is_circle));
+            themePref.setEnabled(true);
+        }
 
         indexPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
@@ -450,8 +455,10 @@ public class TimerPrefActivity extends PreferenceActivity {
 
                 if (dIndex == 0) {
                     indexPref.setSummary(getString(R.string.is_bitmap));
+                    themePref.setEnabled(false);
                 } else {
                     indexPref.setSummary(getString(R.string.is_circle));
+                    themePref.setEnabled(true);
                 }
                 Editor mSettingsEdit = prefs.edit();
                 mSettingsEdit.putInt("DrawingIndex", dIndex);
