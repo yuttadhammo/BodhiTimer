@@ -24,6 +24,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -32,7 +34,13 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.DrawableRes;
+import androidx.core.content.ContextCompat;
 
 import org.yuttadhammo.BodhiTimer.R;
 import org.yuttadhammo.BodhiTimer.TimerUtils;
@@ -96,11 +104,63 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         configure();
     }
 
+    private static Bitmap getBitmapFromVector(VectorDrawable vectorDrawable) {
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        vectorDrawable.draw(canvas);
+        return bitmap;
+    }
+
+
+
+    public static Bitmap getBitmapFromVector(Context context, @DrawableRes int drawableResId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableResId);
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else if (drawable instanceof VectorDrawable) {
+            return getBitmapFromVector((VectorDrawable) drawable);
+        } else {
+            throw new IllegalArgumentException("Unsupported drawable type");
+        }
+    }
+
+
+    public Bitmap invert(Bitmap src)
+    {
+        int height = src.getHeight();
+        int width = src.getWidth();
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+
+        ColorMatrix matrixGrayscale = new ColorMatrix();
+        matrixGrayscale.setSaturation(0);
+
+        ColorMatrix matrixInvert = new ColorMatrix();
+        matrixInvert.set(new float[]
+                {
+                        -1.0f, 0.0f, 0.0f, 0.0f, 255.0f,
+                        0.0f, -1.0f, 0.0f, 0.0f, 255.0f,
+                        0.0f, 0.0f, -1.0f, 0.0f, 255.0f,
+                        0.0f, 0.0f, 0.0f, 1.0f, 0.0f
+                });
+        matrixInvert.preConcat(matrixGrayscale);
+
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrixInvert);
+        paint.setColorFilter(filter);
+
+        canvas.drawBitmap(src, 0, 0, paint);
+        return bitmap;
+    }
+
     public void configure() {
         Resources resources = mContext.getResources();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        // LOAD The correct theme
+        // Load the correct theme
         theme = Integer.parseInt(prefs.getString("Theme", "3"));
         invertColors = prefs.getBoolean("invert_colors", false);
 
@@ -144,9 +204,13 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
                 break;
         }
 
-        mEnsoBitmap = BitmapFactory.decodeResource(resources, invertColors ? R.drawable.ensow_black : R.drawable.ensow);
+        mEnsoBitmap = getBitmapFromVector(mContext, R.drawable.enso);
         eHeight = mEnsoBitmap.getHeight();
         eWidth = mEnsoBitmap.getWidth();
+
+        if (invertColors)
+            mEnsoBitmap = invert(mEnsoBitmap);
+
 
         mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCirclePaint.setColor(colors[0]);
@@ -244,11 +308,8 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
 
         mLastTime = timeVec;
 
-        // enso
-
+        // Enso
         if (theme == 3) {
-
-            // enso
 
             int w = canvas.getClipBounds().width();
             int h = canvas.getClipBounds().height();
@@ -268,18 +329,18 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
             canvas.restore();
             canvas.translate(mWidth / 2.0f, mHeight / 2.0f);
 
-            // uncover arc
-
+            // Uncover arc
             float timeAngle = 360 * (1 - p);
 
-            float ucAngle = START_ANGLE + timeAngle;
+            // We add 20 degrees to the start angle, because the
+            // enso doesn't start exactly at 90deg
+            float ucAngle = START_ANGLE + 20 + timeAngle;
 
             if (ucAngle > 360)
                 ucAngle = ucAngle - 360;
 
             canvas.drawArc(mArcRect, ucAngle, 360 - 360 * (1 - p), true, mArcPaint);
 
-            //canvas.drawCircle(0,0,mInnerRadius,mInnerPaint);
         } else {
 
             // Ms Arc
@@ -291,6 +352,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
                 canvas.drawCircle(0, 0, mMsRadius, (mMsFlipper) ? mCirclePaint : mMsPaint);
                 canvas.drawArc(mMsRect, START_ANGLE, thetaMs, true, (mMsFlipper) ? mMsPaint : mCirclePaint);
             }
+            
             // We want to draw a very thin border
             else {
                 canvas.drawCircle(0, 0, mMsRadius, mMsPaint);
@@ -299,7 +361,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
             // Gap between the ms and seconds
             canvas.drawCircle(0, 0, mMsGap, mInnerPaint);
 
-            //Second arc
+            // Second arc
             canvas.drawCircle(0, 0, mSecondRadius, mSecondBgPaint);
             canvas.drawArc(mSecondRect, START_ANGLE, thetaSecond, true, mSecondPaint);
 

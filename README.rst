@@ -42,3 +42,17 @@ Features
 
 - free and open source: https://github.com/yuttadhammo/BodhiTimer
 - licensed under the GPL 3+: https://www.gnu.org/licenses/gpl.html
+
+Credits
+=========
+
+The Enso image was drawn by Ryōnen Gensō (1646-1711).
+Next to the Enso she has written:
+"When you do understand yourself fully,
+there is not one thing."
+
+Singing Bowl Low sound
+Recorded by juskiddink
+Licensed under CC-BY-SA 3.0
+https://freesound.org/people/juskiddink/sounds/122647/
+

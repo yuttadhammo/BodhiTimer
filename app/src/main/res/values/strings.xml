@@ -128,7 +128,13 @@
 				<p>You may <b>add a timer widget</b> to your desktop via the App Drawer, or on your lockscreen (Android 4.2+).</p>
 				<p><b>Bodhi Timer</b> is free and open source software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version. <b><a href="http://www.gnu.org/licenses/gpl.html">GPL License</a></b></p>
 				<p>Get the latest version of the source code <b><a href="https://github.com/yuttadhammo/BodhiTimer">on GitHub</a></b>.</p>
+				<h4>Credits</h4>
 				<p>Bodhi Timer is a fork of the open source TeaTimer app by Ralph Gootee &lt;rgootee@gmail.com&gt;, which is also available <b><a href="https://github.com/ralphleon/TeaTimer">on GitHub</a></b>.</p>
+				<p>The Enso image was drawn by Ryōnen Gensō (1646-1711). Next to the Enso she has written:<br>
+                    "When you do understand yourself fully,<br>
+                    there is not one thing."<br><br>
+                    Singing Bowl Low sound: <a href="https://freesound.org/people/juskiddink/sounds/122647/">Recorded by juskiddink</a>, Licensed under CC-BY-SA 3.0
+                 </p>
 			</body>
 		]]>
 	</string>
