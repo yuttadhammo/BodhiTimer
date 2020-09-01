@@ -1,23 +1,23 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion "20"
+    compileSdkVersion 30
+    buildToolsVersion '30.0.1'
 
     defaultConfig {
         applicationId "org.yuttadhammo.BodhiTimer"
-        minSdkVersion 9
-        targetSdkVersion 20
+        minSdkVersion 14
+        targetSdkVersion 30
     }
 
     buildTypes {
         release {
-            runProguard true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
         }
     }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:20.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
