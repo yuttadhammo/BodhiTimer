@@ -11,6 +11,5 @@
 		<item name="android:windowNoTitle">true</item>
 		<item name="android:windowIsFloating">true</item>
 	</style>	
-	<style name="Theme.Holo" parent="@android:style/Theme.Black">
-	</style>	
+	<style name="Theme.Holo" parent="@android:style/Theme.Black"></style>
 </resources>
