@@ -254,7 +254,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing
 			
 			Rect rs = new Rect(0, 0, eWidth, eHeight);
 			Rect rd;
-			
+			//canvas.save();
 			if(w < h) {
 				rd = new Rect(0,0,w,w);
 				canvas.translate(w/-2,h/-2+(h-w)/2);
@@ -314,10 +314,10 @@ class CircleAnimation implements TimerAnimation.TimerDrawing
 			// Main arc
 			canvas.drawArc(mArcRect,START_ANGLE,360*(1-p),true,mArcPaint);
 			// Inner paint
-			canvas.drawCircle(0,0,mInnerRadius,mInnerPaint);			
-
+			canvas.drawCircle(0,0,mInnerRadius,mInnerPaint);
+			canvas.restore();
 		}
 		
-		canvas.restore();
+
 	}
 }
