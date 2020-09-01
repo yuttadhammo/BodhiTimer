@@ -90,9 +90,7 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
 {
 	/** All possible timer states */
 	public final static int RUNNING=0;
-
 	public static final int STOPPED=1;
-
 	public static final int PAUSED=2;
 
 	/** Should the logs be shown */
@@ -167,7 +165,6 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
     /** Called when the activity is first created.
      *	{ @inheritDoc} 
      */
-	@SuppressLint("NewApi")
 	@Override
     public void onCreate(Bundle savedInstanceState)
     {    	
@@ -464,7 +461,7 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
                 prePlayer.release();
             }
 
-            cancelNotification();
+            //cancelNotification();
         }
 
         switch(v.getId()){
@@ -535,7 +532,6 @@ public class TimerActivity extends Activity implements OnClickListener,OnNNumber
         return super.onKeyDown(keycode, e);
     }
 
-    @SuppressLint("NewApi")
     private void setLowProfile() {
         if(android.os.Build.VERSION.SDK_INT >= 14) {
             View rootView = getWindow().getDecorView();
