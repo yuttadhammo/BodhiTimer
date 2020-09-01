@@ -38,7 +38,7 @@
             android:theme="@style/Theme.Holo" />
         <activity
             android:label="@string/advanced"
-            android:name=".ANumberPicker"
+            android:name=".AdvNumberPicker"
             android:theme="@style/Theme.Holo"
             android:windowSoftInputMode="adjustResize" />
 

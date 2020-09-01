@@ -40,6 +40,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ import java.util.List;
 /**
  * Created by noah on 9/16/14.
  */
-public class ANumberPicker extends Activity {
+public class AdvNumberPicker extends Activity {
 
     private String TAG = "ANumberPicker";
     private Activity context;
@@ -59,6 +60,8 @@ public class ANumberPicker extends Activity {
     private EditText hours;
     private EditText mins;
     private EditText secs;
+
+
     ListView listView;
     private List<String> advTimeList;
 
@@ -72,6 +75,7 @@ public class ANumberPicker extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         this.context = this;
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -91,6 +95,7 @@ public class ANumberPicker extends Activity {
         Button cancel = (Button) findViewById(R.id.cancel);
         Button clear = (Button) findViewById(R.id.clear);
         Button save = (Button) findViewById(R.id.save);
+
         hours = (EditText) findViewById(R.id.hours);
         mins = (EditText) findViewById(R.id.mins);
         secs = (EditText) findViewById(R.id.secs);

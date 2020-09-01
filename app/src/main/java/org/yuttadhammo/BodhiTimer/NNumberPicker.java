@@ -229,7 +229,7 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
             setResult(Activity.RESULT_OK, i);
             finish();
         } else {
-            Intent i = new Intent(this, ANumberPicker.class);
+            Intent i = new Intent(this, AdvNumberPicker.class);
             startActivity(i);
         }
     }
@@ -269,7 +269,7 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
                 setPre(v, 4, vals);
                 return true;
             case R.id.btnadv:
-                Intent i = new Intent(this, ANumberPicker.class);
+                Intent i = new Intent(this, AdvNumberPicker.class);
                 startActivity(i);
                 return true;
             default:
