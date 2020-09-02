@@ -40,7 +40,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -57,8 +56,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class TimerPrefActivity extends PreferenceActivity {
-    private static final String TAG = TimerPrefActivity.class.getSimpleName();
+public class PreferenceActivity extends android.preference.PreferenceActivity {
+    private static final String TAG = PreferenceActivity.class.getSimpleName();
     private SharedPreferences prefs;
     private Context context;
     private static Activity activity;

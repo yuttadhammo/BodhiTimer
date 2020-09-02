@@ -34,7 +34,7 @@
             android:theme="@style/Theme.Transparent" />
         <activity
             android:label="@string/preferences"
-            android:name=".TimerPrefActivity"
+            android:name=".PreferenceActivity"
             android:theme="@style/Theme.Holo" />
         <activity
             android:label="@string/advanced"
