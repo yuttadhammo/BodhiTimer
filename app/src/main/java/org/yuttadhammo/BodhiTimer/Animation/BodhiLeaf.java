@@ -17,6 +17,7 @@
 
 package org.yuttadhammo.BodhiTimer.Animation;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -29,11 +30,14 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
 
 import org.yuttadhammo.BodhiTimer.R;
 
+import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 class BodhiLeaf implements TimerAnimation.TimerDrawing {
@@ -59,11 +63,19 @@ class BodhiLeaf implements TimerAnimation.TimerDrawing {
         } else {
             String bmpUrl = prefs.getString("bmp_url", "");
             Uri selectedImage = Uri.parse(bmpUrl);
-            InputStream imageStream = context.getContentResolver().openInputStream(selectedImage);
-            mCupBitmap = BitmapFactory.decodeStream(imageStream);
-            if (mCupBitmap == null) {
+            ContentResolver resolver = context.getContentResolver();
+            String readOnlyMode = "r";
+
+            try {
+                ParcelFileDescriptor pfile = resolver.openFileDescriptor(selectedImage, readOnlyMode);
+                FileDescriptor file = pfile.getFileDescriptor();
+                //InputStream imageStream = resolver.openInputStream(selectedImage);
+                mCupBitmap = BitmapFactory.decodeFileDescriptor(file);
+            } catch (IOException e) {
+                e.printStackTrace();
                 mCupBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.leaf);
             }
+
         }
         mHeight = mCupBitmap.getHeight();
         mWidth = mCupBitmap.getWidth();

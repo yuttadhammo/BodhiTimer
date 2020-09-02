@@ -33,6 +33,7 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.CheckBoxPreference;
@@ -236,9 +237,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 
         });
 
-        // pre play tone
-
-
+        // Pre play tone
         pretone.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
             @Override
@@ -394,11 +393,15 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                Uri uri = Uri.parse("content://com.android.externalstorage.documents/document/");
+
+                Intent photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 photoPickerIntent.setType("image/*");
+                photoPickerIntent.putExtra("android.provider.extra.INITIAL_URI", uri);
+                
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
                 return true;
-
             }
 
         });
@@ -470,6 +473,8 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 
         Preference export = (Preference) findPreference("exportPref");
 
+
+        // FIXME: Broken
         export.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
             @Override
@@ -637,6 +642,9 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
                     break;
                 case SELECT_PHOTO:
                     uri = intent.getData();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    }
                     if (uri != null)
                         mSettingsEdit.putString("bmp_url", uri.toString());
                     else
