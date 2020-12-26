@@ -116,6 +116,9 @@
     <string name="about_title">About Bodhi Timer</string>
     <string name="about_text">
 		<![CDATA[
+		    <style>
+		        a {color: rgb(255,87,34); text-decoration: none;}
+		    </style>
 			<body style="text-align:justify;font-size:16px;color:white;background-color:black;>
 				<p><b>Bodhi Timer</b> is an elegant, minimalist countdown timer.  It was designed mainly for use as a meditation timer but can easily be used for any similar purpose.</p>
 				<p><b>Set the time</b> via the clock button in the top left corner.  You may <b>set presets</b> by choosing a time then holding down on one of the three preset buttons.</p>
@@ -156,9 +159,9 @@
     <string name="pre4">four</string>
     <string name="adv">adv</string>
     <string name="advanced">Advanced</string>
-    <string name="add">add</string>
-    <string name="save">save</string>
-    <string name="cancel">cancel</string>
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
     <string name="empty_list">empty</string>
 
     <string name="sys_def">System Default</string>
