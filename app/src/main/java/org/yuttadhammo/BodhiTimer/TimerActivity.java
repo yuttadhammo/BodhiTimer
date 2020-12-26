@@ -28,7 +28,6 @@
 
 package org.yuttadhammo.BodhiTimer;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -576,7 +575,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
         } else {
             float p = (mLastTime != 0) ? (mTime / (float) mLastTime) : 0;
             int alpha = Math.round(255 * p);
-            alpha = alpha > 255 ? 255 : alpha;
+            alpha = Math.min(alpha, 255);
 
             String alphas = Integer.toHexString(alpha);
             alphas = alphas.length() == 1 ? "0" + alphas : alphas;
@@ -884,14 +883,18 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
     private void playPreSound() {
         String uriString = prefs.getString("PreSoundUri", "");
 
-        if (uriString.equals("system"))
-            uriString = prefs.getString("PreSystemUri", "");
-        else if (uriString.equals("file"))
-            uriString = prefs.getString("PreFileUri", "");
-        else if (uriString.equals("tts")) {
-            uriString = "";
-            final String ttsString = prefs.getString("tts_string_pre", context.getString(R.string.timer_done));
-            tts.speak(ttsString, TextToSpeech.QUEUE_ADD, null);
+        switch (uriString) {
+            case "system":
+                uriString = prefs.getString("PreSystemUri", "");
+                break;
+            case "file":
+                uriString = prefs.getString("PreFileUri", "");
+                break;
+            case "tts":
+                uriString = "";
+                final String ttsString = prefs.getString("tts_string_pre", context.getString(R.string.timer_done));
+                tts.speak(ttsString, TextToSpeech.QUEUE_ADD, null);
+                break;
         }
 
         if (uriString.equals(""))
