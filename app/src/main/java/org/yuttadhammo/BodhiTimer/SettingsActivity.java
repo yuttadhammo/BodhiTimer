@@ -186,15 +186,15 @@ public class SettingsActivity extends AppCompatActivity {
 
             // Animation Style
             final Preference indexPref = (Preference) findPreference("DrawingIndex");
-            final Preference cirleThemePref = (Preference) findPreference("CircleTheme");
+            final Preference circleTheme = (Preference) findPreference("CircleTheme");
 
             int dIndex = prefs.getInt("DrawingIndex", 0);
             if (dIndex == 0) {
                 indexPref.setSummary(getString(R.string.is_bitmap));
-                cirleThemePref.setEnabled(false);
+                circleTheme.setEnabled(false);
             } else {
                 indexPref.setSummary(getString(R.string.is_circle));
-                cirleThemePref.setEnabled(true);
+                circleTheme.setEnabled(true);
             }
 
             indexPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -207,11 +207,11 @@ public class SettingsActivity extends AppCompatActivity {
 
                     if (dIndex == 0) {
                         indexPref.setSummary(getString(R.string.is_bitmap));
-                        cirleThemePref.setEnabled(false);
+                        circleTheme.setEnabled(false);
                         customImage.setEnabled(true);
                     } else {
                         indexPref.setSummary(getString(R.string.is_circle));
-                        cirleThemePref.setEnabled(true);
+                        circleTheme.setEnabled(true);
                         customImage.setEnabled(false);
                     }
 
