@@ -312,7 +312,6 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
     /**
      * {@inheritDoc}
      */
-    @SuppressLint("NewApi")
     @Override
     public void onResume() {
         super.onResume();
@@ -543,10 +542,9 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
     @Override
     public boolean onKeyDown(int keycode, KeyEvent e) {
         mNM.cancelAll();
-        switch (keycode) {
-            case KeyEvent.KEYCODE_MENU:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
+        if (keycode == KeyEvent.KEYCODE_MENU) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
         }
         return super.onKeyDown(keycode, e);
     }

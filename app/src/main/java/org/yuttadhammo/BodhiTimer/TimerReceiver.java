@@ -40,6 +40,9 @@ import androidx.core.app.TaskStackBuilder;
 import java.io.IOException;
 import java.util.Date;
 
+
+// This class handles the alarm callback
+
 public class TimerReceiver extends BroadcastReceiver {
     private final static String TAG = "TimerReceiver";
     final static String CANCEL_NOTIFICATION = "CANCEL_NOTIFICATION";
@@ -63,8 +66,6 @@ public class TimerReceiver extends BroadcastReceiver {
             } catch (Exception e) {
                 e.printStackTrace();
                 player = null;
-            } finally {
-                // do nothing
             }
         }
 
@@ -114,16 +115,20 @@ public class TimerReceiver extends BroadcastReceiver {
 
         Log.v(TAG, "notification uri: " + notificationUri);
 
-        if (notificationUri.equals("system"))
-            notificationUri = prefs.getString("SystemUri", "");
-        else if (notificationUri.equals("file"))
-            notificationUri = prefs.getString("FileUri", "");
-        else if (notificationUri.equals("tts")) {
-            notificationUri = "";
-            final String ttsString = prefs.getString("tts_string", context.getString(R.string.timer_done));
-            Intent ttsIntent = new Intent(context, TTSService.class);
-            ttsIntent.putExtra("spoken_text", ttsString);
-            context.startService(ttsIntent);
+        switch (notificationUri) {
+            case "system":
+                notificationUri = prefs.getString("SystemUri", "");
+                break;
+            case "file":
+                notificationUri = prefs.getString("FileUri", "");
+                break;
+            case "tts":
+                notificationUri = "";
+                final String ttsString = prefs.getString("tts_string", context.getString(R.string.timer_done));
+                Intent ttsIntent = new Intent(context, TTSService.class);
+                ttsIntent.putExtra("spoken_text", ttsString);
+                context.startService(ttsIntent);
+                break;
         }
 
         NotificationCompat.Builder mBuilder =

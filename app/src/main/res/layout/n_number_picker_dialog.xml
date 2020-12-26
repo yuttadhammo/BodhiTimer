@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
     <ScrollView
         android:id="@+id/ScrollView01"
@@ -19,79 +19,13 @@
             android:background="#66858585"
             android:visibility="invisible">
 
-            <LinearLayout
-                android:id="@+id/hour_cont"
-                android:gravity="center"
+            <TimePicker
+                android:id="@+id/timepick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:theme="@style/themeOverlay_timePicker"
 
-                <TextView
-                    android:id="@+id/text_hour"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/H"
-                    android:padding="10dp"
-                    android:textSize="17sp"
-                    android:textColor="#FFFFFF" />
-
-                <Gallery
-                    android:layout_width="match_parent"
-                    android:id="@+id/gallery_hour"
-                    android:spacing="6dp"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/min_cont"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/text_min"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/M"
-                    android:textSize="17sp"
-                    android:padding="10dp"
-                    android:textColor="#FFFFFF" />
-
-                <Gallery
-                    android:layout_width="match_parent"
-                    android:id="@+id/gallery_min"
-                    android:spacing="6dp"
-                    android:textColor="@color/gallery_item_color"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/sec_cont"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/text_sec"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="#FFFFFF"
-                    android:text="@string/S"
-                    android:textSize="17sp"
-                    android:padding="10dp" />
-
-                <Gallery
-                    android:layout_width="match_parent"
-                    android:id="@+id/gallery_sec"
-                    android:textColor="@color/gallery_item_color"
-                    android:spacing="6dp"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                />
 
             <ImageView
                 android:layout_width="match_parent"

@@ -37,5 +37,9 @@
 
     </style>
 
+    <style name="themeOverlay_timePicker" parent="@style/ThemeOverlay.MaterialComponents">
+        <item name="colorControlActivated">@color/orange</item>
+    </style>
+
     <style name="AppTheme" parent="Theme.MaterialComponents.Light" />
 </resources>

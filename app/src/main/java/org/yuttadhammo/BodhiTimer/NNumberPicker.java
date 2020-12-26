@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -30,12 +31,14 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * Dialog box with an arbitrary number of number pickers
@@ -47,13 +50,10 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
     }
 
 
-    private int hsel;
-    private int msel;
-    private int ssel;
-
     private Gallery hour;
     private Gallery min;
     private Gallery sec;
+    private TimePicker timePicker;
 
     private String i1;
 
@@ -67,8 +67,7 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
 
     private Context context;
 
-    private int[] time;
-
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = this;
@@ -77,30 +76,18 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
 
         LinearLayout scrollView = (LinearLayout) findViewById(R.id.container);
 
-        Animation slideDown = slideDown();
-        scrollView.startAnimation(slideDown);
         scrollView.setVisibility(View.VISIBLE);
 
 
-        String[] numbers = new String[61];
-        for (int i = 0; i < 61; i++) {
-            numbers[i] = Integer.toString(i);
-        }
-        hour = (Gallery) findViewById(R.id.gallery_hour);
-        min = (Gallery) findViewById(R.id.gallery_min);
-        sec = (Gallery) findViewById(R.id.gallery_sec);
-
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context, R.layout.gallery_item, numbers);
-
-        hour.setAdapter(adapter1);
-        min.setAdapter(adapter1);
-        sec.setAdapter(adapter1);
-
+        // Established times
         int[] times = getIntent().getIntArrayExtra("times");
 
-        hour.setSelection(times[0]);
-        min.setSelection(times[1]);
-        sec.setSelection(times[2]);
+        // Time Picker
+        timePicker = (TimePicker) findViewById(R.id.timepick);
+        timePicker.setIs24HourView(true);
+        timePicker.setHour(times[0]);
+        timePicker.setMinute(times[1]);
+
 
         Button cancel = (Button) findViewById(R.id.btnCancel);
         Button ok = (Button) findViewById(R.id.btnOk);
@@ -140,28 +127,20 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
         adv.setOnClickListener(this);
         adv.setOnLongClickListener(this);
 
-
-        TextView htext = (TextView) findViewById(R.id.text_hour);
-        TextView mtext = (TextView) findViewById(R.id.text_min);
-        TextView stext = (TextView) findViewById(R.id.text_sec);
-
-        htext.setOnClickListener(this);
-        mtext.setOnClickListener(this);
-        stext.setOnClickListener(this);
-
     }
 
     /**
      * {@inheritDoc}
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.btnOk:
 
-                hsel = hour.getSelectedItemPosition();
-                msel = min.getSelectedItemPosition();
-                ssel = sec.getSelectedItemPosition();
+                int hsel = timePicker.getHour();
+                int msel = timePicker.getMinute();
+                int ssel = 0;
 
                 int[] values = {hsel, msel, ssel};
                 Intent i = new Intent();
@@ -187,15 +166,6 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
             case R.id.btnadv:
                 setFromAdv();
                 break;
-            case R.id.text_hour:
-                hour.setSelection(0);
-                break;
-            case R.id.text_min:
-                min.setSelection(0);
-                break;
-            case R.id.text_sec:
-                sec.setSelection(0);
-                break;
 
         }
 
@@ -209,7 +179,12 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
 
         int h = Integer.parseInt(ts.substring(0, 2));
         int m = Integer.parseInt(ts.substring(3, 5));
-        int s = Integer.parseInt(ts.substring(6, 8));
+        int s = 0;
+
+        if (ts.length() > 5)
+            s = Integer.parseInt(ts.substring(6, 8));
+
+
 
         if (h != 0 || m != 0 || s != 0) {
             int[] values = {h, m, s};
@@ -239,18 +214,18 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
      *
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean onLongClick(View v) {
-        String h = hour.getSelectedItemPosition() + "";
+        String h = timePicker.getHour() + "";
+        String m = timePicker.getMinute() + "";
+        String s = 0 + "";
+
         if (h.length() == 1)
             h = "0" + h;
-        String m = min.getSelectedItemPosition() + "";
         if (m.length() == 1)
             m = "0" + m;
-        String s = sec.getSelectedItemPosition() + "";
-        if (s.length() == 1)
-            s = "0" + s;
 
-        String vals = h + ":" + m + ":" + s;
+        String vals = h + ":" + m;
         switch (v.getId()) {
             case R.id.btn1:
                 i1 = vals;
@@ -297,86 +272,8 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
             ((TextView) v).setText(t);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("pre" + i, s);
-        editor.commit();
+        editor.apply();
     }
 
-    public void setTimes(int[] _times) {
-        time = _times;
-        hour.setSelection(time[0]);
-        min.setSelection(time[1]);
-        sec.setSelection(time[2]);
-    }
-
-
-    public static Animation slideDown() {
-
-        AnimationSet set = new AnimationSet(true);
-
-        Animation animation = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                0.0f, Animation.RELATIVE_TO_SELF, -1.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f);
-        animation.setDuration(200);
-        animation.setAnimationListener(new AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                // TODO Auto-generated method stub
-                //Log.d(TAG,"sliding down ended");
-
-            }
-        });
-        set.addAnimation(animation);
-
-        return animation;
-    }
-
-    public static Animation slideUp(final View view) {
-
-        AnimationSet set = new AnimationSet(true);
-
-        Animation animation = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, -1.0f);
-        animation.setDuration(200);
-        animation.setAnimationListener(new AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                // TODO Auto-generated method stub
-                view.clearAnimation();
-                view.setVisibility(View.GONE);
-            }
-        });
-        set.addAnimation(animation);
-
-        return animation;
-
-    }
 
 }
