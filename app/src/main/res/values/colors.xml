@@ -4,9 +4,10 @@
     <color name="tea_bg">#101010</color>
     <color name="dark_gray">#3C3C3C</color>
     <color name="light_gray">#5A5A5A</color>
+    <color name="shade">#33000000</color>
 
-    <color name="colorPrimary">#afb42b</color>
-    <color name="colorPrimaryDark">#7c8500</color>
+    <color name="colorPrimary">#FF5722</color>
+    <color name="colorPrimaryDark">#BF360C</color>
     <color name="colorAccent">#e64a19</color>
     <color name="colorAccentVariant">#ac0800</color>
 

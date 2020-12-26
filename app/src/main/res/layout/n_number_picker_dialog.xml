@@ -16,7 +16,7 @@
             android:layout_width="300dp"
             android:layout_height="250dp"
             android:orientation="vertical"
-            android:background="@drawable/glass"
+            android:background="#66858585"
             android:visibility="invisible">
 
             <LinearLayout

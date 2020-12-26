@@ -3,15 +3,15 @@
 
     <style name="NPTheme" parent="Theme.MaterialComponents.DayNight">
         <item name="android:background">@color/shade</item>
-        <item name="colorPrimary">#3FAA44</item>
-        <item name="colorPrimaryVariant">#153916</item>
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryVariant">@color/orangeDark</item>
     </style>
 
-    <color name="shade">#33000000</color>
+
 
     <style name="Theme.Transparent" parent="Theme.MaterialComponents.DayNight">
-        <item name="colorPrimary">#3FAA44</item>
-        <item name="colorPrimaryVariant">#153916</item>
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryVariant">@color/orangeDark</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -20,8 +20,8 @@
     </style>
 
     <style name="Theme.Holo" parent="Theme.MaterialComponents.DayNight">
-        <item name="colorPrimary">#afb42b</item>
-        <item name="colorPrimaryVariant">#7c8500</item>
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryVariant">@color/orangeDark</item>
         <item name="colorSecondary">#e64a19</item>
         <item name="colorSecondaryVariant">#ac0800</item>
     </style>
