@@ -38,7 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = SettingsActivity.class.getSimpleName();
     private SharedPreferences prefs;
     private Context context;
-    private static Activity activity;
+    private Activity activity;
     private MediaPlayer player;
     private Preference play;
     private Preference preplay;
@@ -48,12 +48,6 @@ public class SettingsActivity extends AppCompatActivity {
     private final int SELECT_PRE_RINGTONE = 2;
     private final int SELECT_PRE_FILE = 3;
     private final int SELECT_PHOTO = 4;
-
-    private String lastToneType;
-    private String lastPreToneType;
-
-
-
 
 
     @Override
@@ -104,9 +98,6 @@ public class SettingsActivity extends AppCompatActivity {
         private final int SELECT_PRE_FILE = 3;
         private final int SELECT_PHOTO = 4;
 
-        private String lastToneType;
-        private String lastPreToneType;
-
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.preferences, rootKey);
@@ -121,11 +112,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
 
-        @Override
-        public boolean onPreferenceTreeClick(Preference preference) {
-            //Toast.makeText(getContext(), preference.toString(), Toast.LENGTH_SHORT).show();
-            return super.onPreferenceTreeClick(preference);
-        }
 
         public void setupAboutScreen(){
             Preference about = (Preference) preferenceScreen.findPreference("aboutPref");
@@ -262,11 +248,7 @@ public class SettingsActivity extends AppCompatActivity {
             pretone.setEntries(entries);
             pretone.setEntryValues(entryValues);
 
-
             player = new MediaPlayer();
-
-            lastToneType = prefs.getString("NotificationUri", (String) entryValues[1]);
-            lastPreToneType = prefs.getString("NotificationUri", (String) entryValues[0]);
 
 
             tone.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -329,9 +311,7 @@ public class SettingsActivity extends AppCompatActivity {
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
                 try {
                     getActivity().startActivityForResult(intent, ringtoneActivity);
-                } catch (ActivityNotFoundException ex) {
-                    Toast.makeText(activity, "Please install a File Manager.",
-                            Toast.LENGTH_SHORT).show();
+                } catch (ActivityNotFoundException ignored) {
                 }
 
             } else if (newValue.toString().equals("file")) {
@@ -343,13 +323,10 @@ public class SettingsActivity extends AppCompatActivity {
                 try {
                     getActivity().startActivityForResult(Intent.createChooser(intent, "Select Sound File"), fileActivity);
                 } catch (ActivityNotFoundException ex) {
-                    Toast.makeText(activity, "Please install a File Manager.",
+                    Toast.makeText(getActivity(), "Please install a File Manager.",
                             Toast.LENGTH_SHORT).show();
                 }
-            } else
-                // FIXME
-                lastToneType = (String) newValue;
-
+            }
 
             return true;
         }
@@ -415,7 +392,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == Activity.RESULT_OK) {
-            Uri uri = null;
+            Uri uri;
             SharedPreferences.Editor mSettingsEdit = prefs.edit();
             switch (requestCode) {
                 case SELECT_RINGTONE:
@@ -423,10 +400,6 @@ public class SettingsActivity extends AppCompatActivity {
                     if (uri != null) {
                         Log.i("Timer", "Got ringtone " + uri.toString());
                         mSettingsEdit.putString("SystemUri", uri.toString());
-                        lastToneType = "system";
-                    } else {
-                        mSettingsEdit.putString("SystemUri", "");
-                        mSettingsEdit.putString("NotificationUri", lastToneType);
                     }
                     break;
                 case SELECT_FILE:
@@ -435,10 +408,6 @@ public class SettingsActivity extends AppCompatActivity {
                     if (uri != null) {
                         Log.i(TAG, "File Path: " + uri);
                         mSettingsEdit.putString("FileUri", uri.toString());
-                        lastToneType = "file";
-                    } else {
-                        mSettingsEdit.putString("FileUri", "");
-                        mSettingsEdit.putString("NotificationUri", lastToneType);
                     }
                     break;
                 case SELECT_PRE_RINGTONE:
@@ -446,10 +415,6 @@ public class SettingsActivity extends AppCompatActivity {
                     if (uri != null) {
                         Log.i("Timer", "Got ringtone " + uri.toString());
                         mSettingsEdit.putString("PreSystemUri", uri.toString());
-                        lastPreToneType = "system";
-                    } else {
-                        mSettingsEdit.putString("PreSystemUri", "");
-                        mSettingsEdit.putString("PreSoundUri", lastPreToneType);
                     }
                     break;
                 case SELECT_PRE_FILE:
@@ -458,24 +423,20 @@ public class SettingsActivity extends AppCompatActivity {
                     if (uri != null) {
                         Log.i(TAG, "File Path: " + uri);
                         mSettingsEdit.putString("PreFileUri", uri.toString());
-                        lastPreToneType = "file";
-                    } else {
-                        mSettingsEdit.putString("PreFileUri", "");
-                        mSettingsEdit.putString("PreSoundUri", lastPreToneType);
                     }
                     break;
                 case SELECT_PHOTO:
                     uri = intent.getData();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    }
+
                     if (uri != null)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        }
                         mSettingsEdit.putString("bmp_url", uri.toString());
-                    else
-                        mSettingsEdit.putString("bmp_url", "");
+
                     break;
             }
-            mSettingsEdit.commit();
+            mSettingsEdit.apply();
         }
     }
 
