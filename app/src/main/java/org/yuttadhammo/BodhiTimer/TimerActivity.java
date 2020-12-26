@@ -120,12 +120,12 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
     /**
      * The maximum time
      */
-    private int mLastTime = 0;
+    private int mLastTime = 1800000;
 
     /**
      * The current timer time
      */
-    private int mTime = 300;
+    private int mTime = 0;
 
     /**
      * To save having to traverse the view tree
@@ -401,7 +401,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
 
         // check the timestamp from the last update and start the timer.
         // assumes the data has already been loaded?
-        mLastTime = prefs.getInt("LastTime", 0);
+        mLastTime = prefs.getInt("LastTime", 1800000);
 
         Log.d(TAG, "Last Time: " + mLastTime);
         int state = prefs.getInt("State", STOPPED);
@@ -677,8 +677,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
         lastTimes[1] = min;
         lastTimes[2] = sec;
 
-        // put last set time to prefs
-
+        // Save last set times in preferences
         editor.putInt("LastTime", mLastTime);
         editor.putInt("last_hour", lastTimes[0]);
         editor.putInt("last_min", lastTimes[1]);
@@ -1111,12 +1110,21 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
     }
 
     /**
-     * Handle the results from the recognition activity.
+     * Handle the all activities.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (LOG) Log.v(TAG, "Got result");
-        if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+
+        if (requestCode == NUMBERPICK_REQUEST_CODE && resultCode == RESULT_OK) {
+            int[] values = data.getIntArrayExtra("times");
+
+            onNumbersPicked(values);
+            if (widget) {
+                finish();
+            }
+        }
+        else  if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
             // Fill the list view with the strings the recognizer thought it could have heard
             ArrayList<String> matches = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
@@ -1163,13 +1171,6 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
                     } else
                         Toast.makeText(this, getString(R.string.speech_not_recognized), Toast.LENGTH_SHORT).show();
                 }
-            }
-        } else if (requestCode == NUMBERPICK_REQUEST_CODE && resultCode == RESULT_OK) {
-            int[] values = data.getIntArrayExtra("times");
-
-            onNumbersPicked(values);
-            if (widget) {
-                finish();
             }
         }
 
