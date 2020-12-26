@@ -39,12 +39,12 @@
         app:iconSpaceReserved="false"
         app:showSeekBarValue="true" />
 
-
-    <Preference
+    <SeekBarPreference
         android:key="PreparationTime"
         android:title="@string/preparation_time"
         android:summary="@string/preparation_time_desc"
-        app:iconSpaceReserved="false" />
+        app:iconSpaceReserved="false"
+        android:max="300" />
 
     <PreferenceCategory
         android:title="@string/notification"
