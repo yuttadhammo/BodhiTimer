@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/sound" />
 
@@ -12,11 +12,11 @@
         android:title="@string/play_sound"
         android:summary="@string/play_sound_desc"
         android:key="playSound" />
-    <org.yuttadhammo.BodhiTimer.VolumePreference
-        android:key="tone_volume"
-        android:title="@string/volume"
-        android:summary="@string/volume_desc"
-        android:max="100" />
+<!--    <org.yuttadhammo.BodhiTimer.VolumePreference-->
+<!--        android:key="tone_volume"-->
+<!--        android:title="@string/volume"-->
+<!--        android:summary="@string/volume_desc"-->
+<!--        android:max="100" />-->
     <ListPreference
         android:key="PreSoundUri"
         android:title="@string/pre_sound"
@@ -25,6 +25,10 @@
         android:title="@string/play_pre_sound"
         android:summary="@string/play_pre_sound_desc"
         android:key="playPreSound" />
+    <Preference
+        android:key="PreparationTime"
+        android:title="@string/preparation_time"
+        android:summary="@string/preparation_time_desc" />
 
     <PreferenceCategory android:title="@string/notification" />
     <CheckBoxPreference
@@ -56,13 +60,10 @@
     <CheckBoxPreference
         android:title="@string/custom_bmp"
         android:key="custom_bmp" />
-    <Preference
-        android:title="@string/bmp_url"
-        android:key="bmp_url" />
     <ListPreference
-        android:title="@string/color_theme"
-        android:summary="@string/color_theme_desc"
-        android:key="Theme"
+        android:title="@string/circle_theme"
+        android:summary="@string/circle_theme_desc"
+        android:key="CircleTheme"
         android:entries="@array/themes"
         android:defaultValue="3"
         android:entryValues="@array/themeValues" />
@@ -104,8 +105,5 @@
         android:title="@string/about"
         android:summary="@string/about_desc"
         android:key="aboutPref" />
-    <Preference
-        android:title="@string/export_sounds"
-        android:summary="@string/export_sounds_desc"
-        android:key="exportPref" />
-</PreferenceScreen>
+
+</androidx.preference.PreferenceScreen>

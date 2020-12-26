@@ -35,11 +35,10 @@
 
     <string name="visual">Erscheinungsbild</string>
 
-    <string name="custom_bmp">Benutze individuelles Bild</string>
-    <string name="bmp_url">Individuelles Bild auswählen</string>
+    <string name="custom_bmp">Individuelles Bild benutzen</string>
 
-    <string name="color_theme">Kreis Theme</string>
-    <string name="color_theme_desc">(Klick das Blatt des Bodhibaums um die Kreisanimation zu wechseln)</string>
+    <string name="circle_theme">Kreis Theme</string>
+    <string name="circle_theme_desc">Den Stil der Kreisanimation wählen.</string>
 
     <string name="fullscreen">Vollbild</string>
     <string name="fullscreen_desc">Verstecke die Statusanzeige während das Programm läuft.</string>
@@ -75,6 +74,18 @@
     <string name="H">Std</string>
     <string name="M">Min</string>
     <string name="S">Sek</string>
+    <string name="preferences">Einstellungen</string>
+    <string name="pre_sound">Start-Ton</string>
+    <string name="volume">Lautstärke</string>
+    <string name="play_pre_sound">Start-Ton testen</string>
+    <string name="play_pre_sound_desc">Spielt den aktuellen Start-Ton ab.</string>
+    <string name="is_circle">Kreis Animation</string>
+    <string name="invert_colors">Farben invertieren</string>
+    <string name="export_sounds">Töne exportieren</string>
+    <string name="exporting">Töne werden exportiert</string>
+    <string name="sound">Töne</string>
+    <string name="preparation_time">Vorbereitungszeit</string>
+    <string name="preparation_time_desc">Eine Verzögerung einstellen, bevor der Timer beginnt.</string>
 
 </resources>
 

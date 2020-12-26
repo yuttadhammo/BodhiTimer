@@ -26,8 +26,8 @@
 
     <string name="visual">Visuel</string>
 
-    <string name="color_theme">Thème</string>
-    <string name="color_theme_desc">Sélectionner le thème visuel</string>
+    <string name="circle_theme">Thème</string>
+    <string name="circle_theme_desc">Sélectionner le thème visuel</string>
 
     <string name="misc">Divers</string>
 

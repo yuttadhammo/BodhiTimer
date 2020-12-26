@@ -85,7 +85,6 @@
         <item>Bird Song</item>
         <item>System Tone</item>
         <item>Sound File</item>
-        <item>Text To Speech</item>
     </string-array>
     <string-array name="sound_uris">
         <item></item>
@@ -98,5 +97,15 @@
         <item>system</item>
         <item>file</item>
         <item>tts</item>
+    </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
     </string-array>
 </resources>

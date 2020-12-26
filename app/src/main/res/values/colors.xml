@@ -5,6 +5,17 @@
     <color name="dark_gray">#3C3C3C</color>
     <color name="light_gray">#5A5A5A</color>
 
+    <color name="colorPrimary">#afb42b</color>
+    <color name="colorPrimaryDark">#7c8500</color>
+    <color name="colorAccent">#e64a19</color>
+    <color name="colorAccentVariant">#ac0800</color>
+
+    <color name="green">#8BC34A</color>
+    <color name="greenDark">#33691E</color>
+    <color name="orange">#FF5722</color>
+    <color name="orangeDark">#BF360C</color>
+    <color name="red">#B71C1C</color>
+
     <!-- Original Theme -->
     <color name="themeA1">#3C3C3C</color>
     <color name="themeA2">#5A5A5A</color>
@@ -40,6 +51,9 @@
     <color name="themeE3">#FFFFFF</color>
     <color name="themeE4">#DDDDDD</color>
     <color name="themeE5">#010101</color>
+
+
+
 
 
 </resources>

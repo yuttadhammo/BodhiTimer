@@ -25,4 +25,17 @@
         <item name="colorSecondary">#e64a19</item>
         <item name="colorSecondaryVariant">#ac0800</item>
     </style>
+
+    <!-- Base application theme. -->
+    <style name="AppCompatTheme" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryDark">@color/orangeDark</item>
+        <item name="colorAccent">@color/orange</item>
+
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
+    </style>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light" />
 </resources>

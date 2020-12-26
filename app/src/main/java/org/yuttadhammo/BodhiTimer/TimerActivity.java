@@ -494,7 +494,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
             case R.id.prefButton:
                 Log.i("Timer", "pref button clicked");
                 widget = false;
-                startActivity(new Intent(this, PreferenceActivity.class));
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
 
 
@@ -544,7 +544,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
         mNM.cancelAll();
         switch (keycode) {
             case KeyEvent.KEYCODE_MENU:
-                startActivity(new Intent(this, PreferenceActivity.class));
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
         }
         return super.onKeyDown(keycode, e);

@@ -37,7 +37,7 @@
     <!-- Preferences -->
 
     <string name="preferences">Preferences</string>
-    <string name="sound">Sound:</string>
+    <string name="sound">Sound</string>
     <string name="notification_sound">Timer Sound</string>
     <string name="notification_sound_desc">The sound to play when the timer finishes</string>
 
@@ -48,7 +48,10 @@
     <string name="playing_sound_desc">Click to stop the current playing sound.</string>
 
     <string name="pre_sound">Start Sound</string>
-    <string name="pre_sound_desc">Optional sound to play when timer starts</string>
+    <string name="pre_sound_desc">Optional sound to play when timer starts.</string>
+
+    <string name="preparation_time">Preparation time</string>
+    <string name="preparation_time_desc">Add a delay before the timer starts.</string>
 
     <string name="play_pre_sound">Test Start Sound</string>
     <string name="play_pre_sound_desc">Play the current start sound.</string>
@@ -71,8 +74,8 @@
 
     <string name="visual">Visual</string>
 
-    <string name="is_bitmap">fade-in image</string>
-    <string name="is_circle">circle animation</string>
+    <string name="is_bitmap">Fade-in image</string>
+    <string name="is_circle">Circle animation</string>
     <string name="bmp_or_circle">Animation Type</string>
 
     <string name="custom_bmp">Use Custom Image</string>
@@ -80,8 +83,8 @@
 
     <string name="invert_colors">Invert UI Colors</string>
 
-    <string name="color_theme">Choose Circle Animation</string>
-    <string name="color_theme_desc">(Click on Bodhi leaf to switch to circle animation)</string>
+    <string name="circle_theme">Circle Animation</string>
+    <string name="circle_theme_desc">Choose the style of circle animation to use</string>
 
     <string name="fullscreen">Full Screen</string>
     <string name="fullscreen_desc">Hide the status bar when timer is running.</string>
@@ -172,6 +175,21 @@
     <string name="timer_done">timer finished</string>
     <string name="input_text">Text To Speech</string>
     <string name="input_text_desc">Input text to be spoken</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>
 
