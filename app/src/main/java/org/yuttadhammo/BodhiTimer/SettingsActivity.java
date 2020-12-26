@@ -188,7 +188,7 @@ public class SettingsActivity extends AppCompatActivity {
             final Preference indexPref = (Preference) findPreference("DrawingIndex");
             final Preference circleTheme = (Preference) findPreference("CircleTheme");
 
-            int dIndex = prefs.getInt("DrawingIndex", 0);
+            int dIndex = prefs.getInt("DrawingIndex", 1);
             if (dIndex == 0) {
                 indexPref.setSummary(getString(R.string.is_bitmap));
                 circleTheme.setEnabled(false);
@@ -201,7 +201,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    int dIndex = prefs.getInt("DrawingIndex", 0);
+                    int dIndex = prefs.getInt("DrawingIndex", 1);
                     dIndex++;
                     dIndex %= 2;
 

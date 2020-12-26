@@ -35,9 +35,9 @@ import org.yuttadhammo.BodhiTimer.TimerActivity;
 import java.io.FileNotFoundException;
 import java.util.Vector;
 
-public class TimerAnimation extends ImageView implements OnClickListener, OnSharedPreferenceChangeListener {
+public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView implements OnClickListener, OnSharedPreferenceChangeListener {
     Vector<TimerDrawing> mDrawings = new Vector<TimerDrawing>();
-    int mIndex = 0;
+    int mIndex = 1;
     int mLastTime = 0, mLastMax = 0;
 
     Bitmap mBitmap = null;

@@ -102,6 +102,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
      * Macros for our dialogs
      */
     private final static int ALERT_DIALOG = 1;
+
     /**
      * debug string
      */
@@ -125,7 +126,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
     /**
      * The current timer time
      */
-    private int mTime = 0;
+    private int mTime = 300;
 
     /**
      * To save having to traverse the view tree
@@ -292,7 +293,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
                 break;
         }
 
-        editor.commit();
+        editor.apply();
 
     }
 
@@ -338,7 +339,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        animationIndex = prefs.getInt("DrawingIndex", 0);
+        animationIndex = prefs.getInt("DrawingIndex", 1);
 
         try {
             mTimerAnimation.setIndex(animationIndex);
@@ -689,7 +690,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
 
         // Check to make sure the phone isn't set to silent
         boolean silent = (mAudioMgr.getRingerMode() == AudioManager.RINGER_MODE_SILENT);
-        boolean vibrate = prefs.getBoolean("Vibrate", true);
+        boolean vibrate = prefs.getBoolean("Vibrate", false);
         String noise = prefs.getString("NotificationUri", "");
         boolean nag = prefs.getBoolean("NagSilent", true);
 
