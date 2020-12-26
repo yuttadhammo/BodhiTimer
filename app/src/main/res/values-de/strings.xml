@@ -49,7 +49,7 @@
     <string name="misc">Sonstiges</string>
 
     <string name="nag_dialog">Popup-Fenster</string>
-    <string name="nag_dialog_desc">Zeige ein Popup-Fenster das Telefon auf lautlos gestellt ist.</string>
+    <string name="nag_dialog_desc">Zeige ein Popup-Fenster, wenn das Telefon auf lautlos gestellt ist.</string>
 
     <string name="repeat_timer">Wiederhole Timer</string>
     <string name="repeat_timer_desc">Setze Timer nach Ablauf automatisch zurück.</string>
@@ -57,8 +57,6 @@
     <string name="stay_awake">Wach bleiben</string>
     <string name="stay_awake_desc">Das Telefon nicht einschlafen lassen.</string>
 
-    <string name="override_sound">Individuellen Ton erzwingen</string>
-    <string name="override_sound_desc">Nur auswählen, falls das Setzen eines Tons fehlschlägt.</string>
 
     <string name="about_desc">Über Bodhi Timer</string>
 
@@ -81,8 +79,6 @@
     <string name="play_pre_sound_desc">Spielt den aktuellen Start-Ton ab.</string>
     <string name="is_circle">Kreis Animation</string>
     <string name="invert_colors">Farben invertieren</string>
-    <string name="export_sounds">Töne exportieren</string>
-    <string name="exporting">Töne werden exportiert</string>
     <string name="sound">Töne</string>
     <string name="preparation_time">Vorbereitungszeit</string>
     <string name="preparation_time_desc">Eine Verzögerung einstellen, bevor der Timer beginnt.</string>

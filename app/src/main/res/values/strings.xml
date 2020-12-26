@@ -106,14 +106,9 @@
     <string name="switch_time">Switch Time Input Mode</string>
     <string name="switch_time_desc">Clicking on clock opens speech input (otherwise on long-click).</string>
 
-    <string name="override_sound">Force Custom Sound</string>
-    <string name="override_sound_desc">use this only if you are not able to set a custom sound for the timer</string>
-
     <string name="about_desc">About Bodhi Timer</string>
 
-    <string name="export_sounds">Export Sounds</string>
-    <string name="export_sounds_desc">Copy built-in sound files to SD Card</string>
-    <string name="exporting">Exporting sounds…</string>
+
 
     <!-- About -->
     <string name="close">Close</string>
@@ -175,21 +170,6 @@
     <string name="timer_done">timer finished</string>
     <string name="input_text">Text To Speech</string>
     <string name="input_text_desc">Input text to be spoken</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>
 
