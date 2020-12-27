@@ -18,7 +18,8 @@
         android:id="@+id/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FF000000" />
+        android:background="#FF000000"
+        android:contentDescription="background image" />
 
 
     <TextView
