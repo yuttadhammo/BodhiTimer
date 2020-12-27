@@ -18,7 +18,6 @@
 package org.yuttadhammo.BodhiTimer;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,8 +39,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,10 +51,10 @@ import java.util.List;
 /**
  * Created by noah on 9/16/14.
  */
-public class AdvNumberPicker extends Activity {
+public class AdvNumberPicker extends AppCompatActivity {
 
     private String TAG = "ANumberPicker";
-    private Activity context;
+    private AppCompatActivity context;
     private SharedPreferences prefs;
     private MyAdapter adapter;
     private String advTimeString;
@@ -344,8 +345,9 @@ public class AdvNumberPicker extends Activity {
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == Activity.RESULT_OK) {
-            Uri uri = null;
+            Uri uri;
 
             switch (requestCode) {
                 case SELECT_RINGTONE:

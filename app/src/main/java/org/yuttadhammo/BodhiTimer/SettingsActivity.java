@@ -11,13 +11,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.WebView;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -38,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = SettingsActivity.class.getSimpleName();
     private SharedPreferences prefs;
     private Context context;
-    private Activity activity;
+    private AppCompatActivity activity;
     private MediaPlayer player;
     private Preference play;
     private Preference preplay;
@@ -217,7 +214,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                     SharedPreferences.Editor mSettingsEdit = prefs.edit();
                     mSettingsEdit.putInt("DrawingIndex", dIndex);
-                    mSettingsEdit.commit();
+                    mSettingsEdit.apply();
                     return true;
 
                 }
@@ -429,9 +426,8 @@ public class SettingsActivity extends AppCompatActivity {
                     uri = intent.getData();
 
                     if (uri != null)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                        }
+                        getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
                         mSettingsEdit.putString("bmp_url", uri.toString());
 
                     break;

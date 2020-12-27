@@ -17,7 +17,6 @@
 
 package org.yuttadhammo.BodhiTimer.widget;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -30,11 +29,13 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.RemoteViews;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.yuttadhammo.BodhiTimer.R;
 
 import java.util.Arrays;
 
-public class AppWidgetConfigure extends Activity implements OnClickListener {
+public class AppWidgetConfigure extends AppCompatActivity implements OnClickListener {
 
     private int mAppWidgetId;
 
@@ -118,7 +119,7 @@ public class AppWidgetConfigure extends Activity implements OnClickListener {
         if (!widgetIds.contains("," + appWidgetId + ","))
             widgetIds += +appWidgetId + ",";
         editor.putString("widgetIds", widgetIds);
-        editor.commit();
+        editor.apply();
     }
 
     static void deletePref(Context context, int appWidgetId) {
@@ -135,6 +136,6 @@ public class AppWidgetConfigure extends Activity implements OnClickListener {
         widgetIds = widgetIds.replace("," + appWidgetId + ",", ",");
         editor.putString("widgetIds", widgetIds);
         editor.remove("widget_theme_" + appWidgetId);
-        editor.commit();
+        editor.apply();
     }
 }

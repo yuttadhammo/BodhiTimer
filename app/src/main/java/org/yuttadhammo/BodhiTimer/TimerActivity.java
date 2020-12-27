@@ -28,7 +28,6 @@
 
 package org.yuttadhammo.BodhiTimer;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -67,9 +66,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
-import org.yuttadhammo.BodhiTimer.SimpleNumberPicker.OnNNumberPickedListener;
 import org.yuttadhammo.BodhiTimer.Service.ScheduleClient;
+import org.yuttadhammo.BodhiTimer.SimpleNumberPicker.OnNNumberPickedListener;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ import java.util.TimerTask;
  *
  * @author Ralph Gootee (rgootee@gmail.com)
  */
-public class TimerActivity extends Activity implements OnClickListener, OnNNumberPickedListener, OnSharedPreferenceChangeListener {
+public class TimerActivity extends AppCompatActivity implements OnClickListener, OnNNumberPickedListener, OnSharedPreferenceChangeListener {
     /**
      * All possible timer states
      */
@@ -549,10 +550,10 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
     }
 
     private void setLowProfile() {
-        if (android.os.Build.VERSION.SDK_INT >= 14) {
-            View rootView = getWindow().getDecorView();
-            rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-        }
+
+        View rootView = getWindow().getDecorView();
+        rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+
     }
 
     private void showNumberPicker() {

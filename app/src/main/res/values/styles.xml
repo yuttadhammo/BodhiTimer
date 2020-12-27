@@ -1,45 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="NPTheme" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:background">@color/shade</item>
-        <item name="colorPrimary">@color/orange</item>
-        <item name="colorPrimaryVariant">@color/orangeDark</item>
-    </style>
-
-
-
-    <style name="Theme.Transparent" parent="Theme.MaterialComponents.DayNight">
-        <item name="colorPrimary">@color/orange</item>
-        <item name="colorPrimaryVariant">@color/orangeDark</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-    </style>
-
-    <style name="Theme.Holo" parent="Theme.MaterialComponents.DayNight">
-        <item name="colorPrimary">@color/orange</item>
-        <item name="colorPrimaryVariant">@color/orangeDark</item>
-        <item name="colorSecondary">#e64a19</item>
-        <item name="colorSecondaryVariant">#ac0800</item>
-    </style>
-
     <!-- Base application theme. -->
-    <style name="AppCompatTheme" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppCompatTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryDark">@color/orangeDark</item>
         <item name="colorAccent">@color/orange</item>
-
+        <item name="colorControlActivated">@color/orange</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-
     </style>
 
-    <style name="themeOverlay_timePicker" parent="@style/ThemeOverlay.MaterialComponents">
+    <style name="NoTitleBar" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Transparent" parent="AppCompatTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="themeOverlay_timePicker" parent="ThemeOverlay.AppCompat">
         <item name="colorControlActivated">@color/orange</item>
     </style>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light" />
 </resources>

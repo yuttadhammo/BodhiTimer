@@ -17,11 +17,12 @@
 
 package org.yuttadhammo.BodhiTimer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -54,10 +55,10 @@ public class TimerUtils {
     /**
      * Converts a millisecond time to a string time
      *
-     * @param time is the time in milliseconds
+     * @param ms the time in milliseconds
      * @return the formated string
      */
-    public static String[] time2str(int ms) {
+    public static String[] ms2Str(int ms) {
         int[] time = time2Array(ms);
 
         if (time[0] == 0 && time[1] == 0 && time[2] == 0) {
@@ -74,7 +75,7 @@ public class TimerUtils {
     /**
      * Creates a time vector
      *
-     * @param ms the time in milliseconds
+     * @param time the time in seconds
      * @return [hour, minutes, seconds, ms]
      */
     public static int[] time2Array(int time) {
@@ -134,7 +135,7 @@ public class TimerUtils {
 
 
     public static String time2hms(int time) {
-        String[] str = time2str(time);
+        String[] str = ms2Str(time);
         if (str.length == 3)
             return (str[0] + ":" + str[1] + ":" + str[2]);
         else if (str.length == 2)
@@ -145,7 +146,7 @@ public class TimerUtils {
             return ("");
     }
 
-    public static String str2complexTimeString(Activity activity, String numberString) {
+    public static String str2complexTimeString(AppCompatActivity activity, String numberString) {
         String out = "";
 
         ArrayList<String> stringArray = new ArrayList<String>();
@@ -164,7 +165,7 @@ public class TimerUtils {
         return out;
     }
 
-    public static int str2timeString(Activity activity, String numberString) {
+    public static int str2timeString(AppCompatActivity activity, String numberString) {
         final Resources res = activity.getResources();
         final String[] numbers = res.getStringArray(R.array.numbers);
         int position = 0;

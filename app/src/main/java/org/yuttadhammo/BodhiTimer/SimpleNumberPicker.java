@@ -17,7 +17,6 @@
 
 package org.yuttadhammo.BodhiTimer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,10 +26,6 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
@@ -39,28 +34,22 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Dialog box with an arbitrary number of number pickers
  */
-public class SimpleNumberPicker extends Activity implements OnClickListener, OnLongClickListener {
+public class SimpleNumberPicker extends AppCompatActivity implements OnClickListener, OnLongClickListener {
 
     public interface OnNNumberPickedListener {
         void onNumbersPicked(int[] number);
     }
 
-
-    private Gallery hour;
-    private Gallery min;
-    private Gallery sec;
     private TimePicker timePicker;
 
     private String i1;
-
     private String i2;
-
     private String i3;
-
     private String i4;
 
     private SharedPreferences prefs;
@@ -145,7 +134,7 @@ public class SimpleNumberPicker extends Activity implements OnClickListener, OnL
                 int[] values = {hsel, msel, ssel};
                 Intent i = new Intent();
                 i.putExtra("times", values);
-                setResult(Activity.RESULT_OK, i);
+                setResult(AppCompatActivity.RESULT_OK, i);
                 finish();
                 break;
             case R.id.btnCancel:
@@ -190,7 +179,7 @@ public class SimpleNumberPicker extends Activity implements OnClickListener, OnL
             int[] values = {h, m, s};
             Intent i = new Intent();
             i.putExtra("times", values);
-            setResult(Activity.RESULT_OK, i);
+            setResult(AppCompatActivity.RESULT_OK, i);
             finish();
         } else
             Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG).show();
@@ -201,7 +190,7 @@ public class SimpleNumberPicker extends Activity implements OnClickListener, OnL
             int[] values = {-1, -1, -1};
             Intent i = new Intent();
             i.putExtra("times", values);
-            setResult(Activity.RESULT_OK, i);
+            setResult(AppCompatActivity.RESULT_OK, i);
             finish();
         } else {
             Intent i = new Intent(this, AdvNumberPicker.class);
