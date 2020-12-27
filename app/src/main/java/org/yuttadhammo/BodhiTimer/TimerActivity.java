@@ -976,7 +976,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mTime = mLastTime;
         Log.v(TAG, "Picked time: " + mLastTime);
 
-        onUpdateTime();
+
 
         lastTimes = new int[3];
 
