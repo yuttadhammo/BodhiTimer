@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
@@ -48,12 +47,13 @@ import org.yuttadhammo.BodhiTimer.TimerUtils;
 class CircleAnimation implements TimerAnimation.TimerDrawing {
     private static final float MAX_SIZE = 1000;
 
-    private final int START_ANGLE = 90;
-
     private float mRadius = MAX_SIZE * 0.75f, mInnerRadius = MAX_SIZE / 3f, mSecondRadius = MAX_SIZE, mMsRadius = mSecondRadius + MAX_SIZE / 50f;
     private float scale;
 
-    private Paint mCirclePaint, mInnerPaint, mArcPaint, mLeadPaint, mMsPaint, mTickerPaint;
+    private Paint mCirclePaint;
+    private Paint mInnerPaint;
+    private Paint mArcPaint;
+    private Paint mMsPaint;
 
     private Bitmap mEnsoBitmap;
 
@@ -64,7 +64,6 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
 
     int mInnerColor = 0;
 
-    private boolean showMs = false;
     boolean mMsFlipper = false;
     private int[] mLastTime;
 
@@ -90,8 +89,6 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
 
     private int theme;
 
-    private boolean invertColors;
-
     public CircleAnimation(Context context) {
         mContext = context;
 
@@ -112,7 +109,6 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
     }
 
 
-
     public static Bitmap getBitmapFromVector(Context context, @DrawableRes int drawableResId) {
         Drawable drawable = ContextCompat.getDrawable(context, drawableResId);
         if (drawable instanceof BitmapDrawable) {
@@ -125,8 +121,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
     }
 
 
-    public Bitmap invert(Bitmap src)
-    {
+    public Bitmap invert(Bitmap src) {
         int height = src.getHeight();
         int width = src.getWidth();
 
@@ -160,7 +155,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
 
         // Load the correct theme
         theme = Integer.parseInt(prefs.getString("Theme", "3"));
-        invertColors = prefs.getBoolean("invert_colors", false);
+        boolean invertColors = prefs.getBoolean("invert_colors", false);
 
         int[] colors;
 
@@ -232,10 +227,10 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         mArcPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mArcPaint.setStyle(Paint.Style.FILL);
 
-        mLeadPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint mLeadPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mLeadPaint.setStyle(Paint.Style.FILL);
 
-        mTickerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint mTickerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTickerPaint.setColor(0xFFFFFFFF);
 
         scale = resources.getDisplayMetrics().density;
@@ -286,14 +281,13 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
 
         canvas.save();
 
-        float p = (max == 0) ? 0 : (time / (float) max);
+        float progress = (max == 0) ? 0 : (time / (float) max);
         int[] timeVec = TimerUtils.time2Array(time);
         if (mLastTime == null) mLastTime = timeVec;
         if (mLastTime[2] != timeVec[2]) mMsFlipper = !mMsFlipper;
 
         float pSecond = (max == 0) ? 1 : (timeVec[2] + timeVec[3] / 1000.0f) / 60.0f;
         float thetaSecond = pSecond * 360;
-
 
         if (mWidth != canvas.getClipBounds().width() || mHeight != canvas.getClipBounds().height())
             sizeChange(canvas.getClipBounds().width(), canvas.getClipBounds().height());
@@ -303,68 +297,88 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         mSecondRect.set(-mSecondRadius, -mSecondRadius, mSecondRadius, mSecondRadius);
         mArcRect.set(-mRadius, -mRadius, mRadius, mRadius);
 
-
         mLastTime = timeVec;
 
-        // Enso
         if (theme == 3) {
-
-            int w = canvas.getClipBounds().width();
-            int h = canvas.getClipBounds().height();
-
-            Rect rs = new Rect(0, 0, eWidth, eHeight);
-            Rect rd;
-            //canvas.save();
-            if (w < h) {
-                rd = new Rect(0, 0, w, w);
-                canvas.translate(w / -2, h / -2 + (h - w) / 2);
-            } else {
-                rd = new Rect(0, 0, h, h);
-                canvas.translate(w / -2 + (w - h) / 2, h / -2);
-            }
-            canvas.drawBitmap(mEnsoBitmap, rs, rd, null);
-
-            canvas.restore();
-            canvas.translate(mWidth / 2.0f, mHeight / 2.0f);
-
-            // Uncover arc
-            float timeAngle = 360 * (1 - p);
-
-            // We add 20 degrees to the start angle, because the
-            // enso doesn't start exactly at 90deg
-            float ucAngle = START_ANGLE + 20 + timeAngle;
-
-            if (ucAngle > 360)
-                ucAngle = ucAngle - 360;
-
-            canvas.drawArc(mArcRect, ucAngle, 360 - 360 * (1 - p), true, mArcPaint);
-
+            drawEnso(canvas, progress);
         } else {
-
-            // We want to draw a very thin border
-            canvas.drawCircle(0, 0, mMsRadius, mMsPaint);
-
-            // Gap between the ms and seconds
-            canvas.drawCircle(0, 0, mMsGap, mInnerPaint);
-
-            // Second arc
-            canvas.drawCircle(0, 0, mSecondRadius, mSecondBgPaint);
-            canvas.drawArc(mSecondRect, START_ANGLE, thetaSecond, true, mSecondPaint);
-
-            // Gap between the seconds and the inner radius
-            canvas.drawCircle(0, 0, mSecondGap, mInnerPaint);
-
-
-            // Background fill
-            canvas.drawCircle(0, 0, mRadius, mCirclePaint);
-
-            // Main arc
-            canvas.drawArc(mArcRect, START_ANGLE, 360 * (1 - p), true, mArcPaint);
-            // Inner paint
-            canvas.drawCircle(0, 0, mInnerRadius, mInnerPaint);
-            canvas.restore();
+            drawGenericCircle(canvas, progress, thetaSecond);
         }
 
+    }
 
+    /**
+     * Draws the Enso image based on the current time
+     *
+     * @param canvas The canvas to draw on
+     * @param progress  the original time set in milliseconds
+     */
+    private void drawEnso(Canvas canvas, float progress) {
+        // FIXME
+        int START_ANGLE = 120;
+
+        int w = canvas.getClipBounds().width();
+        int h = canvas.getClipBounds().height();
+
+        Rect rs = new Rect(0, 0, eWidth, eHeight);
+        Rect rd;
+        //canvas.save();
+        if (w < h) {
+            rd = new Rect(0, 0, w, w);
+            canvas.translate(w / -2, h / -2 + (h - w) / 2);
+        } else {
+            rd = new Rect(0, 0, h, h);
+            canvas.translate(w / -2 + (w - h) / 2, h / -2);
+        }
+        canvas.drawBitmap(mEnsoBitmap, rs, rd, null);
+
+        canvas.restore();
+        canvas.translate(mWidth / 2.0f, mHeight / 2.0f);
+
+        // Uncover arc
+        float timeAngle = 360 * (1 - progress);
+
+        // We add 20 degrees to the start angle, because the
+        // enso doesn't start exactly at 90deg
+        float ucAngle = START_ANGLE + 20 + timeAngle;
+
+        if (ucAngle > 360)
+            ucAngle = ucAngle - 360;
+
+        canvas.drawArc(mArcRect, ucAngle, 360 - 360 * (1 - progress), true, mArcPaint);
+    }
+
+
+    /**
+     * Draws a circle based on the current time
+     *
+     * @param canvas The canvas to draw on
+     * @param progress  the original time set in milliseconds
+     */
+    private void drawGenericCircle(Canvas canvas, float progress, float thetaSecond) {
+        int START_ANGLE = 90;
+
+        // We want to draw a very thin border
+        canvas.drawCircle(0, 0, mMsRadius, mMsPaint);
+
+        // Gap between the ms and seconds
+        canvas.drawCircle(0, 0, mMsGap, mInnerPaint);
+
+        // Second arc
+        canvas.drawCircle(0, 0, mSecondRadius, mSecondBgPaint);
+        canvas.drawArc(mSecondRect, START_ANGLE, thetaSecond, true, mSecondPaint);
+
+        // Gap between the seconds and the inner radius
+        canvas.drawCircle(0, 0, mSecondGap, mInnerPaint);
+
+
+        // Background fill
+        canvas.drawCircle(0, 0, mRadius, mCirclePaint);
+
+        // Main arc
+        canvas.drawArc(mArcRect, START_ANGLE, 360 * (1 - progress), true, mArcPaint);
+        // Inner paint
+        canvas.drawCircle(0, 0, mInnerRadius, mInnerPaint);
+        canvas.restore();
     }
 }
