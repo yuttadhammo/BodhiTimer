@@ -99,12 +99,12 @@ public class TimerReceiver extends BroadcastReceiver {
         boolean useAdvTime = prefs.getBoolean("useAdvTime", false);
         String advTimeString = prefs.getString("advTimeString", "");
         String[] advTime = null;
-        int advTimeIndex = 1;
+        int advTimeIndex = 0;
 
         if (useAdvTime && advTimeString.length() > 0) {
             advTime = advTimeString.split("\\^");
-            advTimeIndex = prefs.getInt("advTimeIndex", 1);
-            String[] thisAdvTime = advTime[advTimeIndex - 1].split("#"); // will be of format timeInMs#pathToSound
+            advTimeIndex = prefs.getInt("advTimeIndex", 0);
+            String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
 
             if (thisAdvTime.length == 3)
                 notificationUri = thisAdvTime[1];
@@ -256,8 +256,10 @@ public class TimerReceiver extends BroadcastReceiver {
             Intent broadcast = new Intent();
 
             SharedPreferences.Editor editor = prefs.edit();
-            if (advTimeIndex < advTime.length) {
-                editor.putInt("advTimeIndex", advTimeIndex + 1);
+
+            if (advTimeIndex < advTime.length - 1) {
+                advTimeIndex++;
+                editor.putInt("advTimeIndex", advTimeIndex);
 
                 String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
 
@@ -281,13 +283,14 @@ public class TimerReceiver extends BroadcastReceiver {
                 mAlarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
             } else {
                 broadcast.putExtra("stop", true);
-                editor.putInt("advTimeIndex", 1);
+                //FIXME
+                editor.putInt("advTimeIndex", 0);
 
             }
             broadcast.setAction(BROADCAST_RESET);
             context.sendBroadcast(broadcast);
 
-            editor.apply();
+            editor.commit();
 
         } else if (prefs.getBoolean("AutoRestart", false)) {
             int time = pintent.getIntExtra("SetTime", 0);

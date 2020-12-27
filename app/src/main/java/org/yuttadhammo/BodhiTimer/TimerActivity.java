@@ -643,9 +643,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
             editor.putBoolean("useAdvTime", true);
 
-            // set index to 1, because we're doing the first one already
-
-            editor.putInt("advTimeIndex", 1);
+            // set index to 0, because we're doing the first one already
+            editor.putInt("advTimeIndex", 0);
 
 
             advTimeStringLeft = "";
@@ -944,24 +943,27 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         Editor editor = prefs.edit();
 
-        // FIXME 1 Index?
-        if (reset) {
-            // set index to 1, because we're doing the first one already
-            editor.putInt("advTimeIndex", 1);
-            advTimeIndex = 1;
-        } else
-            advTimeIndex = prefs.getInt("advTimeIndex", 1);
 
-        String[] thisAdvTime = advTime[advTimeIndex - 1].split("#"); // will be of format timeInMs#pathToSound
+        if (reset) {
+            // set index to 0, because we're doing the first one already
+            editor.putInt("advTimeIndex", 0);
+            advTimeIndex = 0;
+        } else
+            advTimeIndex = prefs.getInt("advTimeIndex", 0);
+
+
+        // FIXME: Should be unneccessary.
+        if (advTimeIndex >= advTime.length) advTimeIndex = advTime.length - 1;
+
+        String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
         int[] number = TimerUtils.time2Array(Integer.parseInt(thisAdvTime[0]));
 
 
         advTimeStringLeft = "";
-        //FIXME what does this do?
+
+        // Set the preview label, of which times are left
         ArrayList<String> arr = makeAdvLeftArray(advTime);
-
         advTimeStringLeft = TextUtils.join("\n", arr);
-
         mAltLabel.setText(advTimeStringLeft);
 
         int hour = number[0];
@@ -992,7 +994,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     private ArrayList<String> makeAdvLeftArray(String[] advTime) {
         ArrayList<String> arr = new ArrayList<String>();
-        for (int i = advTimeIndex; i < advTime.length; i++) {
+        for (int i = advTimeIndex + 1; i < advTime.length; i++) {
             if (arr.size() >= 2 && advTime.length - i > 1) {
                 arr.add("...");
                 break;
