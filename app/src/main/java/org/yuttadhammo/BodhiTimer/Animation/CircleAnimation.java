@@ -57,8 +57,6 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
 
     private Bitmap mEnsoBitmap;
 
-    RadialGradient mInnerGradient;
-
     /**
      * Paint for the seconds arc
      */
@@ -73,9 +71,10 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
     /**
      * Rects for the arcs
      */
-    private RectF mArcRect, mSecondRect, mMsRect;
+    private final RectF mArcRect;
+    private final RectF mSecondRect;
 
-    private Context mContext;
+    private final Context mContext;
 
     private int mWidth;
 
@@ -99,7 +98,6 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         // Create the rects
         mSecondRect = new RectF();
         mArcRect = new RectF();
-        mMsRect = new RectF();
 
         configure();
     }
@@ -225,7 +223,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         mSecondBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSecondBgPaint.setColor(colors[1]);
 
-        // Paint for the miliseconds
+        // Paint for the milliseconds
         mMsPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mMsPaint.setColor(colors[4]);
 
@@ -343,20 +341,8 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
 
         } else {
 
-            // Ms Arc
-            if (showMs) {
-                float pMs = (float) ((timeVec[3] / 1000.00));
-                float thetaMs = pMs * 360;
-
-                mMsRect.set(-mMsRadius, -mMsRadius, mMsRadius, mMsRadius);
-                canvas.drawCircle(0, 0, mMsRadius, (mMsFlipper) ? mCirclePaint : mMsPaint);
-                canvas.drawArc(mMsRect, START_ANGLE, thetaMs, true, (mMsFlipper) ? mMsPaint : mCirclePaint);
-            }
-            
             // We want to draw a very thin border
-            else {
-                canvas.drawCircle(0, 0, mMsRadius, mMsPaint);
-            }
+            canvas.drawCircle(0, 0, mMsRadius, mMsPaint);
 
             // Gap between the ms and seconds
             canvas.drawCircle(0, 0, mMsGap, mInnerPaint);
