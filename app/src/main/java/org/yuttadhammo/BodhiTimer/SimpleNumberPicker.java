@@ -43,7 +43,7 @@ import androidx.annotation.RequiresApi;
 /**
  * Dialog box with an arbitrary number of number pickers
  */
-public class NNumberPicker extends Activity implements OnClickListener, OnLongClickListener {
+public class SimpleNumberPicker extends Activity implements OnClickListener, OnLongClickListener {
 
     public interface OnNNumberPickedListener {
         void onNumbersPicked(int[] number);

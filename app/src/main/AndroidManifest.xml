@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NNumberPicker"
+            android:name=".SimpleNumberPicker"
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".AdvNumberPicker"

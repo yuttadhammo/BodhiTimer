@@ -68,7 +68,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
-import org.yuttadhammo.BodhiTimer.NNumberPicker.OnNNumberPickedListener;
+import org.yuttadhammo.BodhiTimer.SimpleNumberPicker.OnNNumberPickedListener;
 import org.yuttadhammo.BodhiTimer.Service.ScheduleClient;
 
 import java.io.FileNotFoundException;
@@ -556,7 +556,7 @@ public class TimerActivity extends Activity implements OnClickListener, OnNNumbe
     }
 
     private void showNumberPicker() {
-        Intent i = new Intent(this, NNumberPicker.class);
+        Intent i = new Intent(this, SimpleNumberPicker.class);
         i.putExtra("times", lastTimes);
         startActivityForResult(i, NUMBERPICK_REQUEST_CODE);
     }
