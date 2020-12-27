@@ -314,8 +314,8 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
      * @param progress  the original time set in milliseconds
      */
     private void drawEnso(Canvas canvas, float progress) {
-        // FIXME
-        int START_ANGLE = 120;
+
+        int START_ANGLE = 114;
 
         int w = canvas.getClipBounds().width();
         int h = canvas.getClipBounds().height();
@@ -338,9 +338,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         // Uncover arc
         float timeAngle = 360 * (1 - progress);
 
-        // We add 20 degrees to the start angle, because the
-        // enso doesn't start exactly at 90deg
-        float ucAngle = START_ANGLE + 20 + timeAngle;
+        float ucAngle = START_ANGLE + timeAngle;
 
         if (ucAngle > 360)
             ucAngle = ucAngle - 360;
