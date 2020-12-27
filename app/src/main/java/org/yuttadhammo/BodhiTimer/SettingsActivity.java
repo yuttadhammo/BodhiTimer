@@ -368,6 +368,8 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onCompletion(MediaPlayer mp) {
                         preference.setTitle(context.getString(R.string.play_sound));
                         preference.setSummary(context.getString(R.string.play_sound_desc));
+                        Log.v(TAG, "Resetting media player...");
+                        mp.reset();
                     }
                 });
                 player.start();

@@ -54,7 +54,7 @@ public class TimerReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent pintent) {
-        Log.v(TAG, "ALARM: received alarm");
+        Log.v(TAG, "ALARM: received alarm callback");
 
         NotificationManager mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -210,7 +210,8 @@ public class TimerReceiver extends BroadcastReceiver {
 
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        // TODO Auto-generated method stub
+                        Log.v(TAG, "Releasing media player...");
+                        mp.reset();
                         mp.release();
                     }
 

@@ -917,7 +917,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    // TODO Auto-generated method stub
+                    Log.v(TAG, "Releasing media player...");
+                    mp.reset();
                     mp.release();
                 }
 
