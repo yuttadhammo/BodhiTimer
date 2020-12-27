@@ -942,21 +942,22 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         String[] advTime = advTimeString.split("\\^");
 
-        String[] thisAdvTime = advTime[0].split("#"); // will be of format timeInMs#pathToSound
-        int[] number = TimerUtils.time2Array(Integer.parseInt(thisAdvTime[0]));
-
         Editor editor = prefs.edit();
 
-        // set index to 1, because we're doing the first one already
-
+        // FIXME 1 Index?
         if (reset) {
+            // set index to 1, because we're doing the first one already
             editor.putInt("advTimeIndex", 1);
             advTimeIndex = 1;
         } else
             advTimeIndex = prefs.getInt("advTimeIndex", 1);
 
-        advTimeStringLeft = "";
+        String[] thisAdvTime = advTime[advTimeIndex - 1].split("#"); // will be of format timeInMs#pathToSound
+        int[] number = TimerUtils.time2Array(Integer.parseInt(thisAdvTime[0]));
 
+
+        advTimeStringLeft = "";
+        //FIXME what does this do?
         ArrayList<String> arr = makeAdvLeftArray(advTime);
 
         advTimeStringLeft = TextUtils.join("\n", arr);
