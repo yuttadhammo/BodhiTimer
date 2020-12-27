@@ -315,7 +315,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
      */
     private void drawEnso(Canvas canvas, float progress) {
 
-        int START_ANGLE = 114;
+        int START_ANGLE = 117;
 
         int w = canvas.getClipBounds().width();
         int h = canvas.getClipBounds().height();
