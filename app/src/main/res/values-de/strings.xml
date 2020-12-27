@@ -77,11 +77,17 @@
     <string name="volume">Lautstärke</string>
     <string name="play_pre_sound">Start-Ton testen</string>
     <string name="play_pre_sound_desc">Spielt den aktuellen Start-Ton ab.</string>
-    <string name="is_circle">Kreis Animation</string>
+    <string name="is_circle">Kreis-Animation</string>
     <string name="invert_colors">Farben invertieren</string>
     <string name="sound">Töne</string>
     <string name="preparation_time">Vorbereitungszeit</string>
     <string name="preparation_time_desc">Eine Verzögerung einstellen, bevor der Timer beginnt.</string>
+    <string name="bmp_or_circle">Stil der Animation</string>
+    <string name="volume_desc">in Prozent der Medienlautstärke</string>
+    <string name="pre_sound_desc">Optionaler Ton, der zu Beginn des Timers gespielt wird.</string>
+    <string name="auto_restart">Timer automatisch neustarten</string>
+    <string name="auto_restart_desc">Nach dem Ende eines Timers direkt einen neuen starten.</string>
+    <string name="is_bitmap">Einblend-Animation</string>
 
 </resources>
 
