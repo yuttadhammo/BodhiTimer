@@ -26,4 +26,5 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
+    androidTestImplementation 'tools.fastlane:screengrab:1.0.0'
 }

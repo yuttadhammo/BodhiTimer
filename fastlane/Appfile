@@ -1,0 +1,2 @@
+json_key_file("api.json")
+package_name("org.yuttadhammo.BodhiTimer")

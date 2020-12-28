@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>This is an HTTP CONNECT tunnel, not a full HTTP Proxy</title>
+</head>
+<body>
+<h1>This is an HTTP CONNECT tunnel, not an HTTP proxy.</h1>
+<p>
+It appears you have configured your web browser to use this Tor port as
+an HTTP proxy.
+</p><p>
+This is not correct: This port is configured as a CONNECT tunnel, not
+an HTTP proxy. Please configure your client accordingly.  You can also
+use HTTPS; then the client should automatically use HTTP CONNECT.</p>
+<p>
+See <a href="https://www.torproject.org/documentation.html">https://www.torproject.org/documentation.html</a> for more information.
+</p>
+</body>
+</html>

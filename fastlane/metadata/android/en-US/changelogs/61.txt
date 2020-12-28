@@ -1,0 +1,6 @@
+5.1.0
+* Refactored preference screen
+* Native time pickers
+* Better defaults
+* Updated translations
+* Persist access permissions for custom images
