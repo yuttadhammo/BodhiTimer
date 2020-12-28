@@ -23,16 +23,17 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
-import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -132,10 +133,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
                 int ssel = 0;
 
                 int[] values = {hsel, msel, ssel};
-                Intent i = new Intent();
-                i.putExtra("times", values);
-                setResult(AppCompatActivity.RESULT_OK, i);
-                finish();
+                returnResults(values);
                 break;
             case R.id.btnCancel:
                 finish();
@@ -177,10 +175,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
 
         if (h != 0 || m != 0 || s != 0) {
             int[] values = {h, m, s};
-            Intent i = new Intent();
-            i.putExtra("times", values);
-            setResult(AppCompatActivity.RESULT_OK, i);
-            finish();
+            returnResults(values);
         } else
             Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG).show();
     }
@@ -188,13 +183,9 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
     private void setFromAdv() {
         if (prefs.getString("advTimeString", "").length() > 0) {
             int[] values = {-1, -1, -1};
-            Intent i = new Intent();
-            i.putExtra("times", values);
-            setResult(AppCompatActivity.RESULT_OK, i);
-            finish();
+            returnResults(values);
         } else {
-            Intent i = new Intent(this, AdvNumberPicker.class);
-            startActivity(i);
+            startAdvancedPicker();
         }
     }
 
@@ -233,8 +224,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
                 setPre(v, 4, vals);
                 return true;
             case R.id.btnadv:
-                Intent i = new Intent(this, AdvNumberPicker.class);
-                startActivity(i);
+                startAdvancedPicker();
                 return true;
             default:
                 return false;
@@ -264,5 +254,25 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         editor.apply();
     }
 
+    private void returnResults(int[] values) {
+        Intent i = new Intent();
+        i.putExtra("times", values);
+        setResult(AppCompatActivity.RESULT_OK, i);
+        finish();
+    }
 
+    private void startAdvancedPicker(){
+        Intent i = new Intent(this, AdvNumberPicker.class);
+        startActivityForResult(i, 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode < 0 && prefs.getString("advTimeString", "").length() > 0) {
+            int[] values = {-1, -1, -1};
+            returnResults(values);
+        }
+    }
 }
