@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/controls"
+        android:padding="15dp"
         android:orientation="vertical">
 
         <ImageView
@@ -109,6 +110,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/controls"
+        android:padding="15dp"
         android:id="@+id/timesList" />
 
     <TextView
@@ -117,5 +119,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_above="@id/controls"
+
         android:text="@string/empty_list" />
 </RelativeLayout>
