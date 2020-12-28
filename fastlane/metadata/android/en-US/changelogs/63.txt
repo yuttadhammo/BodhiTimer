@@ -1,0 +1,8 @@
+5.1.2
+* Refactored preference screen
+* Native time pickers
+* Better defaults
+* Updated translations
+* Min SDK 21
+* Fixes various smaller bugs
+* Persist access permissions for custom images

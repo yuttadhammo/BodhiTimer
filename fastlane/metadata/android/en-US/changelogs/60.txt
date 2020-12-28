@@ -1,0 +1,3 @@
+5.0.0
+* Modernize project, update deps
+* Add vector Enso image and new sounds
