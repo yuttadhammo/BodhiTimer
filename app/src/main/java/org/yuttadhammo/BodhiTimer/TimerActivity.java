@@ -193,8 +193,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         tts = new TextToSpeech(this, null);
 
-        Intent intent = new Intent(this, TimerReceiver.class);
-        mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //Intent intent = new Intent(this, TimerReceiver.class);
+        //mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         setContentView(R.layout.main);
         //RelativeLayout main = (RelativeLayout)findViewById(R.id.mainLayout);
@@ -817,6 +817,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     }
 
+
+
+
     /**
      * Stops the timer
      */
@@ -871,7 +874,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      */
     private void stopAlarmTimer() {
         if (LOG) Log.v(TAG, "Stopping the alarm timer ...");
-        mAlarmMgr.cancel(mPendingIntent);
+        //mAlarmMgr.cancel(mPendingIntent);
         mNM.cancelAll();
     }
 
@@ -1051,8 +1054,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         if (mTime <= 0) {
 
-            Log.e(TAG, "Time up");
-
+            Log.e(TAG, "Error: Time up. This probably means that the Broadcast was not received");
             timerStop();
 
             // Update the time
@@ -1186,12 +1188,13 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     // receiver to get restart
 
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             timerStop();
             checkWhetherAdvTime(false);
-            Log.d(TAG, "received: " + intent.getIntExtra("time", 999));
+            Log.d(TAG, "Received restart Broadcast: " + intent.getIntExtra("time", 999));
             if (intent.getBooleanExtra("stop", false))
                 return;
 

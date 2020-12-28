@@ -37,6 +37,8 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
 
+import org.yuttadhammo.BodhiTimer.Service.ScheduleService;
+
 import java.io.IOException;
 import java.util.Date;
 
@@ -47,27 +49,26 @@ public class TimerReceiver extends BroadcastReceiver {
     private final static String TAG = "TimerReceiver";
     final static String CANCEL_NOTIFICATION = "CANCEL_NOTIFICATION";
     public static MediaPlayer player;
+    private SharedPreferences prefs;
+    private Context context;
+    private int advTimeIndex;
+    private String[] advTime;
 
     public static String BROADCAST_RESET = "org.yuttadhammo.BodhiTimer.RESTART";
 
     private TextToSpeech tts;
 
+    public TimerReceiver() {
+        super();
+        Log.v(TAG, "ALARM: Init");
+    }
+
     @Override
-    public void onReceive(Context context, Intent pintent) {
+    public void onReceive(Context contextPassed, Intent pintent) {
+        context = contextPassed;
         Log.v(TAG, "ALARM: received alarm callback");
 
         NotificationManager mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (player != null) {
-            Log.v(TAG, "Releasing media player...");
-            try {
-                player.release();
-                player = null;
-            } catch (Exception e) {
-                e.printStackTrace();
-                player = null;
-            }
-        }
 
         // Cancel notification and return...
         if (CANCEL_NOTIFICATION.equals(pintent.getAction())) {
@@ -77,9 +78,23 @@ public class TimerReceiver extends BroadcastReceiver {
             return;
         }
 
-        // ...or display a new one
+        if (player != null) {
+            Log.v(TAG, "Releasing media player...");
+            try {
+                player.reset();
+                player.release();
+                player = null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                player = null;
+            }
+        }
 
+
+
+        // ...or display a new one
         Log.v(TAG, "Showing notification...");
+
 
         player = new MediaPlayer();
 
@@ -91,15 +106,15 @@ public class TimerReceiver extends BroadcastReceiver {
         CharSequence textLatest = String.format(context.getString(R.string.timer_for_x), setTimeStr);
 
         // Load the settings
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean led = prefs.getBoolean("LED", true);
         boolean vibrate = prefs.getBoolean("Vibrate", true);
         String notificationUri = "";
 
         boolean useAdvTime = prefs.getBoolean("useAdvTime", false);
         String advTimeString = prefs.getString("advTimeString", "");
-        String[] advTime = null;
-        int advTimeIndex = 0;
+        advTime = null;
+        advTimeIndex = 0;
 
         if (useAdvTime && advTimeString.length() > 0) {
             advTime = advTimeString.split("\\^");
@@ -254,57 +269,57 @@ public class TimerReceiver extends BroadcastReceiver {
         }
 
         if (useAdvTime && advTimeString.length() > 0) {
-            Intent broadcast = new Intent();
-
-            SharedPreferences.Editor editor = prefs.edit();
-
-            if (advTimeIndex < advTime.length - 1) {
-                advTimeIndex++;
-                editor.putInt("advTimeIndex", advTimeIndex);
-
-                String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
-
-                int time = Integer.parseInt(thisAdvTime[0]);
-
-                broadcast.putExtra("time", time);
-
-                // Save new time
-                editor.putLong("TimeStamp", new Date().getTime() + time);
-                editor.putInt("LastTime", time);
-
-                // editor.putString("NotificationUri", thisAdvTime[1]);
-
-                mNM.cancelAll();
-                Log.v(TAG, "Starting next iteration of the timer service ...");
-                Intent rintent = new Intent(context, TimerReceiver.class);
-                rintent.putExtra("SetTime", time);
-                PendingIntent mPendingIntent = PendingIntent.getBroadcast(context, 0, rintent, PendingIntent.FLAG_UPDATE_CURRENT);
-                AlarmManager mAlarmMgr = (AlarmManager) context
-                        .getSystemService(Context.ALARM_SERVICE);
-                mAlarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
-            } else {
-                broadcast.putExtra("stop", true);
-                //FIXME
-                editor.putInt("advTimeIndex", 0);
-
-            }
-            broadcast.setAction(BROADCAST_RESET);
-            context.sendBroadcast(broadcast);
-
-            editor.commit();
-
+            continueAdvTimer(mNM);
         } else if (prefs.getBoolean("AutoRestart", false)) {
+            autoRestart(pintent, mNM);
+        }
+
+        mNotificationManager.notify(0, mBuilder.build());
+
+        Log.d(TAG, "ALARM: alarm finished");
+
+    }
+
+    private void continueAdvTimer(NotificationManager mNM) {
+        Intent broadcast = new Intent();
+        SharedPreferences.Editor editor = prefs.edit();
+
+        if (advTimeIndex < advTime.length - 1) {
+            advTimeIndex++;
+            editor.putInt("advTimeIndex", advTimeIndex);
+
+            String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
+
+            int time = Integer.parseInt(thisAdvTime[0]);
+
+            broadcast.putExtra("time", time);
+
+            // Save new time
+            editor.putLong("TimeStamp", new Date().getTime() + time);
+            editor.putInt("LastTime", time);
+
+            // editor.putString("NotificationUri", thisAdvTime[1]);
+
+            mNM.cancelAll();
+            Log.v(TAG, "Starting next iteration of the timer service ...");
+
+        } else {
+            broadcast.putExtra("stop", true);
+            editor.putInt("advTimeIndex", 0);
+
+        }
+        broadcast.setAction(BROADCAST_RESET);
+        context.sendBroadcast(broadcast);
+
+        editor.commit();
+    }
+
+    private void autoRestart(Intent pintent, NotificationManager mNM) {
             int time = pintent.getIntExtra("SetTime", 0);
             if (time != 0) {
 
                 mNM.cancel(0);
                 Log.v(TAG, "Restarting the timer service ...");
-                Intent rintent = new Intent(context, TimerReceiver.class);
-                rintent.putExtra("SetTime", time);
-                PendingIntent mPendingIntent = PendingIntent.getBroadcast(context, 0, rintent, PendingIntent.FLAG_UPDATE_CURRENT);
-                AlarmManager mAlarmMgr = (AlarmManager) context
-                        .getSystemService(Context.ALARM_SERVICE);
-                mAlarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
 
                 // Save new time
                 SharedPreferences.Editor editor = prefs.edit();
@@ -318,11 +333,6 @@ public class TimerReceiver extends BroadcastReceiver {
                 context.sendBroadcast(broadcast);
 
             }
-        }
-
-        mNotificationManager.notify(0, mBuilder.build());
-
-        Log.d(TAG, "ALARM: alarm finished");
 
     }
 }
