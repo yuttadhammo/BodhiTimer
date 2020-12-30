@@ -108,7 +108,6 @@
     <string name="about_desc">About Bodhi Timer</string>
 
 
-
     <!-- About -->
     <string name="close">Close</string>
     <string name="about">About</string>
@@ -173,6 +172,23 @@
     <string name="input_text">Text To Speech</string>
     <string name="input_text_desc">Input text to be spoken</string>
     <string name="NoVoiceRecognitionInstalled">Please install a voice recognition app!</string>
+    <string name="general">General</string>
+    <string name="disable_battery_optim">Disable battery optimization</string>
+    <string name="disable_battery_optim_desc">BodhiTimer needs to be excluded from battery optimization in order for the alarm to work precisely</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>
 

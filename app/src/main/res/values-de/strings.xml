@@ -89,6 +89,9 @@
     <string name="auto_restart_desc">Nach dem Ende eines Timers direkt einen neuen starten.</string>
     <string name="is_bitmap">Einblend-Animation</string>
     <string name="NoVoiceRecognitionInstalled">Bitte installieren Sie eine Spracherkennungs-App!</string>
+    <string name="general">General</string>
+    <string name="disable_battery_optim">Disable battery optimization</string>
+    <string name="disable_battery_optim_desc">BodhiTimer needs to be excluded from battery optimization in order for the alarm to work precisely</string>
 
 </resources>
 

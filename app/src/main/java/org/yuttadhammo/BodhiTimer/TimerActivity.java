@@ -50,8 +50,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
@@ -1109,10 +1111,19 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
             startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
         } catch (ActivityNotFoundException e) {
-
+            showBatteryOptimizationDialog();
             Toast.makeText(this, getString(R.string.NoVoiceRecognitionInstalled), Toast.LENGTH_SHORT).show();
 
         }
+    }
+
+    public boolean showBatteryOptimizationDialog() {
+        Intent intent = new Intent();
+        String packageName = context.getPackageName();
+        intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+        intent.setData(Uri.parse("package:" + packageName));
+        startActivity(intent);
+        return true;
     }
 
     /**

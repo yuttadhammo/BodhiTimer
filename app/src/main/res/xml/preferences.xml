@@ -4,6 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
+        android:title="@string/general"
+        app:iconSpaceReserved="false"
+        android:key="disable_battery_header"/>
+
+    <Preference
+        android:title="@string/disable_battery_optim"
+        android:summary="@string/disable_battery_optim_desc"
+        android:key="disable_battery_optim"
+        app:iconSpaceReserved="false" />
+
+    <PreferenceCategory
         android:title="@string/sound"
         app:iconSpaceReserved="false" />
 
