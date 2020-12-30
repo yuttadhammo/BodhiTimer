@@ -1111,20 +1111,12 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
             startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
         } catch (ActivityNotFoundException e) {
-            showBatteryOptimizationDialog();
             Toast.makeText(this, getString(R.string.NoVoiceRecognitionInstalled), Toast.LENGTH_SHORT).show();
 
         }
     }
 
-    public boolean showBatteryOptimizationDialog() {
-        Intent intent = new Intent();
-        String packageName = context.getPackageName();
-        intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-        intent.setData(Uri.parse("package:" + packageName));
-        startActivity(intent);
-        return true;
-    }
+
 
     /**
      * Handle the all activities.

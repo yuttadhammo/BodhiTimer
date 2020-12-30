@@ -100,13 +100,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     }
 
-    public boolean showBatteryOptimizationDialog() {
+    public void showBatteryOptimizationDialog() {
         Intent intent = new Intent();
         String packageName = context.getPackageName();
         intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
         intent.setData(Uri.parse("package:" + packageName));
         startActivity(intent);
-        return true;
     }
 
 
@@ -197,7 +196,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private boolean setupTonePicker() {
+    private void setupTonePicker() {
         ListPreference tone = (ListPreference) preferenceScreen.findPreference("NotificationUri");
         play = (Preference) findPreference("playSound");
 
@@ -227,7 +226,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                return selectTone(preference, newValue, SELECT_RINGTONE, SELECT_FILE);
+                selectTone(newValue, SELECT_RINGTONE, SELECT_FILE);
+                return true;
             }
 
         });
@@ -236,7 +236,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                return selectTone(preference, newValue, SELECT_PRE_RINGTONE, SELECT_PRE_FILE);
+                selectTone(newValue, SELECT_PRE_RINGTONE, SELECT_PRE_FILE);
+                return true;
             }
 
         });
@@ -264,10 +265,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         });
 
-        return true;
     }
 
-    private boolean selectTone(final Preference preference, Object newValue, int ringtoneActivity, int fileActivity) {
+    private boolean selectTone(Object newValue, int ringtoneActivity, int fileActivity) {
         if (player.isPlaying()) {
             play.setTitle(context.getString(R.string.play_sound));
             play.setSummary(context.getString(R.string.play_sound_desc));
@@ -303,7 +303,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         return true;
     }
 
-    private boolean prePlayTone(String ToneUri, final Preference preference) {
+    private void prePlayTone(String ToneUri, final Preference preference) {
 
         boolean isPre = (preference.getKey().equals("playPreSound"));
 
@@ -313,7 +313,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             play.setSummary(context.getString(R.string.play_sound_desc));
             preplay.setTitle(context.getString(R.string.play_pre_sound));
             preplay.setSummary(context.getString(R.string.play_pre_sound_desc));
-            return false;
+            return;
         }
 
         try {
@@ -327,7 +327,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 ToneUri = prefs.getString("FileUri", "");
 
             if (ToneUri.equals(""))
-                return false;
+                return;
             Log.v(TAG, "Playing Uri: " + ToneUri);
             player.reset();
             int currVolume = prefs.getInt("tone_volume", 0);
@@ -355,7 +355,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             e.printStackTrace();
         }
 
-        return true;
     }
 }
 
