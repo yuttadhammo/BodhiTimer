@@ -30,7 +30,8 @@
         android:text=""
         android:textSize="50sp"
         android:gravity="center"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:fontFamily="@font/main" />
 
     <TextView
         android:id="@+id/text_alt"
