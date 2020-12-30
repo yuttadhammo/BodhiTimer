@@ -88,6 +88,7 @@
     <string name="auto_restart">Timer automatisch neustarten</string>
     <string name="auto_restart_desc">Nach dem Ende eines Timers direkt einen neuen starten.</string>
     <string name="is_bitmap">Einblend-Animation</string>
+    <string name="NoVoiceRecognitionInstalled">Bitte installieren Sie eine Spracherkennungs-App!</string>
 
 </resources>
 

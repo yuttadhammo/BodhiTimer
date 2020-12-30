@@ -172,6 +172,7 @@
     <string name="timer_done">timer finished</string>
     <string name="input_text">Text To Speech</string>
     <string name="input_text_desc">Input text to be spoken</string>
+    <string name="NoVoiceRecognitionInstalled">Please install a voice recognition app!</string>
 
 </resources>
 

@@ -78,7 +78,6 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-// import android.net.Uri;
 
 /**
  * The main activity which shows the timer and allows the user to set the time
@@ -956,7 +955,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             advTimeIndex = prefs.getInt("advTimeIndex", 0);
 
 
-        // FIXME: Should be unneccessary.
+        // FIXME: Should be unnecessary.
         if (advTimeIndex >= advTime.length) advTimeIndex = advTime.length - 1;
 
         String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
@@ -1110,8 +1109,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
             startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
         } catch (ActivityNotFoundException e) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://market.android.com/details?id=com.google.android.voicesearch"));
-            startActivity(browserIntent);
+
+            Toast.makeText(this, getString(R.string.NoVoiceRecognitionInstalled), Toast.LENGTH_SHORT).show();
 
         }
     }

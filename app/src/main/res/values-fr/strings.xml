@@ -41,4 +41,5 @@
     <string name="close">Fermer</string>
     <string name="about">À propos</string>
     <string name="about_title">À propos de Bodhi Timer</string>
+    <string name="NoVoiceRecognitionInstalled">Veuillez installer une application de reconnaissance vocale !</string>
 </resources>
