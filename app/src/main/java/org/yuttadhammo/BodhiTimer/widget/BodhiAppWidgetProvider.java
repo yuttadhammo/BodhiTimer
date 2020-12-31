@@ -120,8 +120,8 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
     public void onDeleted(Context context, int[] appWidgetIds) {
         Log.d(TAG, "onDeleted");
+
         // When the user deletes the widget, delete the preference associated with it.
-        final int N = appWidgetIds.length;
         for (int appWidgetId : appWidgetIds) {
             AppWidgetConfigure.deletePref(context, appWidgetId);
         }

@@ -38,15 +38,14 @@ import org.yuttadhammo.BodhiTimer.R;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 class BodhiLeaf implements TimerAnimation.TimerDrawing {
     private Bitmap mCupBitmap;
 
-    private int mWidth = 0;
-    private int mHeight = 0;
+    private int mWidth;
+    private int mHeight;
 
-    private Paint mProgressPaint = null;
+    private Paint mProgressPaint;
 
     private SharedPreferences prefs;
 
@@ -110,23 +109,19 @@ class BodhiLeaf implements TimerAnimation.TimerDrawing {
             rd = new Rect(0, shift, w, nHeight + shift);
         }
 
-        //Log.i("Timer",nWidth+" "+nHeight+" "+w+" "+h);
 
         canvas.drawBitmap(mCupBitmap, rs, rd, null);
 
         float p = (max != 0) ? (time / (float) max) : 0;
 
-        //if(p == 0) p = 1;
 
-        RectF fill = new RectF(0, 0, canvas.getWidth(), canvas.getHeight());
         mProgressPaint.setAlpha((int) (255 - (255 * p)));
-        //canvas.drawRect(fill,mProgressPaint);
-
 
         canvas.restore();
     }
 
     public void configure() {
+
         // TODO Auto-generated method stub
 
     }

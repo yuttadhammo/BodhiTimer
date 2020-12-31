@@ -53,7 +53,9 @@ import java.util.List;
  */
 public class AdvNumberPicker extends AppCompatActivity {
 
-    private String TAG = "ANumberPicker";
+
+
+    private final String TAG = "ANumberPicker";
     private AppCompatActivity context;
     private SharedPreferences prefs;
     private MyAdapter adapter;

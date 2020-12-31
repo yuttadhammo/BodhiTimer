@@ -31,32 +31,16 @@ import java.util.regex.Pattern;
 public class TimerUtils {
 
 
-    private static String TAG = "TimerUtils";
+    private static final String TAG = "TimerUtils";
 
     public static String TIME_SEPARATOR = " again ";
-
-    /**
-     * Returns the suggested text size for the string. A hack.
-     *
-     * @param str the time string
-     * @return the suggested text size to accommodate the string
-     */
-    public static int textSize(String str) {
-        if (str.length() > 7) {
-            return 50;
-        } else if (str.length() == 7) {
-            return 55;
-        } else {
-            return 80;
-        }
-    }
 
 
     /**
      * Converts a millisecond time to a string time
      *
      * @param ms the time in milliseconds
-     * @return the formated string
+     * @return the formatted string
      */
     public static String[] ms2Str(int ms) {
         int[] time = time2Array(ms);
@@ -106,7 +90,7 @@ public class TimerUtils {
 
         String r = "";
 
-        // string formating
+        // string formatting
         if (hour != 0) {
             if (hour != 1)
                 r += String.format(context.getString(R.string.x_hours), hour);
@@ -147,7 +131,7 @@ public class TimerUtils {
     }
 
     public static String str2complexTimeString(AppCompatActivity activity, String numberString) {
-        String out = "";
+        String out;
 
         ArrayList<String> stringArray = new ArrayList<String>();
 

@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -198,7 +197,6 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
     public boolean onLongClick(View v) {
         String h = timePicker.getHour() + "";
         String m = timePicker.getMinute() + "";
-        String s = 0 + "";
 
         if (h.length() == 1)
             h = "0" + h;
