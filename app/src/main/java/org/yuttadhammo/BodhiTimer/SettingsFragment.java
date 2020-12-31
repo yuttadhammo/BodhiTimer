@@ -81,7 +81,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private boolean isIgnoringBatteryOptimizations() {
         PowerManager pwrm = (PowerManager) requireActivity().getSystemService(Context.POWER_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return pwrm.isIgnoringBatteryOptimizations(requireActivity().getPackageName());
+            boolean status = pwrm.isIgnoringBatteryOptimizations(requireActivity().getPackageName());
+            Log.v(TAG, "isIgnoringBatteryOptimizations = "  + status);
+            return status;
         }
         return true;
     }
@@ -110,7 +112,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
     private void showAboutScreen() {
-
         LayoutInflater li = LayoutInflater.from(context);
         View view = li.inflate(R.layout.about, null);
         WebView wv = (WebView) view.findViewById(R.id.about_text);
@@ -295,8 +296,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             try {
                 getActivity().startActivityForResult(Intent.createChooser(intent, "Select Sound File"), fileActivity);
             } catch (ActivityNotFoundException ex) {
-                Toast.makeText(getActivity(), "Please install a File Manager.",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Please install a File Manager.", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -351,7 +351,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             preference.setTitle(context.getString(R.string.playing_sound));
             preference.setSummary(context.getString(R.string.playing_sound_desc));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Log.e(TAG, "Failed to play uri: " + ToneUri);
             e.printStackTrace();
         }
 

@@ -1,9 +1,7 @@
 package org.yuttadhammo.BodhiTimer;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -75,36 +73,36 @@ public class SettingsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == Activity.RESULT_OK) {
             Uri uri;
-            SharedPreferences.Editor mSettingsEdit = prefs.edit();
+            String result = intent.getDataString();
+
+            SharedPreferences.Editor settings = prefs.edit();
             switch (requestCode) {
                 case SELECT_RINGTONE:
                     uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                     if (uri != null) {
                         Log.i("Timer", "Got ringtone " + uri.toString());
-                        mSettingsEdit.putString("SystemUri", uri.toString());
+                        settings.putString("SystemUri", uri.toString());
                     }
                     break;
                 case SELECT_FILE:
                     // Get the Uri of the selected file
-                    uri = intent.getData();
-                    if (uri != null) {
-                        Log.i(TAG, "File Path: " + uri);
-                        mSettingsEdit.putString("FileUri", uri.toString());
+                    if (result != null) {
+                        Log.i(TAG, "File Path: " + result);
+                        settings.putString("FileUri", result);
                     }
                     break;
                 case SELECT_PRE_RINGTONE:
                     uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                     if (uri != null) {
                         Log.i("Timer", "Got ringtone " + uri.toString());
-                        mSettingsEdit.putString("PreSystemUri", uri.toString());
+                        settings.putString("PreSystemUri", uri.toString());
                     }
                     break;
                 case SELECT_PRE_FILE:
                     // Get the Uri of the selected file
-                    uri = intent.getData();
-                    if (uri != null) {
-                        Log.i(TAG, "File Path: " + uri);
-                        mSettingsEdit.putString("PreFileUri", uri.toString());
+                    if (result != null) {
+                        Log.i(TAG, "File Path: " + result);
+                        settings.putString("PreFileUri", result);
                     }
                     break;
                 case SELECT_PHOTO:
@@ -112,11 +110,12 @@ public class SettingsActivity extends AppCompatActivity {
 
                     if (uri != null)
                         getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                        mSettingsEdit.putString("bmp_url", uri.toString());
+                        settings.putString("bmp_url", uri.toString());
 
                     break;
             }
-            mSettingsEdit.apply();
+
+            settings.apply();
         }
     }
 
