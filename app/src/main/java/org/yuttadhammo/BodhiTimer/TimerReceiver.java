@@ -37,8 +37,6 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
 
-import org.yuttadhammo.BodhiTimer.Service.ScheduleService;
-
 import java.io.IOException;
 import java.util.Date;
 

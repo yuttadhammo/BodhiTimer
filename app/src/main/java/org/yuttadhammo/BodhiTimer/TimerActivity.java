@@ -469,8 +469,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         // this stops us leaking our activity into the system *bad*
         Log.d(TAG, "service stopped");
 
-        if (mAlarmTaskManager.scheduleClient != null)
-            mAlarmTaskManager.scheduleClient.doUnbindService();
         super.onStop();
     }
 

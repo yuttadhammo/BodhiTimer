@@ -7,12 +7,10 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import org.yuttadhammo.BodhiTimer.TimerUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Stack;
 import java.util.Timer;
@@ -24,8 +22,6 @@ import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
 
 public class AlarmTaskManager {
     private final String TAG = AlarmTaskManager.class.getSimpleName();
-
-
 
     /**
      * Update rate of the internal timer
@@ -57,8 +53,6 @@ public class AlarmTaskManager {
     // The context to start the service in
     private Context mContext;
 
-    public ScheduleClient scheduleClient;
-
     public boolean isPaused;
 
 
@@ -76,9 +70,6 @@ public class AlarmTaskManager {
         mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // Create a new service client and bind our activity to this service
-        scheduleClient = new ScheduleClient(context);
-        scheduleClient.doBindService();
 
         // Constructor where listener events are ignored
         this.listener = null;
@@ -124,7 +115,7 @@ public class AlarmTaskManager {
     public void addAlarm(int time) {
         // This starts a new thread to set the alarm
         // You want to push off your tasks onto a new thread to free up the UI to carry on responding
-        Log.i("ScheduleService", "Creating new alarm task");
+        Log.i(TAG, "Creating new alarm task");
 
 //        AlarmTask alarm =  new AlarmTask(mContext, time, "", "");
 //        alarms.push(alarm);
@@ -135,10 +126,20 @@ public class AlarmTaskManager {
     /**
      * Show an alarm for a certain date when the alarm is called it will pop up a notification
      */
+    public void setAlarmForNotification(int time) {
+        // This starts a new thread to set the alarm
+        // You want to push off your tasks onto a new thread to free up the UI to carry on responding
+        Log.i(TAG, "Creating new alarm task");
+        new AlarmTask(mContext, time).run();
+    }
+
+    /**
+     * Show an alarm for a certain date when the alarm is called it will pop up a notification
+     */
     public void addAlarmWithUri(int time, String uriType, String notificationUri) {
         // This starts a new thread to set the alarm
         // You want to push off your tasks onto a new thread to free up the UI to carry on responding
-        Log.i("ScheduleService", "Creating new alarm task");
+        Log.i(TAG, "Creating new alarm task");
 
 //        AlarmTask alarm =  new AlarmTask(mContext, time, uriType, notificationUri);
 //        alarms.push(alarm);
@@ -191,7 +192,7 @@ public class AlarmTaskManager {
         if (service) {
             Log.v(TAG, "ALARM: Starting the timer service: " + TimerUtils.time2humanStr(mContext, mTime));
 
-            scheduleClient.setAlarmForNotification(mTime);
+            setAlarmForNotification(mTime);
 
         }
 
@@ -314,65 +315,4 @@ public class AlarmTaskManager {
     };
 
 
-
-//
-//    /**
-//     * Class for clients to access.  Because we know this service always
-//     * runs in the same process as its clients, we don't need to deal with
-//     * IPC.
-//     */
-//    public class LocalBinder extends Binder {
-//        AlarmTaskManager getService() {
-//            return AlarmTaskManager.this;
-//        }
-//    }
-//
-//    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId) {
-//        Log.i("LocalService", "Received start id " + startId + ": " + intent);
-//        return START_NOT_STICKY;
-//    }
-//
-//    @Nullable
-//    @Override
-//    public IBinder onBind(Intent intent) {
-//        return mBinder;
-//    }
-//
-//    // This is the object that receives interactions from clients.  See
-//    // RemoteService for a more complete example.
-//    private final IBinder mBinder = new LocalBinder();
-
-
-//    private class AppCountDownTimer extends CountDownTimer {
-//
-//        private final String TAG = AlarmTaskManager.AppCountDownTimer.class.getSimpleName();
-//        /**
-//         * @param millisInFuture    The number of millis in the future from the call
-//         *                          to {@link #start()} until the countdown is done and {@link #onFinish()}
-//         *                          is called.
-//         */
-//        private AppCountDownTimer(long millisInFuture) {
-//            super(millisInFuture, 1000);
-//        }
-//
-//        /**
-//         * This is useful only when the screen is turned on. It seems that onTick is not called for every tick if the
-//         * phone is locked and the app runs in the background.
-//         * I found this the hard way when using the session duration(which is set here) in saving to statistics.
-//         */
-//        @Override
-//        public void onTick(long millisUntilFinished) {
-//            Log.v(TAG, "is Ticking: " + millisUntilFinished + " millis remaining.");
-//            mCurrentTimer.setDuration(millisUntilFinished);
-//            mRemaining = millisUntilFinished;
-//            //EventBus.getDefault().post(new Constants.UpdateTimerProgressEvent());
-//        }
-//
-//        @Override
-//        public void onFinish() {
-//            Log.v(TAG, "is finished.");
-//            mRemaining = 0;
-//        }
-//    }
 }
