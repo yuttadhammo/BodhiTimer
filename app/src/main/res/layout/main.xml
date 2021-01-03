@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
         android:text=""
+        android:textAlignment="center"
         android:textSize="50sp"
         android:gravity="center"
         android:layout_centerInParent="true"
@@ -39,11 +40,13 @@
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
         android:text=""
+        android:textAlignment="center"
         android:textSize="30sp"
         android:gravity="center"
         android:singleLine="false"
+        android:fontFamily="@font/main"
         android:layout_below="@id/text_top"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerInParent="true" />
 
     <ImageButton
         android:contentDescription="@string/set"
