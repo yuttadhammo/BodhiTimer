@@ -29,7 +29,6 @@
 package org.yuttadhammo.BodhiTimer;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -48,12 +47,8 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.PowerManager;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
@@ -513,7 +508,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     case STOPPED:
                         playPreSound();
                         checkWhetherAdvTime(true);
-                        mAlarmTaskManager.timerStart(mAlarmTaskManager.mLastTime, true);
+                        mAlarmTaskManager.timerStart(mAlarmTaskManager.mLastTime);
                         break;
                 }
                 break;
@@ -606,11 +601,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         int rtime = (int) (Math.ceil(((float) time) / 1000) * 1000);  // round to seconds
 
-        //Log.v(TAG,"rounding time: "+time+" "+rtime);
 
         mTimerLabel.setText(TimerUtils.time2hms(rtime));
 
-        //mTimerLabel2.setText(str[1]);
     }
 
 
@@ -701,7 +694,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         playPreSound();
         prepareTimerStart();
-        mAlarmTaskManager.timerStart(mAlarmTaskManager.mLastTime, true);
+        mAlarmTaskManager.timerStart(mAlarmTaskManager.mLastTime);
 
         if (widget) {
             sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
@@ -1067,7 +1060,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             mAlarmTaskManager.mLastTime = intent.getIntExtra("time", mAlarmTaskManager.mLastTime);
             mAlarmTaskManager.mTime = mAlarmTaskManager.mLastTime;
             prepareTimerStart();
-            mAlarmTaskManager.timerStart(mAlarmTaskManager.mTime, true);
+            mAlarmTaskManager.timerStart(mAlarmTaskManager.mTime);
         }
     };
 

@@ -130,7 +130,22 @@ public class AlarmTaskManager {
         // This starts a new thread to set the alarm
         // You want to push off your tasks onto a new thread to free up the UI to carry on responding
         Log.i(TAG, "Creating new alarm task");
-        new AlarmTask(mContext, time).run();
+        AlarmTask alarm = new AlarmTask(mContext, time);
+        alarm.run();
+    }
+
+
+    /**
+     * Show an alarm for a certain date when the alarm is called it will pop up a notification
+     */
+    public void setAlarmWithMetadata(int time, String uri, String uriType) {
+        // This starts a new thread to set the alarm
+        // You want to push off your tasks onto a new thread to free up the UI to carry on responding
+        Log.i(TAG, "Creating new alarm task");
+        AlarmTask alarm = new AlarmTask(mContext, time);
+        alarm.setUri(uri);
+        alarm.setUriType(uriType);
+        alarm.run();
     }
 
     /**
@@ -170,12 +185,12 @@ public class AlarmTaskManager {
 
     /**
      * Starts the timer at the given time
+     *  @param time    with which to count down
      *
-     * @param time    with which to count down
-     * @param service whether or not to start the service as well
      */
-    public void timerStart(int time, boolean service) {
+    public void timerStart(int time) {
         Log.v(TAG, "Starting the timer: " + time);
+        Log.v(TAG, "ALARM: Starting the timer service: " + TimerUtils.time2humanStr(mContext, mTime));
 
         onEnterState(RUNNING);
 
@@ -188,13 +203,7 @@ public class AlarmTaskManager {
         editor.apply();
 
 
-        // Start external service
-        if (service) {
-            Log.v(TAG, "ALARM: Starting the timer service: " + TimerUtils.time2humanStr(mContext, mTime));
-
-            setAlarmForNotification(mTime);
-
-        }
+        setAlarmForNotification(mTime);
 
         mTimer.schedule(
                 new TimerTask() {
@@ -233,7 +242,7 @@ public class AlarmTaskManager {
     public void timerResume() {
         Log.v(TAG, "Resuming the timer...");
 
-        timerStart(mTime, true);
+        timerStart(mTime);
         onEnterState(RUNNING);
     }
 

@@ -53,6 +53,7 @@ public class AlarmTask implements Runnable {
     private final MutableLiveData<SessionType> mSessionType = new MutableLiveData<>();
     private final MutableLiveData<String> mLabel = new MutableLiveData<>();
     private final MutableLiveData<String> mUri = new MutableLiveData<>();
+    private final MutableLiveData<String> mUriType = new MutableLiveData<>();
 
     public AlarmTask(Context context, int duration) {
         this.context = context;
@@ -93,10 +94,6 @@ public class AlarmTask implements Runnable {
         return mSessionType;
     }
 
-    public LiveData<String> getLabel() {
-        return mLabel;
-    }
-
     public void setDuration(int newDuration) {
         mDuration.setValue(newDuration);
     }
@@ -109,7 +106,19 @@ public class AlarmTask implements Runnable {
         mSessionType.setValue(type);
     }
 
-    public void setLabel(String label) {
-        mLabel.setValue(label);
+    public LiveData<String> getUri() {
+        return mUri;
     }
+    public void setUri(String label) {
+        mUri.setValue(label);
+    }
+
+    public LiveData<String> getUriType() {
+        return mUriType;
+    }
+    public void setUriType(String val) {
+        mUriType.setValue(val);
+    }
+
+
 }
