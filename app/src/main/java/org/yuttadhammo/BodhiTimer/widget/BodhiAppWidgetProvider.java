@@ -49,6 +49,10 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
+import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
+import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
+
 public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
     private static SharedPreferences mSettings;
@@ -172,7 +176,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         mTimer = new Timer();
         timeStamp = mSettings.getLong("TimeStamp", -1);
         mLastTime = mSettings.getInt("LastTime", 0);
-        state = mSettings.getInt("State", AlarmTaskManager.STOPPED);
+        state = mSettings.getInt("State", STOPPED);
 
         appWidgetManager = AppWidgetManager.getInstance(context);
         ComponentName appWidgets = new ComponentName(context.getPackageName(), "org.yuttadhammo.BodhiTimer.widget.BodhiAppWidgetProvider");
@@ -214,7 +218,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         //Log.d(TAG, "Delta: "+delta);
 
         // We still have a timer running!
-        if (then.after(now) && state == AlarmTaskManager.RUNNING) {
+        if (then.after(now) && state == RUNNING) {
             //Log.d(TAG, "running");
             views.setTextViewText(R.id.time, getTime(delta));
             mTimer.schedule(new TimerTask() {
@@ -226,7 +230,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
                             },
                     AlarmTaskManager.TIMER_TIC
             );
-        } else if (state == AlarmTaskManager.PAUSED) {
+        } else if (state == PAUSED) {
             Log.d(TAG, "paused");
 
             Integer time = mSettings.getInt("CurrentTime", 0);
@@ -239,7 +243,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
         float p = (mLastTime != 0) ? (delta / (float) mLastTime) : 0;
 
-        if (then.after(now) && state == AlarmTaskManager.RUNNING) {
+        if (then.after(now) && state == RUNNING) {
             if (bmp == null || ++tick == 10) {
                 bmp = adjustOpacity(originalBitmap, (int) (255 - (255 * p)));
                 tick = 0;

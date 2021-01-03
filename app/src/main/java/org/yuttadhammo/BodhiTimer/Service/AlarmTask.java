@@ -27,7 +27,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import org.yuttadhammo.BodhiTimer.BL.SessionType;
-import org.yuttadhammo.BodhiTimer.BL.TimerState;
 import org.yuttadhammo.BodhiTimer.TimerReceiver;
 
 /**
