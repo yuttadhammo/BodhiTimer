@@ -14,8 +14,7 @@
 package org.yuttadhammo.BodhiTimer.Service;
 
 public enum SessionType {
-    WORK,
-    BREAK,
-    LONG_BREAK,
+    REAL,
+    PREPARATION,
     INVALID
 }

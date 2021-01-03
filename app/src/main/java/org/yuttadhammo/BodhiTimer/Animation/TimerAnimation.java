@@ -42,10 +42,10 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
     int mLastTime = 0, mLastMax = 0;
 
     Bitmap mBitmap = null;
+    SharedPreferences prefs;
 
     Context mContext;
     private TimerActivity mActivity;
-    private boolean clicked;
 
     public interface TimerDrawing {
 
@@ -69,7 +69,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         super(context);
         mContext = context;
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         prefs.registerOnSharedPreferenceChangeListener(this);
 
         setOnClickListener(this);
@@ -119,17 +119,13 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         mActivity.mAlarmTaskManager.pauseAlarms();
     }
 
-    public void thisClicked() {
-        startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_out));
-
-        mIndex++;
-        mIndex %= mDrawings.size();
-
-        startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_in));
-
-        invalidate();
-
+    public void saveState(SharedPreferences prefs) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("DrawingIndex", getIndex());
+        editor.apply();
     }
+
+
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 

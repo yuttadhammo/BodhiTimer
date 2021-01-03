@@ -44,6 +44,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.yuttadhammo.BodhiTimer.Service.SessionType;
+import org.yuttadhammo.BodhiTimer.Util.Time;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -266,7 +269,7 @@ public class AdvNumberPicker extends AppCompatActivity {
 
         int time = h * 60 * 60 * 1000 + m * 60 * 1000 + s * 1000;
 
-        advTimeString += (advTimeString.length() == 0 ? "" : "^") + time + "#" + customUri + "#" + customSound;
+        advTimeString += (advTimeString.length() == 0 ? "" : "^") + time + "#" + customUri + "#" + SessionType.REAL;
         updateDataSet();
         hours.setText("");
         mins.setText("");
@@ -311,7 +314,7 @@ public class AdvNumberPicker extends AppCompatActivity {
                 TextView time = (TextView) rowView.findViewById(R.id.time);
 
                 if (time != null) {
-                    String ts = TimerUtils.time2humanStr(context, Integer.parseInt(p[0]));
+                    String ts = Time.time2humanStr(context, Integer.parseInt(p[0]));
                     time.setText(ts);
                 }
             }

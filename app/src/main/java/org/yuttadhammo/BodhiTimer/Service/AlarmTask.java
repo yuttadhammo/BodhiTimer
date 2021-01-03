@@ -22,11 +22,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import org.yuttadhammo.BodhiTimer.TimerReceiver;
+
+import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
 
 /**
  * Set an alarm for the date passed into the constructor
@@ -40,6 +43,8 @@ import org.yuttadhammo.BodhiTimer.TimerReceiver;
  */
 public class AlarmTask implements Runnable {
 
+    private final String TAG = AlarmTask.class.getSimpleName();
+
     // The android system alarm manager
     private final AlarmManager mAlarmMgr;
     // Your context to retrieve the alarm manager from
@@ -48,17 +53,26 @@ public class AlarmTask implements Runnable {
     // The duration selected for the alarm
     private final MutableLiveData<Integer> mDuration = new MutableLiveData<>();
 
+    private PendingIntent mPendingIntent;
+
     // Unused
     private final MutableLiveData<TimerState> mTimerState = new MutableLiveData<>();
     private final MutableLiveData<SessionType> mSessionType = new MutableLiveData<>();
     private final MutableLiveData<String> mLabel = new MutableLiveData<>();
     private final MutableLiveData<String> mUri = new MutableLiveData<>();
+    private final MutableLiveData<String> mUriType = new MutableLiveData<>();
 
-    public AlarmTask(Context context, int duration) {
+    public int id = 0;
+    public int offset = 0;
+    public int duration = 0;
+
+    public AlarmTask(Context context, int offset, int duration) {
         this.context = context;
         this.mAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         this.mDuration.setValue((int) duration);
+        this.duration = duration;
+        this.offset = offset;
 //        this.mTimerState.setValue(TimerState.INACTIVE);
 //        this.mSessionType.setValue(SessionType.WORK);
 //        this.mLabel.setValue("FIXME");
@@ -68,22 +82,41 @@ public class AlarmTask implements Runnable {
 
     @Override
     public void run() {
-        int time = getDuration().getValue();
-        Intent intent = new Intent(context, TimerReceiver.class);
-        intent.putExtra("SetTime", time);
 
-        PendingIntent mPendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(context, TimerReceiver.class);
+        //Intent intent = new Intent();
+
+        //intent.putExtra("SetTime", time);
+        intent.putExtra("offset", offset);
+        intent.putExtra("duration", duration);
+        intent.putExtra("uri", mUri.getValue());
+        intent.putExtra("id", id);
+        intent.setAction(BROADCAST_END);
+
+        int time = duration + offset;
+
+        Log.i(TAG, "Running new alarm task " + id + ", uri " + mUri.getValue() + " type: " + mSessionType.getValue() + " due in " + (time)/1000 );
+
+        mPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        //mPendingIntent.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mAlarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
+            Intent alarmInfoIntent = new Intent(context, TimerReceiver.class);
+            PendingIntent pendingAlarmInfo = PendingIntent.getBroadcast(context, id + 1000, alarmInfoIntent, 0);
+            AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(System.currentTimeMillis() + time, pendingAlarmInfo);
+
+            mAlarmMgr.setAlarmClock(info, mPendingIntent);
+            //mAlarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
         } else {
             mAlarmMgr.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
         }
     }
 
-    // Accesors
-    public LiveData<Integer> getDuration() {
-        return mDuration;
+    public void cancel() {
+        if (mPendingIntent != null)
+             mAlarmMgr.cancel(mPendingIntent);
     }
+
+    // Accesors
 
     public LiveData<TimerState> getTimerState() {
         return mTimerState;
@@ -91,10 +124,6 @@ public class AlarmTask implements Runnable {
 
     public LiveData<SessionType> getSessionType() {
         return mSessionType;
-    }
-
-    public LiveData<String> getLabel() {
-        return mLabel;
     }
 
     public void setDuration(int newDuration) {
@@ -109,7 +138,19 @@ public class AlarmTask implements Runnable {
         mSessionType.setValue(type);
     }
 
-    public void setLabel(String label) {
-        mLabel.setValue(label);
+    public LiveData<String> getUri() {
+        return mUri;
     }
+    public void setUri(String label) {
+        mUri.setValue(label);
+    }
+
+    public LiveData<String> getUriType() {
+        return mUriType;
+    }
+    public void setUriType(String val) {
+        mUriType.setValue(val);
+    }
+
+
 }

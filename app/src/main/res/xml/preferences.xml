@@ -3,16 +3,16 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
-        android:title="@string/general"
-        app:iconSpaceReserved="false"
-        android:key="disable_battery_header"/>
+<!--    <PreferenceCategory-->
+<!--        android:title="@string/general"-->
+<!--        app:iconSpaceReserved="false"-->
+<!--        android:key="disable_battery_header"/>-->
 
-    <Preference
-        android:title="@string/disable_battery_optim"
-        android:summary="@string/disable_battery_optim_desc"
-        android:key="disable_battery_optim"
-        app:iconSpaceReserved="false" />
+<!--    <Preference-->
+<!--        android:title="@string/disable_battery_optim"-->
+<!--        android:summary="@string/disable_battery_optim_desc"-->
+<!--        android:key="disable_battery_optim"-->
+<!--        app:iconSpaceReserved="false" />-->
 
     <PreferenceCategory
         android:title="@string/sound"
@@ -50,12 +50,13 @@
         app:iconSpaceReserved="false"
         app:showSeekBarValue="true" />
 
-<!--    <SeekBarPreference-->
-<!--        android:key="PreparationTime"-->
-<!--        android:title="@string/preparation_time"-->
-<!--        android:summary="@string/preparation_time_desc"-->
-<!--        app:iconSpaceReserved="false"-->
-<!--        android:max="300" />-->
+    <SeekBarPreference
+        android:key="preparationTime"
+        android:title="@string/preparation_time"
+        android:summary="@string/preparation_time_desc"
+        app:iconSpaceReserved="false"
+        app:showSeekBarValue="true"
+        android:max="120" />
 
     <PreferenceCategory
         android:title="@string/notification"
@@ -75,12 +76,12 @@
         android:defaultValue="False"
         app:iconSpaceReserved="false" />
 
-    <CheckBoxPreference
-        android:key="AutoClear"
-        android:title="@string/auto_clear"
-        android:summary="@string/auto_clear_desc"
-        android:defaultValue="False"
-        app:iconSpaceReserved="false" />
+<!--    <CheckBoxPreference-->
+<!--        android:key="AutoClear"-->
+<!--        android:title="@string/auto_clear"-->
+<!--        android:summary="@string/auto_clear_desc"-->
+<!--        android:defaultValue="False"-->
+<!--        app:iconSpaceReserved="false" />-->
 
     <CheckBoxPreference
         android:key="NagSilent"

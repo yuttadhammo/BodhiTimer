@@ -58,7 +58,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         setupTonePicker();
         setupAnimations();
-        setupBatteryAction();
+        //setupBatteryAction();
 
     }
 
@@ -67,9 +67,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         String key = preference.getKey();
 
         switch (key) {
-            case "disable_battery_optim":
-                showBatteryOptimizationDialog();
-                break;
             case "aboutPref":
                 showAboutScreen();
                 break;
@@ -78,29 +75,29 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         return super.onPreferenceTreeClick(preference);
     }
 
-    private boolean isIgnoringBatteryOptimizations() {
-        PowerManager pwrm = (PowerManager) requireActivity().getSystemService(Context.POWER_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            boolean status = pwrm.isIgnoringBatteryOptimizations(requireActivity().getPackageName());
-            Log.v(TAG, "isIgnoringBatteryOptimizations = "  + status);
-            return status;
-        }
-        return true;
-    }
-
-    private void setupBatteryAction() {
-        Preference batteryButton = (Preference) preferenceScreen.findPreference("disable_battery_optim");
-        PreferenceCategory batteryCategory = preferenceScreen.findPreference("disable_battery_header");
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations()) {
-            batteryButton.setVisible(true);
-            batteryCategory.setVisible(true);
-        } else {
-            batteryButton.setVisible(false);
-            batteryCategory.setVisible(false);
-        }
-
-    }
+//    private boolean isIgnoringBatteryOptimizations() {
+//        PowerManager pwrm = (PowerManager) requireActivity().getSystemService(Context.POWER_SERVICE);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            boolean status = pwrm.isIgnoringBatteryOptimizations(requireActivity().getPackageName());
+//            Log.v(TAG, "isIgnoringBatteryOptimizations = "  + status);
+//            return status;
+//        }
+//        return true;
+//    }
+//
+//    private void setupBatteryAction() {
+//        Preference batteryButton = (Preference) preferenceScreen.findPreference("disable_battery_optim");
+//        PreferenceCategory batteryCategory = preferenceScreen.findPreference("disable_battery_header");
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations()) {
+//            batteryButton.setVisible(true);
+//            batteryCategory.setVisible(true);
+//        } else {
+//            batteryButton.setVisible(false);
+//            batteryCategory.setVisible(false);
+//        }
+//
+//    }
 
     public void showBatteryOptimizationDialog() {
         Intent intent = new Intent();

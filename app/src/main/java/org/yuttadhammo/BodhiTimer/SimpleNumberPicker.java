@@ -170,8 +170,6 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         if (ts.length() > 5)
             s = Integer.parseInt(ts.substring(6, 8));
 
-
-
         if (h != 0 || m != 0 || s != 0) {
             int[] values = {h, m, s};
             returnResults(values);
@@ -207,19 +205,19 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         switch (v.getId()) {
             case R.id.btn1:
                 i1 = vals;
-                setPre(v, 1, vals);
+                setPreset(v, 1, vals);
                 return true;
             case R.id.btn2:
                 i2 = vals;
-                setPre(v, 2, vals);
+                setPreset(v, 2, vals);
                 return true;
             case R.id.btn3:
                 i3 = vals;
-                setPre(v, 3, vals);
+                setPreset(v, 3, vals);
                 return true;
             case R.id.btn4:
                 i4 = vals;
-                setPre(v, 4, vals);
+                setPreset(v, 4, vals);
                 return true;
             case R.id.btnadv:
                 startAdvancedPicker();
@@ -229,7 +227,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         }
     }
 
-    private void setPre(View v, int i, String s) {
+    private void setPreset(View v, int i, String s) {
         String t = s;
         if (s.equals("00:00:00")) {
             s = null;
@@ -247,12 +245,18 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
             Toast.makeText(context, context.getString(R.string.notset), Toast.LENGTH_LONG).show();
         } else
             ((TextView) v).setText(t);
+
+        savePreset(i, s);
+    }
+
+    private void savePreset(int i, String s) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("pre" + i, s);
         editor.apply();
     }
 
     private void returnResults(int[] values) {
+
         Intent i = new Intent();
         i.putExtra("times", values);
         setResult(AppCompatActivity.RESULT_OK, i);
@@ -265,6 +269,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
     }
 
     @Override
+    // This is called when we come back from the advanced time picker
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
