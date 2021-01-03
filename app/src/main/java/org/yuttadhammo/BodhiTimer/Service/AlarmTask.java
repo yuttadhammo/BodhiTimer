@@ -55,6 +55,8 @@ public class AlarmTask implements Runnable {
     private final MutableLiveData<String> mUri = new MutableLiveData<>();
     private final MutableLiveData<String> mUriType = new MutableLiveData<>();
 
+    public int id = 0;
+
     public AlarmTask(Context context, int duration) {
         this.context = context;
         this.mAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -72,8 +74,13 @@ public class AlarmTask implements Runnable {
         int time = getDuration().getValue();
         Intent intent = new Intent(context, TimerReceiver.class);
         intent.putExtra("SetTime", time);
+        intent.putExtra("uri", mUri.getValue());
+        intent.putExtra("id", id);
+        //intent.
 
-        PendingIntent mPendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        PendingIntent mPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        //mPendingIntent.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mAlarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
         } else {

@@ -42,7 +42,7 @@ import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
 
 import org.yuttadhammo.BodhiTimer.R;
-import org.yuttadhammo.BodhiTimer.TimerUtils;
+import org.yuttadhammo.BodhiTimer.Util.Time;
 
 class CircleAnimation implements TimerAnimation.TimerDrawing {
     private static final float MAX_SIZE = 1000;
@@ -282,7 +282,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         canvas.save();
 
         float progress = (max == 0) ? 0 : (time / (float) max);
-        int[] timeVec = TimerUtils.time2Array(time);
+        int[] timeVec = Time.time2Array(time);
         if (mLastTime == null) mLastTime = timeVec;
         if (mLastTime[2] != timeVec[2]) mMsFlipper = !mMsFlipper;
 

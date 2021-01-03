@@ -40,7 +40,7 @@ import android.widget.RemoteViews;
 import org.yuttadhammo.BodhiTimer.R;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.TimerActivity;
-import org.yuttadhammo.BodhiTimer.TimerUtils;
+import org.yuttadhammo.BodhiTimer.Util.Time;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -52,6 +52,7 @@ import java.util.TimerTask;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
+import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.*;
 
 public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
@@ -138,7 +139,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
         final String action = i.getAction();
 
-        stopTicking = action.equals(TimerActivity.BROADCAST_STOP) || action.equals(Intent.ACTION_SCREEN_OFF);
+        stopTicking = action.equals(BROADCAST_STOP) || action.equals(Intent.ACTION_SCREEN_OFF);
 
         doUpdate(context);
         doTick();
@@ -235,7 +236,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
             Integer time = mSettings.getInt("CurrentTime", 0);
             int rtime = Math.round(((float) time) / 1000) * 1000;  // round to seconds
-            views.setTextViewText(R.id.time, TimerUtils.time2hms(rtime));
+            views.setTextViewText(R.id.time, Time.time2hms(rtime));
         } else {
             Log.d(TAG, "stopped");
             views.setTextViewText(R.id.time, "");
@@ -291,7 +292,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
      */
     public static String getTime(int time) {
         time += 999;  // round seconds upwards
-        String[] str = TimerUtils.ms2Str(time);
+        String[] str = Time.ms2Str(time);
         if (str.length == 3)
             return (str[0] + ":" + str[1] + ":" + str[2]);
         else if (str.length == 2)

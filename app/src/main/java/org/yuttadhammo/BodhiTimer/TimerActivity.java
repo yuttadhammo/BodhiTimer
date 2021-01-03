@@ -67,16 +67,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
+import org.yuttadhammo.BodhiTimer.Service.SessionType;
 import org.yuttadhammo.BodhiTimer.SimpleNumberPicker.OnNNumberPickedListener;
+import org.yuttadhammo.BodhiTimer.Util.Time;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 
+import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
-import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
+import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
+import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_RESET;
+import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_STOP;
+import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_UPDATE;
 
 
 /**
@@ -124,7 +130,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     // for canceling notifications
 
 
-
     private boolean widget;
 
     private int[] lastTimes;
@@ -138,15 +143,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     private MediaPlayer prePlayer;
 
 
-    public static final String BROADCAST_UPDATE = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_UPDATE";
-    public static final String BROADCAST_STOP = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_CANCEL";
-
     private boolean invertColors = false;
-    private String advTimeString = "";
-    private String advTimeStringLeft = "";
-    private boolean useAdvTime = false;
-    private int advTimeIndex;
-
 
 
     private TextToSpeech tts;
@@ -261,7 +258,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAlarmTaskManager.isPaused = true; // tell gui timer to stop
         sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
 
-        unregisterReceiver(receiver);
+        unregisterReceiver(resetReceiver);
+        unregisterReceiver(alarmEndReceiver);
 
         BitmapDrawable drawable = (BitmapDrawable) mTimerAnimation.getDrawable();
         if (drawable != null) {
@@ -271,7 +269,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // Save our settings
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("LastTime", mAlarmTaskManager.mLastTime);
+        editor.putInt("LastTime", mAlarmTaskManager.mLastDuration);
         editor.putInt("CurrentTime", mAlarmTaskManager.mTime);
         editor.putInt("DrawingIndex", mTimerAnimation.getIndex());
         editor.putInt("State", mAlarmTaskManager.mCurrentState);
@@ -321,8 +319,12 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         IntentFilter filter = new IntentFilter();
-        filter.addAction(TimerReceiver.BROADCAST_RESET);
-        registerReceiver(receiver, filter);
+        filter.addAction(BROADCAST_RESET);
+        registerReceiver(resetReceiver, filter);
+
+        IntentFilter filter2 = new IntentFilter();
+        filter2.addAction(BROADCAST_END);
+        registerReceiver(alarmEndReceiver, filter2);
 
         mAlarmTaskManager.isPaused = false;
         sendBroadcast(new Intent(BROADCAST_STOP)); // tell widgets to stop updating
@@ -404,9 +406,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // check the timestamp from the last update and start the timer.
         // assumes the data has already been loaded?
-        mAlarmTaskManager.mLastTime = prefs.getInt("LastTime", 1800000);
+        mAlarmTaskManager.mLastDuration = prefs.getInt("LastTime", 1800000);
 
-        Log.d(TAG, "Last Time: " + mAlarmTaskManager.mLastTime);
+        Log.d(TAG, "Last Time: " + mAlarmTaskManager.mLastDuration);
         int state = prefs.getInt("State", STOPPED);
         if (state == STOPPED)
             cancelNotification();
@@ -506,9 +508,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                         mAlarmTaskManager.timerResume();
                         break;
                     case STOPPED:
-                        playPreSound();
+
                         checkWhetherAdvTime(true);
-                        mAlarmTaskManager.timerStart(mAlarmTaskManager.mLastTime);
+                        mAlarmTaskManager.timerStart(mAlarmTaskManager.mLastDuration);
                         break;
                 }
                 break;
@@ -571,9 +573,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         updateLabel(mAlarmTaskManager.mTime);
         if (animationIndex != 0) {
             blackView.setVisibility(View.GONE);
-            mTimerAnimation.updateImage(mAlarmTaskManager.mTime, mAlarmTaskManager.mLastTime);
+            mTimerAnimation.updateImage(mAlarmTaskManager.mTime, mAlarmTaskManager.mLastDuration);
         } else {
-            float p = (mAlarmTaskManager.mLastTime != 0) ? (mAlarmTaskManager.mTime / (float) mAlarmTaskManager.mLastTime) : 0;
+            float p = (mAlarmTaskManager.mLastDuration != 0) ? (mAlarmTaskManager.mTime / (float) mAlarmTaskManager.mLastDuration) : 0;
             int alpha = Math.round(255 * p);
             alpha = Math.min(alpha, 255);
 
@@ -596,86 +598,71 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      */
     public void updateLabel(int time) {
         if (time == 0) {
-            time = mAlarmTaskManager.mLastTime;
+            time = mAlarmTaskManager.mLastDuration;
         }
 
         int rtime = (int) (Math.ceil(((float) time) / 1000) * 1000);  // round to seconds
 
 
-        mTimerLabel.setText(TimerUtils.time2hms(rtime));
+        mTimerLabel.setText(Time.time2hms(rtime));
 
     }
 
 
-    /**
-     * Callback for the number picker dialog
-     */
-    public void onNumbersPicked(int[] number) {
-        if (number == null) {
-            widget = false;
-            return;
+    public void addAlarmsFromAdvanced() {
+
+    }
+
+    public void startSimpleAlarm(int[] numbers) {
+
+        int prepTime = prefs.getInt("preparationTime", 0) * 1000;
+
+
+        String preUriString = prefs.getString("PreSoundUri", "");
+
+        switch (preUriString) {
+            case "system":
+                preUriString = prefs.getString("PreSystemUri", "");
+                break;
+            case "file":
+                preUriString = prefs.getString("PreFileUri", "");
+                break;
         }
 
-        Editor editor = prefs.edit();
 
-        // advanced timer - 0 will be -1
-
-        if (number[0] == -1) {
-            advTimeString = prefs.getString("advTimeString", "");
-            if (advTimeString == null || advTimeString.length() == 0) {
-                widget = false;
-                return;
-            }
-
-            useAdvTime = true;
-
-            String[] advTime = advTimeString.split("\\^");
-
-            String[] thisAdvTime = advTime[0].split("#"); // will be of format timeInMs#pathToSound
-            number = TimerUtils.time2Array(Integer.parseInt(thisAdvTime[0]));
-
-            //editor.putString("NotificationUri",thisAdvTime[1]);
-
-            // switch timer to use advanced time
-
-            editor.putBoolean("useAdvTime", true);
-
-            // set index to 0, because we're doing the first one already
-            editor.putInt("advTimeIndex", 0);
-
-
-            advTimeStringLeft = "";
-
-            ArrayList<String> arr = makeAdvLeftArray(advTime);
-
-            advTimeStringLeft = TextUtils.join("\n", arr);
-            mAltLabel.setText(advTimeStringLeft);
-
-        } else {
-            if (prefs.getBoolean("useAdvTime", false)) {
-                editor.putBoolean("useAdvTime", false);
-            }
+        // Add a preparatory timer
+        if (prepTime > 0 && !preUriString.equals("")) {
+            mAlarmTaskManager.addAlarmWithUri(prepTime, preUriString, SessionType.PREPARATION);
         }
 
-        int hour = number[0];
-        int min = number[1];
-        int sec = number[2];
 
-        mAlarmTaskManager.mLastTime = hour * 60 * 60 * 1000 + min * 60 * 1000 + sec * 1000;
+        String notificationUri = prefs.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
 
-        mAlarmTaskManager.mTime = mAlarmTaskManager.mLastTime;
-        Log.v(TAG, "Picked time: " + mAlarmTaskManager.mLastTime);
 
+        switch (notificationUri) {
+            case "system":
+                notificationUri = prefs.getString("SystemUri", "");
+                break;
+            case "file":
+                notificationUri = prefs.getString("FileUri", "");
+                break;
+        }
+
+        // Add main timer
+        int mainTime = Time.msFromArray(numbers);
+        mAlarmTaskManager.addAlarmWithUri(prepTime + mainTime, notificationUri, SessionType.REAL);
+
+        mAlarmTaskManager.startAll();
+
+
+        // FIXME: Needs to go!
         updateTime();
 
-        lastTimes = new int[3];
+        int[] lastTimes = Time.time2Array(mAlarmTaskManager.mLastDuration);
 
-        lastTimes[0] = hour;
-        lastTimes[1] = min;
-        lastTimes[2] = sec;
-
+        Editor editor = prefs.edit();
         // Save last set times in preferences
-        editor.putInt("LastTime", mAlarmTaskManager.mLastTime);
+        editor.putInt("LastTime", mAlarmTaskManager.mLastDuration);
         editor.putInt("last_hour", lastTimes[0]);
         editor.putInt("last_min", lastTimes[1]);
         editor.putInt("last_sec", lastTimes[2]);
@@ -692,9 +679,107 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             showDialog(ALERT_DIALOG);
         }
 
-        playPreSound();
         prepareTimerStart();
-        mAlarmTaskManager.timerStart(mAlarmTaskManager.mLastTime);
+        mAlarmTaskManager.timerStartNoSideEffects(mAlarmTaskManager.mLastDuration);
+
+        if (widget) {
+            sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
+            finish();
+        }
+
+    }
+
+
+    /**
+     * Callback for the number picker dialog
+     */
+    public void onNumbersPicked(int[] numbers) {
+        if (numbers == null) {
+            widget = false;
+            return;
+        }
+
+        Editor editor = prefs.edit();
+
+        // advanced timer - 0 will be -1
+
+        if (numbers[0] == -1) {
+            mAlarmTaskManager.advTimeString = prefs.getString("advTimeString", "");
+            if (mAlarmTaskManager.advTimeString == null || mAlarmTaskManager.advTimeString.length() == 0) {
+                widget = false;
+                return;
+            }
+
+            mAlarmTaskManager.useAdvTime = true;
+
+            String[] advTime = mAlarmTaskManager.advTimeString.split("\\^");
+
+            String[] thisAdvTime = advTime[0].split("#"); // will be of format timeInMs#pathToSound
+            numbers = Time.time2Array(Integer.parseInt(thisAdvTime[0]));
+
+            //editor.putString("NotificationUri",thisAdvTime[1]);
+
+            // switch timer to use advanced time
+
+            editor.putBoolean("useAdvTime", true);
+
+            // set index to 0, because we're doing the first one already
+            editor.putInt("advTimeIndex", 0);
+
+
+            mAlarmTaskManager.advTimeStringLeft = "";
+
+            ArrayList<String> arr = makeAdvLeftArray(advTime);
+
+            mAlarmTaskManager.advTimeStringLeft = TextUtils.join("\n", arr);
+            mAltLabel.setText(mAlarmTaskManager.advTimeStringLeft);
+
+        } else {
+            if (prefs.getBoolean("useAdvTime", false)) {
+                editor.putBoolean("useAdvTime", false);
+            }
+            startSimpleAlarm(numbers);
+            return;
+        }
+
+        int hour = numbers[0];
+        int min = numbers[1];
+        int sec = numbers[2];
+
+        mAlarmTaskManager.mLastDuration = Time.msFromNumbers(hour, min, sec);
+
+        mAlarmTaskManager.mTime = mAlarmTaskManager.mLastDuration;
+        Log.v(TAG, "Picked time: " + mAlarmTaskManager.mLastDuration);
+
+        updateTime();
+
+        lastTimes = new int[3];
+
+        lastTimes[0] = hour;
+        lastTimes[1] = min;
+        lastTimes[2] = sec;
+
+        // Save last set times in preferences
+        editor.putInt("LastTime", mAlarmTaskManager.mLastDuration);
+        editor.putInt("last_hour", lastTimes[0]);
+        editor.putInt("last_min", lastTimes[1]);
+        editor.putInt("last_sec", lastTimes[2]);
+        editor.apply();
+
+        // Check to make sure the phone isn't set to silent
+        boolean silent = (mAudioMgr.getRingerMode() == AudioManager.RINGER_MODE_SILENT);
+        boolean vibrate = prefs.getBoolean("Vibrate", false);
+        String noise = prefs.getString("NotificationUri", "");
+        boolean nag = prefs.getBoolean("NagSilent", true);
+
+        // If the conditions are _just_ right show a nag screen
+        if (nag && silent && (noise.length() > 0 || vibrate)) {
+            showDialog(ALERT_DIALOG);
+        }
+
+
+        prepareTimerStart();
+        mAlarmTaskManager.timerStart(mAlarmTaskManager.mLastDuration);
 
         if (widget) {
             sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
@@ -704,22 +789,22 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
     public void prepareTimerStart() {
-        if (useAdvTime) {
-            String[] advTime = advTimeString.split("\\^");
+        if (mAlarmTaskManager.useAdvTime) {
+            String[] advTime = mAlarmTaskManager.advTimeString.split("\\^");
 
             ArrayList<String> arr = new ArrayList<String>();
 
-            advTimeStringLeft = "";
+            mAlarmTaskManager.advTimeStringLeft = "";
 
-            advTimeIndex = prefs.getInt("advTimeIndex", 1);
+            mAlarmTaskManager.advTimeIndex = prefs.getInt("advTimeIndex", 1);
 
-            Log.d(TAG, "time index: " + advTimeIndex);
+            Log.d(TAG, "time index: " + mAlarmTaskManager.advTimeIndex);
 
-            if (advTimeIndex < advTime.length) {
+            if (mAlarmTaskManager.advTimeIndex < advTime.length) {
 
                 arr = makeAdvLeftArray(advTime);
             }
-            advTimeStringLeft = TextUtils.join("\n", arr);
+            mAlarmTaskManager.advTimeStringLeft = TextUtils.join("\n", arr);
         }
     }
 
@@ -774,10 +859,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mCancelButton.setAlpha(i);
         mPrefButton.setAlpha(i);
     }
-
-
-
-
 
 
     /**
@@ -840,11 +921,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             return;
         }
 
-        advTimeString = prefs.getString("advTimeString", "");
-        if (advTimeString == null || advTimeString.length() == 0)
+        mAlarmTaskManager.advTimeString = prefs.getString("advTimeString", "");
+        if (mAlarmTaskManager.advTimeString == null || mAlarmTaskManager.advTimeString.length() == 0)
             return;
 
-        String[] advTime = advTimeString.split("\\^");
+        String[] advTime = mAlarmTaskManager.advTimeString.split("\\^");
 
         Editor editor = prefs.edit();
 
@@ -852,34 +933,34 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         if (reset) {
             // set index to 0, because we're doing the first one already
             editor.putInt("advTimeIndex", 0);
-            advTimeIndex = 0;
+            mAlarmTaskManager.advTimeIndex = 0;
         } else
-            advTimeIndex = prefs.getInt("advTimeIndex", 0);
+            mAlarmTaskManager.advTimeIndex = prefs.getInt("advTimeIndex", 0);
 
 
         // FIXME: Should be unnecessary.
-        if (advTimeIndex >= advTime.length) advTimeIndex = advTime.length - 1;
+        if (mAlarmTaskManager.advTimeIndex >= advTime.length)
+            mAlarmTaskManager.advTimeIndex = advTime.length - 1;
 
-        String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
-        int[] number = TimerUtils.time2Array(Integer.parseInt(thisAdvTime[0]));
+        String[] thisAdvTime = advTime[mAlarmTaskManager.advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
+        int[] number = Time.time2Array(Integer.parseInt(thisAdvTime[0]));
 
 
-        advTimeStringLeft = "";
+        mAlarmTaskManager.advTimeStringLeft = "";
 
         // Set the preview label, of which times are left
         ArrayList<String> arr = makeAdvLeftArray(advTime);
-        advTimeStringLeft = TextUtils.join("\n", arr);
-        mAltLabel.setText(advTimeStringLeft);
+        mAlarmTaskManager.advTimeStringLeft = TextUtils.join("\n", arr);
+        mAltLabel.setText(mAlarmTaskManager.advTimeStringLeft);
 
         int hour = number[0];
         int min = number[1];
         int sec = number[2];
 
-        mAlarmTaskManager.mLastTime = hour * 60 * 60 * 1000 + min * 60 * 1000 + sec * 1000;
+        mAlarmTaskManager.mLastDuration = hour * 60 * 60 * 1000 + min * 60 * 1000 + sec * 1000;
 
-        mAlarmTaskManager.mTime = mAlarmTaskManager.mLastTime;
-        Log.v(TAG, "Picked time: " + mAlarmTaskManager.mLastTime);
-
+        mAlarmTaskManager.mTime = mAlarmTaskManager.mLastDuration;
+        Log.v(TAG, "Picked time: " + mAlarmTaskManager.mLastDuration);
 
 
         lastTimes = new int[3];
@@ -890,7 +971,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // put last set time to prefs
 
-        editor.putInt("LastTime", mAlarmTaskManager.mLastTime);
+        editor.putInt("LastTime", mAlarmTaskManager.mLastDuration);
         editor.putInt("last_hour", lastTimes[0]);
         editor.putInt("last_min", lastTimes[1]);
         editor.putInt("last_sec", lastTimes[2]);
@@ -899,12 +980,12 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     private ArrayList<String> makeAdvLeftArray(String[] advTime) {
         ArrayList<String> arr = new ArrayList<String>();
-        for (int i = advTimeIndex + 1; i < advTime.length; i++) {
+        for (int i = mAlarmTaskManager.advTimeIndex + 1; i < advTime.length; i++) {
             if (arr.size() >= 2 && advTime.length - i > 1) {
                 arr.add("...");
                 break;
             }
-            arr.add(TimerUtils.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
+            arr.add(Time.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
         }
         return arr;
     }
@@ -941,7 +1022,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
 
-
     private int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
     private int NUMBERPICK_REQUEST_CODE = 5678;
@@ -974,7 +1054,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
 
-
     /**
      * Handle the all activities.
      */
@@ -989,8 +1068,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             if (widget) {
                 finish();
             }
-        }
-        else  if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
             // Fill the list view with the strings the recognizer thought it could have heard
             ArrayList<String> matches = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
@@ -999,8 +1077,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 match = match.toLowerCase();
                 Log.d(TAG, "Got speech: " + match);
 
-                if (match.contains(TimerUtils.TIME_SEPARATOR)) {
-                    String complexTime = TimerUtils.str2complexTimeString(this, match);
+                if (match.contains(Time.TIME_SEPARATOR)) {
+                    String complexTime = Time.str2complexTimeString(this, match);
                     if (complexTime.length() > 0) {
                         Editor editor = prefs.edit();
                         editor.putString("advTimeString", complexTime);
@@ -1023,13 +1101,13 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                         break;
                     }
                 } else {
-                    final int speechTime = TimerUtils.str2timeString(this, match);
+                    final int speechTime = Time.str2timeString(this, match);
                     if (speechTime != 0) {
-                        int[] values = TimerUtils.time2Array(speechTime);
-                        Toast.makeText(this, String.format(getString(R.string.speech_recognized), TimerUtils.time2humanStr(this, speechTime)), Toast.LENGTH_SHORT).show();
+                        int[] values = Time.time2Array(speechTime);
+                        Toast.makeText(this, String.format(getString(R.string.speech_recognized), Time.time2humanStr(this, speechTime)), Toast.LENGTH_SHORT).show();
                         if (prefs.getBoolean("SpeakTime", false)) {
                             Log.d(TAG, "Speaking time");
-                            tts.speak(String.format(getString(R.string.speech_recognized), TimerUtils.time2humanStr(context, speechTime)), TextToSpeech.QUEUE_ADD, null);
+                            tts.speak(String.format(getString(R.string.speech_recognized), Time.time2humanStr(context, speechTime)), TextToSpeech.QUEUE_ADD, null);
                         }
 
                         onNumbersPicked(values);
@@ -1048,19 +1126,46 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     // receiver to get restart
 
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private BroadcastReceiver resetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            //mAlarmTaskManager
+            Log.d(TAG, "Received restart Broadcast: " + intent.getIntExtra("time", 999));
+
             mAlarmTaskManager.timerStop();
+
             checkWhetherAdvTime(false);
             Log.d(TAG, "Received restart Broadcast: " + intent.getIntExtra("time", 999));
             if (intent.getBooleanExtra("stop", false))
                 return;
 
-            mAlarmTaskManager.mLastTime = intent.getIntExtra("time", mAlarmTaskManager.mLastTime);
-            mAlarmTaskManager.mTime = mAlarmTaskManager.mLastTime;
+            mAlarmTaskManager.mLastDuration = intent.getIntExtra("time", mAlarmTaskManager.mLastDuration);
+            mAlarmTaskManager.mTime = mAlarmTaskManager.mLastDuration;
             prepareTimerStart();
             mAlarmTaskManager.timerStart(mAlarmTaskManager.mTime);
+        }
+    };
+
+    private BroadcastReceiver alarmEndReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //mAlarmTaskManager
+            Log.d(TAG, "alarmEndReceiver: " + intent.getIntExtra("time", 777));
+            Log.d(TAG, "id " + intent.getIntExtra("id", 1212));
+            mAlarmTaskManager.onAlarmEnd(intent.getIntExtra("id", 1212));
+
+//            mAlarmTaskManager.timerStop();
+//            Log.d(TAG, "Have " + mAlarmTaskManager.getAlarmCount());
+//            //mAlarmTaskManager.getAlarmCount();
+//            checkWhetherAdvTime(false);
+//            Log.d(TAG, "Received restart Broadcast: " + intent.getIntExtra("time", 999));
+//            if (intent.getBooleanExtra("stop", false))
+//                return;
+//
+//            mAlarmTaskManager.mLastTime = intent.getIntExtra("time", mAlarmTaskManager.mLastTime);
+//            mAlarmTaskManager.mTime = mAlarmTaskManager.mLastTime;
+//            prepareTimerStart();
+//            mAlarmTaskManager.timerStart(mAlarmTaskManager.mTime);
         }
     };
 
