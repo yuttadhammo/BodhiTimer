@@ -23,6 +23,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import org.yuttadhammo.BodhiTimer.BL.SessionType;
+import org.yuttadhammo.BodhiTimer.BL.TimerState;
 import org.yuttadhammo.BodhiTimer.TimerReceiver;
 
 /**
@@ -36,25 +41,73 @@ import org.yuttadhammo.BodhiTimer.TimerReceiver;
  * @author paul.blundell
  */
 public class AlarmTask implements Runnable {
-    // The date selected for the alarm
-    private final int time;
+
     // The android system alarm manager
     private final AlarmManager mAlarmMgr;
     // Your context to retrieve the alarm manager from
     private final Context context;
 
-    public AlarmTask(Context context, int time) {
+    // The duration selected for the alarm
+    private final MutableLiveData<Integer> mDuration = new MutableLiveData<>();
+
+    // Unused
+    private final MutableLiveData<TimerState> mTimerState = new MutableLiveData<>();
+    private final MutableLiveData<SessionType> mSessionType = new MutableLiveData<>();
+    private final MutableLiveData<String> mLabel = new MutableLiveData<>();
+    private final MutableLiveData<String> mUri = new MutableLiveData<>();
+
+    public AlarmTask(Context context, int duration) {
         this.context = context;
         this.mAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        this.time = time;
+
+        this.mDuration.setValue((int) duration);
+//        this.mTimerState.setValue(TimerState.INACTIVE);
+//        this.mSessionType.setValue(SessionType.WORK);
+//        this.mLabel.setValue("FIXME");
+//        // FIXME
+//        this.mUri.setValue(null);
     }
 
     @Override
     public void run() {
+        int time = getDuration().getValue();
         Intent intent = new Intent(context, TimerReceiver.class);
         intent.putExtra("SetTime", time);
 
         PendingIntent mPendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         mAlarmMgr.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
+    }
+
+    // Accesors
+    public LiveData<Integer> getDuration() {
+        return mDuration;
+    }
+
+    public LiveData<TimerState> getTimerState() {
+        return mTimerState;
+    }
+
+    public LiveData<SessionType> getSessionType() {
+        return mSessionType;
+    }
+
+    public LiveData<String> getLabel() {
+        return mLabel;
+    }
+
+    public void setDuration(long newDuration) {
+        mDuration.setValue(newDuration);
+    }
+
+    public void setTimerState(TimerState state) {
+        mTimerState.setValue(state);
+    }
+
+    public void setSessionType(SessionType type) {
+        mSessionType.setValue(type);
+    }
+
+    public void setLabel(String label) {
+        mLabel.setValue(label);
     }
 }
