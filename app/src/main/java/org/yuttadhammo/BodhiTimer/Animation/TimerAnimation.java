@@ -30,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.TimerActivity;
 
 import java.io.FileNotFoundException;
@@ -101,7 +102,6 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
     }
 
     public void updateImage(int time, int max) {
-        //Log.v(this.getClass().getCanonicalName(),"time: "+time+" "+max);
         mLastTime = time;
         mLastMax = max;
 
@@ -115,11 +115,8 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
     }
 
     public void onClick(View v) {
-        if (TimerActivity.mCurrentState == TimerActivity.STOPPED)
-            mActivity.mNM.cancelAll();
-        else
-            clicked = true;
-
+        // FIXME
+        mActivity.mAlarmTaskManager.pauseAlarms();
     }
 
     public void thisClicked() {

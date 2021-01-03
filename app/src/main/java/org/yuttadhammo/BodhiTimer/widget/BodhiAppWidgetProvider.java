@@ -38,6 +38,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import org.yuttadhammo.BodhiTimer.R;
+import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.TimerActivity;
 import org.yuttadhammo.BodhiTimer.TimerUtils;
 
@@ -171,7 +172,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         mTimer = new Timer();
         timeStamp = mSettings.getLong("TimeStamp", -1);
         mLastTime = mSettings.getInt("LastTime", 0);
-        state = mSettings.getInt("State", TimerActivity.STOPPED);
+        state = mSettings.getInt("State", AlarmTaskManager.STOPPED);
 
         appWidgetManager = AppWidgetManager.getInstance(context);
         ComponentName appWidgets = new ComponentName(context.getPackageName(), "org.yuttadhammo.BodhiTimer.widget.BodhiAppWidgetProvider");
@@ -213,7 +214,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         //Log.d(TAG, "Delta: "+delta);
 
         // We still have a timer running!
-        if (then.after(now) && state == TimerActivity.RUNNING) {
+        if (then.after(now) && state == AlarmTaskManager.RUNNING) {
             //Log.d(TAG, "running");
             views.setTextViewText(R.id.time, getTime(delta));
             mTimer.schedule(new TimerTask() {
@@ -223,9 +224,9 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
                                     }
                                 }
                             },
-                    TimerActivity.TIMER_TIC
+                    AlarmTaskManager.TIMER_TIC
             );
-        } else if (state == TimerActivity.PAUSED) {
+        } else if (state == AlarmTaskManager.PAUSED) {
             Log.d(TAG, "paused");
 
             Integer time = mSettings.getInt("CurrentTime", 0);
@@ -238,7 +239,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
         float p = (mLastTime != 0) ? (delta / (float) mLastTime) : 0;
 
-        if (then.after(now) && state == TimerActivity.RUNNING) {
+        if (then.after(now) && state == AlarmTaskManager.RUNNING) {
             if (bmp == null || ++tick == 10) {
                 bmp = adjustOpacity(originalBitmap, (int) (255 - (255 * p)));
                 tick = 0;

@@ -75,7 +75,11 @@ public class AlarmTask implements Runnable {
         intent.putExtra("SetTime", time);
 
         PendingIntent mPendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mAlarmMgr.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mAlarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
+        } else {
+            mAlarmMgr.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
+        }
     }
 
     // Accesors
@@ -95,7 +99,7 @@ public class AlarmTask implements Runnable {
         return mLabel;
     }
 
-    public void setDuration(long newDuration) {
+    public void setDuration(int newDuration) {
         mDuration.setValue(newDuration);
     }
 

@@ -71,6 +71,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
+import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.Service.ScheduleClient;
 import org.yuttadhammo.BodhiTimer.SimpleNumberPicker.OnNNumberPickedListener;
 
@@ -80,6 +81,11 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager.PAUSED;
+import static org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager.RUNNING;
+import static org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager.STOPPED;
+import static org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager.TIMER_TIC;
+
 
 /**
  * The main activity which shows the timer and allows the user to set the time
@@ -87,12 +93,6 @@ import java.util.TimerTask;
  * @author Ralph Gootee (rgootee@gmail.com)
  */
 public class TimerActivity extends AppCompatActivity implements OnClickListener, OnNNumberPickedListener, OnSharedPreferenceChangeListener {
-    /**
-     * All possible timer states
-     */
-    public final static int RUNNING = 0;
-    public static final int STOPPED = 1;
-    public static final int PAUSED = 2;
 
     /**
      * Should the logs be shown
@@ -109,25 +109,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      */
     private final String TAG = "TimerActivity";
 
-    /**
-     * Update rate of the internal timer
-     */
-    public final static int TIMER_TIC = 100;
-
-    /**
-     * The timer's current state
-     */
-    public static int mCurrentState = -1;
-
-    /**
-     * The maximum time
-     */
-    private int mLastTime = 1800000;
-
-    /**
-     * The current timer time
-     */
-    private int mTime = 0;
 
     /**
      * To save having to traverse the view tree
@@ -141,6 +122,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     private Bitmap mPlayBitmap, mPauseBitmap;
 
     private AlarmManager mAlarmMgr;
+    public AlarmTaskManager mAlarmTaskManager;
 
     private static PendingIntent mPendingIntent;
 
@@ -187,6 +169,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Setup a new AlarmTaskManager
+        mAlarmTaskManager = new AlarmTaskManager(this);
 
         // Create a new service client and bind our activity to this service
         scheduleClient = new ScheduleClient(this);
@@ -273,19 +258,19 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // Save our settings
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("LastTime", mLastTime);
-        editor.putInt("CurrentTime", mTime);
+        editor.putInt("LastTime", mAlarmTaskManager.mLastTime);
+        editor.putInt("CurrentTime", mAlarmTaskManager.mTime);
         editor.putInt("DrawingIndex", mTimerAnimation.getIndex());
-        editor.putInt("State", mCurrentState);
+        editor.putInt("State", mAlarmTaskManager.mCurrentState);
 
         editor.putInt("last_hour", lastTimes[0]);
         editor.putInt("last_min", lastTimes[1]);
         editor.putInt("last_sec", lastTimes[2]);
 
-        switch (mCurrentState) {
+        switch (mAlarmTaskManager.mCurrentState) {
 
             case RUNNING:
-                Log.i(TAG, "pause while running: " + new Date().getTime() + mTime);
+                Log.i(TAG, "pause while running: " + new Date().getTime() + mAlarmTaskManager.mTime);
                 break;
             case STOPPED:
                 cancelNotification();
@@ -403,9 +388,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // check the timestamp from the last update and start the timer.
         // assumes the data has already been loaded?
-        mLastTime = prefs.getInt("LastTime", 1800000);
+        mAlarmTaskManager.mLastTime = prefs.getInt("LastTime", 1800000);
 
-        Log.d(TAG, "Last Time: " + mLastTime);
+        Log.d(TAG, "Last Time: " + mAlarmTaskManager.mLastTime);
         int state = prefs.getInt("State", STOPPED);
         if (state == STOPPED)
             cancelNotification();
@@ -423,7 +408,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 // We still have a timer running!
                 if (then.after(now)) {
                     if (LOG) Log.i(TAG, "Still have a timer");
-                    mTime = (int) (then.getTime() - now.getTime());
+                    mAlarmTaskManager.mTime = (int) (then.getTime() - now.getTime());
 
                     enterState(RUNNING);
 
@@ -449,7 +434,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 break;
 
             case PAUSED:
-                mTime = prefs.getInt("CurrentTime", 0);
+                mAlarmTaskManager.mTime = prefs.getInt("CurrentTime", 0);
                 onUpdateTime();
                 enterState(PAUSED);
                 break;
@@ -475,7 +460,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         setLowProfile();
 
-        if (mCurrentState == STOPPED) {
+        if (mAlarmTaskManager.mCurrentState == STOPPED) {
             if (prePlayer != null) {
                 prePlayer.release();
             }
@@ -500,7 +485,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
             case R.id.pauseButton:
-                switch (mCurrentState) {
+                switch (mAlarmTaskManager.mCurrentState) {
                     case RUNNING:
                         timerPause();
                         break;
@@ -510,7 +495,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     case STOPPED:
                         playPreSound();
                         checkWhetherAdvTime(true);
-                        timerStart(mLastTime, true);
+                        timerStart(mAlarmTaskManager.mLastTime, true);
                         break;
                 }
                 break;
@@ -521,7 +506,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
                 // We need to be careful to not cancel timers
                 // that are not running (e.g. if we're paused)
-                switch (mCurrentState) {
+                switch (mAlarmTaskManager.mCurrentState) {
                     case RUNNING:
                         if (prePlayer != null) {
                             prePlayer.release();
@@ -568,14 +553,14 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      * Updates the time
      */
     public void onUpdateTime() {
-        if (mCurrentState == STOPPED)
-            mTime = 0;
-        updateLabel(mTime);
+        if (mAlarmTaskManager.mCurrentState == STOPPED)
+            mAlarmTaskManager.mTime = 0;
+        updateLabel(mAlarmTaskManager.mTime);
         if (animationIndex != 0) {
             blackView.setVisibility(View.GONE);
-            mTimerAnimation.updateImage(mTime, mLastTime);
+            mTimerAnimation.updateImage(mAlarmTaskManager.mTime, mAlarmTaskManager.mLastTime);
         } else {
-            float p = (mLastTime != 0) ? (mTime / (float) mLastTime) : 0;
+            float p = (mAlarmTaskManager.mLastTime != 0) ? (mAlarmTaskManager.mTime / (float) mAlarmTaskManager.mLastTime) : 0;
             int alpha = Math.round(255 * p);
             alpha = Math.min(alpha, 255);
 
@@ -598,7 +583,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      */
     public void updateLabel(int time) {
         if (time == 0) {
-            time = mLastTime;
+            time = mAlarmTaskManager.mLastTime;
         }
 
         int rtime = (int) (Math.ceil(((float) time) / 1000) * 1000);  // round to seconds
@@ -665,10 +650,10 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         int min = number[1];
         int sec = number[2];
 
-        mLastTime = hour * 60 * 60 * 1000 + min * 60 * 1000 + sec * 1000;
+        mAlarmTaskManager.mLastTime = hour * 60 * 60 * 1000 + min * 60 * 1000 + sec * 1000;
 
-        mTime = mLastTime;
-        Log.v(TAG, "Picked time: " + mLastTime);
+        mAlarmTaskManager.mTime = mAlarmTaskManager.mLastTime;
+        Log.v(TAG, "Picked time: " + mAlarmTaskManager.mLastTime);
 
         onUpdateTime();
 
@@ -679,7 +664,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         lastTimes[2] = sec;
 
         // Save last set times in preferences
-        editor.putInt("LastTime", mLastTime);
+        editor.putInt("LastTime", mAlarmTaskManager.mLastTime);
         editor.putInt("last_hour", lastTimes[0]);
         editor.putInt("last_min", lastTimes[1]);
         editor.putInt("last_sec", lastTimes[2]);
@@ -697,7 +682,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
 
         playPreSound();
-        timerStart(mLastTime, true);
+        timerStart(mAlarmTaskManager.mLastTime, true);
 
         if (widget) {
             sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
@@ -713,15 +698,15 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      * @param state the visual state that is being entered
      */
     private void enterState(int state) {
-        if (mCurrentState != state) {
+        if (mAlarmTaskManager.mCurrentState != state) {
 
             // update preference for widget, notification
 
-            if (LOG) Log.v(TAG, "From/to states: " + mCurrentState + " " + state);
+            if (LOG) Log.v(TAG, "From/to states: " + mAlarmTaskManager.mCurrentState + " " + state);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt("State", state);
             editor.apply();
-            mCurrentState = state;
+            mAlarmTaskManager.mCurrentState = state;
 
         }
 
@@ -769,9 +754,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         enterState(RUNNING);
 
-        mTime = time;
+        mAlarmTaskManager.mTime = time;
 
-        timeStamp = new Date().getTime() + mTime;
+        timeStamp = new Date().getTime() + mAlarmTaskManager.mTime;
 
         SharedPreferences.Editor editor = prefs.edit();
         editor.putLong("TimeStamp", timeStamp);
@@ -798,9 +783,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         // Start external service
         if (service) {
             if (LOG)
-                Log.v(TAG, "ALARM: Starting the timer service: " + TimerUtils.time2humanStr(context, mTime));
+                Log.v(TAG, "ALARM: Starting the timer service: " + TimerUtils.time2humanStr(context, mAlarmTaskManager.mTime));
 
-            scheduleClient.setAlarmForNotification(mTime);
+            scheduleClient.setAlarmForNotification(mAlarmTaskManager.mTime);
 
         }
 
@@ -841,7 +826,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     private void timerResume() {
         if (LOG) Log.v(TAG, "Resuming the timer...");
 
-        timerStart(mTime, true);
+        timerStart(mAlarmTaskManager.mTime, true);
         enterState(RUNNING);
     }
 
@@ -852,7 +837,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         if (LOG) Log.v(TAG, "Pausing the timer...");
 
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("CurrentTime", mTime);
+        editor.putInt("CurrentTime", mAlarmTaskManager.mTime);
         editor.apply();
 
         stopAlarmTimer();
@@ -864,7 +849,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      * Clears the time, sets the image and label to default
      */
     private void clearTime() {
-        mTime = 0;
+        mAlarmTaskManager.mTime = 0;
 
         onUpdateTime();
     }
@@ -975,10 +960,10 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         int min = number[1];
         int sec = number[2];
 
-        mLastTime = hour * 60 * 60 * 1000 + min * 60 * 1000 + sec * 1000;
+        mAlarmTaskManager.mLastTime = hour * 60 * 60 * 1000 + min * 60 * 1000 + sec * 1000;
 
-        mTime = mLastTime;
-        Log.v(TAG, "Picked time: " + mLastTime);
+        mAlarmTaskManager.mTime = mAlarmTaskManager.mLastTime;
+        Log.v(TAG, "Picked time: " + mAlarmTaskManager.mLastTime);
 
 
 
@@ -990,7 +975,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // put last set time to prefs
 
-        editor.putInt("LastTime", mLastTime);
+        editor.putInt("LastTime", mAlarmTaskManager.mLastTime);
         editor.putInt("last_hour", lastTimes[0]);
         editor.putInt("last_min", lastTimes[1]);
         editor.putInt("last_sec", lastTimes[2]);
@@ -1045,15 +1030,15 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     private void doTick() {
         //Log.w(TAG,"ticking");
 
-        if (mCurrentState != RUNNING || isPaused)
+        if (mAlarmTaskManager.mCurrentState != RUNNING || isPaused)
             return;
 
         Date now = new Date();
         Date then = new Date(timeStamp);
 
-        mTime = (int) (then.getTime() - now.getTime());
+        mAlarmTaskManager.mTime = (int) (then.getTime() - now.getTime());
 
-        if (mTime <= 0) {
+        if (mAlarmTaskManager.mTime <= 0) {
 
             Log.e(TAG, "Error: Time up. This probably means that the Broadcast was not received");
             timerStop();
@@ -1200,9 +1185,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             if (intent.getBooleanExtra("stop", false))
                 return;
 
-            mLastTime = intent.getIntExtra("time", mLastTime);
-            mTime = mLastTime;
-            timerStart(mTime, true);
+            mAlarmTaskManager.mLastTime = intent.getIntExtra("time", mAlarmTaskManager.mLastTime);
+            mAlarmTaskManager.mTime = mAlarmTaskManager.mLastTime;
+            timerStart(mAlarmTaskManager.mTime, true);
         }
     };
 
