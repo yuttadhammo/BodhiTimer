@@ -39,11 +39,6 @@ public class AlarmTaskManager {
      */
     public int mCurrentState = -1;
 
-    /**
-     * The current duration
-     */
-    private int mLastDuration = 1800000;
-
 
     public long timeStamp;
 
@@ -86,7 +81,6 @@ public class AlarmTaskManager {
     }
 
     public void setDuration(int newDuration) {
-        mLastDuration = newDuration;
         mCurDuration.setValue(new Integer(newDuration));
     }
     public void setCurElapsed(int newElapsed) {

@@ -137,7 +137,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     private int animationIndex;
 
     private ImageView blackView;
-    public String advTimeStringLeft = "";
 
 
     private boolean invertColors = false;
@@ -685,7 +684,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 return;
             }
 
-            advTimeStringLeft = "";
 
             startAdvancedAlarm(advTimeString);
             updatePreviewLabel();
@@ -707,7 +705,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         ArrayList<String> arr = makePreviewArray();
         if (LOG) Log.v(TAG, "Update preview label");
 
-        advTimeStringLeft = TextUtils.join("\n", arr);
+        String advTimeStringLeft = TextUtils.join("\n", arr);
         mAltLabel.setText(advTimeStringLeft);
     }
 
