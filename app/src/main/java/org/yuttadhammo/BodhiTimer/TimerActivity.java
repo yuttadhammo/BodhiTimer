@@ -269,20 +269,13 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // Save our settings
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("LastTime", mAlarmTaskManager.mLastDuration);
-        editor.putInt("CurrentTime", mAlarmTaskManager.mTime);
-        editor.putInt("DrawingIndex", mTimerAnimation.getIndex());
-        editor.putInt("State", mAlarmTaskManager.mCurrentState);
-
-
-        editor.putInt("last_hour", lastTimes[0]);
-        editor.putInt("last_min", lastTimes[1]);
-        editor.putInt("last_sec", lastTimes[2]);
+        mAlarmTaskManager.saveState();
+        mTimerAnimation.saveState();
 
         switch (mAlarmTaskManager.mCurrentState) {
 
             case RUNNING:
-                Log.i(TAG, "pause while running: " + new Date().getTime() + mAlarmTaskManager.mTime);
+                Log.i(TAG, "pause while running: " + new Date().getTime() + mAlarmTaskManager.getCurElapsedVal());
                 break;
             case STOPPED:
                 cancelNotification();
@@ -329,10 +322,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAlarmTaskManager.isPaused = false;
         sendBroadcast(new Intent(BROADCAST_STOP)); // tell widgets to stop updating
         mAlarmTaskManager.mTimer = new Timer();
-
-        lastTimes[0] = prefs.getInt("last_hour", 0);
-        lastTimes[1] = prefs.getInt("last_min", 0);
-        lastTimes[2] = prefs.getInt("last_sec", 0);
 
         if (getIntent().hasExtra("set")) {
             Log.d(TAG, "Create From Widget");
@@ -632,7 +621,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // Add a preparatory timer
         if (prepTime > 0 && !preUriString.equals("")) {
-            mAlarmTaskManager.addAlarmWithUri(prepTime, preUriString, SessionType.PREPARATION);
+            mAlarmTaskManager.addAlarmWithUri(0, prepTime, preUriString, SessionType.PREPARATION);
         }
 
 
@@ -650,22 +639,19 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // Add main timer
         int mainTime = Time.msFromArray(numbers);
-        mAlarmTaskManager.addAlarmWithUri(prepTime + mainTime, notificationUri, SessionType.REAL);
-
+        mAlarmTaskManager.addAlarmWithUri(prepTime, mainTime, notificationUri, SessionType.REAL);
         mAlarmTaskManager.startAll();
 
 
         // FIXME: Needs to go!
-        updateTime();
+        //updateTime();
+        updatePreviewLabel();
 
         int[] lastTimes = Time.time2Array(mAlarmTaskManager.mLastDuration);
 
         Editor editor = prefs.edit();
         // Save last set times in preferences
         editor.putInt("LastTime", mAlarmTaskManager.mLastDuration);
-        editor.putInt("last_hour", lastTimes[0]);
-        editor.putInt("last_min", lastTimes[1]);
-        editor.putInt("last_sec", lastTimes[2]);
         editor.apply();
 
         // Check to make sure the phone isn't set to silent
@@ -689,6 +675,26 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     }
 
+    public void startAdvancedAlarm() {
+        int offset = 0;
+        mAlarmTaskManager.useAdvTime = true;
+        String[] advTime = mAlarmTaskManager.advTimeString.split("\\^");
+
+        for (int i = 0; i < advTime.length; i++) {
+            String alarmSpec = advTime[i];
+            //  alarmSpec will be of format timeInMs#pathToSound
+
+            String[] thisAdvTime = alarmSpec.split("#");
+            int duration = Integer.parseInt(thisAdvTime[0]);
+            mAlarmTaskManager.addAlarmWithUri(offset, duration, thisAdvTime[1], SessionType.REAL);
+
+            offset += duration;
+        }
+
+        mAlarmTaskManager.startAll();
+
+    }
+
 
     /**
      * Callback for the number picker dialog
@@ -699,40 +705,32 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             return;
         }
 
+        mAlarmTaskManager.cancelAllAlarms();
+
         Editor editor = prefs.edit();
 
         // advanced timer - 0 will be -1
 
         if (numbers[0] == -1) {
             mAlarmTaskManager.advTimeString = prefs.getString("advTimeString", "");
+
             if (mAlarmTaskManager.advTimeString == null || mAlarmTaskManager.advTimeString.length() == 0) {
                 widget = false;
                 return;
             }
 
             mAlarmTaskManager.useAdvTime = true;
-
-            String[] advTime = mAlarmTaskManager.advTimeString.split("\\^");
-
-            String[] thisAdvTime = advTime[0].split("#"); // will be of format timeInMs#pathToSound
-            numbers = Time.time2Array(Integer.parseInt(thisAdvTime[0]));
-
-            //editor.putString("NotificationUri",thisAdvTime[1]);
+            mAlarmTaskManager.advTimeStringLeft = "";
 
             // switch timer to use advanced time
-
             editor.putBoolean("useAdvTime", true);
 
             // set index to 0, because we're doing the first one already
             editor.putInt("advTimeIndex", 0);
 
+            startAdvancedAlarm();
 
-            mAlarmTaskManager.advTimeStringLeft = "";
-
-            ArrayList<String> arr = makeAdvLeftArray(advTime);
-
-            mAlarmTaskManager.advTimeStringLeft = TextUtils.join("\n", arr);
-            mAltLabel.setText(mAlarmTaskManager.advTimeStringLeft);
+            updatePreviewLabel();
 
         } else {
             if (prefs.getBoolean("useAdvTime", false)) {
@@ -761,9 +759,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // Save last set times in preferences
         editor.putInt("LastTime", mAlarmTaskManager.mLastDuration);
-        editor.putInt("last_hour", lastTimes[0]);
-        editor.putInt("last_min", lastTimes[1]);
-        editor.putInt("last_sec", lastTimes[2]);
         editor.apply();
 
         // Check to make sure the phone isn't set to silent
@@ -779,12 +774,19 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
         prepareTimerStart();
-        mAlarmTaskManager.timerStart(mAlarmTaskManager.mLastDuration);
+        mAlarmTaskManager.timerStartNoSideEffects(mAlarmTaskManager.mLastDuration);
 
         if (widget) {
             sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
             finish();
         }
+    }
+
+    private void updatePreviewLabel() {
+        ArrayList<String> arr = makePreviewArray();
+
+        mAlarmTaskManager.advTimeStringLeft = TextUtils.join("\n", arr);
+        mAltLabel.setText(mAlarmTaskManager.advTimeStringLeft);
     }
 
 
@@ -802,7 +804,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
             if (mAlarmTaskManager.advTimeIndex < advTime.length) {
 
-                arr = makeAdvLeftArray(advTime);
+                arr = makePreviewArray();
             }
             mAlarmTaskManager.advTimeStringLeft = TextUtils.join("\n", arr);
         }
@@ -861,59 +863,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
 
-    /**
-     * plays a sound before timer starts
-     */
-    private void playPreSound() {
-        String uriString = prefs.getString("PreSoundUri", "");
 
-        switch (uriString) {
-            case "system":
-                uriString = prefs.getString("PreSystemUri", "");
-                break;
-            case "file":
-                uriString = prefs.getString("PreFileUri", "");
-                break;
-            case "tts":
-                uriString = "";
-                final String ttsString = prefs.getString("tts_string_pre", context.getString(R.string.timer_done));
-                tts.speak(ttsString, TextToSpeech.QUEUE_ADD, null);
-                break;
-        }
-
-        if (uriString.equals(""))
-            return;
-
-        Log.v(TAG, "preplay uri: " + uriString);
-
-        try {
-            prePlayer = new MediaPlayer();
-            Uri uri = Uri.parse(uriString);
-
-            int currVolume = prefs.getInt("tone_volume", 0);
-            if (currVolume != 0) {
-                float log1 = (float) (Math.log(100 - currVolume) / Math.log(100));
-                prePlayer.setVolume(1 - log1, 1 - log1);
-            }
-            prePlayer.setDataSource(context, uri);
-            prePlayer.prepare();
-            prePlayer.setLooping(false);
-            prePlayer.setOnCompletionListener(new OnCompletionListener() {
-
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    Log.v(TAG, "Releasing media player...");
-                    mp.reset();
-                    mp.release();
-                }
-
-            });
-            prePlayer.start();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 
     private void checkWhetherAdvTime(boolean reset) {
         if (!prefs.getBoolean("useAdvTime", false)) {
@@ -949,9 +899,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAlarmTaskManager.advTimeStringLeft = "";
 
         // Set the preview label, of which times are left
-        ArrayList<String> arr = makeAdvLeftArray(advTime);
-        mAlarmTaskManager.advTimeStringLeft = TextUtils.join("\n", arr);
-        mAltLabel.setText(mAlarmTaskManager.advTimeStringLeft);
+        updatePreviewLabel();
 
         int hour = number[0];
         int min = number[1];
@@ -972,20 +920,20 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         // put last set time to prefs
 
         editor.putInt("LastTime", mAlarmTaskManager.mLastDuration);
-        editor.putInt("last_hour", lastTimes[0]);
-        editor.putInt("last_min", lastTimes[1]);
-        editor.putInt("last_sec", lastTimes[2]);
         editor.apply();
     }
 
-    private ArrayList<String> makeAdvLeftArray(String[] advTime) {
+    // Shortens the array to max three
+    private ArrayList<String> makePreviewArray() {
         ArrayList<String> arr = new ArrayList<String>();
-        for (int i = mAlarmTaskManager.advTimeIndex + 1; i < advTime.length; i++) {
-            if (arr.size() >= 2 && advTime.length - i > 1) {
+        ArrayList<Integer> previewTimes = mAlarmTaskManager.getPreviewTimes();
+
+        for (int i = 0; i < previewTimes.size(); i++) {
+            if (i >= 2) {
                 arr.add("...");
                 break;
             }
-            arr.add(Time.time2hms(Integer.parseInt(advTime[i].split("#")[0])));
+            arr.add(Time.time2hms(previewTimes.get(i) ));
         }
         return arr;
     }

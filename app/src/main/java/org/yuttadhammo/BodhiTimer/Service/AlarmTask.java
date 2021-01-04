@@ -48,6 +48,8 @@ public class AlarmTask implements Runnable {
     // The duration selected for the alarm
     private final MutableLiveData<Integer> mDuration = new MutableLiveData<>();
 
+    private PendingIntent mPendingIntent;
+
     // Unused
     private final MutableLiveData<TimerState> mTimerState = new MutableLiveData<>();
     private final MutableLiveData<SessionType> mSessionType = new MutableLiveData<>();
@@ -56,12 +58,15 @@ public class AlarmTask implements Runnable {
     private final MutableLiveData<String> mUriType = new MutableLiveData<>();
 
     public int id = 0;
+    public int offset = 0;
+    public int duration = 0;
 
-    public AlarmTask(Context context, int duration) {
+    public AlarmTask(Context context, int offset, int duration) {
         this.context = context;
         this.mAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         this.mDuration.setValue((int) duration);
+        this.duration = duration;
 //        this.mTimerState.setValue(TimerState.INACTIVE);
 //        this.mSessionType.setValue(SessionType.WORK);
 //        this.mLabel.setValue("FIXME");
@@ -73,19 +78,26 @@ public class AlarmTask implements Runnable {
     public void run() {
         int time = getDuration().getValue();
         Intent intent = new Intent(context, TimerReceiver.class);
-        intent.putExtra("SetTime", time);
+        //intent.putExtra("SetTime", time);
+        intent.putExtra("offset", offset);
+        intent.putExtra("duration", time);
         intent.putExtra("uri", mUri.getValue());
         intent.putExtra("id", id);
-        //intent.
+
+        time += offset;
 
 
-        PendingIntent mPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        mPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         //mPendingIntent.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mAlarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
         } else {
             mAlarmMgr.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
         }
+    }
+
+    public void cancel() {
+        mAlarmMgr.cancel(mPendingIntent);
     }
 
     // Accesors

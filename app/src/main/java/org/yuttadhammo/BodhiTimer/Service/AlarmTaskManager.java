@@ -5,15 +5,18 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import org.yuttadhammo.BodhiTimer.Util.Time;
 import org.yuttadhammo.BodhiTimer.Util.Notification;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Stack;
 import java.util.Timer;
@@ -63,6 +66,35 @@ public class AlarmTaskManager {
 
     public boolean isPaused;
 
+    // Live Data
+    private final MutableLiveData<Integer> mCurDuration = new MutableLiveData<>();
+    private final MutableLiveData<Integer> mCurElapsed = new MutableLiveData<>();
+
+
+    // Accesors
+    public LiveData<Integer> getCurDuration() {
+        return mCurDuration;
+    }
+    public LiveData<Integer> getCurElapsed() {
+        return mCurElapsed;
+    }
+    public Integer getCurDurationVal() {
+        return mCurDuration.getValue();
+    }
+    public Integer getCurElapsedVal() {
+        return mCurElapsed.getValue();
+    }
+
+    public void setDuration(int newDuration) {
+        mLastDuration = newDuration;
+        mCurDuration.setValue(newDuration);
+
+    }
+    private void setTimerState(int newElapsed) {
+        mTime = newElapsed;
+        mCurElapsed.setValue(newElapsed);
+    }
+
 
     // TODO: These need to be handled outside
     public NotificationManager mNM;
@@ -91,6 +123,13 @@ public class AlarmTaskManager {
 
     private AlarmTaskListener listener;
 
+    public void saveState() {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("LastTime", getCurDurationVal());
+        editor.putInt("CurrentTime", getCurElapsedVal());
+        editor.putInt("State", mCurrentState);
+    }
+
     public interface AlarmTaskListener {
         public void onEnterState(int state);
 
@@ -116,6 +155,7 @@ public class AlarmTaskManager {
     }
 
     private void onUpdateTime() {
+
         if (listener != null)
             listener.onUpdateTime();
     }
@@ -143,7 +183,7 @@ public class AlarmTaskManager {
         // This starts a new thread to set the alarm
         // You want to push off your tasks onto a new thread to free up the UI to carry on responding
         Log.i(TAG, "Creating new alarm task");
-        AlarmTask alarm = new AlarmTask(mContext, time);
+        AlarmTask alarm = new AlarmTask(mContext, 0, time);
         alarms.push(alarm);
         lastAlarm = alarm;
         alarm.run();
@@ -157,7 +197,7 @@ public class AlarmTaskManager {
         // This starts a new thread to set the alarm
         // You want to push off your tasks onto a new thread to free up the UI to carry on responding
         Log.i(TAG, "Creating new alarm task");
-        AlarmTask alarm = new AlarmTask(mContext, time);
+        AlarmTask alarm = new AlarmTask(mContext, 0, time);
         alarm.setUri(uri);
         alarm.setSessionType(sessionType);
         alarm.run();
@@ -166,10 +206,10 @@ public class AlarmTaskManager {
     /**
      * Show an alarm for a certain date when the alarm is called it will pop up a notification
      */
-    public AlarmTask addAlarmWithUri(int time, String uri, SessionType sessionType) {
+    public AlarmTask addAlarmWithUri(int offset, int duration, String uri, SessionType sessionType) {
 
         Log.i(TAG, "Creating new alarm task, uri " + uri + " type: " + sessionType );
-        AlarmTask alarm = new AlarmTask(mContext, time);
+        AlarmTask alarm = new AlarmTask(mContext, offset, duration);
         alarm.setUri(uri);
         alarm.setSessionType(sessionType);
 
@@ -183,18 +223,19 @@ public class AlarmTaskManager {
     }
 
     @Deprecated
-    public void startAlarmWithUri(int duration, String uri, SessionType sessionType) {
-        AlarmTask alarm = addAlarmWithUri(duration, uri, sessionType);
+    public void startAlarmWithUri(int offset, int duration, String uri, SessionType sessionType) {
+        AlarmTask alarm = addAlarmWithUri(offset, duration, uri, sessionType);
         alarm.run();
     }
 
     public void startAll() {
+        // FIXME: Wrong order!!!
         for (AlarmTask alarm : alarms) {
             alarm.run();
         }
 
-        AlarmTask firstAlarm = alarms.peek();
-
+        AlarmTask firstAlarm = alarms.firstElement();
+        //alarms.firstElement()
         mLastDuration = firstAlarm.getDuration().getValue();
         mTime = mLastDuration;
 
@@ -220,8 +261,19 @@ public class AlarmTaskManager {
     }
 
     public void cancelAllAlarms() {
+        for (AlarmTask alarm : alarms) {
+            alarm.cancel();
+        }
+        alarms.clear();
+    }
 
-
+    public ArrayList<Integer> getPreviewTimes() {
+        ArrayList<Integer> previewTimes = new ArrayList<Integer>();
+        for (int i = advTimeIndex + 1; i < alarms.size(); i++) {
+            AlarmTask alarm = alarms.elementAt(i);
+            previewTimes.add(alarm.duration);
+        }
+        return previewTimes;
     }
 
 
@@ -293,8 +345,6 @@ public class AlarmTaskManager {
                 },
                 TIMER_TIC
         );
-
-
     }
 
 
@@ -305,7 +355,7 @@ public class AlarmTaskManager {
         Log.v(TAG, "Timer stopped");
 
         clearTime();
-        stopAlarmTimer();
+        cancelAllAlarms();
 
         // Stop our timer service
         onEnterState(STOPPED);
@@ -417,9 +467,11 @@ public class AlarmTaskManager {
         // Send notification
         Notification.show(mContext, alarm.getUri().getValue(), alarm.getDuration().getValue(), alarm.getSessionType().getValue());
 
-
         // Update labels?
         continueAdvTimer();
+
+        // Remove alarm
+        alarms.remove(alarm);
     }
 
     private void continueAdvTimer() {

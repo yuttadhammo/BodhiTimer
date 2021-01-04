@@ -96,7 +96,7 @@ public class TimerReceiver extends BroadcastReceiver {
 
 
     private void autoRestart(Intent pintent, NotificationManager mNM) {
-            int time = pintent.getIntExtra("SetTime", 0);
+            int time = pintent.getIntExtra("duration", 0);
             if (time != 0) {
 
                 mNM.cancel(0);
