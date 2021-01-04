@@ -467,50 +467,50 @@ public class AlarmTaskManager {
 
 
 
-    private void continueAdvTimer() {
-        Intent broadcast = new Intent();
-        SharedPreferences.Editor editor = prefs.edit();
-
-        boolean useAdvTime = prefs.getBoolean("useAdvTime", false);
-        String advTimeString = prefs.getString("advTimeString", "");
-        advTime = null;
-        advTimeIndex = 0;
-
-        if (useAdvTime && advTimeString.length() > 0) {
-            advTime = advTimeString.split("\\^");
-            advTimeIndex = prefs.getInt("advTimeIndex", 0);
-
-            if (advTimeIndex < advTime.length - 1) {
-                advTimeIndex++;
-                editor.putInt("advTimeIndex", advTimeIndex);
-
-                String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
-
-                int duration = Integer.parseInt(thisAdvTime[0]);
-
-                broadcast.putExtra("time", duration);
-                setTimeStamp(duration);
-
-                editor.putInt("LastTime", duration);
-
-                // editor.putString("NotificationUri", thisAdvTime[1]);
-
-                mNM.cancelAll();
-                Log.v(TAG, "Starting next iteration of the timer service ...");
-
-            } else {
-                broadcast.putExtra("stop", true);
-                editor.putInt("advTimeIndex", 0);
-
-            }
-            broadcast.setAction(BROADCAST_RESET);
-            mContext.sendBroadcast(broadcast);
-
-            editor.commit();
-        }
-
-
-    }
+//    private void continueAdvTimer() {
+//        Intent broadcast = new Intent();
+//        SharedPreferences.Editor editor = prefs.edit();
+//
+//        boolean useAdvTime = prefs.getBoolean("useAdvTime", false);
+//        String advTimeString = prefs.getString("advTimeString", "");
+//        advTime = null;
+//        advTimeIndex = 0;
+//
+//        if (useAdvTime && advTimeString.length() > 0) {
+//            advTime = advTimeString.split("\\^");
+//            advTimeIndex = prefs.getInt("advTimeIndex", 0);
+//
+//            if (advTimeIndex < advTime.length - 1) {
+//                advTimeIndex++;
+//                editor.putInt("advTimeIndex", advTimeIndex);
+//
+//                String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
+//
+//                int duration = Integer.parseInt(thisAdvTime[0]);
+//
+//                broadcast.putExtra("time", duration);
+//                setTimeStamp(duration);
+//
+//                editor.putInt("LastTime", duration);
+//
+//                // editor.putString("NotificationUri", thisAdvTime[1]);
+//
+//                mNM.cancelAll();
+//                Log.v(TAG, "Starting next iteration of the timer service ...");
+//
+//            } else {
+//                broadcast.putExtra("stop", true);
+//                editor.putInt("advTimeIndex", 0);
+//
+//            }
+//            broadcast.setAction(BROADCAST_RESET);
+//            mContext.sendBroadcast(broadcast);
+//
+//            editor.commit();
+//        }
+//
+//
+//    }
 
     private void setTimeStamp(int duration) {
         SharedPreferences.Editor editor = prefs.edit();

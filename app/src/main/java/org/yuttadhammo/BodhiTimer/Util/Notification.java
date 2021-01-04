@@ -18,6 +18,7 @@ import java.io.IOException;
 
 public class Notification {
     private static final String TAG = "NOTIFY";
+    private static final String DEFAULTURI = "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell1;
 
     public static void show(Context context, String notificationUri, int time, SessionType type) {
 
@@ -47,9 +48,11 @@ public class Notification {
         boolean led = prefs.getBoolean("LED", true);
         boolean vibrate = prefs.getBoolean("Vibrate", true);
 
-        // FIXME: STopgap
         if (notificationUri == null)
-            notificationUri = "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell1;
+            notificationUri = DEFAULTURI;
+
+        if (notificationUri.equals("sys_def"))
+            notificationUri = prefs.getString("NotificationUri", DEFAULTURI);
 
 //        boolean useAdvTime = prefs.getBoolean("useAdvTime", false);
 //        String advTimeString = prefs.getString("advTimeString", "");
@@ -137,6 +140,7 @@ public class Notification {
 
         if (uri != null) {
 
+            // We play the sound manually, so that it works even if muted.
             //remove notification sound
             mBuilder.setSound(null);
 
@@ -175,6 +179,9 @@ public class Notification {
             }
         }
 
+        mNotificationManager.notify(0, mBuilder.build());
+
+
 //        if (prefs.getBoolean("AutoClear", false)) {
 //            // Determine duration of notification sound
 //            int duration = 5000;
@@ -202,7 +209,6 @@ public class Notification {
 //        }
 
 
-        mNotificationManager.notify(0, mBuilder.build());
     }
 
 }

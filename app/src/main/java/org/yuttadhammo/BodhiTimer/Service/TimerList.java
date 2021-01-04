@@ -1,5 +1,9 @@
 package org.yuttadhammo.BodhiTimer.Service;
 
+import android.text.TextUtils;
+
+import org.yuttadhammo.BodhiTimer.R;
+
 import java.util.ArrayList;
 
 
@@ -15,12 +19,23 @@ public class TimerList {
             duration = mduration;
             uri = muri;
         };
+
+        public Timer(int mduration, String muri, SessionType mSessionType) {
+            super();
+            duration = mduration;
+            uri = muri;
+            sessionType = mSessionType;
+        };
     }
 
     public ArrayList<Timer> timers;
 
     public TimerList(String advTimeString) {
         timers = timeStringToList(advTimeString);
+    }
+
+    public TimerList() {
+        timers = new ArrayList<Timer>();
     }
 
     public String getString() {
@@ -44,13 +59,13 @@ public class TimerList {
     }
 
     public static String listToTimeString (ArrayList<Timer> list ) {
-        String ret = "";
+        ArrayList<String> stringArray = new ArrayList<String>();
 
         for (Timer timer: list) {
-            ret += timer.duration + "#" + timer.uri + "#" +  timer.sessionType + "^";
+            stringArray.add(timer.duration + "#" + timer.uri + "#" +  timer.sessionType);
         }
 
-        return ret;
+        return TextUtils.join("^", stringArray);
     }
 
 }
