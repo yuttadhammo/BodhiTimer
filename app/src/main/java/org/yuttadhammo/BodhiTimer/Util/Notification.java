@@ -203,8 +203,6 @@ public class Notification {
 
 
         mNotificationManager.notify(0, mBuilder.build());
-
-        Log.d(TAG, "ALARM: alarm finished");
     }
 
 }

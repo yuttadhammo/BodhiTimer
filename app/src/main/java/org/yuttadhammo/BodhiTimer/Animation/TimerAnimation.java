@@ -119,7 +119,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         mActivity.mAlarmTaskManager.pauseAlarms();
     }
 
-    public void saveState() {
+    public void saveState(SharedPreferences prefs) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("DrawingIndex", getIndex());
     }

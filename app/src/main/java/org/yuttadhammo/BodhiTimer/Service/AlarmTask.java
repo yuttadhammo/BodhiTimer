@@ -76,21 +76,26 @@ public class AlarmTask implements Runnable {
 
     @Override
     public void run() {
-        int time = getDuration().getValue();
+
         Intent intent = new Intent(context, TimerReceiver.class);
         //intent.putExtra("SetTime", time);
         intent.putExtra("offset", offset);
-        intent.putExtra("duration", time);
+        intent.putExtra("duration", duration);
         intent.putExtra("uri", mUri.getValue());
         intent.putExtra("id", id);
 
-        time += offset;
+        int time = duration + offset;
 
 
         mPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         //mPendingIntent.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mAlarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
+            Intent alarmInfoIntent = new Intent(context, TimerReceiver.class);
+            PendingIntent pendingAlarmInfo = PendingIntent.getBroadcast(context, -1, alarmInfoIntent, 0);
+            AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(System.currentTimeMillis() + time, pendingAlarmInfo);
+
+            mAlarmMgr.setAlarmClock(info, mPendingIntent);
+            //mAlarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
         } else {
             mAlarmMgr.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + time, mPendingIntent);
         }
@@ -101,9 +106,6 @@ public class AlarmTask implements Runnable {
     }
 
     // Accesors
-    public LiveData<Integer> getDuration() {
-        return mDuration;
-    }
 
     public LiveData<TimerState> getTimerState() {
         return mTimerState;
