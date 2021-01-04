@@ -215,7 +215,8 @@ public class AlarmTaskManager {
         setDuration(dur);
         setCurElapsed(0);
 
-        Log.v(TAG, "Started timer, first duration: " + mLastDuration);
+        startTicker(dur);
+        Log.v(TAG, "Started ticker & timer, first duration: " + mLastDuration);
 
 
     }
@@ -364,7 +365,7 @@ public class AlarmTaskManager {
      */
     public void stopAlarmsAndTicker() {
         Log.v(TAG, "Stopping the alarm timer ...");
-        //mAlarmMgr.cancel(mPendingIntent);
+
         cancelAllAlarms();
         tickerStop();
         clearTime();
@@ -431,7 +432,7 @@ public class AlarmTaskManager {
     public void onAlarmEnd(int id) {
         int left = alarms.size() - 1;
         Log.v(TAG, "Alarm has ended. There are " +  left + " alarms left");
-        // TODO: Find correct alarm (by ID)
+
         AlarmTask alarm = getAlarmById(id);
 
         if (alarm == null) return;
@@ -458,8 +459,10 @@ public class AlarmTaskManager {
         setCurElapsed(0);
 
         Intent broadcast = new Intent();
-        SharedPreferences.Editor editor = prefs.edit();
+
         broadcast.putExtra("time", duration);
+        broadcast.setAction(BROADCAST_RESET);
+        mContext.sendBroadcast(broadcast);
     }
 
 

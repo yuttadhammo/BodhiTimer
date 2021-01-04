@@ -65,6 +65,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.Service.SessionType;
+import org.yuttadhammo.BodhiTimer.Service.TimerList;
 import org.yuttadhammo.BodhiTimer.SimpleNumberPicker.OnNNumberPickedListener;
 import org.yuttadhammo.BodhiTimer.Util.Time;
 
@@ -254,7 +255,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAlarmTaskManager.isPaused = true; // tell gui timer to stop
         sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
 
-        unregisterReceiver(resetReceiver);
+        //unregisterReceiver(resetReceiver);
         unregisterReceiver(alarmEndReceiver);
 
         BitmapDrawable drawable = (BitmapDrawable) mTimerAnimation.getDrawable();
@@ -307,9 +308,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(BROADCAST_RESET);
-        registerReceiver(resetReceiver, filter);
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(BROADCAST_RESET);
+//        registerReceiver(resetReceiver, filter);
 
         IntentFilter filter2 = new IntentFilter();
         filter2.addAction(BROADCAST_END);
@@ -401,7 +402,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         if (state == STOPPED)
             cancelNotification();
 
-        //checkWhetherAdvTime();
 
         switch (state) {
             case RUNNING:
@@ -519,6 +519,10 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         return super.onKeyDown(keycode, e);
     }
 
+    public void onSingleAlarmEnd() {
+        updatePreviewLabel();
+    }
+
     private void setLowProfile() {
 
         View rootView = getWindow().getDecorView();
@@ -620,52 +624,54 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAlarmTaskManager.addAlarmWithUri(prepTime, mainTime, notificationUri, SessionType.REAL);
         mAlarmTaskManager.startAll();
 
+        showDialog(ALERT_DIALOG);
 
-        // FIXME: Needs to go!
-        //updateInterfaceWithTime();
-        updatePreviewLabel();
-
-        int[] lastTimes = Time.time2Array(mAlarmTaskManager.getCurDurationVal());
-
-        Editor editor = prefs.edit();
-        // Save last set times in preferences
-        editor.putInt("LastTime", mAlarmTaskManager.getCurDurationVal());
-        editor.apply();
-
-        // Check to make sure the phone isn't set to silent
-        boolean silent = (mAudioMgr.getRingerMode() == AudioManager.RINGER_MODE_SILENT);
-        boolean vibrate = prefs.getBoolean("Vibrate", false);
-        String noise = prefs.getString("NotificationUri", "");
-        boolean nag = prefs.getBoolean("NagSilent", true);
-
-        // If the conditions are _just_ right show a nag screen
-        if (nag && silent && (noise.length() > 0 || vibrate)) {
-            showDialog(ALERT_DIALOG);
-        }
-
-        prepareTimerStart();
-        mAlarmTaskManager.startTicker(mAlarmTaskManager.getCurDurationVal());
-
-        if (widget) {
-            sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
-            finish();
-        }
+//
+//        // FIXME: Needs to go!
+//        //updateInterfaceWithTime();
+//        updatePreviewLabel();
+//
+//        int[] lastTimes = Time.time2Array(mAlarmTaskManager.getCurDurationVal());
+//
+//        Editor editor = prefs.edit();
+//        // Save last set times in preferences
+//        editor.putInt("LastTime", mAlarmTaskManager.getCurDurationVal());
+//        editor.apply();
+//
+//        // Check to make sure the phone isn't set to silent
+//        boolean silent = (mAudioMgr.getRingerMode() == AudioManager.RINGER_MODE_SILENT);
+//        boolean vibrate = prefs.getBoolean("Vibrate", false);
+//        String noise = prefs.getString("NotificationUri", "");
+//        boolean nag = prefs.getBoolean("NagSilent", true);
+//
+//        // If the conditions are _just_ right show a nag screen
+//        if (nag && silent && (noise.length() > 0 || vibrate)) {
+//            showDialog(ALERT_DIALOG);
+//        }
+//
+//        prepareTimerStart();
+//        mAlarmTaskManager.startTicker(mAlarmTaskManager.getCurDurationVal());
+//
+//        if (widget) {
+//            sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
+//            finish();
+//        }
 
     }
 
-    public void startAdvancedAlarm() {
+    public void startAdvancedAlarm(String advTimeString) {
         int offset = 0;
         mAlarmTaskManager.useAdvTime = true;
-        String[] advTime = mAlarmTaskManager.advTimeString.split("\\^");
 
-        for (int i = 0; i < advTime.length; i++) {
-            String alarmSpec = advTime[i];
-            //  alarmSpec will be of format timeInMs#pathToSound
 
-            String[] thisAdvTime = alarmSpec.split("#");
-            int duration = Integer.parseInt(thisAdvTime[0]);
-            mAlarmTaskManager.addAlarmWithUri(offset, duration, thisAdvTime[1], SessionType.REAL);
+        TimerList list = new TimerList(advTimeString);
+        Log.v(TAG, "advString: " + advTimeString);
+        Log.v(TAG, "advString2: " + list.getString());
 
+
+        for (TimerList.Timer timer: list.timers) {
+            int duration = timer.duration;
+            mAlarmTaskManager.addAlarmWithUri(offset, duration, timer.uri, SessionType.REAL);
             offset += duration;
         }
 
@@ -690,9 +696,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         // advanced timer - 0 will be -1
 
         if (numbers[0] == -1) {
-            mAlarmTaskManager.advTimeString = prefs.getString("advTimeString", "");
+            String advTimeString = prefs.getString("advTimeString", "");
 
-            if (mAlarmTaskManager.advTimeString == null || mAlarmTaskManager.advTimeString.length() == 0) {
+            if (advTimeString == null || advTimeString.length() == 0) {
                 widget = false;
                 return;
             }
@@ -706,7 +712,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             // set index to 0, because we're doing the first one already
             editor.putInt("advTimeIndex", 0);
 
-            startAdvancedAlarm();
+            startAdvancedAlarm(prefs.getString("advTimeString", ""));
             updatePreviewLabel();
 
         } else {
@@ -714,49 +720,53 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 editor.putBoolean("useAdvTime", false);
             }
             startSimpleAlarm(numbers);
-            return;
+
         }
 
-        int hour = numbers[0];
-        int min = numbers[1];
-        int sec = numbers[2];
+        updatePreviewLabel();
 
-        mAlarmTaskManager.setDuration(Time.msFromNumbers(hour, min, sec));
+        //updateInterfaceWithTime();
 
-        mAlarmTaskManager.setCurElapsed(mAlarmTaskManager.getCurDurationVal());
-        Log.v(TAG, "Picked time: " + mAlarmTaskManager.getCurDurationVal());
-
-        updateInterfaceWithTime(0, mAlarmTaskManager.getCurDurationVal());
-
-        lastTimes = new int[3];
-
-        lastTimes[0] = hour;
-        lastTimes[1] = min;
-        lastTimes[2] = sec;
-
-        // Save last set times in preferences
-        editor.putInt("LastTime", mAlarmTaskManager.getCurDurationVal());
-        editor.apply();
-
-        // Check to make sure the phone isn't set to silent
-        boolean silent = (mAudioMgr.getRingerMode() == AudioManager.RINGER_MODE_SILENT);
-        boolean vibrate = prefs.getBoolean("Vibrate", false);
-        String noise = prefs.getString("NotificationUri", "");
-        boolean nag = prefs.getBoolean("NagSilent", true);
-
-        // If the conditions are _just_ right show a nag screen
-        if (nag && silent && (noise.length() > 0 || vibrate)) {
-            showDialog(ALERT_DIALOG);
-        }
-
-
-        prepareTimerStart();
-        mAlarmTaskManager.startTicker(mAlarmTaskManager.getCurDurationVal());
-
-        if (widget) {
-            sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
-            finish();
-        }
+//        int hour = numbers[0];
+//        int min = numbers[1];
+//        int sec = numbers[2];
+//
+//        mAlarmTaskManager.setDuration(Time.msFromNumbers(hour, min, sec));
+//
+//        mAlarmTaskManager.setCurElapsed(mAlarmTaskManager.getCurDurationVal());
+//        Log.v(TAG, "Picked time: " + mAlarmTaskManager.getCurDurationVal());
+//
+//        updateInterfaceWithTime(0, mAlarmTaskManager.getCurDurationVal());
+//
+//        lastTimes = new int[3];
+//
+//        lastTimes[0] = hour;
+//        lastTimes[1] = min;
+//        lastTimes[2] = sec;
+//
+//        // Save last set times in preferences
+//        editor.putInt("LastTime", mAlarmTaskManager.getCurDurationVal());
+//        editor.apply();
+//
+//        // Check to make sure the phone isn't set to silent
+//        boolean silent = (mAudioMgr.getRingerMode() == AudioManager.RINGER_MODE_SILENT);
+//        boolean vibrate = prefs.getBoolean("Vibrate", false);
+//        String noise = prefs.getString("NotificationUri", "");
+//        boolean nag = prefs.getBoolean("NagSilent", true);
+//
+//        // If the conditions are _just_ right show a nag screen
+//        if (nag && silent && (noise.length() > 0 || vibrate)) {
+//            showDialog(ALERT_DIALOG);
+//        }
+//
+//
+//        prepareTimerStart();
+//        mAlarmTaskManager.startTicker(mAlarmTaskManager.getCurDurationVal());
+//
+//        if (widget) {
+//            sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
+//            finish();
+//        }
     }
 
     private void updatePreviewLabel() {
@@ -766,26 +776,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAltLabel.setText(advTimeStringLeft);
     }
 
-
-    public void prepareTimerStart() {
-        if (mAlarmTaskManager.useAdvTime) {
-            String[] advTime = mAlarmTaskManager.advTimeString.split("\\^");
-
-            ArrayList<String> arr = new ArrayList<String>();
-
-            advTimeStringLeft = "";
-
-            mAlarmTaskManager.advTimeIndex = prefs.getInt("advTimeIndex", 1);
-
-            Log.d(TAG, "time index: " + mAlarmTaskManager.advTimeIndex);
-
-            if (mAlarmTaskManager.advTimeIndex < advTime.length) {
-
-                arr = makePreviewArray();
-            }
-            advTimeStringLeft = TextUtils.join("\n", arr);
-        }
-    }
 
     /**
      * This only refers to the visual state of the application, used to manage
@@ -997,35 +987,13 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
     // receiver to get restart
-
-
-    private BroadcastReceiver resetReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-//            //mAlarmTaskManager
-//            Log.d(TAG, "Received restart Broadcast: " + intent.getIntExtra("time", 999));
-//
-//            mAlarmTaskManager.tickerStop();
-//
-//            checkWhetherAdvTime();
-//            Log.d(TAG, "Received restart Broadcast: " + intent.getIntExtra("time", 999));
-//            if (intent.getBooleanExtra("stop", false))
-//                return;
-//
-//            mAlarmTaskManager.mLastDuration = intent.getIntExtra("time", mAlarmTaskManager.mLastDuration);
-//            mAlarmTaskManager.setCurElapsed(mAlarmTaskManager.mLastDuration);
-//            prepareTimerStart();
-//            mAlarmTaskManager.timerStart(mAlarmTaskManager.getCurElapsedVal());
-        }
-    };
-
     private BroadcastReceiver alarmEndReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //mAlarmTaskManager
             Log.d(TAG, "id " + intent.getIntExtra("id", 1212));
             mAlarmTaskManager.onAlarmEnd(intent.getIntExtra("id", 1212));
-
+            onSingleAlarmEnd();
         }
     };
 

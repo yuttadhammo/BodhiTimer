@@ -92,28 +92,4 @@ public class TimerReceiver extends BroadcastReceiver {
 
     }
 
-
-
-
-    private void autoRestart(Intent pintent, NotificationManager mNM) {
-            int time = pintent.getIntExtra("duration", 0);
-            if (time != 0) {
-
-                mNM.cancel(0);
-                Log.v(TAG, "Restarting the timer service ...");
-
-                // Save new time
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putLong("TimeStamp", new Date().getTime() + time);
-                editor.putInt("LastTime", time);
-                editor.apply();
-
-//                Intent broadcast = new Intent();
-//                broadcast.putExtra("time", time);
-//                broadcast.setAction(BROADCAST_RESET);
-//                context.sendBroadcast(broadcast);
-
-            }
-
-    }
 }

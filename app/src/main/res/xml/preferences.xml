@@ -76,12 +76,12 @@
         android:defaultValue="False"
         app:iconSpaceReserved="false" />
 
-    <CheckBoxPreference
-        android:key="AutoClear"
-        android:title="@string/auto_clear"
-        android:summary="@string/auto_clear_desc"
-        android:defaultValue="False"
-        app:iconSpaceReserved="false" />
+<!--    <CheckBoxPreference-->
+<!--        android:key="AutoClear"-->
+<!--        android:title="@string/auto_clear"-->
+<!--        android:summary="@string/auto_clear_desc"-->
+<!--        android:defaultValue="False"-->
+<!--        app:iconSpaceReserved="false" />-->
 
     <CheckBoxPreference
         android:key="NagSilent"
