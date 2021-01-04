@@ -121,7 +121,7 @@ public class AlarmTaskManager {
 
     public void saveState() {
         SharedPreferences.Editor editor = prefs.edit();
-        // editor.putInt("LastTime", getCurDurationVal());
+        // editor.putInt("LastSimpleTime", getCurDurationVal());
         editor.putInt("CurrentTime", getCurElapsedVal());
         editor.putInt("State", mCurrentState);
     }
@@ -197,7 +197,7 @@ public class AlarmTaskManager {
         setCurElapsed(0);
 
         startTicker(dur);
-        Log.v(TAG, "Started ticker & timer, first duration: " + mLastDuration);
+        Log.v(TAG, "Started ticker & timer, first duration: " + getCurDurationVal());
     }
 
     public int getAlarmCount() {
@@ -310,7 +310,7 @@ public class AlarmTaskManager {
      * Cancels the alarm portion of the timer
      */
     public void stopAlarmsAndTicker() {
-        Log.v(TAG, "Stopping the alarm timer ...");
+        Log.v(TAG, "Stopping Alarms and Ticker ...");
 
         cancelAllAlarms();
         tickerStop();
@@ -438,7 +438,7 @@ public class AlarmTaskManager {
 //                broadcast.putExtra("time", duration);
 //                setTimeStamp(duration);
 //
-//                editor.putInt("LastTime", duration);
+//                editor.putInt("LastSimpleTime", duration);
 //
 //                // editor.putString("NotificationUri", thisAdvTime[1]);
 //

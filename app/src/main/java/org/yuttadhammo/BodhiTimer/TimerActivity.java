@@ -306,6 +306,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     public void onResume() {
         super.onResume();
 
+        Log.i(TAG, "RESUME");
+
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 //        IntentFilter filter = new IntentFilter();
@@ -598,8 +600,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             }
 
             tL.timers.add(new TimerList.Timer(prepTime, preUriString, SessionType.PREPARATION));
-
-            mAlarmTaskManager.addAlarmWithUri(0, prepTime, preUriString, SessionType.PREPARATION);
         }
 
 
@@ -628,6 +628,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         String ret = tL.getString();
         Log.v(TAG, "Saved timer string: " + ret);
         editor.putString("advTimeString", tL.getString());
+        editor.apply();
     }
 
     private TimerList retrieveTimerList() {
@@ -652,7 +653,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         for (TimerList.Timer timer: list.timers) {
             int duration = timer.duration;
-            mAlarmTaskManager.addAlarmWithUri(offset, duration, timer.uri, SessionType.REAL);
+
+            mAlarmTaskManager.addAlarmWithUri(offset, duration, timer.uri, timer.sessionType);
             offset += duration;
         }
 
@@ -689,10 +691,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             updatePreviewLabel();
 
         } else {
-            int last = Time.msFromArray(numbers);
             lastTimes = numbers;
-
-            editor.putInt("LastTime", last);
+            editor.putInt("LastSimpleTime", Time.msFromArray(numbers));
             startSimpleAlarm(numbers);
         }
 

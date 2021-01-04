@@ -18,6 +18,7 @@ public class TimerList {
             super();
             duration = mduration;
             uri = muri;
+            sessionType = SessionType.REAL;
         };
 
         public Timer(int mduration, String muri, SessionType mSessionType) {

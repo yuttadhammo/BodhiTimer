@@ -176,7 +176,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
         mTimer = new Timer();
         timeStamp = mSettings.getLong("TimeStamp", -1);
-        mLastTime = mSettings.getInt("LastTime", 0);
+        mLastTime = mSettings.getInt("LastSimpleTime", 0);
         state = mSettings.getInt("State", STOPPED);
 
         appWidgetManager = AppWidgetManager.getInstance(context);
