@@ -13,7 +13,6 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import org.yuttadhammo.BodhiTimer.Util.Time;
 import org.yuttadhammo.BodhiTimer.Util.Notification;
 
 import java.util.ArrayList;
@@ -65,9 +64,11 @@ public class AlarmTaskManager {
     private final MutableLiveData<Integer> mCurDuration = new MutableLiveData<>();
     // The current elapsed timer time
     private final MutableLiveData<Integer> mCurElapsed = new MutableLiveData<>();
+    // The current elapsed timer time
+    private final MutableLiveData<Integer> mIndex = new MutableLiveData<>();
 
 
-    // Accesors
+    // Accessors
     public LiveData<Integer> getCurDuration() {
         return mCurDuration;
     }
@@ -80,8 +81,8 @@ public class AlarmTaskManager {
     public Integer getCurElapsedVal() {
         return mCurElapsed.getValue();
     }
-    public Integer getProgress() {
-        return mCurElapsed.getValue() / mCurDuration.getValue();
+    public Integer getIndexVal() {
+        return mIndex.getValue();
     }
 
     public void setDuration(int newDuration) {
@@ -91,18 +92,14 @@ public class AlarmTaskManager {
     public void setCurElapsed(int newElapsed) {
         mCurElapsed.setValue(new Integer(newElapsed));
     }
-
+    public void setIndex(int newIndex) {
+        mIndex.setValue(new Integer(newIndex));
+    }
 
     // TODO: These need to be handled outside
     public NotificationManager mNM;
     private SharedPreferences prefs;
 
-    // TODO: These should not be needed in future
-    public String advTimeString = "";
-
-    public boolean useAdvTime = false;
-    public int advTimeIndex;
-    private String[] advTime;
 
 
     public AlarmTaskManager(Context context) {
@@ -124,7 +121,7 @@ public class AlarmTaskManager {
 
     public void saveState() {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("LastTime", getCurDurationVal());
+        // editor.putInt("LastTime", getCurDurationVal());
         editor.putInt("CurrentTime", getCurElapsedVal());
         editor.putInt("State", mCurrentState);
     }
@@ -160,22 +157,6 @@ public class AlarmTaskManager {
             a = getCurElapsedVal();
             b = getCurDurationVal();
             listener.onUpdateTime(getCurElapsedVal(), getCurDurationVal());
-    }
-
-
-
-    /**
-     * Show an alarm for a certain date when the alarm is called it will pop up a notification
-     */
-    @Deprecated
-    public void setAlarmForNotification(int time) {
-        // This starts a new thread to set the alarm
-        // You want to push off your tasks onto a new thread to free up the UI to carry on responding
-        Log.i(TAG, "Creating new alarm task");
-        AlarmTask alarm = new AlarmTask(mContext, 0, time);
-        alarms.push(alarm);
-        lastAlarm = alarm;
-        alarm.run();
     }
 
 
@@ -217,8 +198,6 @@ public class AlarmTaskManager {
 
         startTicker(dur);
         Log.v(TAG, "Started ticker & timer, first duration: " + mLastDuration);
-
-
     }
 
     public int getAlarmCount() {
@@ -246,7 +225,7 @@ public class AlarmTaskManager {
 
     public ArrayList<Integer> getPreviewTimes() {
         ArrayList<Integer> previewTimes = new ArrayList<Integer>();
-        for (int i = advTimeIndex + 1; i < alarms.size(); i++) {
+        for (int i = 1; i < alarms.size(); i++) {
             AlarmTask alarm = alarms.elementAt(i);
             previewTimes.add(alarm.duration);
         }
@@ -278,38 +257,6 @@ public class AlarmTaskManager {
         );
     }
 
-    /**
-     * Starts the timer at the given time
-     *
-     * @param time with which to count down
-     */
-    public void timerStart(int time) {
-        Log.v(TAG, "Starting the timer: " + time);
-        Log.v(TAG, "ALARM: Starting the timer service: " + Time.time2humanStr(mContext, getCurElapsedVal()));
-
-        onEnterState(RUNNING);
-
-        setCurElapsed(time);
-        setTimeStamp(time);
-
-
-
-        setAlarmForNotification(getCurElapsedVal());
-
-        mTimer.schedule(
-                new TimerTask() {
-                    public void run() {
-                        if (mHandler != null) {
-                            mHandler.sendEmptyMessage(0);
-                        }
-                    }
-                },
-                TIMER_TIC
-        );
-
-
-    }
-
 
     /**
      * Stops the timer
@@ -318,8 +265,6 @@ public class AlarmTaskManager {
         Log.v(TAG, "Timer stopped");
 
         clearTime();
-        // FIXME Need to differantiate between a forced stop and a soft stop
-        //cancelAllAlarms();
 
         // Stop our timer service
         onEnterState(STOPPED);
@@ -332,7 +277,7 @@ public class AlarmTaskManager {
     public void timerResume() {
         Log.v(TAG, "Resuming the timer...");
 
-        timerStart(getCurElapsedVal());
+        startTicker(getCurElapsedVal());
         onEnterState(RUNNING);
     }
 
@@ -356,6 +301,7 @@ public class AlarmTaskManager {
      */
     public void clearTime() {
         setCurElapsed(0);
+        setIndex(0);
         onUpdateTime();
     }
 
@@ -448,6 +394,7 @@ public class AlarmTaskManager {
             //cleanup?
         } else {
             switchToTimer(alarms.firstElement());
+            //increaseIndex();
         }
     }
 

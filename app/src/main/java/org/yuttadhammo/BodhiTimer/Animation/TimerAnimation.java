@@ -124,17 +124,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         editor.putInt("DrawingIndex", getIndex());
     }
 
-//    public void thisClicked() {
-//        startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_out));
-//
-//        mIndex++;
-//        mIndex %= mDrawings.size();
-//
-//        startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_in));
-//
-//        invalidate();
-//
-//    }
+
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 

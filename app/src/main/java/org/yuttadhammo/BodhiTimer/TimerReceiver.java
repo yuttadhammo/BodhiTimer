@@ -42,13 +42,7 @@ public class TimerReceiver extends BroadcastReceiver {
     private final static String TAG = "TimerReceiver";
     final static String CANCEL_NOTIFICATION = "CANCEL_NOTIFICATION";
     public static MediaPlayer player;
-    private SharedPreferences prefs;
     private Context context;
-    private int advTimeIndex;
-    private String[] advTime;
-
-
-    private TextToSpeech tts;
 
     public TimerReceiver() {
         super();

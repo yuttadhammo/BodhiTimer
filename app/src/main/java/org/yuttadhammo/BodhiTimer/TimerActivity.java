@@ -492,19 +492,15 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                         mAlarmTaskManager.timerResume();
                         break;
                     case STOPPED:
-                        resetAdvTime();
-                        //checkWhetherAdvTime();
-                        mAlarmTaskManager.timerStart(mAlarmTaskManager.getCurDurationVal());
+                        // We are stopped and want to restore the last used timers.
+                        startAdvancedAlarm(retrieveTimerList());
                         break;
                 }
                 break;
 
             case R.id.cancelButton:
-
                 mAlarmTaskManager.stopAlarmsAndTicker();
                 enterState(STOPPED);
-                resetAdvTime();
-
                 break;
         }
     }
@@ -543,10 +539,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      * @param duration
      */
     public void updateInterfaceWithTime(int elapsed, int duration) {
-        // FIXME: needs to go to Alarmmanager
-        if (mAlarmTaskManager.mCurrentState == STOPPED)
-            mAlarmTaskManager.setCurElapsed(0);
         updateLabel(elapsed);
+
         if (animationIndex != 0) {
             blackView.setVisibility(View.GONE);
             mTimerAnimation.updateImage(elapsed, duration);
@@ -620,15 +614,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 break;
         }
 
-
-
         // Add main timer
         int mainTime = Time.msFromArray(numbers);
         tL.timers.add(new TimerList.Timer(mainTime, notificationUri, SessionType.REAL));
-//        mAlarmTaskManager.addAlarmWithUri(prepTime, mainTime, notificationUri, SessionType.REAL);
-//        mAlarmTaskManager.startAll();
-
-//        showDialog(ALERT_DIALOG);
 
         saveTimerList(tL);
         startAdvancedAlarm(tL);
@@ -642,9 +630,14 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         editor.putString("advTimeString", tL.getString());
     }
 
-    public void startAdvancedAlarm(String advTimeString) {
-        mAlarmTaskManager.useAdvTime = true;
+    private TimerList retrieveTimerList() {
+        String prefString = prefs.getString("advTimeString", "120000#sys_def");
+        TimerList tL = new TimerList(prefString);
+        Log.v(TAG, "Got timer string: " + prefString + " from Settings");
+        return tL;
+    }
 
+    public void startAdvancedAlarm(String advTimeString) {
         TimerList list = new TimerList(advTimeString);
 
         Log.v(TAG, "advString: " + advTimeString);
@@ -656,7 +649,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     public void startAdvancedAlarm(TimerList list) {
         int offset = 0;
-        mAlarmTaskManager.useAdvTime = true;
 
         for (TimerList.Timer timer: list.timers) {
             int duration = timer.duration;
@@ -678,7 +670,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             return;
         }
 
-        mAlarmTaskManager.cancelAllAlarms();
+        mAlarmTaskManager.stopAlarmsAndTicker();
 
         Editor editor = prefs.edit();
 
@@ -693,21 +685,25 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
             advTimeStringLeft = "";
 
-            // set index to 0, because we're doing the first one already
-            editor.putInt("advTimeIndex", 0);
-
-            startAdvancedAlarm(prefs.getString("advTimeString", ""));
+            startAdvancedAlarm(advTimeString);
             updatePreviewLabel();
 
         } else {
+            int last = Time.msFromArray(numbers);
+            lastTimes = numbers;
+
+            editor.putInt("LastTime", last);
             startSimpleAlarm(numbers);
         }
 
+        editor.commit();
         updatePreviewLabel();
 
     }
 
     private void updatePreviewLabel() {
+
+        // FIXME; If stopped: show last used....
         ArrayList<String> arr = makePreviewArray();
         if (LOG) Log.v(TAG, "Update preview label");
 
@@ -766,14 +762,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mPauseButton.setAlpha(i);
         mCancelButton.setAlpha(i);
         mPrefButton.setAlpha(i);
-    }
-
-
-    private void resetAdvTime() {
-        Editor editor = prefs.edit();
-        // set index to 0, because we're doing the first one already
-        editor.putInt("advTimeIndex", 0);
-        mAlarmTaskManager.advTimeIndex = 0;
     }
 
 
