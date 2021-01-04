@@ -54,6 +54,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -333,6 +334,68 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         animationIndex = prefs.getInt("DrawingIndex", 1);
 
+        setupUI();
+
+        // check the timestamp from the last update and start the timer.
+        // assumes the data has already been loaded?
+        // How do I know where we are resuming from?
+        int dur = prefs.getInt("LastTime", 1800000);
+        //mAlarmTaskManager.setDuration(dur);
+
+        Log.d(TAG, "Last Time: " + dur);
+        int state = prefs.getInt("State", STOPPED);
+        if (state == STOPPED)
+            cancelNotification();
+
+
+        switch (state) {
+            case RUNNING:
+                Log.i(TAG, "Resume while running: " + prefs.getLong("TimeStamp", -1));
+                mAlarmTaskManager.timeStamp = prefs.getLong("TimeStamp", -1);
+
+                Date now = new Date();
+                Date then = new Date(mAlarmTaskManager.timeStamp);
+
+                // We still have a timer running!
+                if (then.after(now)) {
+                    if (LOG) Log.i(TAG, "Still have a timer");
+                    mAlarmTaskManager.setCurElapsed((int) (then.getTime() - now.getTime()));
+
+                    enterState(RUNNING);
+
+                    mAlarmTaskManager.doTick();
+
+                    // All finished
+                } else {
+                    cancelNotification();
+                    mAlarmTaskManager.tickerStop();
+                }
+                break;
+
+            case STOPPED:
+                mAlarmTaskManager.mNM.cancelAll();
+                mAlarmTaskManager.tickerStop();
+                if (widget) {
+                    if (prefs.getBoolean("SwitchTimeMode", false))
+                        startVoiceRecognitionActivity();
+                    else
+                        showNumberPicker();
+                    return;
+                }
+                break;
+
+            case PAUSED:
+                int curTime = prefs.getInt("CurrentTime", 0);
+                mAlarmTaskManager.setCurElapsed(curTime);
+                // FIXME
+                updateInterfaceWithTime(curTime, 0);
+                enterState(PAUSED);
+                break;
+        }
+        widget = false;
+    }
+
+    private void setupUI() {
         try {
             mTimerAnimation.setIndex(animationIndex);
         } catch (FileNotFoundException e) {
@@ -392,63 +455,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN, LayoutParams.FLAG_FULLSCREEN);
         else
             getWindow().clearFlags(LayoutParams.FLAG_FULLSCREEN);
-
-        // check the timestamp from the last update and start the timer.
-        // assumes the data has already been loaded?
-        int dur = prefs.getInt("LastTime", 1800000);
-        mAlarmTaskManager.setDuration(dur);
-
-        Log.d(TAG, "Last Time: " + dur);
-        int state = prefs.getInt("State", STOPPED);
-        if (state == STOPPED)
-            cancelNotification();
-
-
-        switch (state) {
-            case RUNNING:
-                Log.i(TAG, "Resume while running: " + prefs.getLong("TimeStamp", -1));
-                mAlarmTaskManager.timeStamp = prefs.getLong("TimeStamp", -1);
-
-                Date now = new Date();
-                Date then = new Date(mAlarmTaskManager.timeStamp);
-
-                // We still have a timer running!
-                if (then.after(now)) {
-                    if (LOG) Log.i(TAG, "Still have a timer");
-                    mAlarmTaskManager.setCurElapsed((int) (then.getTime() - now.getTime()));
-
-                    enterState(RUNNING);
-
-                    mAlarmTaskManager.doTick();
-
-                    // All finished
-                } else {
-                    cancelNotification();
-                    mAlarmTaskManager.tickerStop();
-                }
-                break;
-
-            case STOPPED:
-                mAlarmTaskManager.mNM.cancelAll();
-                mAlarmTaskManager.tickerStop();
-                if (widget) {
-                    if (prefs.getBoolean("SwitchTimeMode", false))
-                        startVoiceRecognitionActivity();
-                    else
-                        showNumberPicker();
-                    return;
-                }
-                break;
-
-            case PAUSED:
-                int curTime = prefs.getInt("CurrentTime", 0);
-                mAlarmTaskManager.setCurElapsed(curTime);
-                // FIXME
-                updateInterfaceWithTime(curTime, 0);
-                enterState(PAUSED);
-                break;
-        }
-        widget = false;
     }
 
     @Override
