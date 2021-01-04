@@ -401,7 +401,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         if (state == STOPPED)
             cancelNotification();
 
-        checkWhetherAdvTime();
+        //checkWhetherAdvTime();
 
         switch (state) {
             case RUNNING:
@@ -493,7 +493,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                         break;
                     case STOPPED:
                         resetAdvTime();
-                        checkWhetherAdvTime();
+                        //checkWhetherAdvTime();
                         mAlarmTaskManager.timerStart(mAlarmTaskManager.getCurDurationVal());
                         break;
                 }
@@ -501,22 +501,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
             case R.id.cancelButton:
 
-                mAlarmTaskManager.stopAlarmTimer();
-
-                // We need to be careful to not cancel timers
-                // that are not running (e.g. if we're paused)
-                switch (mAlarmTaskManager.mCurrentState) {
-                    case RUNNING:
-                        cancelNotification();
-                        mAlarmTaskManager.tickerStop();
-                        break;
-                    case PAUSED:
-                        mAlarmTaskManager.clearTime();
-                        enterState(STOPPED);
-                        break;
-                }
+                mAlarmTaskManager.stopAlarmsAndTicker();
+                enterState(STOPPED);
                 resetAdvTime();
-                checkWhetherAdvTime();
 
                 break;
         }
@@ -860,58 +847,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAlarmTaskManager.advTimeIndex = 0;
     }
 
-    private void checkWhetherAdvTime() {
-        if (!prefs.getBoolean("useAdvTime", false)) {
-            mAltLabel.setText("");
-            return;
-        }
-
-        mAlarmTaskManager.advTimeString = prefs.getString("advTimeString", "");
-        if (mAlarmTaskManager.advTimeString == null || mAlarmTaskManager.advTimeString.length() == 0)
-            return;
-
-        String[] advTime = mAlarmTaskManager.advTimeString.split("\\^");
-
-        Editor editor = prefs.edit();
-
-
-        mAlarmTaskManager.advTimeIndex = prefs.getInt("advTimeIndex", 0);
-
-
-        // FIXME: Should be unnecessary.
-        if (mAlarmTaskManager.advTimeIndex >= advTime.length)
-            mAlarmTaskManager.advTimeIndex = advTime.length - 1;
-
-        String[] thisAdvTime = advTime[mAlarmTaskManager.advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
-        int[] number = Time.time2Array(Integer.parseInt(thisAdvTime[0]));
-
-
-        advTimeStringLeft = "";
-
-        // Set the preview label, of which times are left
-        updatePreviewLabel();
-
-        int hour = number[0];
-        int min = number[1];
-        int sec = number[2];
-
-        mAlarmTaskManager.setDuration(hour * 60 * 60 * 1000 + min * 60 * 1000 + sec * 1000);
-
-        mAlarmTaskManager.setCurElapsed(mAlarmTaskManager.getCurDurationVal());
-        Log.v(TAG, "Picked time: " + mAlarmTaskManager.getCurDurationVal());
-
-
-        lastTimes = new int[3];
-
-        lastTimes[0] = hour;
-        lastTimes[1] = min;
-        lastTimes[2] = sec;
-
-        // put last set time to prefs
-
-        editor.putInt("LastTime", mAlarmTaskManager.getCurDurationVal());
-        editor.apply();
-    }
 
     // Shortens the array to max three
     private ArrayList<String> makePreviewArray() {

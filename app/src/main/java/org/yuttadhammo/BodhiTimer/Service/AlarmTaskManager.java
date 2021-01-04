@@ -345,7 +345,7 @@ public class AlarmTaskManager {
         editor.putInt("CurrentTime", getCurElapsedVal());
         editor.apply();
 
-        stopAlarmTimer();
+        stopAlarmsAndTicker();
 
         onEnterState(PAUSED);
     }
@@ -362,9 +362,12 @@ public class AlarmTaskManager {
     /**
      * Cancels the alarm portion of the timer
      */
-    public void stopAlarmTimer() {
+    public void stopAlarmsAndTicker() {
         Log.v(TAG, "Stopping the alarm timer ...");
         //mAlarmMgr.cancel(mPendingIntent);
+        cancelAllAlarms();
+        tickerStop();
+        clearTime();
         mNM.cancelAll();
     }
 
@@ -440,7 +443,11 @@ public class AlarmTaskManager {
         alarms.remove(alarm);
 
         // Update labels
-        switchToTimer(alarms.firstElement());
+        if (alarms.empty()) {
+            //cleanup?
+        } else {
+            switchToTimer(alarms.firstElement());
+        }
     }
 
     private void switchToTimer(AlarmTask alarm) {
