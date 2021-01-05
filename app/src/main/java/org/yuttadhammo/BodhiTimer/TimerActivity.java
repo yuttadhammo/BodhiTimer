@@ -96,10 +96,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      */
     private final static boolean LOG = true;
 
-    /**
-     * Macros for our dialogs
-     */
-    private final static int ALERT_DIALOG = 1;
 
     /**
      * debug string
@@ -120,9 +116,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
     public AlarmTaskManager mAlarmTaskManager;
-    private static PendingIntent mPendingIntent;
 
-    private AudioManager mAudioMgr;
 
     private SharedPreferences prefs;
 
@@ -208,8 +202,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // Store some useful values
         prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
-        mAudioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 
         // get last times
@@ -322,7 +314,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         sendBroadcast(new Intent(BROADCAST_STOP)); // tell widgets to stop updating
         mAlarmTaskManager.mTimer = new Timer();
 
-        lastTimes = Time.time2Array(prefs.getInt("LastTime", 0));
 
         if (getIntent().hasExtra("set")) {
             Log.d(TAG, "Create From Widget");
@@ -338,11 +329,14 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // check the timestamp from the last update and start the timer.
         // assumes the data has already been loaded?
-        // How do I know where we are resuming from?
-        int dur = prefs.getInt("LastTime", 1800000);
-        //mAlarmTaskManager.setDuration(dur);
+        // FIXME: How do I know where we are resuming from?
 
+
+        int dur = prefs.getInt("LastSimpleTime", 1800000);
+        lastTimes = Time.time2Array(dur);
         Log.d(TAG, "Last Time: " + dur);
+
+
         int state = prefs.getInt("State", STOPPED);
         if (state == STOPPED)
             cancelNotification();
@@ -350,6 +344,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         switch (state) {
             case RUNNING:
+                // TODO: RECREATE ALARMS if empty, but we are running.
                 Log.i(TAG, "Resume while running: " + prefs.getLong("TimeStamp", -1));
                 mAlarmTaskManager.timeStamp = prefs.getLong("TimeStamp", -1);
 
@@ -373,8 +368,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 break;
 
             case STOPPED:
-                mAlarmTaskManager.mNM.cancelAll();
-                mAlarmTaskManager.tickerStop();
+                mAlarmTaskManager.stopAlarmsAndTicker();
+                mAlarmTaskManager.setDuration(dur);
+
                 if (widget) {
                     if (prefs.getBoolean("SwitchTimeMode", false))
                         startVoiceRecognitionActivity();
@@ -387,12 +383,14 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             case PAUSED:
                 int curTime = prefs.getInt("CurrentTime", 0);
                 mAlarmTaskManager.setCurElapsed(curTime);
+
                 // FIXME
                 updateInterfaceWithTime(curTime, 0);
                 enterState(PAUSED);
                 break;
         }
         widget = false;
+        updateLabel(0);
     }
 
     private void setupUI() {
@@ -696,6 +694,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         } else {
             lastTimes = numbers;
+            Log.v(TAG, "Saving simple time: " + Time.msFromArray(numbers));
             editor.putInt("LastSimpleTime", Time.msFromArray(numbers));
             startSimpleAlarm(numbers);
         }
@@ -709,7 +708,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // FIXME; If stopped: show last used....
         ArrayList<String> arr = makePreviewArray();
-        if (LOG) Log.v(TAG, "Update preview label");
+        Log.v(TAG, "Update preview label");
 
         String advTimeStringLeft = TextUtils.join("\n", arr);
         mAltLabel.setText(advTimeStringLeft);

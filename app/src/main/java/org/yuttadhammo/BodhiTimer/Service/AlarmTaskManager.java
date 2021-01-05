@@ -105,7 +105,7 @@ public class AlarmTaskManager {
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         setCurElapsed(0);
-        setDuration(1800000);
+        setDuration(0);
 
         // Constructor where listener events are ignored
         this.listener = null;
