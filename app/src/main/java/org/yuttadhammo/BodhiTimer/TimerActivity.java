@@ -54,7 +54,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -79,7 +78,6 @@ import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
-import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_RESET;
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_STOP;
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_UPDATE;
 
@@ -145,6 +143,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "CREATE");
         super.onCreate(savedInstanceState);
 
         // Setup a new AlarmTaskManager
@@ -158,7 +157,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         //mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         setContentView(R.layout.main);
-        //RelativeLayout main = (RelativeLayout)findViewById(R.id.mainLayout);
 
         context = this;
 
@@ -244,7 +242,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     @Override
     public void onPause() {
         super.onPause();
-        mAlarmTaskManager.isPaused = true; // tell gui timer to stop
+        mAlarmTaskManager.appIsPaused = true; // tell gui timer to stop
         sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
 
         //unregisterReceiver(resetReceiver);
@@ -264,7 +262,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         switch (mAlarmTaskManager.mCurrentState) {
 
             case RUNNING:
-                Log.i(TAG, "pause while running: " + new Date().getTime() + mAlarmTaskManager.getCurElapsedVal());
+                Log.i(TAG, "pause while running: " + new Date().getTime() + mAlarmTaskManager.getCurTimerLeftVal());
                 break;
             case STOPPED:
                 cancelNotification();
@@ -302,15 +300,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-//        IntentFilter filter = new IntentFilter();
-//        filter.addAction(BROADCAST_RESET);
-//        registerReceiver(resetReceiver, filter);
-
         IntentFilter filter2 = new IntentFilter();
         filter2.addAction(BROADCAST_END);
         registerReceiver(alarmEndReceiver, filter2);
 
-        mAlarmTaskManager.isPaused = false;
+        mAlarmTaskManager.appIsPaused = false;
         sendBroadcast(new Intent(BROADCAST_STOP)); // tell widgets to stop updating
         mAlarmTaskManager.mTimer = new Timer();
 
@@ -327,11 +321,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         setupUI();
 
-        // check the timestamp from the last update and start the timer.
-        // assumes the data has already been loaded?
-        // FIXME: How do I know where we are resuming from?
 
 
+        // Load the last time picked with the simple time picker.
         int dur = prefs.getInt("LastSimpleTime", 1800000);
         lastTimes = Time.time2Array(dur);
         Log.d(TAG, "Last Time: " + dur);
@@ -342,34 +334,56 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             cancelNotification();
 
 
+
         switch (state) {
             case RUNNING:
-                // TODO: RECREATE ALARMS if empty, but we are running.
+                // We are resuming the app while timers are (presumably) still active
+                // We might not have access to any objects, since the app might have been killed in the meantime.
+
+                long sessionTimeStamp = prefs.getLong("SessionTimeStamp", -1);
+                long curTimerStamp = prefs.getLong("TimeStamp", -1);
+
                 Log.i(TAG, "Resume while running: " + prefs.getLong("TimeStamp", -1));
-                mAlarmTaskManager.timeStamp = prefs.getLong("TimeStamp", -1);
 
                 Date now = new Date();
-                Date then = new Date(mAlarmTaskManager.timeStamp);
+                Date sessionEnd = new Date(sessionTimeStamp);
+                Date curTimerEnd = new Date(curTimerStamp);
 
-                // We still have a timer running!
-                if (then.after(now)) {
-                    if (LOG) Log.i(TAG, "Still have a timer");
-                    mAlarmTaskManager.setCurElapsed((int) (then.getTime() - now.getTime()));
+                // We still have timers running!
+                if (sessionEnd.after(now)) {
+                    // TODO:
+                    Log.i(TAG, "Still have timers");
+
+                    int sessionTimeLeft = (int)(sessionEnd.getTime() - now.getTime());
+                    int curTimerLeft = (int)(curTimerEnd.getTime() - now.getTime());
+                    int sessionDuration = prefs.getInt("SessionDuration", -1);
+
+
+                    int timeElapsed = sessionDuration - sessionTimeLeft;
+
+                    // RECREATE ALARMS if empty, but we are running.
+                    // THEY WILL HAVE WRONG IDS.....
+                    if (mAlarmTaskManager.getAlarmCount() == 0) {
+                        Log.i(TAG, "Trying to recreate alarms");
+                        mAlarmTaskManager.addAlarms(retrieveTimerList(), -timeElapsed);
+                    }
+
+                    // Resume ticker at correct position
+
+                    mAlarmTaskManager.timerResume(curTimerLeft);
+
 
                     enterState(RUNNING);
 
-                    mAlarmTaskManager.doTick();
-
-                    // All finished
                 } else {
                     cancelNotification();
-                    mAlarmTaskManager.tickerStop();
+                    mAlarmTaskManager.stopTicker();
                 }
                 break;
 
             case STOPPED:
                 mAlarmTaskManager.stopAlarmsAndTicker();
-                mAlarmTaskManager.setDuration(dur);
+                mAlarmTaskManager.setCurTimerDuration(dur);
 
                 if (widget) {
                     if (prefs.getBoolean("SwitchTimeMode", false))
@@ -381,8 +395,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 break;
 
             case PAUSED:
-                int curTime = prefs.getInt("CurrentTime", 0);
-                mAlarmTaskManager.setCurElapsed(curTime);
+                int curTime = prefs.getInt("CurrentTimeLeft", 0);
+                mAlarmTaskManager.setCurTimerLeft(curTime);
 
                 // FIXME
                 updateInterfaceWithTime(curTime, 0);
@@ -494,7 +508,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                         mAlarmTaskManager.timerPause();
                         break;
                     case PAUSED:
-                        mAlarmTaskManager.timerResume();
+                        resumeTimer();
                         break;
                     case STOPPED:
                         // We are stopped and want to restore the last used timers.
@@ -508,6 +522,19 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 enterState(STOPPED);
                 break;
         }
+    }
+
+    public void resumeTimer() {
+        // How far have we elapsed?
+        int sessionLeft = prefs.getInt("SessionTimeLeft", 0);
+        int sessionDuration = mAlarmTaskManager.sessionDuration;
+
+        int timeElapsed =  sessionDuration - sessionLeft;
+
+        // Get time string
+        mAlarmTaskManager.addAlarms(retrieveTimerList(), -timeElapsed);
+        mAlarmTaskManager.timerResume();
+        mAlarmTaskManager.startAllAlarms();
     }
 
     @Override
@@ -573,7 +600,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      */
     public void updateLabel(int time) {
         if (time == 0) {
-            time = mAlarmTaskManager.getCurDurationVal();
+            time = mAlarmTaskManager.getCurTimerDurationVal();
         }
 
         int rtime = (int) (Math.ceil(((float) time) / 1000) * 1000);  // round to seconds
@@ -648,21 +675,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         Log.v(TAG, "advString2: " + list.getString());
 
         startAdvancedAlarm(list);
-
     }
 
     public void startAdvancedAlarm(TimerList list) {
-        int offset = 0;
-
-        for (TimerList.Timer timer: list.timers) {
-            int duration = timer.duration;
-
-            mAlarmTaskManager.addAlarmWithUri(offset, duration, timer.uri, timer.sessionType);
-            offset += duration;
-        }
-
+        mAlarmTaskManager.addAlarms(list, 0);
         mAlarmTaskManager.startAll();
-
     }
 
 
@@ -863,57 +880,61 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             }
         } else if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
             // Fill the list view with the strings the recognizer thought it could have heard
-            ArrayList<String> matches = data.getStringArrayListExtra(
-                    RecognizerIntent.EXTRA_RESULTS);
-            for (String match : matches) {
-
-                match = match.toLowerCase();
-                Log.d(TAG, "Got speech: " + match);
-
-                if (match.contains(Time.TIME_SEPARATOR)) {
-                    String complexTime = Time.str2complexTimeString(this, match);
-                    if (complexTime.length() > 0) {
-                        Editor editor = prefs.edit();
-                        editor.putString("advTimeString", complexTime);
-                        editor.apply();
-                        if (prefs.getBoolean("SpeakTime", false)) {
-                            tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-
-                                @Override
-                                public void onInit(int status) {
-                                    if (status == TextToSpeech.SUCCESS) {
-                                        tts.speak(getString(R.string.adv_speech_recognized), TextToSpeech.QUEUE_ADD, null);
-                                    } else
-                                        Log.e("error", "Initilization Failed!");
-                                }
-                            });
-                        }
-                        Toast.makeText(this, getString(R.string.adv_speech_recognized), Toast.LENGTH_SHORT).show();
-                        int[] values = {-1, -1, -1};
-                        onNumbersPicked(values);
-                        break;
-                    }
-                } else {
-                    final int speechTime = Time.str2timeString(this, match);
-                    if (speechTime != 0) {
-                        int[] values = Time.time2Array(speechTime);
-                        Toast.makeText(this, String.format(getString(R.string.speech_recognized), Time.time2humanStr(this, speechTime)), Toast.LENGTH_SHORT).show();
-                        if (prefs.getBoolean("SpeakTime", false)) {
-                            Log.d(TAG, "Speaking time");
-                            tts.speak(String.format(getString(R.string.speech_recognized), Time.time2humanStr(context, speechTime)), TextToSpeech.QUEUE_ADD, null);
-                        }
-
-                        onNumbersPicked(values);
-                        break;
-                    } else
-                        Toast.makeText(this, getString(R.string.speech_not_recognized), Toast.LENGTH_SHORT).show();
-                }
-            }
+            onVoiceSpoken(data);
         }
 
         widget = false;
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void onVoiceSpoken(Intent data) {
+        ArrayList<String> matches = data.getStringArrayListExtra(
+                RecognizerIntent.EXTRA_RESULTS);
+        for (String match : matches) {
+
+            match = match.toLowerCase();
+            Log.d(TAG, "Got speech: " + match);
+
+            if (match.contains(Time.TIME_SEPARATOR)) {
+                String complexTime = Time.str2complexTimeString(this, match);
+                if (complexTime.length() > 0) {
+                    Editor editor = prefs.edit();
+                    editor.putString("advTimeString", complexTime);
+                    editor.apply();
+                    if (prefs.getBoolean("SpeakTime", false)) {
+                        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+
+                            @Override
+                            public void onInit(int status) {
+                                if (status == TextToSpeech.SUCCESS) {
+                                    tts.speak(getString(R.string.adv_speech_recognized), TextToSpeech.QUEUE_ADD, null);
+                                } else
+                                    Log.e("error", "Initilization Failed!");
+                            }
+                        });
+                    }
+                    Toast.makeText(this, getString(R.string.adv_speech_recognized), Toast.LENGTH_SHORT).show();
+                    int[] values = {-1, -1, -1};
+                    onNumbersPicked(values);
+                    break;
+                }
+            } else {
+                final int speechTime = Time.str2timeString(this, match);
+                if (speechTime != 0) {
+                    int[] values = Time.time2Array(speechTime);
+                    Toast.makeText(this, String.format(getString(R.string.speech_recognized), Time.time2humanStr(this, speechTime)), Toast.LENGTH_SHORT).show();
+                    if (prefs.getBoolean("SpeakTime", false)) {
+                        Log.d(TAG, "Speaking time");
+                        tts.speak(String.format(getString(R.string.speech_recognized), Time.time2humanStr(context, speechTime)), TextToSpeech.QUEUE_ADD, null);
+                    }
+
+                    onNumbersPicked(values);
+                    break;
+                } else
+                    Toast.makeText(this, getString(R.string.speech_not_recognized), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     // receiver to get restart

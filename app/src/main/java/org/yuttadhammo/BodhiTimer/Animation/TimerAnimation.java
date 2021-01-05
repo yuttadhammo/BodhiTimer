@@ -122,6 +122,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
     public void saveState(SharedPreferences prefs) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("DrawingIndex", getIndex());
+        editor.apply();
     }
 
 

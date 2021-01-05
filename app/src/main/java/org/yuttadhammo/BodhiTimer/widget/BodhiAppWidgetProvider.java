@@ -234,7 +234,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         } else if (state == PAUSED) {
             Log.d(TAG, "paused");
 
-            Integer time = mSettings.getInt("CurrentTime", 0);
+            Integer time = mSettings.getInt("CurrentTimeLeft", 0);
             int rtime = Math.round(((float) time) / 1000) * 1000;  // round to seconds
             views.setTextViewText(R.id.time, Time.time2hms(rtime));
         } else {

@@ -41,6 +41,9 @@ public class AlarmTaskManager {
 
 
     public long timeStamp;
+    private long sessionTimeStamp;
+
+    public int sessionDuration;
 
     public Timer mTimer;
 
@@ -53,38 +56,41 @@ public class AlarmTaskManager {
     // The context to start the service in
     private Context mContext;
 
-    public boolean isPaused;
+    public boolean appIsPaused;
 
     // Live Data
-    private final MutableLiveData<Integer> mCurDuration = new MutableLiveData<>();
+    private final MutableLiveData<Integer> currentTimerDuration = new MutableLiveData<>();
     // The current elapsed timer time
-    private final MutableLiveData<Integer> mCurElapsed = new MutableLiveData<>();
+    private final MutableLiveData<Integer> currentTimerLeft = new MutableLiveData<>();
     // The current elapsed timer time
     private final MutableLiveData<Integer> mIndex = new MutableLiveData<>();
-
+    // The current elapsed timer time
+    private final MutableLiveData<Integer> sessionTimeLeft = new MutableLiveData<>();
+    // The current elapsed timer time
+    //private final MutableLiveData<Integer> sessionTimeLeft = new MutableLiveData<>();
 
     // Accessors
-    public LiveData<Integer> getCurDuration() {
-        return mCurDuration;
+    public LiveData<Integer> getCurTimerDuration() {
+        return currentTimerDuration;
     }
-    public LiveData<Integer> getCurElapsed() {
-        return mCurElapsed;
+    public LiveData<Integer> getCurTimerLeft() {
+        return currentTimerLeft;
     }
-    public Integer getCurDurationVal() {
-        return mCurDuration.getValue();
+    public Integer getCurTimerDurationVal() {
+        return currentTimerDuration.getValue();
     }
-    public Integer getCurElapsedVal() {
-        return mCurElapsed.getValue();
+    public Integer getCurTimerLeftVal() {
+        return currentTimerLeft.getValue();
     }
     public Integer getIndexVal() {
         return mIndex.getValue();
     }
 
-    public void setDuration(int newDuration) {
-        mCurDuration.setValue(new Integer(newDuration));
+    public void setCurTimerDuration(int newDuration) {
+        currentTimerDuration.setValue(new Integer(newDuration));
     }
-    public void setCurElapsed(int newElapsed) {
-        mCurElapsed.setValue(new Integer(newElapsed));
+    public void setCurTimerLeft(int newElapsed) {
+        currentTimerLeft.setValue(new Integer(newElapsed));
     }
     public void setIndex(int newIndex) {
         mIndex.setValue(new Integer(newIndex));
@@ -104,8 +110,8 @@ public class AlarmTaskManager {
         mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        setCurElapsed(0);
-        setDuration(0);
+        setCurTimerLeft(0);
+        setCurTimerDuration(0);
 
         // Constructor where listener events are ignored
         this.listener = null;
@@ -115,9 +121,11 @@ public class AlarmTaskManager {
 
     public void saveState() {
         SharedPreferences.Editor editor = prefs.edit();
-        // editor.putInt("LastSimpleTime", getCurDurationVal());
-        editor.putInt("CurrentTime", getCurElapsedVal());
+        // editor.putInt("LastSimpleTime", getCurTimerDurationVal());
+        editor.putInt("CurrentTimeLeft", getCurTimerLeftVal());
         editor.putInt("State", mCurrentState);
+        editor.putInt("SessionDuration", sessionDuration);
+        editor.apply();
     }
 
     public interface AlarmTaskListener {
@@ -148,9 +156,9 @@ public class AlarmTaskManager {
         int a;
         int b;
         if (listener != null)
-            a = getCurElapsedVal();
-            b = getCurDurationVal();
-            listener.onUpdateTime(getCurElapsedVal(), getCurDurationVal());
+            a = getCurTimerLeftVal();
+            b = getCurTimerDurationVal();
+            listener.onUpdateTime(getCurTimerLeftVal(), getCurTimerDurationVal());
     }
 
 
@@ -159,7 +167,7 @@ public class AlarmTaskManager {
      */
     public AlarmTask addAlarmWithUri(int offset, int duration, String uri, SessionType sessionType) {
 
-        Log.i(TAG, "Creating new alarm task, uri " + uri + " type: " + sessionType );
+        Log.i(TAG, "Creating new alarm task, uri " + uri + " type: " + sessionType + " due in " + (duration + offset)/1000 );
         AlarmTask alarm = new AlarmTask(mContext, offset, duration);
         alarm.setUri(uri);
         alarm.setSessionType(sessionType);
@@ -173,25 +181,49 @@ public class AlarmTaskManager {
         return alarm;
     }
 
-    @Deprecated
-    public void startAlarmWithUri(int offset, int duration, String uri, SessionType sessionType) {
-        AlarmTask alarm = addAlarmWithUri(offset, duration, uri, sessionType);
-        alarm.run();
+    public void addAlarms(TimerList list, int offset) {
+
+        for (TimerList.Timer timer: list.timers) {
+            int duration = timer.duration;
+
+            // Don't add elapsed timers, but increase the id,
+            // to make sure that on App resume the alarms have the correct id.
+            if ((duration + offset) < 0) {
+                lastId++;
+                continue;
+            }
+
+            addAlarmWithUri(offset, duration, timer.uri, timer.sessionType);
+            offset += duration;
+        }
+
+
+    }
+
+    public void startAllAlarms(){
+        for (AlarmTask alarm : alarms) {
+            alarm.run();
+        }
     }
 
     public void startAll() {
+        int sessionDur = 0;
+
         for (AlarmTask alarm : alarms) {
             alarm.run();
+            sessionDur += alarm.duration;
         }
 
         AlarmTask firstAlarm = alarms.firstElement();
 
         int dur = firstAlarm.duration;
-        setDuration(dur);
-        setCurElapsed(0);
+        setCurTimerDuration(dur);
+        setCurTimerLeft(0);
+        sessionDuration = sessionDur;
+        setSessionTimeStamp(sessionDur);
 
         startTicker(dur);
-        Log.v(TAG, "Started ticker & timer, first duration: " + getCurDurationVal());
+        Log.v(TAG, "Started ticker & timer, first duration: " + getCurTimerDurationVal());
     }
 
     public int getAlarmCount() {
@@ -236,7 +268,7 @@ public class AlarmTaskManager {
         Log.v(TAG, "Starting the ticker: " + time);
         onEnterState(RUNNING);
 
-        setCurElapsed(time);
+        setCurTimerLeft(time);
         setTimeStamp(time);
 
         mTimer.schedule(
@@ -255,10 +287,12 @@ public class AlarmTaskManager {
     /**
      * Stops the timer
      */
-    public void tickerStop() {
+    public void stopTicker() {
         Log.v(TAG, "Timer stopped");
 
         clearTime();
+        cancelAllAlarms();
+
 
         // Stop our timer service
         onEnterState(STOPPED);
@@ -271,9 +305,21 @@ public class AlarmTaskManager {
     public void timerResume() {
         Log.v(TAG, "Resuming the timer...");
 
-        startTicker(getCurElapsedVal());
+        startTicker(currentTimerLeft.getValue());
         onEnterState(RUNNING);
     }
+
+    /**
+     * Resume the time after being paused
+     */
+    public void timerResume(int timeLeft) {
+        Log.v(TAG, "Resuming the timer...");
+
+        startTicker(timeLeft);
+        onEnterState(RUNNING);
+    }
+
+
 
     /**
      * Pause the timer and stop the timer service
@@ -282,10 +328,12 @@ public class AlarmTaskManager {
         Log.v(TAG, "Pausing the timer...");
 
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("CurrentTime", getCurElapsedVal());
+        editor.putInt("CurrentTimeLeft", currentTimerLeft.getValue());
+        editor.putInt("SessionTimeLeft", sessionTimeLeft.getValue());
         editor.apply();
 
-        stopAlarmsAndTicker();
+        cancelAllAlarms();
+        //stopTicker();
 
         onEnterState(PAUSED);
     }
@@ -294,7 +342,7 @@ public class AlarmTaskManager {
      * Clears the time, sets the image and label to default
      */
     public void clearTime() {
-        setCurElapsed(0);
+        setCurTimerLeft(0);
         setIndex(0);
         onUpdateTime();
     }
@@ -307,7 +355,7 @@ public class AlarmTaskManager {
         Log.v(TAG, "Stopping Alarms and Ticker ...");
 
         cancelAllAlarms();
-        tickerStop();
+        stopTicker();
         clearTime();
         mNM.cancelAll();
     }
@@ -315,21 +363,23 @@ public class AlarmTaskManager {
     public void doTick() {
         //Log.w(TAG,"ticking");
 
-        if (mCurrentState != RUNNING || isPaused)
+        if (mCurrentState != RUNNING || appIsPaused)
             return;
 
         Date now = new Date();
-        Date then = new Date(timeStamp);
+        Date nextAlarm = new Date(timeStamp);
+        Date sessionEnd = new Date(sessionTimeStamp);
 
-        setCurElapsed((int) (then.getTime() - now.getTime()));
+        currentTimerLeft.setValue((int) (nextAlarm.getTime() - now.getTime()));
+        sessionTimeLeft.setValue((int) (sessionEnd.getTime() - now.getTime()));
 
-        if (getCurElapsedVal() <= 0) {
+        if (getCurTimerLeftVal() <= 0) {
 
             if (alarms.size() > 0) {
                 Log.v(TAG, "Tick cycled ended");
             } else {
                 Log.e(TAG, "Error: Time up. This probably means that the Broadcast was not received");
-                tickerStop();
+                stopTicker();
             }
 
 
@@ -395,9 +445,9 @@ public class AlarmTaskManager {
     private void switchToTimer(AlarmTask alarm) {
         lastAlarm = alarm;
         int duration = alarm.duration;
-        setDuration(duration);
+        setCurTimerDuration(duration);
         setTimeStamp(duration);
-        setCurElapsed(0);
+        setCurTimerLeft(0);
 
         Intent broadcast = new Intent();
 
@@ -407,59 +457,25 @@ public class AlarmTaskManager {
     }
 
 
-
-//    private void continueAdvTimer() {
-//        Intent broadcast = new Intent();
-//        SharedPreferences.Editor editor = prefs.edit();
-//
-//        boolean useAdvTime = prefs.getBoolean("useAdvTime", false);
-//        String advTimeString = prefs.getString("advTimeString", "");
-//        advTime = null;
-//        advTimeIndex = 0;
-//
-//        if (useAdvTime && advTimeString.length() > 0) {
-//            advTime = advTimeString.split("\\^");
-//            advTimeIndex = prefs.getInt("advTimeIndex", 0);
-//
-//            if (advTimeIndex < advTime.length - 1) {
-//                advTimeIndex++;
-//                editor.putInt("advTimeIndex", advTimeIndex);
-//
-//                String[] thisAdvTime = advTime[advTimeIndex].split("#"); // will be of format timeInMs#pathToSound
-//
-//                int duration = Integer.parseInt(thisAdvTime[0]);
-//
-//                broadcast.putExtra("time", duration);
-//                setTimeStamp(duration);
-//
-//                editor.putInt("LastSimpleTime", duration);
-//
-//                // editor.putString("NotificationUri", thisAdvTime[1]);
-//
-//                mNM.cancelAll();
-//                Log.v(TAG, "Starting next iteration of the timer service ...");
-//
-//            } else {
-//                broadcast.putExtra("stop", true);
-//                editor.putInt("advTimeIndex", 0);
-//
-//            }
-//            broadcast.setAction(BROADCAST_RESET);
-//            mContext.sendBroadcast(broadcast);
-//
-//            editor.commit();
-//        }
-//
-//
-//    }
-
     private void setTimeStamp(int duration) {
+        Log.v(TAG, "Next alarm will finish in: " + duration);
         SharedPreferences.Editor editor = prefs.edit();
 
         timeStamp = new Date().getTime() + duration;
 
         // Save new time
-        editor.putLong("TimeStamp", new Date().getTime() + duration);
+        editor.putLong("TimeStamp", timeStamp);
+        editor.apply();
+    }
+
+    private void setSessionTimeStamp(int duration) {
+        Log.v(TAG, "Session will finish in: " + duration);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        sessionTimeStamp = new Date().getTime() + duration;
+
+        // Save new time
+        editor.putLong("SessionTimeStamp", sessionTimeStamp);
         editor.apply();
     }
 }

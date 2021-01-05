@@ -22,6 +22,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -39,6 +40,8 @@ import org.yuttadhammo.BodhiTimer.TimerReceiver;
  * @author paul.blundell
  */
 public class AlarmTask implements Runnable {
+
+    private final String TAG = AlarmTask.class.getSimpleName();
 
     // The android system alarm manager
     private final AlarmManager mAlarmMgr;
@@ -67,6 +70,7 @@ public class AlarmTask implements Runnable {
 
         this.mDuration.setValue((int) duration);
         this.duration = duration;
+        this.offset = offset;
 //        this.mTimerState.setValue(TimerState.INACTIVE);
 //        this.mSessionType.setValue(SessionType.WORK);
 //        this.mLabel.setValue("FIXME");
@@ -86,12 +90,13 @@ public class AlarmTask implements Runnable {
 
         int time = duration + offset;
 
+        Log.i(TAG, "Running new alarm task " + id + ", uri " + mUri.getValue() + " type: " + mSessionType.getValue() + " due in " + (time)/1000 );
 
         mPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         //mPendingIntent.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent alarmInfoIntent = new Intent(context, TimerReceiver.class);
-            PendingIntent pendingAlarmInfo = PendingIntent.getBroadcast(context, -1, alarmInfoIntent, 0);
+            PendingIntent pendingAlarmInfo = PendingIntent.getBroadcast(context, id + 1000, alarmInfoIntent, 0);
             AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(System.currentTimeMillis() + time, pendingAlarmInfo);
 
             mAlarmMgr.setAlarmClock(info, mPendingIntent);
@@ -102,7 +107,8 @@ public class AlarmTask implements Runnable {
     }
 
     public void cancel() {
-        mAlarmMgr.cancel(mPendingIntent);
+        if (mPendingIntent != null)
+             mAlarmMgr.cancel(mPendingIntent);
     }
 
     // Accesors
