@@ -236,58 +236,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         });
     }
 
-    /**
-     * { @inheritDoc}
-     */
-    @Override
-    public void onPause() {
-        super.onPause();
-        mAlarmTaskManager.appIsPaused = true; // tell gui timer to stop
-        sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
 
-        //unregisterReceiver(resetReceiver);
-        unregisterReceiver(alarmEndReceiver);
-
-        BitmapDrawable drawable = (BitmapDrawable) mTimerAnimation.getDrawable();
-        if (drawable != null) {
-            Bitmap bitmap = drawable.getBitmap();
-            bitmap.recycle();
-        }
-
-        // Save our settings
-        SharedPreferences.Editor editor = prefs.edit();
-        mAlarmTaskManager.saveState();
-        mTimerAnimation.saveState(prefs);
-
-        switch (mAlarmTaskManager.mCurrentState) {
-
-            case RUNNING:
-                Log.i(TAG, "pause while running: " + new Date().getTime() + mAlarmTaskManager.getCurTimerLeftVal());
-                break;
-            case STOPPED:
-                cancelNotification();
-            case PAUSED:
-                editor.putLong("TimeStamp", 1);
-                break;
-            default:
-                break;
-        }
-
-        editor.apply();
-
-    }
-
-    @Override
-    public void onDestroy() {
-        //Close the Text to Speech Library
-        if (tts != null) {
-
-            tts.stop();
-            tts.shutdown();
-            Log.d(TAG, "TTSService Destroyed");
-        }
-        super.onDestroy();
-    }
 
     /**
      * {@inheritDoc}
@@ -355,7 +304,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     Log.i(TAG, "Still have timers");
 
                     int sessionTimeLeft = (int)(sessionEnd.getTime() - now.getTime());
-                    //int curTimerLeft = (int)(curTimerEnd.getTime() - now.getTime());
+                    int curTimerLeft = (int)(curTimerEnd.getTime() - now.getTime());
                     int sessionDuration = prefs.getInt("SessionDuration", -1);
 
                     Log.i(TAG, "Session Time Left " + sessionTimeLeft);
@@ -369,13 +318,19 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     if (mAlarmTaskManager.getAlarmCount() == 0) {
                         Log.i(TAG, "Trying to recreate alarms");
                         mAlarmTaskManager.addAlarms(retrieveTimerList(), -timeElapsed);
-                    }
 
-                    // Resume ticker at correct position
-                    // Get duration of current alarm
-                    int curTimerDuration = mAlarmTaskManager.getCurrentAlarmDuration();
-                    int curTimerLeft = mAlarmTaskManager.getTotalDuration() - sessionTimeLeft;
-                    mAlarmTaskManager.timerResume(curTimerLeft);
+                        // Resume ticker at correct position
+                        // Get duration of current alarm
+                        int curTimerDuration = mAlarmTaskManager.getCurrentAlarmDuration();
+                        curTimerLeft = mAlarmTaskManager.getTotalDuration() - sessionTimeLeft;
+
+                        Log.i(TAG, "Setting timer: " + curTimerLeft + " of " + curTimerDuration);
+                        mAlarmTaskManager.timerResume(curTimerLeft, curTimerDuration);
+
+                    } else {
+                        mAlarmTaskManager.timerResume(curTimerLeft);
+
+                    }
 
 
                     enterState(RUNNING);
@@ -410,6 +365,60 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
         widget = false;
         updateLabel(0);
+    }
+
+    /**
+     * { @inheritDoc}
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "PAUSE");
+        mAlarmTaskManager.appIsPaused = true; // tell gui timer to stop
+        sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
+
+        //unregisterReceiver(resetReceiver);
+        unregisterReceiver(alarmEndReceiver);
+
+        BitmapDrawable drawable = (BitmapDrawable) mTimerAnimation.getDrawable();
+        if (drawable != null) {
+            Bitmap bitmap = drawable.getBitmap();
+            bitmap.recycle();
+        }
+
+        // Save our settings
+        SharedPreferences.Editor editor = prefs.edit();
+        mAlarmTaskManager.saveState();
+        mTimerAnimation.saveState(prefs);
+
+        switch (mAlarmTaskManager.mCurrentState) {
+
+            case RUNNING:
+                Log.i(TAG, "pause while running: " + new Date().getTime() + mAlarmTaskManager.getCurTimerLeftVal());
+                break;
+            case STOPPED:
+                cancelNotification();
+            case PAUSED:
+                editor.putLong("TimeStamp", 1);
+                break;
+            default:
+                break;
+        }
+
+        editor.apply();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        //Close the Text to Speech Library
+        if (tts != null) {
+
+            tts.stop();
+            tts.shutdown();
+            Log.d(TAG, "TTSService Destroyed");
+        }
+        super.onDestroy();
     }
 
     private void setupUI() {

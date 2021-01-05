@@ -185,6 +185,8 @@ public class AlarmTaskManager {
 
     public int addAlarms(TimerList list, int offset) {
         int totalDuration = 0;
+        lastId = 0;
+
         for (TimerList.Timer timer: list.timers) {
             int duration = timer.duration;
 
@@ -403,7 +405,7 @@ public class AlarmTaskManager {
         currentTimerLeft.setValue((int) (nextAlarm.getTime() - now.getTime()));
         sessionTimeLeft.setValue((int) (sessionEnd.getTime() - now.getTime()));
 
-        if (getCurTimerLeftVal() <= 0) {
+        if (currentTimerLeft.getValue() <= 0) {
 
             if (alarms.size() > 0) {
                 Log.v(TAG, "Tick cycled ended");
@@ -478,6 +480,7 @@ public class AlarmTaskManager {
         setCurTimerDuration(duration);
         setTimeStamp(duration);
         setCurTimerLeft(0);
+        doTick();
 
         Intent broadcast = new Intent();
 
