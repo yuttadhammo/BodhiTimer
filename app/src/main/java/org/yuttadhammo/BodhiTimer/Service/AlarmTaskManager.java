@@ -128,6 +128,8 @@ public class AlarmTaskManager {
         editor.apply();
     }
 
+
+
     public interface AlarmTaskListener {
         public void onEnterState(int state);
 
@@ -181,8 +183,8 @@ public class AlarmTaskManager {
         return alarm;
     }
 
-    public void addAlarms(TimerList list, int offset) {
-
+    public int addAlarms(TimerList list, int offset) {
+        int totalDuration = 0;
         for (TimerList.Timer timer: list.timers) {
             int duration = timer.duration;
 
@@ -195,8 +197,10 @@ public class AlarmTaskManager {
 
             addAlarmWithUri(offset, duration, timer.uri, timer.sessionType);
             offset += duration;
+            totalDuration += totalDuration;
         }
 
+        return totalDuration;
 
     }
 
@@ -214,9 +218,7 @@ public class AlarmTaskManager {
             sessionDur += alarm.duration;
         }
 
-        AlarmTask firstAlarm = alarms.firstElement();
-
-        int dur = firstAlarm.duration;
+        int dur = getCurrentAlarmDuration();
         setCurTimerDuration(dur);
         setCurTimerLeft(0);
         sessionDuration = sessionDur;
@@ -224,6 +226,23 @@ public class AlarmTaskManager {
 
         startTicker(dur);
         Log.v(TAG, "Started ticker & timer, first duration: " + getCurTimerDurationVal());
+    }
+
+    public int getCurrentAlarmDuration() {
+        AlarmTask firstAlarm = alarms.firstElement();
+
+        return firstAlarm.duration;
+    }
+
+    public int getTotalDuration() {
+        int sessionDur = 0;
+
+        for (AlarmTask alarm : alarms) {
+            sessionDur += alarm.duration;
+        }
+
+        return sessionDur;
+
     }
 
     public int getAlarmCount() {
@@ -315,6 +334,17 @@ public class AlarmTaskManager {
     public void timerResume(int timeLeft) {
         Log.v(TAG, "Resuming the timer...");
 
+        startTicker(timeLeft);
+        onEnterState(RUNNING);
+    }
+
+    /**
+     * Resume the time after being paused
+     */
+    public void timerResume(int timeLeft, int curDuration) {
+        Log.v(TAG, "Resuming the timer...");
+
+        currentTimerDuration.setValue(curDuration);
         startTicker(timeLeft);
         onEnterState(RUNNING);
     }

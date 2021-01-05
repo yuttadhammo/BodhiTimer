@@ -355,9 +355,12 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     Log.i(TAG, "Still have timers");
 
                     int sessionTimeLeft = (int)(sessionEnd.getTime() - now.getTime());
-                    int curTimerLeft = (int)(curTimerEnd.getTime() - now.getTime());
+                    //int curTimerLeft = (int)(curTimerEnd.getTime() - now.getTime());
                     int sessionDuration = prefs.getInt("SessionDuration", -1);
 
+                    Log.i(TAG, "Session Time Left " + sessionTimeLeft);
+                    //Log.i(TAG, "Cur Time Left " + curTimerLeft);
+                    Log.i(TAG, "SessionDuration " + sessionDuration);
 
                     int timeElapsed = sessionDuration - sessionTimeLeft;
 
@@ -369,7 +372,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     }
 
                     // Resume ticker at correct position
-
+                    // Get duration of current alarm
+                    int curTimerDuration = mAlarmTaskManager.getCurrentAlarmDuration();
+                    int curTimerLeft = mAlarmTaskManager.getTotalDuration() - sessionTimeLeft;
                     mAlarmTaskManager.timerResume(curTimerLeft);
 
 
