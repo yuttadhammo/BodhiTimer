@@ -740,7 +740,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     private void updatePreviewLabel() {
 
-        // FIXME; If stopped: show last used....
         ArrayList<String> arr = makePreviewArray();
         Log.v(TAG, "Update preview label");
 

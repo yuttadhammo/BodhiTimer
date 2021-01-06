@@ -99,14 +99,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 //
 //    }
 
-    public void showBatteryOptimizationDialog() {
-        Intent intent = new Intent();
-        String packageName = context.getPackageName();
-        intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-        intent.setData(Uri.parse("package:" + packageName));
-        startActivity(intent);
-    }
-
 
     private void showAboutScreen() {
         LayoutInflater li = LayoutInflater.from(context);

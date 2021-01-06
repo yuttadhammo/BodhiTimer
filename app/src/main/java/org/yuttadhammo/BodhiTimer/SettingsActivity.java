@@ -1,7 +1,6 @@
 package org.yuttadhammo.BodhiTimer;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -22,11 +21,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
     private SharedPreferences prefs;
-    private static Context context;
-    private AppCompatActivity activity;
-    private MediaPlayer player;
-    private Preference play;
-    private Preference preplay;
 
     private final int SELECT_RINGTONE = 0;
     private final int SELECT_FILE = 1;
@@ -62,7 +56,6 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        player = new MediaPlayer();
 
     }
 
