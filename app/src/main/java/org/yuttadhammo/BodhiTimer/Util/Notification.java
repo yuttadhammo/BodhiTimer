@@ -20,7 +20,7 @@ public class Notification {
     private static final String TAG = "NOTIFY";
     private static final String DEFAULTURI = "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell1;
 
-    public static void show(Context context, String notificationUri, int time, SessionType type) {
+    public static void show(Context context, String notificationUri, int time) {
 
         MediaPlayer player;
         SharedPreferences prefs;

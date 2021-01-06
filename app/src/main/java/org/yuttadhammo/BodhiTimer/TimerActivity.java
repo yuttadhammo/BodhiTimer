@@ -208,6 +208,12 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         prefs.registerOnSharedPreferenceChangeListener(this);
 
+
+        IntentFilter filter2 = new IntentFilter();
+        filter2.addAction(BROADCAST_END);
+        registerReceiver(alarmEndReceiver, filter2);
+
+
     }
 
     private void setupListener() {
@@ -249,9 +255,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        IntentFilter filter2 = new IntentFilter();
-        filter2.addAction(BROADCAST_END);
-        registerReceiver(alarmEndReceiver, filter2);
 
         mAlarmTaskManager.appIsPaused = false;
         sendBroadcast(new Intent(BROADCAST_STOP)); // tell widgets to stop updating
@@ -279,8 +282,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
         int state = prefs.getInt("State", STOPPED);
-        if (state == STOPPED)
-            cancelNotification();
+
 
 
 
@@ -336,7 +338,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     enterState(RUNNING);
 
                 } else {
-                    cancelNotification();
                     mAlarmTaskManager.stopTicker();
                 }
                 break;
@@ -377,8 +378,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAlarmTaskManager.appIsPaused = true; // tell gui timer to stop
         sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
 
-        //unregisterReceiver(resetReceiver);
-        unregisterReceiver(alarmEndReceiver);
 
         BitmapDrawable drawable = (BitmapDrawable) mTimerAnimation.getDrawable();
         if (drawable != null) {
@@ -396,8 +395,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             case RUNNING:
                 Log.i(TAG, "pause while running: " + new Date().getTime() + mAlarmTaskManager.getCurTimerLeftVal());
                 break;
-            case STOPPED:
-                cancelNotification();
             case PAUSED:
                 editor.putLong("TimeStamp", 1);
                 break;
@@ -411,6 +408,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "DESTROY");
         //Close the Text to Speech Library
         if (tts != null) {
 
@@ -418,6 +416,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             tts.shutdown();
             Log.d(TAG, "TTSService Destroyed");
         }
+
+        //unregisterReceiver(resetReceiver);
+        unregisterReceiver(alarmEndReceiver);
+
+
         super.onDestroy();
     }
 
@@ -829,22 +832,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
     }
 
-    private void cancelNotification() {
-        // Create intent for cancelling the notification
-        Intent intent = new Intent(this, TimerReceiver.class);
-        intent.setAction(TimerReceiver.CANCEL_NOTIFICATION);
-
-        // Cancel the pending cancellation and create a new one
-        PendingIntent pendingCancelIntent =
-                PendingIntent.getBroadcast(this, 0, intent,
-                        PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmMgr.set(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime(),
-                pendingCancelIntent);
-
-    }
-
 
     private int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
@@ -955,6 +942,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     private BroadcastReceiver alarmEndReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.v(TAG, "TA Received alarm callback ");
             //mAlarmTaskManager
             Log.d(TAG, "id " + intent.getIntExtra("id", 1212));
             mAlarmTaskManager.onAlarmEnd(intent.getIntExtra("id", 1212));

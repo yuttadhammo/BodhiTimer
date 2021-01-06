@@ -29,6 +29,7 @@ import android.util.Log;
 
 
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
+import org.yuttadhammo.BodhiTimer.Util.Notification;
 
 import java.util.Date;
 
@@ -77,6 +78,10 @@ public class TimerReceiver extends BroadcastReceiver {
 
         Log.v(TAG, "Received alarm callback ");
 
+        // Send notification
+        Notification.show(context, pintent.getStringExtra("uri"), pintent.getIntExtra("duration", 0));
+
+        // This will be only received if the app is not paused...
         Intent broadcast = new Intent();
         broadcast.putExtra("time", 000);
         broadcast.putExtra("id", pintent.getIntExtra("id", 0));

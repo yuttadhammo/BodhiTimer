@@ -3,16 +3,16 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
-        android:title="@string/general"
-        app:iconSpaceReserved="false"
-        android:key="disable_battery_header"/>
+<!--    <PreferenceCategory-->
+<!--        android:title="@string/general"-->
+<!--        app:iconSpaceReserved="false"-->
+<!--        android:key="disable_battery_header"/>-->
 
-    <Preference
-        android:title="@string/disable_battery_optim"
-        android:summary="@string/disable_battery_optim_desc"
-        android:key="disable_battery_optim"
-        app:iconSpaceReserved="false" />
+<!--    <Preference-->
+<!--        android:title="@string/disable_battery_optim"-->
+<!--        android:summary="@string/disable_battery_optim_desc"-->
+<!--        android:key="disable_battery_optim"-->
+<!--        app:iconSpaceReserved="false" />-->
 
     <PreferenceCategory
         android:title="@string/sound"

@@ -2,6 +2,7 @@ package org.yuttadhammo.BodhiTimer.Service;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,9 +25,10 @@ import java.util.TimerTask;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
+import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_RESET;
 
-public class AlarmTaskManager {
+public class AlarmTaskManager extends BroadcastReceiver {
     private final String TAG = AlarmTaskManager.class.getSimpleName();
 
     /**
@@ -460,7 +462,7 @@ public class AlarmTaskManager {
         if (alarm == null) return;
 
         // Send notification
-        Notification.show(mContext, alarm.getUri().getValue(), alarm.duration, alarm.getSessionType().getValue());
+        Notification.show(mContext, alarm.getUri().getValue(), alarm.duration);
 
         // Remove alarm
         alarms.remove(alarm);
@@ -510,5 +512,42 @@ public class AlarmTaskManager {
         // Save new time
         editor.putLong("SessionTimeStamp", sessionTimeStamp);
         editor.apply();
+    }
+
+    @Override
+    public void onReceive(Context context, Intent pintent) {
+//
+
+        NotificationManager mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+//        // Cancel notification and return...
+//        if (CANCEL_NOTIFICATION.equals(pintent.getAction())) {
+//            Log.v(TAG, "Cancelling notification...");
+//
+//            mNM.cancelAll();
+//            return;
+//        }
+//
+//        if (player != null) {
+//            Log.v(TAG, "Releasing media player...");
+//            try {
+//                player.reset();
+//                player.release();
+//                player = null;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                player = null;
+//            }
+//        }
+
+        Log.v(TAG, "MANGER Received alarm callback ");
+
+        Intent broadcast = new Intent();
+        broadcast.putExtra("time", 000);
+        broadcast.putExtra("id", pintent.getIntExtra("id", 0));
+        broadcast.setAction(BROADCAST_END);
+        context.sendBroadcast(broadcast);
+
+
     }
 }

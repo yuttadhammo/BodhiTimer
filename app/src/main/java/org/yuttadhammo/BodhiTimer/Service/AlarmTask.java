@@ -29,6 +29,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.yuttadhammo.BodhiTimer.TimerReceiver;
 
+import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
+
 /**
  * Set an alarm for the date passed into the constructor
  * When the alarm is raised it will start the NotifyService
@@ -82,11 +84,14 @@ public class AlarmTask implements Runnable {
     public void run() {
 
         Intent intent = new Intent(context, TimerReceiver.class);
+        //Intent intent = new Intent();
+
         //intent.putExtra("SetTime", time);
         intent.putExtra("offset", offset);
         intent.putExtra("duration", duration);
         intent.putExtra("uri", mUri.getValue());
         intent.putExtra("id", id);
+        intent.setAction(BROADCAST_END);
 
         int time = duration + offset;
 
