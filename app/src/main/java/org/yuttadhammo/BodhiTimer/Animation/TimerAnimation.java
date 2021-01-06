@@ -83,7 +83,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         //setOnClickListener(this);
     }
 
-    public void setIndex(int i) throws FileNotFoundException {
+    public void setIndex(int i) {
 
         mDrawings = new Vector<TimerDrawing>();
         mDrawings.add(new BodhiLeaf(mContext));
