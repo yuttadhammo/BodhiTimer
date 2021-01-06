@@ -32,7 +32,7 @@ import org.yuttadhammo.BodhiTimer.TimerActivity;
 import java.io.FileNotFoundException;
 import java.util.Vector;
 
-public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView implements OnClickListener, OnSharedPreferenceChangeListener {
+public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView implements  OnSharedPreferenceChangeListener {
     Vector<TimerDrawing> mDrawings = new Vector<TimerDrawing>();
     int mIndex = 1;
     int mLastTime = 0, mLastMax = 0;
@@ -42,6 +42,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
 
     Context mContext;
     private TimerActivity mActivity;
+
 
     public interface TimerDrawing {
 
@@ -68,7 +69,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         prefs.registerOnSharedPreferenceChangeListener(this);
 
-        setOnClickListener(this);
+        //setOnClickListener(this);
     }
 
     public TimerAnimation(Context context, AttributeSet attrs) {
@@ -79,7 +80,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         prefs.registerOnSharedPreferenceChangeListener(this);
 
-        setOnClickListener(this);
+        //setOnClickListener(this);
     }
 
     public void setIndex(int i) throws FileNotFoundException {
@@ -110,10 +111,6 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         mDrawings.get(mIndex).updateImage(canvas, mLastTime, mLastMax);
     }
 
-    public void onClick(View v) {
-        // FIXME
-        mActivity.mAlarmTaskManager.pauseAlarms();
-    }
 
     public void saveState(SharedPreferences prefs) {
         SharedPreferences.Editor editor = prefs.edit();

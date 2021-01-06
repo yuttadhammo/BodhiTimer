@@ -253,7 +253,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     }
 
-    private boolean selectTone(Object newValue, int ringtoneActivity, int fileActivity) {
+    private void selectTone(Object newValue, int ringtoneActivity, int fileActivity) {
         if (player.isPlaying()) {
             play.setTitle(context.getString(R.string.play_sound));
             play.setSummary(context.getString(R.string.play_sound_desc));
@@ -284,8 +284,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 Toast.makeText(getActivity(), "Please install a File Manager.", Toast.LENGTH_SHORT).show();
             }
         }
-
-        return true;
     }
 
     private void prePlayTone(String ToneUri, final Preference preference) {

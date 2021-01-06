@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_margin">0dp</dimen>
     <dimen name="app_defaultsize_w">400.0dip</dimen>
     <dimen name="app_defaultsize_h">400.0dip</dimen>
     <dimen name="app_minimumsize_w">400.0dip</dimen>

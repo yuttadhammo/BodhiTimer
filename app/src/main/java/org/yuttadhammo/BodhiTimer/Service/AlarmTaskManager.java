@@ -49,11 +49,8 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
     public Timer mTimer;
 
-    private final AlarmManager mAlarmMgr;
-
     private final Stack<AlarmTask> alarms;
     private int lastId = 0;
-    private AlarmTask lastAlarm;
 
     // The context to start the service in
     private final Context mContext;
@@ -89,13 +86,13 @@ public class AlarmTaskManager extends BroadcastReceiver {
     }
 
     public void setCurTimerDuration(int newDuration) {
-        currentTimerDuration.setValue(new Integer(newDuration));
+        currentTimerDuration.setValue(Integer.valueOf(newDuration));
     }
     public void setCurTimerLeft(int newElapsed) {
-        currentTimerLeft.setValue(new Integer(newElapsed));
+        currentTimerLeft.setValue(Integer.valueOf(newElapsed));
     }
     public void setIndex(int newIndex) {
-        mIndex.setValue(new Integer(newIndex));
+        mIndex.setValue(Integer.valueOf(newIndex));
     }
 
     // TODO: These need to be handled outside
@@ -108,7 +105,6 @@ public class AlarmTaskManager extends BroadcastReceiver {
         mContext = context;
         alarms = new Stack<AlarmTask>();
 
-        mAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -176,7 +172,6 @@ public class AlarmTaskManager extends BroadcastReceiver {
         alarm.id = lastId;
 
         alarms.push(alarm);
-        lastAlarm = alarm;
 
         return alarm;
     }
@@ -249,15 +244,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
         return alarms.size();
     }
 
-    public void cancelAlarm() {
-
-    }
-
     public void pauseAlarms() {
-
-    }
-
-    public void unpauseAlarms() {
 
     }
 
@@ -473,7 +460,6 @@ public class AlarmTaskManager extends BroadcastReceiver {
     }
 
     private void switchToTimer(AlarmTask alarm) {
-        lastAlarm = alarm;
         int duration = alarm.duration;
         setCurTimerDuration(duration);
         setTimeStamp(duration);

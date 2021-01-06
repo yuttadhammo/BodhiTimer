@@ -48,7 +48,7 @@ class BodhiLeaf implements TimerAnimation.TimerDrawing {
 
     private final SharedPreferences prefs;
 
-    public BodhiLeaf(Context context) throws FileNotFoundException {
+    public BodhiLeaf(Context context) {
         mProgressPaint = new Paint();
         mProgressPaint.setColor(Color.BLACK);
         mProgressPaint.setAlpha(255);
