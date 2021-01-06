@@ -41,12 +41,12 @@ import java.io.IOException;
 class BodhiLeaf implements TimerAnimation.TimerDrawing {
     private Bitmap mCupBitmap;
 
-    private int mWidth;
-    private int mHeight;
+    private final int mWidth;
+    private final int mHeight;
 
-    private Paint mProgressPaint;
+    private final Paint mProgressPaint;
 
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
 
     public BodhiLeaf(Context context) throws FileNotFoundException {
         mProgressPaint = new Paint();

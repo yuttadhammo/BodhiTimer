@@ -99,7 +99,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void showAboutScreen() {
         LayoutInflater li = LayoutInflater.from(context);
         View view = li.inflate(R.layout.about, null);
-        WebView wv = (WebView) view.findViewById(R.id.about_text);
+        WebView wv = view.findViewById(R.id.about_text);
         wv.loadData(getString(R.string.about_text), "text/html", "utf-8");
 
         AlertDialog.Builder p = new AlertDialog.Builder(context).setView(view);
@@ -118,7 +118,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void setupAnimations() {
         // Custom image chooser
-        final Preference customImage = (CheckBoxPreference) preferenceScreen.findPreference("custom_bmp");
+        final Preference customImage = preferenceScreen.findPreference("custom_bmp");
 
         customImage.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
@@ -142,8 +142,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
         // Animation Style
-        final Preference indexPref = (Preference) findPreference("DrawingIndex");
-        final Preference circleTheme = (Preference) findPreference("CircleTheme");
+        final Preference indexPref = findPreference("DrawingIndex");
+        final Preference circleTheme = findPreference("CircleTheme");
 
         int dIndex = prefs.getInt("DrawingIndex", 1);
         if (dIndex == 0) {
@@ -183,24 +183,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void setupTonePicker() {
-        ListPreference tone = (ListPreference) preferenceScreen.findPreference("NotificationUri");
-        play = (Preference) findPreference("playSound");
+        ListPreference tone = preferenceScreen.findPreference("NotificationUri");
+        play = findPreference("playSound");
 
-        ListPreference pretone = (ListPreference) preferenceScreen.findPreference("PreSoundUri");
-        preplay = (Preference) preferenceScreen.findPreference("playPreSound");
+        ListPreference pretone = preferenceScreen.findPreference("PreSoundUri");
+        preplay = preferenceScreen.findPreference("playPreSound");
 
         String[] entries = getResources().getStringArray(R.array.sound_names);
         final String[] entryValues = getResources().getStringArray(R.array.sound_uris);
 
         //Default value
-        if (tone.getValue() == null) tone.setValue((String) entryValues[1]);
-        tone.setDefaultValue((String) entryValues[1]);
+        if (tone.getValue() == null) tone.setValue(entryValues[1]);
+        tone.setDefaultValue(entryValues[1]);
 
         tone.setEntries(entries);
         tone.setEntryValues(entryValues);
 
-        if (pretone.getValue() == null) pretone.setValue((String) entryValues[0]);
-        pretone.setDefaultValue((String) entryValues[0]);
+        if (pretone.getValue() == null) pretone.setValue(entryValues[0]);
+        pretone.setDefaultValue(entryValues[0]);
 
         pretone.setEntries(entries);
         pretone.setEntryValues(entryValues);

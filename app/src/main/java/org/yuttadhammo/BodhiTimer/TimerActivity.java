@@ -157,10 +157,10 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         context = this;
 
-        mCancelButton = (ImageButton) findViewById(R.id.cancelButton);
+        mCancelButton = findViewById(R.id.cancelButton);
         mCancelButton.setOnClickListener(this);
 
-        mSetButton = (ImageButton) findViewById(R.id.setButton);
+        mSetButton = findViewById(R.id.setButton);
         mSetButton.setOnClickListener(this);
         mSetButton.setOnLongClickListener(new OnLongClickListener() {
 
@@ -175,10 +175,10 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         });
 
-        mPauseButton = (ImageButton) findViewById(R.id.pauseButton);
+        mPauseButton = findViewById(R.id.pauseButton);
         mPauseButton.setOnClickListener(this);
 
-        mPrefButton = (ImageButton) findViewById(R.id.prefButton);
+        mPrefButton = findViewById(R.id.prefButton);
         mPrefButton.setOnClickListener(this);
 
         mPauseBitmap = BitmapFactory.decodeResource(
@@ -187,13 +187,13 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mPlayBitmap = BitmapFactory.decodeResource(
                 getResources(), R.drawable.play);
 
-        mTimerLabel = (TextView) findViewById(R.id.text_top);
-        mAltLabel = (TextView) findViewById(R.id.text_alt);
+        mTimerLabel = findViewById(R.id.text_top);
+        mAltLabel = findViewById(R.id.text_alt);
 
-        mTimerAnimation = (TimerAnimation) findViewById(R.id.mainImage);
+        mTimerAnimation = findViewById(R.id.mainImage);
         mTimerAnimation.setOnClickListener(this);
 
-        blackView = (ImageView) findViewById(R.id.black);
+        blackView = findViewById(R.id.black);
 
         // Store some useful values
         prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -829,9 +829,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
 
-    private int VOICE_RECOGNITION_REQUEST_CODE = 1234;
+    private final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
-    private int NUMBERPICK_REQUEST_CODE = 5678;
+    private final int NUMBERPICK_REQUEST_CODE = 5678;
 
     /**
      * Fire an intent to start the speech recognition activity.
@@ -935,7 +935,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
     // receiver to get restart
-    private BroadcastReceiver alarmEndReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver alarmEndReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.v(TAG, "TA Received alarm callback ");

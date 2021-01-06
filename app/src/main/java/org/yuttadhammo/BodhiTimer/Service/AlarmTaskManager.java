@@ -49,14 +49,14 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
     public Timer mTimer;
 
-    private AlarmManager mAlarmMgr;
+    private final AlarmManager mAlarmMgr;
 
-    private Stack<AlarmTask> alarms;
+    private final Stack<AlarmTask> alarms;
     private int lastId = 0;
     private AlarmTask lastAlarm;
 
     // The context to start the service in
-    private Context mContext;
+    private final Context mContext;
 
     public boolean appIsPaused;
 
@@ -100,7 +100,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
     // TODO: These need to be handled outside
     public NotificationManager mNM;
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
 
 
 
@@ -133,14 +133,14 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
 
     public interface AlarmTaskListener {
-        public void onEnterState(int state);
+        void onEnterState(int state);
 
         // These methods are the different events and
         // need to pass relevant arguments related to the event triggered
-        public void onObjectReady(String title);
+        void onObjectReady(String title);
 
         // or when data has been loaded
-        public void onDataLoaded(String data);
+        void onDataLoaded(String data);
 
         void onUpdateTime(int elapsed, int duration);
     }
@@ -431,7 +431,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
     /**
      * Handler for the message from the timer service
      */
-    private Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {

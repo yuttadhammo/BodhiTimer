@@ -17,14 +17,14 @@ public class TimerList {
             duration = mduration;
             uri = muri;
             sessionType = SessionType.REAL;
-        };
+        }
 
         public Timer(int mduration, String muri, SessionType mSessionType) {
             super();
             duration = mduration;
             uri = muri;
             sessionType = mSessionType;
-        };
+        }
     }
 
     public ArrayList<Timer> timers;

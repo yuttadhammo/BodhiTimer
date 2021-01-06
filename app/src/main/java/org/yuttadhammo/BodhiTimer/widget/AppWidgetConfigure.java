@@ -59,10 +59,10 @@ public class AppWidgetConfigure extends AppCompatActivity implements OnClickList
 
         setContentView(R.layout.widget_config);
 
-        ImageButton ib1 = (ImageButton) findViewById(R.id.wtheme1);
-        ImageButton ib2 = (ImageButton) findViewById(R.id.wtheme2);
-        ImageButton ib3 = (ImageButton) findViewById(R.id.wtheme3);
-        ImageButton ib4 = (ImageButton) findViewById(R.id.wtheme4);
+        ImageButton ib1 = findViewById(R.id.wtheme1);
+        ImageButton ib2 = findViewById(R.id.wtheme2);
+        ImageButton ib3 = findViewById(R.id.wtheme3);
+        ImageButton ib4 = findViewById(R.id.wtheme4);
 
         ib1.setOnClickListener(this);
         ib2.setOnClickListener(this);
