@@ -97,16 +97,16 @@ public class AdvNumberPicker extends AppCompatActivity {
         advTimeString = prefs.getString("advTimeString", "");
 
         setContentView(R.layout.adv_number_picker);
-        Button add = (Button) findViewById(R.id.add);
-        Button cancel = (Button) findViewById(R.id.cancel);
-        Button clear = (Button) findViewById(R.id.clear);
-        Button save = (Button) findViewById(R.id.save);
+        Button add = findViewById(R.id.add);
+        Button cancel = findViewById(R.id.cancel);
+        Button clear = findViewById(R.id.clear);
+        Button save = findViewById(R.id.save);
 
-        hours = (EditText) findViewById(R.id.hours);
-        mins = (EditText) findViewById(R.id.mins);
-        secs = (EditText) findViewById(R.id.secs);
+        hours = findViewById(R.id.hours);
+        mins = findViewById(R.id.mins);
+        secs = findViewById(R.id.secs);
 
-        uriText = (TextView) findViewById(R.id.uri);
+        uriText = findViewById(R.id.uri);
 
         hours.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -208,8 +208,8 @@ public class AdvNumberPicker extends AppCompatActivity {
             }
         });
 
-        listView = (ListView) findViewById(R.id.timesList);
-        TextView emptyText = (TextView) findViewById(android.R.id.empty);
+        listView = findViewById(R.id.timesList);
+        TextView emptyText = findViewById(android.R.id.empty);
         listView.setEmptyView(emptyText);
 
         clear.setOnClickListener(new View.OnClickListener() {
@@ -311,7 +311,7 @@ public class AdvNumberPicker extends AppCompatActivity {
 
             if (p[0].length() > 0) {
 
-                TextView time = (TextView) rowView.findViewById(R.id.time);
+                TextView time = rowView.findViewById(R.id.time);
 
                 if (time != null) {
                     String ts = Time.time2humanStr(context, Integer.parseInt(p[0]));
@@ -319,13 +319,13 @@ public class AdvNumberPicker extends AppCompatActivity {
                 }
             }
             if (p.length > 2 && p[2].length() > 0) {
-                TextView sound = (TextView) rowView.findViewById(R.id.sound);
+                TextView sound = rowView.findViewById(R.id.sound);
 
                 if (sound != null) {
                     sound.setText(p[2]);
                 }
             }
-            Button b = (Button) rowView.findViewById(R.id.delete);
+            Button b = rowView.findViewById(R.id.delete);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

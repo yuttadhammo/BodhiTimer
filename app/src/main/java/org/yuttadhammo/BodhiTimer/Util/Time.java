@@ -74,7 +74,7 @@ public class Time {
      */
     public static int[] time2Array(int time) {
         int ms = time % 1000;
-        int seconds = (int) (time / 1000);  // 3550000 / 1000 = 3550
+        int seconds = time / 1000;  // 3550000 / 1000 = 3550
         int minutes = seconds / 60; // 59.16666
         int hours = minutes / 60; // 0.9
 

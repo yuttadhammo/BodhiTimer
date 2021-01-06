@@ -2,8 +2,6 @@ package org.yuttadhammo.BodhiTimer.Service;
 
 import android.text.TextUtils;
 
-import org.yuttadhammo.BodhiTimer.R;
-
 import java.util.ArrayList;
 
 
@@ -19,14 +17,14 @@ public class TimerList {
             duration = mduration;
             uri = muri;
             sessionType = SessionType.REAL;
-        };
+        }
 
         public Timer(int mduration, String muri, SessionType mSessionType) {
             super();
             duration = mduration;
             uri = muri;
             sessionType = mSessionType;
-        };
+        }
     }
 
     public ArrayList<Timer> timers;

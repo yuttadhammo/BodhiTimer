@@ -28,6 +28,8 @@
 
 package org.yuttadhammo.BodhiTimer;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,6 +44,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;

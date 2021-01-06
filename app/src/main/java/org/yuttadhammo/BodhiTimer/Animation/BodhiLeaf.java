@@ -28,7 +28,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
@@ -42,14 +41,14 @@ import java.io.IOException;
 class BodhiLeaf implements TimerAnimation.TimerDrawing {
     private Bitmap mCupBitmap;
 
-    private int mWidth;
-    private int mHeight;
+    private final int mWidth;
+    private final int mHeight;
 
-    private Paint mProgressPaint;
+    private final Paint mProgressPaint;
 
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
 
-    public BodhiLeaf(Context context) throws FileNotFoundException {
+    public BodhiLeaf(Context context) {
         mProgressPaint = new Paint();
         mProgressPaint.setColor(Color.BLACK);
         mProgressPaint.setAlpha(255);

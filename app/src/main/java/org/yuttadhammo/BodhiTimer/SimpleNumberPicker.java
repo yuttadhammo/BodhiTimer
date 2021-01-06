@@ -63,7 +63,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
 
         setContentView(R.layout.n_number_picker_dialog);
 
-        LinearLayout scrollView = (LinearLayout) findViewById(R.id.container);
+        LinearLayout scrollView = findViewById(R.id.container);
 
         scrollView.setVisibility(View.VISIBLE);
 
@@ -72,22 +72,22 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         int[] times = getIntent().getIntArrayExtra("times");
 
         // Time Picker
-        timePicker = (TimePicker) findViewById(R.id.timepick);
+        timePicker = findViewById(R.id.timepick);
         timePicker.setIs24HourView(true);
         timePicker.setHour(times[0]);
         timePicker.setMinute(times[1]);
 
 
-        Button cancel = (Button) findViewById(R.id.btnCancel);
-        Button ok = (Button) findViewById(R.id.btnOk);
+        Button cancel = findViewById(R.id.btnCancel);
+        Button ok = findViewById(R.id.btnOk);
         cancel.setOnClickListener(this);
         ok.setOnClickListener(this);
 
-        Button pre1 = (Button) findViewById(R.id.btn1);
-        Button pre2 = (Button) findViewById(R.id.btn2);
-        Button pre3 = (Button) findViewById(R.id.btn3);
-        Button pre4 = (Button) findViewById(R.id.btn4);
-        Button adv = (Button) findViewById(R.id.btnadv);
+        Button pre1 = findViewById(R.id.btn1);
+        Button pre2 = findViewById(R.id.btn2);
+        Button pre3 = findViewById(R.id.btn3);
+        Button pre4 = findViewById(R.id.btn4);
+        Button adv = findViewById(R.id.btnadv);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         i1 = prefs.getString("pre1", null);

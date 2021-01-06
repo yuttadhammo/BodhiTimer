@@ -8,10 +8,7 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +19,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
@@ -99,19 +95,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 //
 //    }
 
-    public void showBatteryOptimizationDialog() {
-        Intent intent = new Intent();
-        String packageName = context.getPackageName();
-        intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-        intent.setData(Uri.parse("package:" + packageName));
-        startActivity(intent);
-    }
-
 
     private void showAboutScreen() {
         LayoutInflater li = LayoutInflater.from(context);
         View view = li.inflate(R.layout.about, null);
-        WebView wv = (WebView) view.findViewById(R.id.about_text);
+        WebView wv = view.findViewById(R.id.about_text);
         wv.loadData(getString(R.string.about_text), "text/html", "utf-8");
 
         AlertDialog.Builder p = new AlertDialog.Builder(context).setView(view);
@@ -130,7 +118,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void setupAnimations() {
         // Custom image chooser
-        final Preference customImage = (CheckBoxPreference) preferenceScreen.findPreference("custom_bmp");
+        final Preference customImage = preferenceScreen.findPreference("custom_bmp");
 
         customImage.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
@@ -154,8 +142,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
         // Animation Style
-        final Preference indexPref = (Preference) findPreference("DrawingIndex");
-        final Preference circleTheme = (Preference) findPreference("CircleTheme");
+        final Preference indexPref = findPreference("DrawingIndex");
+        final Preference circleTheme = findPreference("CircleTheme");
 
         int dIndex = prefs.getInt("DrawingIndex", 1);
         if (dIndex == 0) {
@@ -195,24 +183,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void setupTonePicker() {
-        ListPreference tone = (ListPreference) preferenceScreen.findPreference("NotificationUri");
-        play = (Preference) findPreference("playSound");
+        ListPreference tone = preferenceScreen.findPreference("NotificationUri");
+        play = findPreference("playSound");
 
-        ListPreference pretone = (ListPreference) preferenceScreen.findPreference("PreSoundUri");
-        preplay = (Preference) preferenceScreen.findPreference("playPreSound");
+        ListPreference pretone = preferenceScreen.findPreference("PreSoundUri");
+        preplay = preferenceScreen.findPreference("playPreSound");
 
         String[] entries = getResources().getStringArray(R.array.sound_names);
         final String[] entryValues = getResources().getStringArray(R.array.sound_uris);
 
         //Default value
-        if (tone.getValue() == null) tone.setValue((String) entryValues[1]);
-        tone.setDefaultValue((String) entryValues[1]);
+        if (tone.getValue() == null) tone.setValue(entryValues[1]);
+        tone.setDefaultValue(entryValues[1]);
 
         tone.setEntries(entries);
         tone.setEntryValues(entryValues);
 
-        if (pretone.getValue() == null) pretone.setValue((String) entryValues[0]);
-        pretone.setDefaultValue((String) entryValues[0]);
+        if (pretone.getValue() == null) pretone.setValue(entryValues[0]);
+        pretone.setDefaultValue(entryValues[0]);
 
         pretone.setEntries(entries);
         pretone.setEntryValues(entryValues);
@@ -265,7 +253,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     }
 
-    private boolean selectTone(Object newValue, int ringtoneActivity, int fileActivity) {
+    private void selectTone(Object newValue, int ringtoneActivity, int fileActivity) {
         if (player.isPlaying()) {
             play.setTitle(context.getString(R.string.play_sound));
             play.setSummary(context.getString(R.string.play_sound_desc));
@@ -296,8 +284,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 Toast.makeText(getActivity(), "Please install a File Manager.", Toast.LENGTH_SHORT).show();
             }
         }
-
-        return true;
     }
 
     private void prePlayTone(String ToneUri, final Preference preference) {

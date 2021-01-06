@@ -12,7 +12,6 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import org.yuttadhammo.BodhiTimer.R;
-import org.yuttadhammo.BodhiTimer.Service.SessionType;
 
 import java.io.IOException;
 
@@ -36,9 +35,8 @@ public class Notification {
 
         player = new MediaPlayer();
 
-        int setTime = time;
-        String setTimeStr = Time.time2humanStr(context, setTime);
-        Log.v(TAG, "Time: " + setTime);
+        String setTimeStr = Time.time2humanStr(context, time);
+        Log.v(TAG, "Time: " + time);
 
         CharSequence text = context.getText(R.string.Notification);
         CharSequence textLatest = String.format(context.getString(R.string.timer_for_x), setTimeStr);

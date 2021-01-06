@@ -70,7 +70,7 @@ public class AlarmTask implements Runnable {
         this.context = context;
         this.mAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        this.mDuration.setValue((int) duration);
+        this.mDuration.setValue(duration);
         this.duration = duration;
         this.offset = offset;
 //        this.mTimerState.setValue(TimerState.INACTIVE);
