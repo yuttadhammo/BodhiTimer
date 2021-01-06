@@ -28,8 +28,6 @@
 
 package org.yuttadhammo.BodhiTimer;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -44,7 +42,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
@@ -584,8 +581,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     /**
      * Updates the time
-     * @param elapsed
-     * @param duration
+     * @param elapsed the elapsed time of the current timer
+     * @param duration the dursation of the current timer
      */
     public void updateInterfaceWithTime(int elapsed, int duration) {
         updateLabel(elapsed);

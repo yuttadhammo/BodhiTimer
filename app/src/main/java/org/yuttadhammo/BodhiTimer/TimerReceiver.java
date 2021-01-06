@@ -17,21 +17,15 @@
 
 package org.yuttadhammo.BodhiTimer;
 
-import android.app.Application;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 
-import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.Util.Notification;
-
-import java.util.Date;
 
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.*;
 

@@ -17,7 +17,6 @@
 
 package org.yuttadhammo.BodhiTimer.Animation;
 
-import android.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -27,10 +26,7 @@ import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 
-import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.TimerActivity;
 
 import java.io.FileNotFoundException;

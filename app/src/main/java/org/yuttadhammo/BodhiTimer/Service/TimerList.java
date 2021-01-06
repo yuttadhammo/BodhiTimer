@@ -2,8 +2,6 @@ package org.yuttadhammo.BodhiTimer.Service;
 
 import android.text.TextUtils;
 
-import org.yuttadhammo.BodhiTimer.R;
-
 import java.util.ArrayList;
 
 

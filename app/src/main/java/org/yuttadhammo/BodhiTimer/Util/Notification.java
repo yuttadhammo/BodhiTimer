@@ -12,7 +12,6 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import org.yuttadhammo.BodhiTimer.R;
-import org.yuttadhammo.BodhiTimer.Service.SessionType;
 
 import java.io.IOException;
 

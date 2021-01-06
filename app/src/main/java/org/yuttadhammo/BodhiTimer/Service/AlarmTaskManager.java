@@ -157,12 +157,8 @@ public class AlarmTaskManager extends BroadcastReceiver {
     }
 
     private void onUpdateTime() {
-        int a;
-        int b;
         if (listener != null)
-            a = getCurTimerLeftVal();
-            b = getCurTimerDurationVal();
-            listener.onUpdateTime(getCurTimerLeftVal(), getCurTimerDurationVal());
+            listener.onUpdateTime(currentTimerLeft.getValue(), currentTimerDuration.getValue());
     }
 
 
