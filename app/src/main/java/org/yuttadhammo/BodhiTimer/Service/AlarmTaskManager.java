@@ -119,7 +119,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
     public void saveState() {
         SharedPreferences.Editor editor = prefs.edit();
-        // editor.putInt("LastSimpleTime", getCurTimerDurationVal());
+        editor.putInt("CurrentTimerDuration", getCurTimerDurationVal());
         editor.putInt("CurrentTimeLeft", getCurTimerLeftVal());
         editor.putInt("State", mCurrentState);
         editor.putInt("SessionDuration", sessionDuration);
@@ -345,6 +345,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
         Log.v(TAG, "Pausing the timer...");
 
         SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("CurrentTimerDuration", getCurTimerDurationVal());
         editor.putInt("CurrentTimeLeft", currentTimerLeft.getValue());
         editor.putInt("SessionTimeLeft", sessionTimeLeft.getValue());
         editor.apply();

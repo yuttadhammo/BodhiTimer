@@ -350,19 +350,23 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                         showNumberPicker();
                     return;
                 }
+                updateLabel(0);
                 break;
 
             case PAUSED:
+
+                // This only handles when not destroyed
                 int curTime = prefs.getInt("CurrentTimeLeft", 0);
                 mAlarmTaskManager.setCurTimerLeft(curTime);
 
-                // FIXME
-                updateInterfaceWithTime(curTime, 0);
+                int curDuration = prefs.getInt("CurrentTimerDuration", 0);
+                mAlarmTaskManager.setCurTimerDuration(curDuration);
+
+                updateInterfaceWithTime(curTime, curDuration);
                 enterState(PAUSED);
                 break;
         }
         widget = false;
-        updateLabel(0);
     }
 
     /**
@@ -582,7 +586,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     /**
      * Updates the time
      * @param elapsed the elapsed time of the current timer
-     * @param duration the dursation of the current timer
+     * @param duration the duration of the current timer
      */
     public void updateInterfaceWithTime(int elapsed, int duration) {
         updateLabel(elapsed);
