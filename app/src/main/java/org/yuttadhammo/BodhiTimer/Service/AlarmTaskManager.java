@@ -1,6 +1,5 @@
 package org.yuttadhammo.BodhiTimer.Service;
 
-import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -375,7 +374,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
         cancelAllAlarms();
         stopTicker();
         clearTime();
-        mNM.cancelAll();
+        //mNM.cancelAll();
     }
 
     public void doTick() {
@@ -445,8 +444,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
         if (alarm == null) return;
 
-        // Send notification
-        Notification.show(mContext, alarm.getUri().getValue(), alarm.duration);
+
 
         // Remove alarm
         alarms.remove(alarm);

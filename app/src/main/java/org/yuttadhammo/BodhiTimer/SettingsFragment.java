@@ -23,6 +23,8 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
 
+import org.yuttadhammo.BodhiTimer.Service.SoundManager;
+
 import java.io.IOException;
 
 
@@ -42,18 +44,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private final int SELECT_PHOTO = 4;
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
+    //private SoundManager mSoundManager;
 
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        //mSoundManager = new SoundManager(getContext());
 
         preferenceScreen = getPreferenceScreen();
         context = getContext();
 
         setupTonePicker();
         setupAnimations();
+
         //setupBatteryAction();
 
     }
@@ -70,30 +75,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         return super.onPreferenceTreeClick(preference);
     }
-
-//    private boolean isIgnoringBatteryOptimizations() {
-//        PowerManager pwrm = (PowerManager) requireActivity().getSystemService(Context.POWER_SERVICE);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            boolean status = pwrm.isIgnoringBatteryOptimizations(requireActivity().getPackageName());
-//            Log.v(TAG, "isIgnoringBatteryOptimizations = "  + status);
-//            return status;
-//        }
-//        return true;
-//    }
-//
-//    private void setupBatteryAction() {
-//        Preference batteryButton = (Preference) preferenceScreen.findPreference("disable_battery_optim");
-//        PreferenceCategory batteryCategory = preferenceScreen.findPreference("disable_battery_header");
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations()) {
-//            batteryButton.setVisible(true);
-//            batteryCategory.setVisible(true);
-//        } else {
-//            batteryButton.setVisible(false);
-//            batteryCategory.setVisible(false);
-//        }
-//
-//    }
 
 
     private void showAboutScreen() {

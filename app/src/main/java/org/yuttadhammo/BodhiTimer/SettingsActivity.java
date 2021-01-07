@@ -58,7 +58,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

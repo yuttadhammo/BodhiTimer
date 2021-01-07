@@ -21,7 +21,6 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.util.Log;
 
 
@@ -35,8 +34,6 @@ import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.*;
 public class TimerReceiver extends BroadcastReceiver {
 
     private final static String TAG = "TimerReceiver";
-    final static String CANCEL_NOTIFICATION = "CANCEL_NOTIFICATION";
-    public static MediaPlayer player;
     private Context context;
 
     public TimerReceiver() {
@@ -48,40 +45,18 @@ public class TimerReceiver extends BroadcastReceiver {
         context = contextPassed;
 
 
-        NotificationManager mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Cancel notification and return...
-        if (CANCEL_NOTIFICATION.equals(pintent.getAction())) {
-            Log.v(TAG, "Cancelling notification...");
-
-            mNM.cancelAll();
-            return;
-        }
-
-        if (player != null) {
-            Log.v(TAG, "Releasing media player...");
-            try {
-                player.reset();
-                player.release();
-                player = null;
-            } catch (Exception e) {
-                e.printStackTrace();
-                player = null;
-            }
-        }
-
-        Log.v(TAG, "Received alarm callback ");
+        Log.v(TAG, "Received system alarm callback ");
 
         // Send notification
-        Notification.show(context, pintent.getStringExtra("uri"), pintent.getIntExtra("duration", 0));
-
-        // This will be only received if the app is not paused...
+        // This will be only received if the app is not stopped (or destroyed)...
+        // TODO: Use wakeful receiver?
         Intent broadcast = new Intent();
-        broadcast.putExtra("time", 000);
+
+        broadcast.putExtra("duration",  pintent.getIntExtra("duration", 0));
         broadcast.putExtra("id", pintent.getIntExtra("id", 0));
+        broadcast.putExtra("uri", pintent.getStringExtra("uri"));
         broadcast.setAction(BROADCAST_END);
         context.sendBroadcast(broadcast);
-
 
     }
 

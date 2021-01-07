@@ -12,17 +12,17 @@ public class TimerList {
         public String uri;
         public SessionType sessionType;
 
-        public Timer(int mduration, String muri) {
+        public Timer(int mDuration, String mUri) {
             super();
-            duration = mduration;
-            uri = muri;
+            duration = mDuration;
+            uri = mUri;
             sessionType = SessionType.REAL;
         }
 
-        public Timer(int mduration, String muri, SessionType mSessionType) {
+        public Timer(int mDuration, String mUri, SessionType mSessionType) {
             super();
-            duration = mduration;
-            uri = muri;
+            duration = mDuration;
+            uri = mUri;
             sessionType = mSessionType;
         }
     }

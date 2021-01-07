@@ -28,8 +28,6 @@
 
 package org.yuttadhammo.BodhiTimer;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,9 +40,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
@@ -65,8 +64,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.Service.SessionType;
+import org.yuttadhammo.BodhiTimer.Service.SoundManager;
 import org.yuttadhammo.BodhiTimer.Service.TimerList;
 import org.yuttadhammo.BodhiTimer.SimpleNumberPicker.OnNNumberPickedListener;
+import org.yuttadhammo.BodhiTimer.Util.Notification;
 import org.yuttadhammo.BodhiTimer.Util.Time;
 
 import java.io.FileNotFoundException;
@@ -137,6 +138,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     private TextToSpeech tts;
 
+    private SoundManager mSoundManager;
+
+
     /**
      * Called when the activity is first created.
      * { @inheritDoc}
@@ -148,6 +152,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // Setup a new AlarmTaskManager
         mAlarmTaskManager = new AlarmTaskManager(this);
+        mSoundManager = new SoundManager(this);
 
         setupListener();
 
@@ -213,6 +218,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         filter2.addAction(BROADCAST_END);
         registerReceiver(alarmEndReceiver, filter2);
 
+        Notification.createNotificationChannel(context);
 
     }
 
@@ -241,7 +247,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             }
         });
     }
-
 
 
     /**
@@ -274,7 +279,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         setupUI();
 
 
-
         // Load the last time picked with the simple time picker.
         int dur = prefs.getInt("LastSimpleTime", 1800000);
         lastTimes = Time.time2Array(dur);
@@ -282,8 +286,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
         int state = prefs.getInt("State", STOPPED);
-
-
 
 
         switch (state) {
@@ -305,8 +307,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     // TODO:
                     Log.i(TAG, "Still have timers");
 
-                    int sessionTimeLeft = (int)(sessionEnd.getTime() - now.getTime());
-                    int curTimerLeft = (int)(curTimerEnd.getTime() - now.getTime());
+                    int sessionTimeLeft = (int) (sessionEnd.getTime() - now.getTime());
+                    int curTimerLeft = (int) (curTimerEnd.getTime() - now.getTime());
                     int sessionDuration = prefs.getInt("SessionDuration", -1);
 
                     Log.i(TAG, "Session Time Left " + sessionTimeLeft);
@@ -490,7 +492,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     protected void onStop() {
         // When our activity is stopped ensure we also stop the connection to the service
         // this stops us leaking our activity into the system *bad*
-        Log.d(TAG, "service stopped");
+        Log.d(TAG, "STOPPED");
 
         super.onStop();
     }
@@ -546,7 +548,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         int sessionLeft = prefs.getInt("SessionTimeLeft", 0);
         int sessionDuration = mAlarmTaskManager.sessionDuration;
 
-        int timeElapsed =  sessionDuration - sessionLeft;
+        int timeElapsed = sessionDuration - sessionLeft;
 
         // Get time string
         mAlarmTaskManager.addAlarms(retrieveTimerList(), -timeElapsed);
@@ -556,7 +558,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     @Override
     public boolean onKeyDown(int keycode, KeyEvent e) {
-        mAlarmTaskManager.mNM.cancelAll();
+        //mAlarmTaskManager.mNM.cancelAll();
         if (keycode == KeyEvent.KEYCODE_MENU) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
@@ -578,13 +580,14 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     private void showNumberPicker() {
         Intent i = new Intent(this, SimpleNumberPicker.class);
         i.putExtra("times", lastTimes);
-        startActivityForResult(i, NUMBERPICK_REQUEST_CODE);
+        startActivityForResult(i, NUMBER_PICK_REQUEST_CODE);
     }
 
 
     /**
      * Updates the time
-     * @param elapsed the elapsed time of the current timer
+     *
+     * @param elapsed  the elapsed time of the current timer
      * @param duration the duration of the current timer
      */
     public void updateInterfaceWithTime(int elapsed, int duration) {
@@ -776,7 +779,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 setButtonAlpha(127);
                 break;
             case STOPPED:
-                mAlarmTaskManager.mNM.cancelAll();
+                //mAlarmTaskManager.mNM.cancelAll();
                 mPauseButton.setImageBitmap(mPlayBitmap);
                 mCancelButton.setVisibility(View.GONE);
                 mSetButton.setVisibility(View.VISIBLE);
@@ -811,7 +814,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 arr.add("...");
                 break;
             }
-            arr.add(Time.time2hms(previewTimes.get(i) ));
+            arr.add(Time.time2hms(previewTimes.get(i)));
         }
         return arr;
     }
@@ -833,8 +836,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
     private final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
-
-    private final int NUMBERPICK_REQUEST_CODE = 5678;
+    private final int NUMBER_PICK_REQUEST_CODE = 5678;
 
     /**
      * Fire an intent to start the speech recognition activity.
@@ -871,7 +873,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (LOG) Log.v(TAG, "Got result");
 
-        if (requestCode == NUMBERPICK_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == NUMBER_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
             int[] values = data.getIntArrayExtra("times");
 
             onNumbersPicked(values);
@@ -910,7 +912,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                                 if (status == TextToSpeech.SUCCESS) {
                                     tts.speak(getString(R.string.adv_speech_recognized), TextToSpeech.QUEUE_ADD, null);
                                 } else
-                                    Log.e("error", "Initilization Failed!");
+                                    Log.e("error", "Initialization failed!");
                             }
                         });
                     }
@@ -941,12 +943,26 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     private final BroadcastReceiver alarmEndReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.v(TAG, "TA Received alarm callback ");
-            //mAlarmTaskManager
-            Log.d(TAG, "id " + intent.getIntExtra("id", 1212));
-            mAlarmTaskManager.onAlarmEnd(intent.getIntExtra("id", 1212));
+            Log.v(TAG, "Received app alarm callback");
+            Log.d(TAG, "id " + intent.getIntExtra("id", -1));
+
+
+            String notificationUri = intent.getStringExtra("uri");
+            int duration = intent.getIntExtra("duration", 0);
+
+
+            // Send notification
+            if (notificationUri != null) {
+                mSoundManager.play(notificationUri);
+                //Notification.show(context, duration);
+            } else {
+                Notification.show(context, duration);
+            }
+
+            mAlarmTaskManager.onAlarmEnd(intent.getIntExtra("id", -1));
             onSingleAlarmEnd();
         }
     };
+
 
 }
