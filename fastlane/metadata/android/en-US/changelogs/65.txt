@@ -1,0 +1,9 @@
+5.2.0
+* Completely refactor Alarm Handling. It should be much more reliable, especially when the phone is in battery saver mode.
+
+Other recent changes
+* Refactored preference screen
+* Native time pickers
+* Better defaults
+* Updated translations
+* Monospaced timer font

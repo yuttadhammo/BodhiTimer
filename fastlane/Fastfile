@@ -38,6 +38,6 @@ platform :android do
       build_type: "Release",
       print_command: true
     )
-    upload_to_play_store
+    upload_to_play_store(track: 'beta')
   end
 end
