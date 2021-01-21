@@ -648,7 +648,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         TimerList tL = new TimerList();
 
         // Add a preparatory timer
-        if (prepTime > 0 && !preUriString.equals("")) {
+        if (!preUriString.equals("")) {
 
             switch (preUriString) {
                 case "system":
