@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.util.Log;
 
 
+import org.yuttadhammo.BodhiTimer.Service.SoundManager;
 import org.yuttadhammo.BodhiTimer.Util.Notification;
 
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.*;
@@ -47,9 +48,8 @@ public class TimerReceiver extends BroadcastReceiver {
 
         Log.v(TAG, "Received system alarm callback ");
 
-        // Send notification
+        // Send Broadcast to main activity
         // This will be only received if the app is not stopped (or destroyed)...
-        // TODO: Use wakeful receiver?
         Intent broadcast = new Intent();
 
         broadcast.putExtra("duration",  pintent.getIntExtra("duration", 0));
@@ -57,6 +57,20 @@ public class TimerReceiver extends BroadcastReceiver {
         broadcast.putExtra("uri", pintent.getStringExtra("uri"));
         broadcast.setAction(BROADCAST_END);
         context.sendBroadcast(broadcast);
+
+        // Show notification
+        String notificationUri = pintent.getStringExtra("uri");
+        int duration = pintent.getIntExtra("duration", 0);
+
+
+        SoundManager mSoundManager = new SoundManager(contextPassed);
+
+        if (notificationUri != null) {
+            mSoundManager.play(notificationUri);
+            //Notification.show(context, duration);
+        } else {
+            Notification.show(context, duration);
+        }
 
     }
 

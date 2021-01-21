@@ -946,19 +946,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             Log.v(TAG, "Received app alarm callback");
             Log.d(TAG, "id " + intent.getIntExtra("id", -1));
 
-
-            String notificationUri = intent.getStringExtra("uri");
-            int duration = intent.getIntExtra("duration", 0);
-
-
-            // Send notification
-            if (notificationUri != null) {
-                mSoundManager.play(notificationUri);
-                //Notification.show(context, duration);
-            } else {
-                Notification.show(context, duration);
-            }
-
             mAlarmTaskManager.onAlarmEnd(intent.getIntExtra("id", -1));
             onSingleAlarmEnd();
         }

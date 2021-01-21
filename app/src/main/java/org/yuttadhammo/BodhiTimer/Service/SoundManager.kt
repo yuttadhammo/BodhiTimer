@@ -34,7 +34,21 @@ class SoundManager(val mContext: Context) {
                     mp.reset()
                     mp.release()
                 })
+
+                player.setOnErrorListener { mp, what, extra ->
+                    Log.e("Player error", "what:$what extra:$extra")
+                    true
+                }
+
+                player.setOnInfoListener { mp, what, extra ->
+                    Log.e("Player info", "what:$what extra:$extra")
+                    true
+                }
+
+                player.setWakeMode(mContext, PowerManager.FULL_WAKE_LOCK)
                 player.start()
+
+                Log.v(TAG, "Playing sound")
             } catch (e: Exception) {
                 // TODO Auto-generated catch block
                 e.printStackTrace()
@@ -49,7 +63,7 @@ class SoundManager(val mContext: Context) {
     private fun getWakeLock(context: Context, dur: Int): WakeLock? {
         // Make sure we can play the sound until it's finished
         val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        val wL = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Bodhi:Alarm")
+        val wL = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "Bodhi:Alarm")
         Log.v(TAG, "Acquiring Wake Lock for $dur")
         wL.acquire((dur + 1000).toLong())
         return wL
