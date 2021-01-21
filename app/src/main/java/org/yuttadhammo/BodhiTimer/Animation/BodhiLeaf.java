@@ -35,7 +35,6 @@ import android.preference.PreferenceManager;
 import org.yuttadhammo.BodhiTimer.R;
 
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 class BodhiLeaf implements TimerAnimation.TimerDrawing {

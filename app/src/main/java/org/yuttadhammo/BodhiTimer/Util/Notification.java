@@ -4,19 +4,13 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
-import android.net.Uri;
 import android.os.Build;
-import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
 import org.yuttadhammo.BodhiTimer.R;
-
-import static android.os.PowerManager.SCREEN_DIM_WAKE_LOCK;
 
 public class Notification {
     private static final String TAG = "NOTIFY";
@@ -106,7 +100,7 @@ public class Notification {
 
 
 
-    private static boolean legacyHandler(NotificationCompat.Builder mBuilder, SharedPreferences prefs) {
+    private static void legacyHandler(NotificationCompat.Builder mBuilder, SharedPreferences prefs) {
         boolean vibrate = prefs.getBoolean("Vibrate", true);
         boolean led = prefs.getBoolean("LED", false);
 
@@ -120,7 +114,6 @@ public class Notification {
             mBuilder.setLights(0xff00ff00, 300, 1000);
         }
 
-        return vibrate;
     }
 
 

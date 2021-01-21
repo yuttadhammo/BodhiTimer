@@ -325,10 +325,10 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         //canvas.save();
         if (w < h) {
             rd = new Rect(0, 0, w, w);
-            canvas.translate(w / -2, h / -2 + (h - w) / 2);
+            canvas.translate(w / -2f, h / -2f + (h - w) / 2f);
         } else {
             rd = new Rect(0, 0, h, h);
-            canvas.translate(w / -2 + (w - h) / 2, h / -2);
+            canvas.translate(w / -2f + (w - h) / 2f, h / -2f);
         }
         canvas.drawBitmap(mEnsoBitmap, rs, rd, null);
 

@@ -34,7 +34,7 @@ public class TimerList {
     }
 
     public TimerList() {
-        timers = new ArrayList<Timer>();
+        timers = new ArrayList<>();
     }
 
     public String getString() {
@@ -42,13 +42,13 @@ public class TimerList {
     }
 
     public static  ArrayList<Timer> timeStringToList(String advTimeString) {
-        ArrayList<Timer> list = new ArrayList<Timer>();
+        ArrayList<Timer> list = new ArrayList<>();
 
         String[] advTime = advTimeString.split("\\^");
 
-        for (int i = 0; i < advTime.length; i++) {
+        for (String s : advTime) {
             //  advTime[n] will be of format timeInMs#pathToSound
-            String[] thisAdvTime = advTime[i].split("#");
+            String[] thisAdvTime = s.split("#");
 
             int duration = 0;
 
@@ -66,7 +66,7 @@ public class TimerList {
     }
 
     public static String listToTimeString (ArrayList<Timer> list ) {
-        ArrayList<String> stringArray = new ArrayList<String>();
+        ArrayList<String> stringArray = new ArrayList<>();
 
         for (Timer timer: list) {
             stringArray.add(timer.duration + "#" + timer.uri + "#" +  timer.sessionType);

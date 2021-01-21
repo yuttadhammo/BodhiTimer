@@ -13,8 +13,6 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import org.yuttadhammo.BodhiTimer.Util.Notification;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Stack;
@@ -102,7 +100,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
     public AlarmTaskManager(Context context) {
         mContext = context;
-        alarms = new Stack<AlarmTask>();
+        alarms = new Stack<>();
 
         mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -263,7 +261,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
     }
 
     public ArrayList<Integer> getPreviewTimes() {
-        ArrayList<Integer> previewTimes = new ArrayList<Integer>();
+        ArrayList<Integer> previewTimes = new ArrayList<>();
         for (int i = 1; i < alarms.size(); i++) {
             AlarmTask alarm = alarms.elementAt(i);
             previewTimes.add(alarm.duration);
@@ -532,7 +530,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
         Log.v(TAG, "MANGER Received alarm callback ");
 
         Intent broadcast = new Intent();
-        broadcast.putExtra("time", 000);
+        broadcast.putExtra("time", 0);
         broadcast.putExtra("id", pintent.getIntExtra("id", 0));
         broadcast.setAction(BROADCAST_END);
         context.sendBroadcast(broadcast);

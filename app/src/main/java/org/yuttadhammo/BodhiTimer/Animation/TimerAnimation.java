@@ -24,8 +24,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.View.OnClickListener;
 
 import org.yuttadhammo.BodhiTimer.TimerActivity;
 
@@ -33,15 +31,13 @@ import java.io.FileNotFoundException;
 import java.util.Vector;
 
 public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView implements  OnSharedPreferenceChangeListener {
-    Vector<TimerDrawing> mDrawings = new Vector<TimerDrawing>();
+    Vector<TimerDrawing> mDrawings = new Vector<>();
     int mIndex = 1;
     int mLastTime = 0, mLastMax = 0;
 
-    Bitmap mBitmap = null;
     SharedPreferences prefs;
 
     Context mContext;
-    private TimerActivity mActivity;
 
 
     public interface TimerDrawing {
@@ -57,9 +53,6 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         void configure();
     }
 
-    public void setActivity(TimerActivity activity) {
-        mActivity = activity;
-    }
 
     public TimerAnimation(Context context) {
 
@@ -85,7 +78,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
 
     public void setIndex(int i) throws FileNotFoundException {
 
-        mDrawings = new Vector<TimerDrawing>();
+        mDrawings = new Vector<>();
         mDrawings.add(new BodhiLeaf(mContext));
         mDrawings.add(new CircleAnimation(mContext));
 

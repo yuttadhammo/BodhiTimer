@@ -41,7 +41,7 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener {
     public void onInit(int status) {
         Log.e("TTSService", "initializing TTSService");
         if (status == TextToSpeech.SUCCESS) {
-            HashMap<String, String> hashAudio = new HashMap<String, String>();
+            HashMap<String, String> hashAudio = new HashMap<>();
             hashAudio.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "english");
 
 

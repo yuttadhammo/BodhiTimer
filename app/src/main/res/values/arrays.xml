@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress CheckTagEmptyBody -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <array name="themes">
         <item>Zen Enso</item>
@@ -86,6 +87,7 @@
         <item>System Tone</item>
         <item>Sound File</item>
     </string-array>
+    <!--suppress CheckTagEmptyBody -->
     <string-array name="sound_uris">
         <item></item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell</item>

@@ -35,7 +35,7 @@ public class Time {
 
     private static final String TAG = "Time";
 
-    public static String TIME_SEPARATOR = " again ";
+    public static final String TIME_SEPARATOR = " again ";
 
 
     public static int msFromNumbers(int hour, int minutes, int seconds) {
@@ -143,7 +143,7 @@ public class Time {
     public static String str2complexTimeString(AppCompatActivity activity, String numberString) {
         String out;
 
-        ArrayList<String> stringArray = new ArrayList<String>();
+        ArrayList<String> stringArray = new ArrayList<>();
 
 
         String[] strings = numberString.split(TIME_SEPARATOR);

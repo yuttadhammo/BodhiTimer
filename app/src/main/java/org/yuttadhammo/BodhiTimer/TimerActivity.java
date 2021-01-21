@@ -40,9 +40,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
@@ -822,7 +820,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     // Shortens the array to max three
     private ArrayList<String> makePreviewArray() {
-        ArrayList<String> arr = new ArrayList<String>();
+        ArrayList<String> arr = new ArrayList<>();
         ArrayList<Integer> previewTimes = mAlarmTaskManager.getPreviewTimes();
 
         for (int i = 0; i < previewTimes.size(); i++) {

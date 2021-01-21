@@ -82,7 +82,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
     private HashMap<Integer, Integer> backgrounds;
 
     public static String ACTION_CLOCK_START = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_START";
-    public static String ACTION_CLOCK_UPDATE = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_UPDATE";
+    public static final String ACTION_CLOCK_UPDATE = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_UPDATE";
     public static String ACTION_CLOCK_CANCEL = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_CANCEL";
 
     private static RemoteViews views;
@@ -183,7 +183,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         ComponentName appWidgets = new ComponentName(context.getPackageName(), "org.yuttadhammo.BodhiTimer.widget.BodhiAppWidgetProvider");
         widgetIds = appWidgetManager.getAppWidgetIds(appWidgets);
 
-        backgrounds = new HashMap<Integer, Integer>();
+        backgrounds = new HashMap<>();
         if (widgetIds.length > 0) {
             for (int widgetId : widgetIds) {
 
@@ -234,7 +234,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         } else if (state == PAUSED) {
             Log.d(TAG, "paused");
 
-            Integer time = mSettings.getInt("CurrentTimeLeft", 0);
+            int time = mSettings.getInt("CurrentTimeLeft", 0);
             int rtime = Math.round(((float) time) / 1000) * 1000;  // round to seconds
             views.setTextViewText(R.id.time, Time.time2hms(rtime));
         } else {

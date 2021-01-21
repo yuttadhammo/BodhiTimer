@@ -9,7 +9,7 @@ import android.os.PowerManager.WakeLock
 import android.util.Log
 import androidx.preference.PreferenceManager
 
-class SoundManager(val mContext: Context) {
+class SoundManager(private val mContext: Context) {
 
     private val TAG: String = "SoundManager"
     private var player: MediaPlayer = MediaPlayer()
@@ -58,7 +58,7 @@ class SoundManager(val mContext: Context) {
     }
 
     fun play(mUri: String) {
-        var uri = mUri;
+        var uri = mUri
 
         if (mUri == "sys_def") {
             uri = PreferenceManager.getDefaultSharedPreferences(mContext).getString("NotificationUri", "").toString()

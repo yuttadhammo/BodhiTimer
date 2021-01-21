@@ -47,7 +47,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.yuttadhammo.BodhiTimer.Service.SessionType;
 import org.yuttadhammo.BodhiTimer.Util.Time;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,7 +72,6 @@ public class AdvNumberPicker extends AppCompatActivity {
     private List<String> advTimeList;
 
     String customUri = "sys_def";
-    String customSound = "";
     String[] customUris;
     String[] customSounds;
     private TextView uriText;
@@ -93,10 +91,6 @@ public class AdvNumberPicker extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         else
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-
-        //FIXME what this?
-        customSound = getString(R.string.sys_def);
 
         customUris = getResources().getStringArray(R.array.sound_uris);
         customSounds = getResources().getStringArray(R.array.sound_names);
@@ -154,7 +148,7 @@ public class AdvNumberPicker extends AppCompatActivity {
 
                 //builderSingle.setTitle("Select One Name:-");
 
-                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.select_dialog_singlechoice);
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
                 arrayAdapter.add(getString(R.string.sys_def));
 
 
@@ -178,12 +172,10 @@ public class AdvNumberPicker extends AppCompatActivity {
 
                                 if (which > 0) {
                                     customUri = customUris[which - 1];
-                                    customSound = customUris[which - 1];
                                 }
 
                                 if (which == 0) {
                                     customUri = "sys_def";
-                                    customSound = getString(R.string.sys_def);
                                 } else if (customUri.equals("system")) {
                                     mDialog = dialog;
                                     Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
@@ -277,7 +269,7 @@ public class AdvNumberPicker extends AppCompatActivity {
 
     private void updateDataSet() {
         if (advTimeString.equals("")) {
-            advTimeList = new ArrayList<String>();
+            advTimeList = new ArrayList<>();
         } else {
             String[] advTime = advTimeString.split("\\^");
             advTimeList = Arrays.asList(advTime);
@@ -377,10 +369,8 @@ public class AdvNumberPicker extends AppCompatActivity {
                     uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                     if (uri != null) {
                         customUri = uri.toString();
-                        customSound = getString(R.string.sys_tone);
                     } else {
                         customUri = "sys_def";
-                        customSound = getString(R.string.sys_def);
                     }
                     break;
                 case SELECT_FILE:
@@ -388,10 +378,8 @@ public class AdvNumberPicker extends AppCompatActivity {
                     uri = intent.getData();
                     if (uri != null) {
                         customUri = uri.toString();
-                        customSound = getString(R.string.sound_file);
                     } else {
                         customUri = "sys_def";
-                        customSound = getString(R.string.sys_def);
                     }
                     break;
             }
