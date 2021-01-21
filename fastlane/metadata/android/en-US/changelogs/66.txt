@@ -1,0 +1,15 @@
+5.3.0
+* Fix bugs with the Advanced Number picker, introduced in the last release. Thanks everyone for your help :)
+* Modernize the way notifications are shown
+
+Other recent changes
+* Completely refactor Alarm Handling. It should be much more reliable, especially when the phone is in battery saver mode.
+* Refactored preference screen
+* Native time pickers
+* Better defaults
+* Updated translations
+* Monospaced timer font
+
+Known issues:
+* Auto repeat doesn't currently work. Use the advanced time picker to add the desired number of repetitions.
+* There are issues with the pause button.
