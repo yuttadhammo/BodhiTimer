@@ -609,14 +609,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         } else {
             float p = (duration != 0) ? (elapsed / (float) duration) : 0;
             int alpha = Math.round(255 * p);
-            alpha = Math.min(alpha, 255);
+            alpha = Math.min(Math.max(0, alpha), 255);
 
-            String alphas = Integer.toHexString(alpha);
-            alphas = alphas.length() == 1 ? "0" + alphas : alphas;
+            int val = (invertColors ? 255 : 0 );
 
-            String colors = "#" + alphas + (invertColors ? "FFFFFF" : "000000");
-
-            int color = Color.parseColor(colors);
+            int color = Color.argb(alpha, val, val, val);
             blackView.setBackgroundColor(color);
             blackView.setVisibility(View.VISIBLE);
         }

@@ -49,7 +49,15 @@ public class TimerList {
         for (int i = 0; i < advTime.length; i++) {
             //  advTime[n] will be of format timeInMs#pathToSound
             String[] thisAdvTime = advTime[i].split("#");
-            int duration = Integer.parseInt(thisAdvTime[0]);
+
+            int duration = 0;
+
+            try {
+                duration = Integer.parseInt(thisAdvTime[0]);
+            } catch (Exception e) {
+                duration = 0;
+            }
+
             Timer timer = new Timer(duration, thisAdvTime[1]);
             list.add(timer);
         }
