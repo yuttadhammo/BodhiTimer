@@ -67,15 +67,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
 
         scrollView.setVisibility(View.VISIBLE);
 
-
-        // Established times
-        int[] times = getIntent().getIntArrayExtra("times");
-
-        // Time Picker
-        timePicker = findViewById(R.id.timepick);
-        timePicker.setIs24HourView(true);
-        timePicker.setHour(times[0]);
-        timePicker.setMinute(times[1]);
+        setupTimePicker();
 
 
         Button cancel = findViewById(R.id.btnCancel);
@@ -115,6 +107,24 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
 
         adv.setOnClickListener(this);
         adv.setOnLongClickListener(this);
+
+    }
+
+    private void setupTimePicker() {
+        // Established times
+        int[] times = getIntent().getIntArrayExtra("times");
+
+        // Time Picker
+        timePicker = findViewById(R.id.timepick);
+        timePicker.setIs24HourView(true);
+
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
+            timePicker.setHour(times[0]);
+            timePicker.setMinute(times[1]);
+        } else {
+            timePicker.setCurrentHour(times[0]);
+            timePicker.setCurrentHour(times[1]);
+        }
 
     }
 
