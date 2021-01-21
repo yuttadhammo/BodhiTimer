@@ -16,6 +16,7 @@ class SoundManager(val mContext: Context) {
 
     private fun play(mUri: Uri) {
 
+
         if (mUri != null) {
 
             try {
@@ -57,7 +58,13 @@ class SoundManager(val mContext: Context) {
     }
 
     fun play(mUri: String) {
-        play(Uri.parse(mUri))
+        var uri = mUri;
+
+        if (mUri == "sys_def") {
+            uri = PreferenceManager.getDefaultSharedPreferences(mContext).getString("NotificationUri", "").toString()
+        }
+
+        play(Uri.parse(uri))
     }
 
     private fun getWakeLock(context: Context, dur: Int): WakeLock? {

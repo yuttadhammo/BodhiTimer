@@ -176,6 +176,9 @@ public class AlarmTaskManager extends BroadcastReceiver {
     }
 
     public int addAlarms(TimerList list, int offset) {
+        // If adding a complete list, clear all previous alarms
+        cancelAllAlarms();
+
         int totalDuration = 0;
         lastId = 0;
 
@@ -193,6 +196,8 @@ public class AlarmTaskManager extends BroadcastReceiver {
             offset += duration;
             totalDuration += totalDuration;
         }
+
+        resetCurrentAlarm();
 
         return totalDuration;
 
@@ -212,14 +217,19 @@ public class AlarmTaskManager extends BroadcastReceiver {
             sessionDur += alarm.duration;
         }
 
-        int dur = getCurrentAlarmDuration();
-        setCurTimerDuration(dur);
-        setCurTimerLeft(0);
+        resetCurrentAlarm();
+        int dur = getCurTimerDurationVal();
         sessionDuration = sessionDur;
         setSessionTimeStamp(sessionDur);
 
         startTicker(dur);
-        Log.v(TAG, "Started ticker & timer, first duration: " + getCurTimerDurationVal());
+        Log.v(TAG, "Started ticker & timer, first duration: " + dur);
+    }
+
+    private void resetCurrentAlarm() {
+        int dur = getCurrentAlarmDuration();
+        setCurTimerDuration(dur);
+        setCurTimerLeft(0);
     }
 
     public int getCurrentAlarmDuration() {
@@ -243,9 +253,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
         return alarms.size();
     }
 
-    public void pauseAlarms() {
 
-    }
 
     public void cancelAllAlarms() {
         for (AlarmTask alarm : alarms) {

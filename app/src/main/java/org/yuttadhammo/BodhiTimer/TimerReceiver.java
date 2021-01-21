@@ -21,6 +21,8 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 
@@ -35,15 +37,15 @@ import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.*;
 public class TimerReceiver extends BroadcastReceiver {
 
     private final static String TAG = "TimerReceiver";
-    private Context context;
+    private Context mContext;
 
     public TimerReceiver() {
         super();
     }
 
     @Override
-    public void onReceive(Context contextPassed, Intent pintent) {
-        context = contextPassed;
+    public void onReceive(Context contextPassed, Intent mIntent) {
+        mContext = contextPassed;
 
 
         Log.v(TAG, "Received system alarm callback ");
@@ -52,24 +54,27 @@ public class TimerReceiver extends BroadcastReceiver {
         // This will be only received if the app is not stopped (or destroyed)...
         Intent broadcast = new Intent();
 
-        broadcast.putExtra("duration",  pintent.getIntExtra("duration", 0));
-        broadcast.putExtra("id", pintent.getIntExtra("id", 0));
-        broadcast.putExtra("uri", pintent.getStringExtra("uri"));
+        broadcast.putExtra("duration",  mIntent.getIntExtra("duration", 0));
+        broadcast.putExtra("id", mIntent.getIntExtra("id", 0));
+        broadcast.putExtra("uri", mIntent.getStringExtra("uri"));
         broadcast.setAction(BROADCAST_END);
-        context.sendBroadcast(broadcast);
+        mContext.sendBroadcast(broadcast);
 
         // Show notification
-        String notificationUri = pintent.getStringExtra("uri");
-        int duration = pintent.getIntExtra("duration", 0);
+        String notificationUri = mIntent.getStringExtra("uri");
+        int duration = mIntent.getIntExtra("duration", 0);
 
+        SoundManager mSoundManager = new SoundManager(mContext);
 
-        SoundManager mSoundManager = new SoundManager(contextPassed);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean alwaysShow = prefs.getBoolean("showAlwaysNotifications", false);
 
         if (notificationUri != null) {
             mSoundManager.play(notificationUri);
-            //Notification.show(context, duration);
-        } else {
-            Notification.show(context, duration);
+        }
+
+        if (alwaysShow || notificationUri == null) {
+            Notification.show(mContext, duration);
         }
 
     }

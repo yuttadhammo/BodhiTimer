@@ -74,10 +74,9 @@ public class Notification {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
 
-
             // Customize
-            boolean led = prefs.getBoolean("LED", true);
             boolean vibrate = prefs.getBoolean("Vibrate", true);
+            boolean led = prefs.getBoolean("LED", false);
 
             // Vibrate
             if (vibrate) {
@@ -93,6 +92,7 @@ public class Notification {
             }
 
             // TODO: For now we are playing the sound ourselves. But this can lead to cut of alarms
+
             // But notification channels don't allow changing sounds. So we would need to create a new channel each time?
             channel.setSound(null, null);
 
@@ -107,8 +107,8 @@ public class Notification {
 
 
     private static boolean legacyHandler(NotificationCompat.Builder mBuilder, SharedPreferences prefs) {
-        boolean led = prefs.getBoolean("LED", true);
         boolean vibrate = prefs.getBoolean("Vibrate", true);
+        boolean led = prefs.getBoolean("LED", false);
 
         // Vibrate
         if (vibrate) {
@@ -119,6 +119,7 @@ public class Notification {
         if (led) {
             mBuilder.setLights(0xff00ff00, 300, 1000);
         }
+
         return vibrate;
     }
 

@@ -47,6 +47,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.yuttadhammo.BodhiTimer.Service.SessionType;
 import org.yuttadhammo.BodhiTimer.Util.Time;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,6 +74,8 @@ public class AdvNumberPicker extends AppCompatActivity {
 
     String customUri = "sys_def";
     String customSound = "";
+    String[] customUris;
+    String[] customSounds;
     private TextView uriText;
     private DialogInterface mDialog;
 
@@ -92,7 +95,11 @@ public class AdvNumberPicker extends AppCompatActivity {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
+        //FIXME what this?
         customSound = getString(R.string.sys_def);
+
+        customUris = getResources().getStringArray(R.array.sound_uris);
+        customSounds = getResources().getStringArray(R.array.sound_names);
 
         advTimeString = prefs.getString("advTimeString", "");
 
@@ -150,9 +157,8 @@ public class AdvNumberPicker extends AppCompatActivity {
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.select_dialog_singlechoice);
                 arrayAdapter.add(getString(R.string.sys_def));
 
-                String[] sounds = getResources().getStringArray(R.array.sound_names);
 
-                for (String s : sounds) {
+                for (String s : customSounds) {
                     arrayAdapter.add(s);
                 }
 
@@ -171,8 +177,8 @@ public class AdvNumberPicker extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
 
                                 if (which > 0) {
-                                    customUri = getResources().getStringArray(R.array.sound_uris)[which - 1];
-                                    customSound = getResources().getStringArray(R.array.sound_names)[which - 1];
+                                    customUri = customUris[which - 1];
+                                    customSound = customUris[which - 1];
                                 }
 
                                 if (which == 0) {
@@ -247,15 +253,8 @@ public class AdvNumberPicker extends AppCompatActivity {
             }
         });
 
+        updateDataSet();
 
-        if (advTimeString.equals("")) {
-            advTimeList = new ArrayList<String>();
-        } else {
-            String[] advTime = advTimeString.split("\\^");
-            advTimeList = Arrays.asList(advTime);
-        }
-        adapter = new MyAdapter(context, R.layout.adv_list_item, advTimeList);
-        listView.setAdapter(adapter);
     }
 
     private void addTimeToList() {
@@ -285,6 +284,7 @@ public class AdvNumberPicker extends AppCompatActivity {
         }
         adapter = new MyAdapter(context, R.layout.adv_list_item, advTimeList);
         listView.setAdapter(adapter);
+
         Log.d(TAG, "advTimeString: " + advTimeString);
         Log.d(TAG, "adapter items: " + adapter.getCount());
 
@@ -322,7 +322,7 @@ public class AdvNumberPicker extends AppCompatActivity {
                 TextView sound = rowView.findViewById(R.id.sound);
 
                 if (sound != null) {
-                    sound.setText(p[2]);
+                    sound.setText(descriptionFromUri(p[1]));
                 }
             }
             Button b = rowView.findViewById(R.id.delete);
@@ -335,6 +335,22 @@ public class AdvNumberPicker extends AppCompatActivity {
 
             return rowView;
 
+        }
+    }
+
+    private String descriptionFromUri(String uri) {
+        switch (uri) {
+            case "sys_def":
+                return getString(R.string.sys_def);
+            default:
+                // Is it part of our tones?
+                int index = Arrays.asList(customUris).indexOf(uri);
+
+                if (index != -1) {
+                    return customSounds[index];
+                }
+
+                return getString(R.string.custom_sound);
         }
     }
 

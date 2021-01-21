@@ -158,8 +158,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         tts = new TextToSpeech(this, null);
 
-        //Intent intent = new Intent(this, TimerReceiver.class);
-        //mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         setContentView(R.layout.main);
 
@@ -207,8 +205,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
 
-        // get last times
-
+        // Setup Last Times
         lastTimes = new int[3];
 
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -256,7 +253,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     public void onResume() {
         super.onResume();
 
-        Log.i(TAG, "RESUME");
+
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -287,9 +284,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         int state = prefs.getInt("State", STOPPED);
 
-
         switch (state) {
             case RUNNING:
+                Log.i(TAG, "RESUME, state RUNNING");
                 // We are resuming the app while timers are (presumably) still active
                 // We might not have access to any objects, since the app might have been killed in the meantime.
 
@@ -340,13 +337,18 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     enterState(RUNNING);
 
                 } else {
+                    Log.i(TAG, "Resumed to RUNNING, but all timers are over");
                     mAlarmTaskManager.stopTicker();
+                    loadLastTimers();
                 }
                 break;
 
             case STOPPED:
-                mAlarmTaskManager.stopAlarmsAndTicker();
+                Log.i(TAG, "RESUME, state STOPPED");
+                //mAlarmTaskManager.stopAlarmsAndTicker();
                 mAlarmTaskManager.setCurTimerDuration(dur);
+                loadLastTimers();
+                enterState(STOPPED);
 
                 if (widget) {
                     if (prefs.getBoolean("SwitchTimeMode", false))
@@ -358,6 +360,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 break;
 
             case PAUSED:
+                Log.i(TAG, "RESUME, state PAUSED");
                 int curTime = prefs.getInt("CurrentTimeLeft", 0);
                 mAlarmTaskManager.setCurTimerLeft(curTime);
 
@@ -368,6 +371,13 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
         widget = false;
         updateLabel(0);
+    }
+
+    private void loadLastTimers() {
+        // Populate the AlarmManager with our last used timers
+        mAlarmTaskManager.addAlarms(retrieveTimerList(), 0);
+
+        updatePreviewLabel();
     }
 
     /**
@@ -742,6 +752,15 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
     private void updatePreviewLabel() {
+
+        ArrayList<String> arr = makePreviewArray();
+        Log.v(TAG, "Update preview label");
+
+        String advTimeStringLeft = TextUtils.join("\n", arr);
+        mAltLabel.setText(advTimeStringLeft);
+    }
+
+    private void updatePreviewLabelFromSettings() {
 
         ArrayList<String> arr = makePreviewArray();
         Log.v(TAG, "Update preview label");

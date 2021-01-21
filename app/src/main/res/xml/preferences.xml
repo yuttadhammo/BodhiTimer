@@ -63,10 +63,17 @@
         app:iconSpaceReserved="false" />
 
     <CheckBoxPreference
+        android:key="showAlwaysNotifications"
+        android:title="@string/notification_always"
+        android:summary="@string/notification_always_desc"
+        android:defaultValue="false"
+        app:iconSpaceReserved="false" />
+
+    <CheckBoxPreference
         android:key="Vibrate"
         android:title="@string/notification_vibrate"
         android:summary="@string/notification_vibrate_desc"
-        android:defaultValue="False"
+        android:defaultValue="True"
         app:iconSpaceReserved="false" />
 
     <CheckBoxPreference
