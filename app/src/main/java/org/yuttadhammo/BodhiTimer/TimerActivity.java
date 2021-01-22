@@ -743,6 +743,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         if (numbers[0] == -1) {
             String advTimeString = prefs.getString("advTimeString", "120000#sys_def");
 
+            // Overwrite the current timeString
+            editor.putString("timeString", advTimeString);
+
             if (advTimeString == null || advTimeString.length() == 0) {
                 widget = false;
                 return;
