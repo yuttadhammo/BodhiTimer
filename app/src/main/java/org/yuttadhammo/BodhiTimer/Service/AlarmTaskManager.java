@@ -39,10 +39,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
     public int mCurrentState = -1;
 
 
-    public long timeStamp;
-    private long sessionTimeStamp;
 
-    public int sessionDuration;
 
     public Timer mTimer;
 
@@ -54,16 +51,19 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
     public boolean appIsPaused;
 
+
+    // Data
+    public long timeStamp;
+    private long sessionTimeStamp;
+    public int sessionDuration;
+    private int sessionTimeLeft;
+
     // Live Data
     private final MutableLiveData<Integer> currentTimerDuration = new MutableLiveData<>();
     // The current elapsed timer time
     private final MutableLiveData<Integer> currentTimerLeft = new MutableLiveData<>();
-    // The current elapsed timer time
     private final MutableLiveData<Integer> mIndex = new MutableLiveData<>();
-    // The current elapsed timer time
-    private final MutableLiveData<Integer> sessionTimeLeft = new MutableLiveData<>();
-    // The current elapsed timer time
-    //private final MutableLiveData<Integer> sessionTimeLeft = new MutableLiveData<>();
+
 
     // Accessors
     public LiveData<Integer> getCurTimerDuration() {
@@ -121,9 +121,19 @@ public class AlarmTaskManager extends BroadcastReceiver {
         editor.putInt("CurrentTimeLeft", getCurTimerLeftVal());
         editor.putInt("State", mCurrentState);
         editor.putInt("SessionDuration", sessionDuration);
-        editor.putInt("SessionTimeLeft", sessionTimeLeft.getValue());
+        editor.putInt("SessionTimeLeft", sessionTimeLeft);
 
         editor.apply();
+    }
+
+    public void restoreState() {
+
+        setCurTimerDuration(prefs.getInt("CurrentTimerDuration", 0));
+        setCurTimerLeft(prefs.getInt("CurrentTimeLeft", 0));
+        mCurrentState = prefs.getInt("State", 0);
+        sessionDuration = prefs.getInt("SessionDuration", 0);
+        sessionTimeLeft = prefs.getInt("SessionTimeLeft", 0);
+
     }
 
 
@@ -396,7 +406,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
         Date sessionEnd = new Date(sessionTimeStamp);
 
         currentTimerLeft.setValue((int) (nextAlarm.getTime() - now.getTime()));
-        sessionTimeLeft.setValue((int) (sessionEnd.getTime() - now.getTime()));
+        sessionTimeLeft = (int) (sessionEnd.getTime() - now.getTime());
 
         if (currentTimerLeft.getValue() <= 0) {
 
