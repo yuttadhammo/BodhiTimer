@@ -98,9 +98,11 @@ public class SettingsActivity extends AppCompatActivity {
                 case SELECT_PHOTO:
                     uri = intent.getData();
 
-                    if (uri != null)
+                    if (uri != null) {
                         getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    settings.putString("bmp_url", uri.toString());
+                        settings.putString("bmp_url", uri.toString());
+                    }
+
 
                     break;
             }
