@@ -368,7 +368,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 break;
         }
         widget = false;
-        updateLabel(0);
+        updateMainLabel(0);
     }
 
     private void loadLastTimers() {
@@ -599,7 +599,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      * @param duration the duration of the current timer
      */
     public void updateInterfaceWithTime(int elapsed, int duration) {
-        updateLabel(elapsed);
+        updateMainLabel(elapsed);
 
         if (animationIndex != 0) {
             blackView.setVisibility(View.GONE);
@@ -623,16 +623,35 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      *
      * @param time in milliseconds
      */
-    public void updateLabel(int time) {
+    public void updateMainLabel(int time) {
         if (time == 0) {
             time = mAlarmTaskManager.getCurTimerDurationVal();
         }
 
-        int rtime = (int) (Math.ceil(((float) time) / 1000) * 1000);  // round to seconds
+        int remainingTime = (int) (Math.ceil(((float) time) / 1000) * 1000);  // round to seconds
 
-        mTimerLabel.setText(Time.time2hms(rtime));
+        mTimerLabel.setText(Time.time2hms(remainingTime));
 
     }
+
+    private void updatePreviewLabel() {
+
+        ArrayList<String> arr = makePreviewArray();
+        Log.v(TAG, "Update preview label");
+
+        String advTimeStringLeft = TextUtils.join("\n", arr);
+        mAltLabel.setText(advTimeStringLeft);
+    }
+
+    private void updatePreviewLabelFromSettings() {
+
+        ArrayList<String> arr = makePreviewArray();
+        Log.v(TAG, "Update preview label");
+
+        String advTimeStringLeft = TextUtils.join("\n", arr);
+        mAltLabel.setText(advTimeStringLeft);
+    }
+
 
 
     public void startSimpleAlarm(int[] numbers) {
@@ -746,23 +765,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     }
 
-    private void updatePreviewLabel() {
-
-        ArrayList<String> arr = makePreviewArray();
-        Log.v(TAG, "Update preview label");
-
-        String advTimeStringLeft = TextUtils.join("\n", arr);
-        mAltLabel.setText(advTimeStringLeft);
-    }
-
-    private void updatePreviewLabelFromSettings() {
-
-        ArrayList<String> arr = makePreviewArray();
-        Log.v(TAG, "Update preview label");
-
-        String advTimeStringLeft = TextUtils.join("\n", arr);
-        mAltLabel.setText(advTimeStringLeft);
-    }
 
 
     /**
