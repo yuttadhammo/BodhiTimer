@@ -1,6 +1,5 @@
 package org.yuttadhammo.BodhiTimer.Service;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,8 +41,6 @@ public class AlarmTaskManager extends BroadcastReceiver {
     public int mCurrentState = -1;
 
 
-
-
     public Timer mTimer;
 
     private final Stack<AlarmTask> alarms;
@@ -72,15 +69,19 @@ public class AlarmTaskManager extends BroadcastReceiver {
     public LiveData<Integer> getCurTimerDuration() {
         return currentTimerDuration;
     }
+
     public LiveData<Integer> getCurTimerLeft() {
         return currentTimerLeft;
     }
+
     public Integer getCurTimerDurationVal() {
         return currentTimerDuration.getValue();
     }
+
     public Integer getCurTimerLeftVal() {
         return currentTimerLeft.getValue();
     }
+
     public Integer getIndexVal() {
         return mIndex.getValue();
     }
@@ -88,9 +89,11 @@ public class AlarmTaskManager extends BroadcastReceiver {
     public void setCurTimerDuration(int newDuration) {
         currentTimerDuration.setValue(Integer.valueOf(newDuration));
     }
+
     public void setCurTimerLeft(int newElapsed) {
         currentTimerLeft.setValue(Integer.valueOf(newElapsed));
     }
+
     public void setIndex(int newIndex) {
         mIndex.setValue(Integer.valueOf(newIndex));
     }
@@ -98,7 +101,6 @@ public class AlarmTaskManager extends BroadcastReceiver {
     // TODO: These need to be handled outside
     public NotificationManager mNM;
     private final SharedPreferences prefs;
-
 
 
     public AlarmTaskManager(Context context) {
@@ -140,7 +142,6 @@ public class AlarmTaskManager extends BroadcastReceiver {
     }
 
 
-
     public interface AlarmTaskListener {
         void onEnterState(int state);
 
@@ -176,7 +177,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
      */
     public AlarmTask addAlarmWithUri(int offset, int duration, String uri, SessionType sessionType) {
 
-        Log.i(TAG, "Creating new alarm task, uri " + uri + " type: " + sessionType + " due in " + (duration + offset)/1000 );
+        Log.i(TAG, "Creating new alarm task, uri " + uri + " type: " + sessionType + " due in " + (duration + offset) / 1000);
         AlarmTask alarm = new AlarmTask(mContext, offset, duration);
         alarm.setUri(uri);
         alarm.setSessionType(sessionType);
@@ -196,7 +197,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
         int totalDuration = 0;
         lastId = 0;
 
-        for (TimerList.Timer timer: list.timers) {
+        for (TimerList.Timer timer : list.timers) {
             int duration = timer.duration;
 
             // Don't add elapsed timers, but increase the id,
@@ -217,7 +218,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
     }
 
-    public void startAllAlarms(){
+    public void startAllAlarms() {
         for (AlarmTask alarm : alarms) {
             alarm.run();
         }
@@ -269,7 +270,6 @@ public class AlarmTaskManager extends BroadcastReceiver {
     public int getAlarmCount() {
         return alarms.size();
     }
-
 
 
     public void cancelAllAlarms() {
@@ -359,7 +359,6 @@ public class AlarmTaskManager extends BroadcastReceiver {
         startTicker(timeLeft);
         onEnterState(RUNNING);
     }
-
 
 
     /**
@@ -460,12 +459,11 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
     public void onAlarmEnd(int id) {
         int left = alarms.size() - 1;
-        Log.v(TAG, "Alarm has ended. There are " +  left + " alarms left");
+        Log.v(TAG, "Alarm has ended. There are " + left + " alarms left");
 
         AlarmTask alarm = getAlarmById(id);
 
         if (alarm == null) return;
-
 
 
         // Remove alarm

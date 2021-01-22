@@ -41,7 +41,7 @@ public class TimerList {
         return listToTimeString(timers);
     }
 
-    public static  ArrayList<Timer> timeStringToList(String advTimeString) {
+    public static ArrayList<Timer> timeStringToList(String advTimeString) {
         ArrayList<Timer> list = new ArrayList<>();
 
         String[] advTime = advTimeString.split("\\^");
@@ -65,11 +65,11 @@ public class TimerList {
         return list;
     }
 
-    public static String listToTimeString (ArrayList<Timer> list ) {
+    public static String listToTimeString(ArrayList<Timer> list) {
         ArrayList<String> stringArray = new ArrayList<>();
 
-        for (Timer timer: list) {
-            stringArray.add(timer.duration + "#" + timer.uri + "#" +  timer.sessionType);
+        for (Timer timer : list) {
+            stringArray.add(timer.duration + "#" + timer.uri + "#" + timer.sessionType);
         }
 
         return TextUtils.join("^", stringArray);

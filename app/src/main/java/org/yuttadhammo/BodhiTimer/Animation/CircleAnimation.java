@@ -310,8 +310,8 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
     /**
      * Draws the Enso image based on the current time
      *
-     * @param canvas The canvas to draw on
-     * @param progress  the original time set in milliseconds
+     * @param canvas   The canvas to draw on
+     * @param progress the original time set in milliseconds
      */
     private void drawEnso(Canvas canvas, float progress) {
 
@@ -350,8 +350,8 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
     /**
      * Draws a circle based on the current time
      *
-     * @param canvas The canvas to draw on
-     * @param progress  the original time set in milliseconds
+     * @param canvas   The canvas to draw on
+     * @param progress the original time set in milliseconds
      */
     private void drawGenericCircle(Canvas canvas, float progress, float thetaSecond) {
         int START_ANGLE = 90;

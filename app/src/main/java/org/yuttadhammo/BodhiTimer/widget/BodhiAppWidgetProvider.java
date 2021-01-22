@@ -53,7 +53,7 @@ import java.util.TimerTask;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
-import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.*;
+import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_STOP;
 
 public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
@@ -308,7 +308,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
     /**
      * Handler for the message from the timer service
      */
-    private Handler mHandler = new Handler(Looper.getMainLooper() ) {
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
 
         @Override
         public void handleMessage(Message msg) {

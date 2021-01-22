@@ -17,7 +17,7 @@ public class Notification {
     private static final String CHANNEL_ID = "ALARMS";
 
 
-    public static void show(Context context, int time){
+    public static void show(Context context, int time) {
         Log.v(TAG, "Showing notification... " + time);
 
         // Get Notification Manager & Prefs
@@ -34,7 +34,6 @@ public class Notification {
 
         CharSequence text = context.getText(R.string.Notification);
         CharSequence textLatest = String.format(context.getString(R.string.timer_for_x), setTimeStr);
-
 
 
         // Create the notification
@@ -96,8 +95,6 @@ public class Notification {
             mNotificationManager.createNotificationChannel(channel);
         }
     }
-
-
 
 
     private static void legacyHandler(NotificationCompat.Builder mBuilder, SharedPreferences prefs) {

@@ -118,7 +118,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             timePicker.setHour(times[0]);
             timePicker.setMinute(times[1]);
         } else {
@@ -273,7 +273,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         finish();
     }
 
-    private void startAdvancedPicker(){
+    private void startAdvancedPicker() {
         Intent i = new Intent(this, AdvNumberPicker.class);
         startActivityForResult(i, 0);
     }

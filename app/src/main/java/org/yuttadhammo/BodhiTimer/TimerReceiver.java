@@ -24,11 +24,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-
 import org.yuttadhammo.BodhiTimer.Service.SoundManager;
 import org.yuttadhammo.BodhiTimer.Util.Notification;
 
-import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.*;
+import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
 
 
 // This class handles the alarm callback
@@ -53,7 +52,7 @@ public class TimerReceiver extends BroadcastReceiver {
         // This will be only received if the app is not stopped (or destroyed)...
         Intent broadcast = new Intent();
 
-        broadcast.putExtra("duration",  mIntent.getIntExtra("duration", 0));
+        broadcast.putExtra("duration", mIntent.getIntExtra("duration", 0));
         broadcast.putExtra("id", mIntent.getIntExtra("id", 0));
         broadcast.putExtra("uri", mIntent.getStringExtra("uri"));
         broadcast.setAction(BROADCAST_END);

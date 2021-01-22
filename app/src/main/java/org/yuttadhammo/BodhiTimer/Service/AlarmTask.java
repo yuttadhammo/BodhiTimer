@@ -95,7 +95,7 @@ public class AlarmTask implements Runnable {
 
         int time = duration + offset;
 
-        Log.i(TAG, "Running new alarm task " + id + ", uri " + mUri.getValue() + " type: " + mSessionType.getValue() + " due in " + (time)/1000 );
+        Log.i(TAG, "Running new alarm task " + id + ", uri " + mUri.getValue() + " type: " + mSessionType.getValue() + " due in " + (time) / 1000);
 
         mPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         //mPendingIntent.
@@ -113,7 +113,7 @@ public class AlarmTask implements Runnable {
 
     public void cancel() {
         if (mPendingIntent != null)
-             mAlarmMgr.cancel(mPendingIntent);
+            mAlarmMgr.cancel(mPendingIntent);
     }
 
     // Accesors
@@ -141,6 +141,7 @@ public class AlarmTask implements Runnable {
     public LiveData<String> getUri() {
         return mUri;
     }
+
     public void setUri(String label) {
         mUri.setValue(label);
     }
@@ -148,6 +149,7 @@ public class AlarmTask implements Runnable {
     public LiveData<String> getUriType() {
         return mUriType;
     }
+
     public void setUriType(String val) {
         mUriType.setValue(val);
     }

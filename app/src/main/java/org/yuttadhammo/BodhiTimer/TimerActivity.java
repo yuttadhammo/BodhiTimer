@@ -496,7 +496,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
 
-
     /**
      * {@inheritDoc}
      */
@@ -603,7 +602,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             int alpha = Math.round(255 * p);
             alpha = Math.min(Math.max(0, alpha), 255);
 
-            int val = (invertColors ? 255 : 0 );
+            int val = (invertColors ? 255 : 0);
 
             int color = Color.argb(alpha, val, val, val);
             blackView.setBackgroundColor(color);
@@ -643,7 +642,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         String advTimeStringLeft = TextUtils.join("\n", arr);
         mAltLabel.setText(advTimeStringLeft);
     }
-
 
 
     public void startSimpleAlarm(int[] numbers) {
@@ -755,7 +753,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         updatePreviewLabel();
 
     }
-
 
 
     /**

@@ -100,7 +100,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                     if (uri != null)
                         getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                        settings.putString("bmp_url", uri.toString());
+                    settings.putString("bmp_url", uri.toString());
 
                     break;
             }
