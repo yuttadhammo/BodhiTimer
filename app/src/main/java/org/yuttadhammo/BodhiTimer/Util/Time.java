@@ -55,9 +55,7 @@ public class Time {
     public static String[] ms2Str(int ms) {
         int[] time = time2Array(ms);
 
-        if (time[0] == 0 && time[1] == 0 && time[2] == 0) {
-            return new String[]{};
-        } else if (time[0] == 0 && time[1] == 0) {
+        if (time[0] == 0 && time[1] == 0) {
             return new String[]{String.format("%01d", time[2])};
         } else if (time[0] == 0) {
             return new String[]{String.format("%01d", time[1]), String.format("%02d", time[2])};
