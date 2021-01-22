@@ -252,7 +252,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         super.onResume();
 
 
-
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 
@@ -272,13 +271,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         animationIndex = prefs.getInt("DrawingIndex", 1);
 
         setupUI();
-
-
-        // Load the last time picked with the simple time picker.
-        int dur = prefs.getInt("LastSimpleTime", 1800000);
-        lastTimes = Time.time2Array(dur);
-        Log.d(TAG, "Last Time: " + dur);
-
 
         int state = prefs.getInt("State", STOPPED);
 
@@ -338,14 +330,16 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     Log.i(TAG, "Resumed to RUNNING, but all timers are over");
                     mAlarmTaskManager.stopTicker();
                     loadLastTimers();
+                    updateMainLabel(0);
                 }
+
                 break;
 
             case STOPPED:
                 Log.i(TAG, "RESUME, state STOPPED");
-                //mAlarmTaskManager.stopAlarmsAndTicker();
-                mAlarmTaskManager.setCurTimerDuration(dur);
+
                 loadLastTimers();
+
                 enterState(STOPPED);
 
                 if (widget) {
@@ -355,26 +349,30 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                         showNumberPicker();
                     return;
                 }
+
+
+                updateMainLabel(0);
+
                 break;
 
             case PAUSED:
                 Log.i(TAG, "RESUME, state PAUSED");
-                int curTime = prefs.getInt("CurrentTimeLeft", 0);
-                mAlarmTaskManager.setCurTimerLeft(curTime);
+                loadLastTimers();
+                mAlarmTaskManager.restoreState();
 
-                // FIXME
-                updateInterfaceWithTime(curTime, 0);
+                updateInterfaceWithTime(mAlarmTaskManager.getCurTimerLeftVal(), mAlarmTaskManager.getCurTimerDurationVal());
+                updateMainLabel(mAlarmTaskManager.getCurTimerLeftVal());
+
                 enterState(PAUSED);
                 break;
         }
         widget = false;
-        updateMainLabel(0);
+
     }
 
     private void loadLastTimers() {
         // Populate the AlarmManager with our last used timers
         mAlarmTaskManager.addAlarms(retrieveTimerList(), 0);
-
         updatePreviewLabel();
     }
 
@@ -400,16 +398,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAlarmTaskManager.saveState();
         mTimerAnimation.saveState(prefs);
 
-        switch (mAlarmTaskManager.mCurrentState) {
-
-            case RUNNING:
-                Log.i(TAG, "pause while running: " + new Date().getTime() + mAlarmTaskManager.getCurTimerLeftVal());
-                break;
-            case PAUSED:
-                editor.putLong("TimeStamp", 1);
-                break;
-            default:
-                break;
+        if (mAlarmTaskManager.mCurrentState == RUNNING) {
+            Log.i(TAG, "Pause while running: " + new Date().getTime() + mAlarmTaskManager.getCurTimerLeftVal());
         }
 
         editor.apply();
@@ -557,13 +547,14 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     public void resumeTimer() {
         // How far have we elapsed?
         int sessionLeft = prefs.getInt("SessionTimeLeft", 0);
+        int currentTimerLeft = prefs.getInt("CurrentTimeLeft", 0);
         int sessionDuration = mAlarmTaskManager.sessionDuration;
 
         int timeElapsed = sessionDuration - sessionLeft;
 
-        // Get time string
+        // Setup the alarms
         mAlarmTaskManager.addAlarms(retrieveTimerList(), -timeElapsed);
-        mAlarmTaskManager.timerResume();
+        mAlarmTaskManager.timerResume(currentTimerLeft);
         mAlarmTaskManager.startAllAlarms();
     }
 
@@ -632,13 +623,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
 
         int remainingTime = (int) (Math.ceil(((float) time) / 1000) * 1000);  // round to seconds
-
         mTimerLabel.setText(Time.time2hms(remainingTime));
 
     }
 
     private void updatePreviewLabel() {
-
         ArrayList<String> arr = makePreviewArray();
         Log.v(TAG, "Update preview label");
 
@@ -751,7 +740,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 widget = false;
                 return;
             }
-
 
             startAdvancedAlarm(advTimeString);
             updatePreviewLabel();
