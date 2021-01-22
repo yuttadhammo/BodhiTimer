@@ -3,10 +3,10 @@
 
     <!-- Base application theme. -->
     <style name="AppCompatTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/orange</item>
-        <item name="colorPrimaryDark">@color/orangeDark</item>
-        <item name="colorAccent">@color/orange</item>
-        <item name="colorControlActivated">@color/orange</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
@@ -24,7 +24,7 @@
     </style>
 
     <style name="themeOverlay_timePicker" parent="ThemeOverlay.AppCompat">
-        <item name="colorControlActivated">@color/orange</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
 
 </resources>
