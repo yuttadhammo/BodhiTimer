@@ -231,9 +231,12 @@ public class AlarmTaskManager extends BroadcastReceiver {
     }
 
     public int getCurrentAlarmDuration() {
-        AlarmTask firstAlarm = alarms.firstElement();
-
-        return firstAlarm.duration;
+        if (!alarms.empty()) {
+            AlarmTask firstAlarm = alarms.firstElement();
+            return firstAlarm.duration;
+        } else {
+            return 0;
+        }
     }
 
     public int getTotalDuration() {
