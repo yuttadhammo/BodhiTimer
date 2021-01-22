@@ -45,8 +45,6 @@ class BodhiLeaf implements TimerAnimation.TimerDrawing {
 
     private final Paint mProgressPaint;
 
-    private final SharedPreferences prefs;
-
     public BodhiLeaf(Context context) {
         mProgressPaint = new Paint();
         mProgressPaint.setColor(Color.BLACK);
@@ -54,7 +52,7 @@ class BodhiLeaf implements TimerAnimation.TimerDrawing {
         mProgressPaint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
 
         // get custom bitmap
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (!prefs.getBoolean("custom_bmp", false) || prefs.getString("bmp_url", "").length() == 0) {
             mCupBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.leaf);
         } else {

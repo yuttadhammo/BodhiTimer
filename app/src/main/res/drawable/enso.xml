@@ -3,7 +3,8 @@
     android:width="400dp"
     android:height="400dp"
     android:viewportWidth="1300"
-    android:viewportHeight="1300">
+    android:viewportHeight="1300"
+    tools:ignore="VectorRaster">
   <path
       android:pathData="m649.13,115.19c-1.04,1.66 2.54,3.31 4.54,2.09 0.8,-0.49 1.13,-1.44 0.73,-2.09 -0.97,-1.6 -4.27,-1.6 -5.27,-0"
       android:fillColor="#ffffff"

@@ -62,7 +62,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.Service.SessionType;
-import org.yuttadhammo.BodhiTimer.Service.SoundManager;
 import org.yuttadhammo.BodhiTimer.Service.TimerList;
 import org.yuttadhammo.BodhiTimer.SimpleNumberPicker.OnNNumberPickedListener;
 import org.yuttadhammo.BodhiTimer.Util.Notification;
@@ -114,10 +113,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     public AlarmTaskManager mAlarmTaskManager;
 
-
     private SharedPreferences prefs;
-
-    // for canceling notifications
 
 
     private boolean widget;
@@ -134,8 +130,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     private TextToSpeech tts;
 
-    private SoundManager mSoundManager;
-
 
     /**
      * Called when the activity is first created.
@@ -148,7 +142,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // Setup a new AlarmTaskManager
         mAlarmTaskManager = new AlarmTaskManager(this);
-        mSoundManager = new SoundManager(this);
 
         setupListener();
 

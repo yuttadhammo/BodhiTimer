@@ -35,16 +35,13 @@ import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
 public class TimerReceiver extends BroadcastReceiver {
 
     private final static String TAG = "TimerReceiver";
-    private Context mContext;
 
     public TimerReceiver() {
         super();
     }
 
     @Override
-    public void onReceive(Context contextPassed, Intent mIntent) {
-        mContext = contextPassed;
-
+    public void onReceive(Context mContext, Intent mIntent) {
 
         Log.v(TAG, "Received system alarm callback ");
 

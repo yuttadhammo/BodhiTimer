@@ -56,11 +56,8 @@ import java.util.List;
  */
 public class AdvNumberPicker extends AppCompatActivity {
 
-
-    private final String TAG = "ANumberPicker";
     private AppCompatActivity context;
     private SharedPreferences prefs;
-    private MyAdapter adapter;
     private String advTimeString;
     private EditText hours;
     private EditText mins;
@@ -68,7 +65,6 @@ public class AdvNumberPicker extends AppCompatActivity {
 
 
     ListView listView;
-    private List<String> advTimeList;
 
     String customUri = "sys_def";
     String[] customUris;
@@ -78,6 +74,9 @@ public class AdvNumberPicker extends AppCompatActivity {
 
     private final int SELECT_RINGTONE = 0;
     private final int SELECT_FILE = 1;
+
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String TAG = "AdvNumberPicker";
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -267,13 +266,14 @@ public class AdvNumberPicker extends AppCompatActivity {
     }
 
     private void updateDataSet() {
+        List<String> advTimeList;
         if (advTimeString.equals("")) {
             advTimeList = new ArrayList<>();
         } else {
             String[] advTime = advTimeString.split("\\^");
             advTimeList = Arrays.asList(advTime);
         }
-        adapter = new MyAdapter(context, R.layout.adv_list_item, advTimeList);
+        MyAdapter adapter = new MyAdapter(context, R.layout.adv_list_item, advTimeList);
         listView.setAdapter(adapter);
 
         Log.d(TAG, "advTimeString: " + advTimeString);
