@@ -417,6 +417,15 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
     @Override
+    protected void onStop() {
+        // When our activity is stopped ensure we also stop the connection to the service
+        // this stops us leaking our activity into the system *bad*
+        Log.d(TAG, "STOPPED");
+
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
         Log.d(TAG, "DESTROY");
         //Close the Text to Speech Library
@@ -496,14 +505,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             getWindow().clearFlags(LayoutParams.FLAG_FULLSCREEN);
     }
 
-    @Override
-    protected void onStop() {
-        // When our activity is stopped ensure we also stop the connection to the service
-        // this stops us leaking our activity into the system *bad*
-        Log.d(TAG, "STOPPED");
 
-        super.onStop();
-    }
 
     /**
      * {@inheritDoc}
