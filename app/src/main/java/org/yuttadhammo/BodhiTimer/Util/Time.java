@@ -94,35 +94,22 @@ public class Time {
         int[] timeVec = time2Array(time);
         int hour = timeVec[0], minutes = timeVec[1], seconds = timeVec[2];
 
-        //Log.v(TAG,"Times: "+hour+" "+minutes+" "+seconds);
+        ArrayList<String> strList = new ArrayList<>();
 
-        String r = "";
+        Resources res = context.getResources();
 
         // string formatting
         if (hour != 0) {
-            if (hour != 1)
-                r += String.format(context.getString(R.string.x_hours), hour);
-            else
-                r += context.getString(R.string.one_hour);
+            strList.add(res.getQuantityString(R.plurals.x_hours, hour, hour));
         }
         if (minutes != 0) {
-            if (r.length() != 0)
-                r += ", ";
-            if (minutes != 1)
-                r += String.format(context.getString(R.string.x_mins), minutes);
-            else
-                r += context.getString(R.string.one_min);
+            strList.add(res.getQuantityString(R.plurals.x_mins, minutes, minutes));
         }
         if (seconds != 0) {
-            if (r.length() != 0)
-                r += ", ";
-            if (seconds != 1)
-                r += String.format(context.getString(R.string.x_secs), seconds);
-            else
-                r += context.getString(R.string.one_sec);
+            strList.add(res.getQuantityString(R.plurals.x_secs, seconds, seconds));
         }
 
-        return r;
+        return TextUtils.join(", ", strList);
     }
 
 

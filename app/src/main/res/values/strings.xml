@@ -12,12 +12,20 @@
     <string name="warning_button">OK</string>
 
     <string name="timer_for_x">Timer for %s</string>
-    <string name="x_hours">" %d hours</string>
-    <string name="one_hour"> 1 hour</string>
-    <string name="x_mins">" %d minutes</string>
-    <string name="one_min"> 1 minute</string>
-    <string name="x_secs"> %d seconds</string>
-    <string name="one_sec"> 1 second</string>
+
+    <plurals name="x_hours">
+        <item quantity="one"> 1 hour</item>
+        <item quantity="other">" %d hours</item>
+    </plurals>
+    <plurals name="x_mins">
+        <item quantity="one"> 1 minute</item>
+        <item quantity="other">" %d minutes</item>
+    </plurals>
+    <plurals name="x_secs">
+        <item quantity="one"> 1 second</item>
+        <item quantity="other"> %d seconds</item>
+    </plurals>
+
 
     <string name="hour">hour</string>
     <string name="minute">minute</string>
