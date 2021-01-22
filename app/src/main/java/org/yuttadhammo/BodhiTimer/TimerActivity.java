@@ -122,8 +122,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     private boolean widget;
 
-    private int[] lastTimes;
-
     private TimerActivity context;
 
     private int animationIndex;
@@ -204,7 +202,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
         // Setup Last Times
-        lastTimes = new int[3];
 
         prefs.registerOnSharedPreferenceChangeListener(this);
 
@@ -580,7 +577,12 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     private void showNumberPicker() {
         Intent i = new Intent(this, SimpleNumberPicker.class);
-        i.putExtra("times", lastTimes);
+
+
+        int lastTimePicked = prefs.getInt("LastSimpleTime", 0);
+
+        i.putExtra("times", Time.time2Array(lastTimePicked));
+
         startActivityForResult(i, NUMBER_PICK_REQUEST_CODE);
     }
 
@@ -755,7 +757,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             updatePreviewLabel();
 
         } else {
-            lastTimes = numbers;
             Log.v(TAG, "Saving simple time: " + Time.msFromArray(numbers));
             editor.putInt("LastSimpleTime", Time.msFromArray(numbers));
             startSimpleAlarm(numbers);
