@@ -82,9 +82,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
     private HashMap<Integer, Integer> backgrounds;
 
-    public static String ACTION_CLOCK_START = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_START";
     public static final String ACTION_CLOCK_UPDATE = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_UPDATE";
-    public static String ACTION_CLOCK_CANCEL = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_CANCEL";
 
     private static RemoteViews views;
 
@@ -308,7 +306,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
     /**
      * Handler for the message from the timer service
      */
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
 
         @Override
         public void handleMessage(Message msg) {
