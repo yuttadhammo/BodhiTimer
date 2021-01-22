@@ -32,6 +32,7 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -307,7 +308,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
     /**
      * Handler for the message from the timer service
      */
-    private Handler mHandler = new Handler() {
+    private Handler mHandler = new Handler(Looper.getMainLooper() ) {
 
         @Override
         public void handleMessage(Message msg) {

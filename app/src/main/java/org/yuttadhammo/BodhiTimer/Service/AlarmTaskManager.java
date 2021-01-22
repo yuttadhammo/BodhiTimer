@@ -1,11 +1,13 @@
 package org.yuttadhammo.BodhiTimer.Service;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -25,6 +27,7 @@ import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_RESET;
 
+@SuppressWarnings("UnnecessaryBoxing")
 public class AlarmTaskManager extends BroadcastReceiver {
     private final String TAG = AlarmTaskManager.class.getSimpleName();
 
@@ -436,7 +439,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
     /**
      * Handler for the message from the timer service
      */
-    private final Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
 
         @Override
         public void handleMessage(Message msg) {
@@ -444,6 +447,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
             doTick();
         }
     };
+
 
     public AlarmTask getAlarmById(int id) {
         AlarmTask found = null;

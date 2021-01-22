@@ -20,12 +20,9 @@ package org.yuttadhammo.BodhiTimer.Animation;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-
-import org.yuttadhammo.BodhiTimer.TimerActivity;
 
 import java.io.FileNotFoundException;
 import java.util.Vector;

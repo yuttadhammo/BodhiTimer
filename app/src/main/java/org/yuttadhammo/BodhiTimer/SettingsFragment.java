@@ -64,6 +64,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public boolean onPreferenceTreeClick(Preference preference) {
         String key = preference.getKey();
 
+        //noinspection SwitchStatementWithTooFewBranches
         switch (key) {
             case "aboutPref":
                 showAboutScreen();
