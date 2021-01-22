@@ -4,7 +4,6 @@
     <string name="Start">Démarrer</string>
     <string name="Stop">Effacer</string>
 
-    <string name="Notification">C\'est l\'heure du thé!</string>
     <string name="InputTitle">Heure:Min:Sec</string>
 
     <string name="warning_text">Le téléphone est en mode silencieux. Vibration et son seront supprimés.</string>

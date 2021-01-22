@@ -303,18 +303,18 @@ public class AdvNumberPicker extends AppCompatActivity {
 
             if (p[0].length() > 0) {
 
-                TextView time = rowView.findViewById(R.id.time);
+                TextView timeView = rowView.findViewById(R.id.time);
 
-                if (time != null) {
+                if (timeView != null) {
                     String ts = Time.time2humanStr(context, Integer.parseInt(p[0]));
-                    time.setText(ts);
+                    timeView.setText(ts);
                 }
             }
             if (p.length > 2 && p[2].length() > 0) {
-                TextView sound = rowView.findViewById(R.id.sound);
+                TextView soundView = rowView.findViewById(R.id.sound);
 
-                if (sound != null) {
-                    sound.setText(descriptionFromUri(p[1]));
+                if (soundView != null) {
+                    soundView.setText(descriptionFromUri(p[1]));
                 }
             }
             Button b = rowView.findViewById(R.id.delete);
