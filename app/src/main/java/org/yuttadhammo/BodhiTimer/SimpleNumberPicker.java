@@ -115,7 +115,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         int[] times = getIntent().getIntArrayExtra("times");
 
         // Time Picker
-        timePicker = findViewById(R.id.timepick);
+        timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
