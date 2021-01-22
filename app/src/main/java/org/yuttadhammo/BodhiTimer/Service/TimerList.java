@@ -54,12 +54,12 @@ public class TimerList {
 
             try {
                 duration = Integer.parseInt(thisAdvTime[0]);
+                Timer timer = new Timer(duration, thisAdvTime[1]);
+                list.add(timer);
             } catch (Exception e) {
-                duration = 0;
+
             }
 
-            Timer timer = new Timer(duration, thisAdvTime[1]);
-            list.add(timer);
         }
 
         return list;
