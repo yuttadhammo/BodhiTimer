@@ -31,7 +31,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private MediaPlayer player;
     private Preference play;
-    private Preference preplay;
+    private Preference prePlay;
     private PreferenceScreen preferenceScreen;
 
     private final int SELECT_RINGTONE = 0;
@@ -166,7 +166,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         play = findPreference("playSound");
 
         ListPreference pretone = preferenceScreen.findPreference("PreSoundUri");
-        preplay = preferenceScreen.findPreference("playPreSound");
+        prePlay = preferenceScreen.findPreference("playPreSound");
 
         String[] entries = getResources().getStringArray(R.array.sound_names);
         final String[] entryValues = getResources().getStringArray(R.array.sound_uris);
@@ -219,7 +219,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         });
 
-        preplay.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        prePlay.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
                 String PreSoundUri = prefs.getString("PreSoundUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
@@ -236,8 +236,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (player.isPlaying()) {
             play.setTitle(context.getString(R.string.play_sound));
             play.setSummary(context.getString(R.string.play_sound_desc));
-            preplay.setTitle(context.getString(R.string.play_pre_sound));
-            preplay.setSummary(context.getString(R.string.play_pre_sound_desc));
+            prePlay.setTitle(context.getString(R.string.play_pre_sound));
+            prePlay.setSummary(context.getString(R.string.play_pre_sound_desc));
 
             player.stop();
         }
@@ -253,12 +253,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         } else if (newValue.toString().equals("file")) {
 
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("audio/*");
+            Uri uri = Uri.parse("content://com.android.externalstorage.documents/music/");
+
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("audio/*");
+            intent.putExtra("android.provider.extra.INITIAL_URI", uri);
 
             try {
-                getActivity().startActivityForResult(Intent.createChooser(intent, "Select Sound File"), fileActivity);
+                getActivity().startActivityForResult(intent, fileActivity);
             } catch (ActivityNotFoundException ex) {
                 Toast.makeText(getActivity(), "Please install a File Manager.", Toast.LENGTH_SHORT).show();
             }
@@ -273,8 +276,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             player.stop();
             play.setTitle(context.getString(R.string.play_sound));
             play.setSummary(context.getString(R.string.play_sound_desc));
-            preplay.setTitle(context.getString(R.string.play_pre_sound));
-            preplay.setSummary(context.getString(R.string.play_pre_sound_desc));
+            prePlay.setTitle(context.getString(R.string.play_pre_sound));
+            prePlay.setSummary(context.getString(R.string.play_pre_sound_desc));
             return;
         }
 
