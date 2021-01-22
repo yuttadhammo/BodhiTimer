@@ -812,9 +812,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
     private void setButtonAlpha(int i) {
-        mPauseButton.setAlpha(i);
-        mCancelButton.setAlpha(i);
-        mPrefButton.setAlpha(i);
+        mPauseButton.setImageAlpha(i);
+        mCancelButton.setImageAlpha(i);
+        mPrefButton.setImageAlpha(i);
     }
 
 
