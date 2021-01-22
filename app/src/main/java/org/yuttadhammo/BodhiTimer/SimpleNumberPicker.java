@@ -188,10 +188,9 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
     }
 
     private void setFromAdv() {
-        if (prefs.getString("advTimeString", "").length() > 0) {
-            int[] values = {-1, -1, -1};
-            returnResults(values);
-        } else {
+        boolean success = returnAdvanced();
+
+        if (!success) {
             startAdvancedPicker();
         }
     }
@@ -266,6 +265,16 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         editor.apply();
     }
 
+    private boolean returnAdvanced() {
+        if (prefs.getString("advTimeString", "").length() > 0) {
+            int[] values = {-1, -1, -1};
+            returnResults(values);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void returnResults(int[] values) {
         Intent i = new Intent();
         i.putExtra("times", values);
@@ -283,9 +292,8 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode < 0 && prefs.getString("advTimeString", "").length() > 0) {
-            int[] values = {-1, -1, -1};
-            returnResults(values);
+        if (resultCode < 0) {
+            returnAdvanced();
         }
     }
 }
