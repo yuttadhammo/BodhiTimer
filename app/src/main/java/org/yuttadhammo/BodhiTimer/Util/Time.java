@@ -105,7 +105,7 @@ public class Time {
         if (minutes != 0) {
             strList.add(res.getQuantityString(R.plurals.x_mins, minutes, minutes));
         }
-        if (seconds != 0) {
+        if (seconds >= 0) {
             strList.add(res.getQuantityString(R.plurals.x_secs, seconds, seconds));
         }
 
