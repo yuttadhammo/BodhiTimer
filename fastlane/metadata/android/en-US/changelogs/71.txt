@@ -1,0 +1,15 @@
+5.3.4
+* Fixed custom sounds not playing
+* Fix some bugs introduced in the last major release. Thanks everyone for your help :)
+
+5.3.0
+* Modernize the way notifications are shown
+* Completely refactor Alarm Handling. It should be much more reliable, especially when the phone is in battery saver mode.
+* Refactored preference screen
+* Native time pickers
+* Better defaults
+* Updated translations
+* Monospaced timer font
+
+Known issues:
+* Auto repeat doesn't currently work. Use the advanced time picker to add the desired number of repetitions.
