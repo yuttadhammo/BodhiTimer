@@ -27,7 +27,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:inputType="number"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                android:importantForAutofill="no" />
 
             <EditText
                 android:hint="mm"
@@ -35,7 +36,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:inputType="number"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                android:importantForAutofill="no" />
 
             <EditText
                 android:hint="ss"
@@ -43,7 +45,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:inputType="number"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                android:importantForAutofill="no" />
 
             <Button
                 android:id="@+id/add"
