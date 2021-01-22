@@ -116,10 +116,13 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
     public void saveState() {
         SharedPreferences.Editor editor = prefs.edit();
+
         editor.putInt("CurrentTimerDuration", getCurTimerDurationVal());
         editor.putInt("CurrentTimeLeft", getCurTimerLeftVal());
         editor.putInt("State", mCurrentState);
         editor.putInt("SessionDuration", sessionDuration);
+        editor.putInt("SessionTimeLeft", sessionTimeLeft.getValue());
+
         editor.apply();
     }
 
@@ -352,11 +355,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
     public void timerPause() {
         Log.v(TAG, "Pausing the timer...");
 
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("CurrentTimerDuration", getCurTimerDurationVal());
-        editor.putInt("CurrentTimeLeft", currentTimerLeft.getValue());
-        editor.putInt("SessionTimeLeft", sessionTimeLeft.getValue());
-        editor.apply();
+        saveState();
 
         cancelAllAlarms();
         //stopTicker();
@@ -505,36 +504,13 @@ public class AlarmTaskManager extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context context, Intent pintent) {
-//
-
-        NotificationManager mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-//        // Cancel notification and return...
-//        if (CANCEL_NOTIFICATION.equals(pintent.getAction())) {
-//            Log.v(TAG, "Cancelling notification...");
-//
-//            mNM.cancelAll();
-//            return;
-//        }
-//
-//        if (player != null) {
-//            Log.v(TAG, "Releasing media player...");
-//            try {
-//                player.reset();
-//                player.release();
-//                player = null;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                player = null;
-//            }
-//        }
+    public void onReceive(Context context, Intent mIntent) {
 
         Log.v(TAG, "MANGER Received alarm callback ");
 
         Intent broadcast = new Intent();
         broadcast.putExtra("time", 0);
-        broadcast.putExtra("id", pintent.getIntExtra("id", 0));
+        broadcast.putExtra("id", mIntent.getIntExtra("id", 0));
         broadcast.setAction(BROADCAST_END);
         context.sendBroadcast(broadcast);
 
