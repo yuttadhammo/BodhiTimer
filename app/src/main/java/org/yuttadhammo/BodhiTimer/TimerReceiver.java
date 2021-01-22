@@ -67,14 +67,13 @@ public class TimerReceiver extends BroadcastReceiver {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         boolean alwaysShow = prefs.getBoolean("showAlwaysNotifications", false);
 
-        if (notificationUri != null) {
-            mSoundManager.play(notificationUri);
-        }
-
         if (alwaysShow || notificationUri == null) {
             Notification.show(mContext, duration);
         }
 
+        if (notificationUri != null) {
+            mSoundManager.play(notificationUri);
+        }
     }
 
 }
