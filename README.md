@@ -5,8 +5,6 @@ Bodhi Timer is an elegant, minimalist countdown timer.  It is designed mainly fo
 
 Set the time via the clock icon in the top left.  You may set presets by choosing a time then holding down on one of the three preset buttons.
 
-You may alternatively use speech to set the time by long-pressing the clock button.  (These behaviours can be swapped via the preference screen.) To set multiple timers using speech, separate using the word "again", as in "five minutes again ten minutes"
-
 Pause / resume via the button in the bottom left, and stop the timer via the button in the bottom right.  The top right button is the preference button.
 
 You may add a timer widget to your desktop via the App Drawer, or on your lockscreen (Android 4.2+).
@@ -56,3 +54,4 @@ Recorded by juskiddink
 Licensed under CC-BY-SA 3.0
 https://freesound.org/people/juskiddink/sounds/122647/
 
+<!-- Regenerate: pandoc -f gfm -t html -o fastlane/metadata/android/en-US/full_description.txt README.md -->
