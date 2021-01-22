@@ -3,18 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ScrollView
-        android:id="@+id/ScrollView01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:layout_centerInParent="true">
+
 
         <LinearLayout
             android:id="@+id/container"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:layout_width="300dp"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#151515"
             android:visibility="invisible">
@@ -148,5 +144,4 @@
                     android:textColor="#FFFFFF" />
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
 </RelativeLayout>
