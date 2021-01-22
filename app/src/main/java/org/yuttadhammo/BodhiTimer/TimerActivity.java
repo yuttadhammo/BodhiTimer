@@ -230,6 +230,16 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             public void onUpdateTime(int elapsed, int duration) {
                 updateInterfaceWithTime(elapsed, duration);
             }
+
+            @Override
+            public void onEndTimers() {
+                if (prefs.getBoolean("AutoRestart", false)) {
+                    Log.i(TAG, "AUTO RESTART");
+                    mAlarmTaskManager.stopAlarmsAndTicker();
+                    startAdvancedAlarm(retrieveTimerList());
+                    enterState(RUNNING);
+                }
+            }
         });
     }
 

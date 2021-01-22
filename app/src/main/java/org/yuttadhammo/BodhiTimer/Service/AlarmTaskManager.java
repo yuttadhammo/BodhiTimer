@@ -153,6 +153,8 @@ public class AlarmTaskManager extends BroadcastReceiver {
         void onDataLoaded(String data);
 
         void onUpdateTime(int elapsed, int duration);
+
+        void onEndTimers();
     }
 
     // Assign the listener implementing events interface that will receive the events
@@ -170,6 +172,13 @@ public class AlarmTaskManager extends BroadcastReceiver {
         if (listener != null)
             listener.onUpdateTime(currentTimerLeft.getValue(), currentTimerDuration.getValue());
     }
+
+    private void onEndTimers() {
+        if (listener != null)
+            listener.onEndTimers();
+    }
+
+
 
 
     /**
@@ -471,10 +480,13 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
         // Update labels
         if (alarms.empty()) {
-            //cleanup?
+
+            // Send message to activity,
+            // in case AutoRepeat is on.
+            onEndTimers();
+
         } else {
             switchToTimer(alarms.firstElement());
-            //increaseIndex();
         }
     }
 
@@ -518,7 +530,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent mIntent) {
 
-        Log.v(TAG, "MANGER Received alarm callback ");
+        Log.v(TAG, "MANAGER Received alarm callback ");
 
         Intent broadcast = new Intent();
         broadcast.putExtra("time", 0);
