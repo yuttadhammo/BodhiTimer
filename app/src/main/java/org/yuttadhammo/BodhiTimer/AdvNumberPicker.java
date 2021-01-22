@@ -236,6 +236,7 @@ public class AdvNumberPicker extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("timeString", advTimeString);
                 editor.putString("advTimeString", advTimeString);
                 editor.apply();
                 Intent i = new Intent();

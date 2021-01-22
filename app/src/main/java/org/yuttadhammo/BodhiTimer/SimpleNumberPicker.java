@@ -251,6 +251,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
                     t = context.getString(R.string.pre4);
             }
         }
+
         if (s == null && ((TextView) v).getText().equals(t)) {
             Toast.makeText(context, context.getString(R.string.notset), Toast.LENGTH_LONG).show();
         } else
@@ -266,7 +267,6 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
     }
 
     private void returnResults(int[] values) {
-
         Intent i = new Intent();
         i.putExtra("times", values);
         setResult(AppCompatActivity.RESULT_OK, i);

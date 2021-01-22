@@ -691,12 +691,21 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         Editor editor = prefs.edit();
         String ret = tL.getString();
         Log.v(TAG, "Saved timer string: " + ret);
-        editor.putString("advTimeString", tL.getString());
+        editor.putString("timeString", tL.getString());
         editor.apply();
     }
 
+    private String getTimeString() {
+        String prefString = prefs.getString("timeString", "");
+
+        if (prefString == "")
+            prefString = prefs.getString("advTimeString", "120000#sys_def");
+
+        return prefString;
+    }
+
     private TimerList retrieveTimerList() {
-        String prefString = prefs.getString("advTimeString", "120000#sys_def");
+        String prefString = getTimeString();
         TimerList tL = new TimerList(prefString);
         Log.v(TAG, "Got timer string: " + prefString + " from Settings");
         return tL;
@@ -732,7 +741,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // advanced timer - 0 will be -1
         if (numbers[0] == -1) {
-            String advTimeString = prefs.getString("advTimeString", "");
+            String advTimeString = prefs.getString("advTimeString", "120000#sys_def");
 
             if (advTimeString == null || advTimeString.length() == 0) {
                 widget = false;
@@ -906,7 +915,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 String complexTime = Time.str2complexTimeString(this, match);
                 if (complexTime.length() > 0) {
                     Editor editor = prefs.edit();
-                    editor.putString("advTimeString", complexTime);
+                    editor.putString("timeString", complexTime);
                     editor.apply();
                     if (prefs.getBoolean("SpeakTime", false)) {
                         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
