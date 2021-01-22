@@ -14,16 +14,16 @@
     <string name="timer_for_x">Timer for %s</string>
 
     <plurals name="x_hours">
-        <item quantity="one"> 1 hour</item>
-        <item quantity="other">" %d hours</item>
+        <item quantity="one">1 hour</item>
+        <item quantity="other">%d hours</item>
     </plurals>
     <plurals name="x_mins">
-        <item quantity="one"> 1 minute</item>
-        <item quantity="other">" %d minutes</item>
+        <item quantity="one">1 minute</item>
+        <item quantity="other">%d minutes</item>
     </plurals>
     <plurals name="x_secs">
-        <item quantity="one"> 1 second</item>
-        <item quantity="other"> %d seconds</item>
+        <item quantity="one">1 second</item>
+        <item quantity="other">%d seconds</item>
     </plurals>
 
 
