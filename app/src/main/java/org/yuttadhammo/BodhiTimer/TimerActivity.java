@@ -537,7 +537,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
             case R.id.cancelButton:
                 mAlarmTaskManager.stopAlarmsAndTicker();
-                loadLastTimers();
                 enterState(STOPPED);
                 break;
         }
@@ -800,10 +799,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 break;
             case STOPPED:
                 loadLastTimers();
+                mAlarmTaskManager.clearTime();
+
                 mPauseButton.setImageBitmap(mPlayBitmap);
                 mCancelButton.setVisibility(View.GONE);
                 mSetButton.setVisibility(View.VISIBLE);
-                mAlarmTaskManager.clearTime();
                 setButtonAlpha(255);
                 break;
 

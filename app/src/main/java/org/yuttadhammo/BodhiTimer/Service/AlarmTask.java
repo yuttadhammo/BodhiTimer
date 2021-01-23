@@ -51,16 +51,12 @@ public class AlarmTask implements Runnable {
     private final Context context;
 
     // The duration selected for the alarm
-    private final MutableLiveData<Integer> mDuration = new MutableLiveData<>();
 
     private PendingIntent mPendingIntent;
 
     // Unused
-    private final MutableLiveData<TimerState> mTimerState = new MutableLiveData<>();
     private final MutableLiveData<SessionType> mSessionType = new MutableLiveData<>();
-    private final MutableLiveData<String> mLabel = new MutableLiveData<>();
     private final MutableLiveData<String> mUri = new MutableLiveData<>();
-    private final MutableLiveData<String> mUriType = new MutableLiveData<>();
 
     public int id = 0;
     public int offset = 0;
@@ -70,35 +66,27 @@ public class AlarmTask implements Runnable {
         this.context = context;
         this.mAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        this.mDuration.setValue(duration);
         this.duration = duration;
         this.offset = offset;
-//        this.mTimerState.setValue(TimerState.INACTIVE);
-//        this.mSessionType.setValue(SessionType.WORK);
-//        this.mLabel.setValue("FIXME");
-//        // FIXME
-//        this.mUri.setValue(null);
     }
 
     @Override
     public void run() {
 
         Intent intent = new Intent(context, TimerReceiver.class);
-        //Intent intent = new Intent();
-
-        //intent.putExtra("SetTime", time);
         intent.putExtra("offset", offset);
         intent.putExtra("duration", duration);
         intent.putExtra("uri", mUri.getValue());
         intent.putExtra("id", id);
+
         intent.setAction(BROADCAST_END);
 
         int time = duration + offset;
 
-        Log.i(TAG, "Running new alarm task " + id + ", uri " + mUri.getValue() + " type: " + mSessionType.getValue() + " due in " + (time) / 1000);
+        Log.i(TAG, "Running new alarm task " + id + ", uri " + mUri.getValue() + " type: " + mSessionType.getValue() + " due in " + (time) / 1000 + " duration " + duration);
 
-        mPendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
-        //mPendingIntent.
+        mPendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent alarmInfoIntent = new Intent(context, TimerReceiver.class);
             PendingIntent pendingAlarmInfo = PendingIntent.getBroadcast(context, id + 1000, alarmInfoIntent, 0);
@@ -116,23 +104,7 @@ public class AlarmTask implements Runnable {
             mAlarmMgr.cancel(mPendingIntent);
     }
 
-    // Accesors
-
-    public LiveData<TimerState> getTimerState() {
-        return mTimerState;
-    }
-
-    public LiveData<SessionType> getSessionType() {
-        return mSessionType;
-    }
-
-    public void setDuration(int newDuration) {
-        mDuration.setValue(newDuration);
-    }
-
-    public void setTimerState(TimerState state) {
-        mTimerState.setValue(state);
-    }
+    // Accessors
 
     public void setSessionType(SessionType type) {
         mSessionType.setValue(type);
@@ -146,13 +118,6 @@ public class AlarmTask implements Runnable {
         mUri.setValue(label);
     }
 
-    public LiveData<String> getUriType() {
-        return mUriType;
-    }
-
-    public void setUriType(String val) {
-        mUriType.setValue(val);
-    }
 
 
 }
