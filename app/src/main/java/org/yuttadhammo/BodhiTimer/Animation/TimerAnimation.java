@@ -111,7 +111,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-        if (key.equals("Theme")) {
+        if (key.equals("CircleTheme")) {
             for (TimerDrawing drawing : mDrawings) {
                 drawing.configure();
             }

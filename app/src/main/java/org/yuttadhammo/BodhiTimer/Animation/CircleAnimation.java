@@ -154,7 +154,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         // Load the correct theme
-        theme = Integer.parseInt(prefs.getString("Theme", "3"));
+        theme = Integer.parseInt(prefs.getString("CircleTheme", "3"));
         boolean invertColors = prefs.getBoolean("invert_colors", false);
 
         int[] colors;
