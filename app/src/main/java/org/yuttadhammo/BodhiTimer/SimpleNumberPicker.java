@@ -110,6 +110,8 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
 
     }
 
+
+
     private void setupTimePicker() {
         // Established times
         int[] times = getIntent().getIntArrayExtra("times");
@@ -118,15 +120,11 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            timePicker.setHour(times[0]);
-            timePicker.setMinute(times[1]);
-        } else {
-            timePicker.setCurrentHour(times[0]);
-            timePicker.setCurrentHour(times[1]);
-        }
-
+        setHour(times);
+        setMinute(times);
     }
+
+
 
     /**
      * {@inheritDoc}
@@ -137,8 +135,8 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         switch (v.getId()) {
             case R.id.btnOk:
 
-                int hsel = timePicker.getHour();
-                int msel = timePicker.getMinute();
+                int hsel = getHour();
+                int msel = getMinute();
                 int ssel = 0;
 
                 int[] values = {hsel, msel, ssel};
@@ -202,8 +200,8 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean onLongClick(View v) {
-        String h = timePicker.getHour() + "";
-        String m = timePicker.getMinute() + "";
+        String h = getHour() + "";
+        String m = getMinute() + "";
 
         if (h.length() == 1)
             h = "0" + h;
@@ -294,6 +292,40 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
 
         if (resultCode < 0) {
             returnAdvanced();
+        }
+    }
+
+
+    // Helper functions
+    private void setMinute(int[] times) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            timePicker.setMinute(times[1]);
+        } else {
+            timePicker.setCurrentMinute(times[1]);
+        }
+    }
+
+    private void setHour(int[] times) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            timePicker.setHour(times[0]);
+        } else {
+            timePicker.setCurrentHour(times[0]);
+        }
+    }
+
+    private int getMinute() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return timePicker.getMinute();
+        } else {
+            return timePicker.getCurrentMinute();
+        }
+    }
+
+    private int getHour() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return timePicker.getHour();
+        } else {
+            return timePicker.getCurrentHour();
         }
     }
 }
