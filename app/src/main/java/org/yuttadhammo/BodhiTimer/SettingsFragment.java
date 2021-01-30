@@ -1,5 +1,6 @@
 package org.yuttadhammo.BodhiTimer;
 
+import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -27,7 +30,7 @@ import java.io.IOException;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private SharedPreferences prefs;
-    private Context context;
+    private Context mContext;
 
     private MediaPlayer player;
     private Preference play;
@@ -51,12 +54,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         //mSoundManager = new SoundManager(getContext());
 
         preferenceScreen = getPreferenceScreen();
-        context = getContext();
+        mContext = getContext();
 
         setupTonePicker();
         setupAnimations();
 
-        //setupBatteryAction();
 
     }
 
@@ -69,6 +71,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             case "aboutPref":
                 showAboutScreen();
                 break;
+            case "showSystemSettings":
+                showSystemSettings();
+                break;
+            case "doNotDisturb":
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    toggleDoNotDisturb();
+                }
+                break;
         }
 
         return super.onPreferenceTreeClick(preference);
@@ -76,12 +86,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
     private void showAboutScreen() {
-        LayoutInflater li = LayoutInflater.from(context);
+        LayoutInflater li = LayoutInflater.from(mContext);
         View view = li.inflate(R.layout.about, null);
         WebView wv = view.findViewById(R.id.about_text);
         wv.loadData(getString(R.string.about_text), "text/html", "utf-8");
 
-        AlertDialog.Builder p = new AlertDialog.Builder(context).setView(view);
+        AlertDialog.Builder p = new AlertDialog.Builder(mContext).setView(view);
         final AlertDialog alrt = p.create();
         alrt.setIcon(R.drawable.icon);
         alrt.setTitle(getString(R.string.about_title));
@@ -93,6 +103,26 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 });
         alrt.show();
 
+    }
+
+    private void showSystemSettings() {
+        Intent intent = new Intent();
+        intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+
+        intent.putExtra("android.provider.extra.APP_PACKAGE", mContext.getPackageName());
+
+        startActivity(intent);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void toggleDoNotDisturb() {
+        NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Check if the notification policy access has been granted for the app.
+        if (!mNotificationManager.isNotificationPolicyAccessGranted()) {
+            Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+            startActivity(intent);
+        }
     }
 
     private void setupAnimations() {
@@ -234,10 +264,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void selectTone(Object newValue, int ringtoneActivity, int fileActivity) {
         if (player.isPlaying()) {
-            play.setTitle(context.getString(R.string.play_sound));
-            play.setSummary(context.getString(R.string.play_sound_desc));
-            prePlay.setTitle(context.getString(R.string.play_pre_sound));
-            prePlay.setSummary(context.getString(R.string.play_pre_sound_desc));
+            play.setTitle(mContext.getString(R.string.play_sound));
+            play.setSummary(mContext.getString(R.string.play_sound_desc));
+            prePlay.setTitle(mContext.getString(R.string.play_pre_sound));
+            prePlay.setSummary(mContext.getString(R.string.play_pre_sound_desc));
 
             player.stop();
         }
@@ -274,10 +304,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         if (player.isPlaying()) {
             player.stop();
-            play.setTitle(context.getString(R.string.play_sound));
-            play.setSummary(context.getString(R.string.play_sound_desc));
-            prePlay.setTitle(context.getString(R.string.play_pre_sound));
-            prePlay.setSummary(context.getString(R.string.play_pre_sound_desc));
+            play.setTitle(mContext.getString(R.string.play_sound));
+            play.setSummary(mContext.getString(R.string.play_sound_desc));
+            prePlay.setTitle(mContext.getString(R.string.play_pre_sound));
+            prePlay.setSummary(mContext.getString(R.string.play_pre_sound_desc));
             return;
         }
 
@@ -300,21 +330,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 float log1 = (float) (Math.log(100 - currVolume) / Math.log(100));
                 player.setVolume(1 - log1, 1 - log1);
             }
-            player.setDataSource(context, Uri.parse(ToneUri));
+            player.setDataSource(mContext, Uri.parse(ToneUri));
             player.prepare();
             player.setLooping(false);
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    preference.setTitle(context.getString(R.string.play_sound));
-                    preference.setSummary(context.getString(R.string.play_sound_desc));
+                    preference.setTitle(mContext.getString(R.string.play_sound));
+                    preference.setSummary(mContext.getString(R.string.play_sound_desc));
                     Log.v(TAG, "Resetting media player...");
                     mp.reset();
                 }
             });
             player.start();
-            preference.setTitle(context.getString(R.string.playing_sound));
-            preference.setSummary(context.getString(R.string.playing_sound_desc));
+            preference.setTitle(mContext.getString(R.string.playing_sound));
+            preference.setSummary(mContext.getString(R.string.playing_sound_desc));
         } catch (IOException e) {
             Log.e(TAG, "Failed to play uri: " + ToneUri);
             e.printStackTrace();

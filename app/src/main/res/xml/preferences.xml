@@ -3,16 +3,6 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<!--    <PreferenceCategory-->
-<!--        android:title="@string/general"-->
-<!--        app:iconSpaceReserved="false"-->
-<!--        android:key="disable_battery_header"/>-->
-
-<!--    <Preference-->
-<!--        android:title="@string/disable_battery_optim"-->
-<!--        android:summary="@string/disable_battery_optim_desc"-->
-<!--        android:key="disable_battery_optim"-->
-<!--        app:iconSpaceReserved="false" />-->
 
     <PreferenceCategory
         android:title="@string/sound"
@@ -58,6 +48,14 @@
         app:showSeekBarValue="true"
         android:max="120" />
 
+    <CheckBoxPreference
+        android:key="doNotDisturb"
+        android:title="@string/do_not_disturb"
+        android:summary="@string/do_not_disturb_desc"
+        android:defaultValue="false"
+        app:iconSpaceReserved="false" />
+
+
     <PreferenceCategory
         android:title="@string/notification"
         app:iconSpaceReserved="false" />
@@ -69,19 +67,7 @@
         android:defaultValue="false"
         app:iconSpaceReserved="false" />
 
-    <CheckBoxPreference
-        android:key="Vibrate"
-        android:title="@string/notification_vibrate"
-        android:summary="@string/notification_vibrate_desc"
-        android:defaultValue="True"
-        app:iconSpaceReserved="false" />
 
-    <CheckBoxPreference
-        android:key="LED"
-        android:title="@string/led_notification"
-        android:summary="@string/led_notification_desc"
-        android:defaultValue="False"
-        app:iconSpaceReserved="false" />
 
 <!--    <CheckBoxPreference-->
 <!--        android:key="AutoClear"-->
@@ -90,11 +76,10 @@
 <!--        android:defaultValue="False"-->
 <!--        app:iconSpaceReserved="false" />-->
 
-    <CheckBoxPreference
-        android:key="NagSilent"
-        android:title="@string/nag_dialog"
-        android:summary="@string/nag_dialog_desc"
-        android:defaultValue="True"
+    <Preference
+        android:key="showSystemSettings"
+        android:title="@string/show_system_settings"
+        android:summary="@string/show_system_settings_desc"
         app:iconSpaceReserved="false" />
 
     <PreferenceCategory

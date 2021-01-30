@@ -202,6 +202,10 @@
     <string name="custom_sound">Custom</string>
     <string name="notification_always">Always show a notification</string>
     <string name="notification_always_desc">Even if a tone is played</string>
+    <string name="show_system_settings">Customize notifications</string>
+    <string name="show_system_settings_desc">Notifications can be customized in Android System Settings</string>
+    <string name="do_not_disturb">Do not Disturb</string>
+    <string name="do_not_disturb_desc">Enter Do Not Distrub Mode when meditating</string>
 
 </resources>
 

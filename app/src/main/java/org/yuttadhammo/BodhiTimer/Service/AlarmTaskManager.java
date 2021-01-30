@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -320,6 +321,8 @@ public class AlarmTaskManager extends BroadcastReceiver {
                 },
                 TIMER_TIC
         );
+
+        startDND();
     }
 
 
@@ -332,6 +335,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
         clearTime();
         cancelAllAlarms();
 
+        stopDND();
 
         // Stop our timer service
         onEnterState(STOPPED);
@@ -484,6 +488,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
             // Send message to activity,
             // in case AutoRepeat is on.
             onEndTimers();
+            stopDND();
 
         } else {
             switchToTimer(alarms.firstElement());
@@ -525,6 +530,20 @@ public class AlarmTaskManager extends BroadcastReceiver {
         // Save new time
         editor.putLong("SessionTimeStamp", sessionTimeStamp);
         editor.apply();
+    }
+
+    private void startDND() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean("doNotDisturb", false)) {
+            NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+        }
+    }
+
+    private void stopDND() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M  && prefs.getBoolean("doNotDisturb", false)) {
+            NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+        }
     }
 
     @Override
