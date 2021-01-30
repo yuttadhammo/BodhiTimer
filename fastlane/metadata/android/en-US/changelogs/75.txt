@@ -1,0 +1,12 @@
+5.3.8
+* Restore previous time picker
+* Add auto repeat function
+* Use green as the highlight color
+
+5.3.0
+* Completely refactor Alarm Handling. It should be much more reliable, especially when the phone is in battery saver mode.
+* Fix some bugs introduced in the last major release. Thanks everyone for your help :)
+* Modernize the way notifications are shown
+* Refactored preference screen
+* Updated translations
+* Monospaced timer font
