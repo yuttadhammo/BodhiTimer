@@ -75,7 +75,7 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
 
         setContentView(R.layout.n_number_picker_dialog);
 
-        LinearLayout scrollView = (LinearLayout) findViewById(R.id.container);
+        LinearLayout scrollView = findViewById(R.id.container);
 
         Animation slideDown = slideDown();
         scrollView.startAnimation(slideDown);
@@ -86,9 +86,9 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
         for (int i = 0; i < 61; i++) {
             numbers[i] = Integer.toString(i);
         }
-        hour = (Gallery) findViewById(R.id.gallery_hour);
-        min = (Gallery) findViewById(R.id.gallery_min);
-        sec = (Gallery) findViewById(R.id.gallery_sec);
+        hour = findViewById(R.id.gallery_hour);
+        min = findViewById(R.id.gallery_min);
+        sec = findViewById(R.id.gallery_sec);
 
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context, R.layout.gallery_item, numbers);
 
@@ -102,16 +102,16 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
         min.setSelection(times[1]);
         sec.setSelection(times[2]);
 
-        Button cancel = (Button) findViewById(R.id.btnCancel);
-        Button ok = (Button) findViewById(R.id.btnOk);
+        Button cancel = findViewById(R.id.btnCancel);
+        Button ok = findViewById(R.id.btnOk);
         cancel.setOnClickListener(this);
         ok.setOnClickListener(this);
 
-        Button pre1 = (Button) findViewById(R.id.btn1);
-        Button pre2 = (Button) findViewById(R.id.btn2);
-        Button pre3 = (Button) findViewById(R.id.btn3);
-        Button pre4 = (Button) findViewById(R.id.btn4);
-        Button adv = (Button) findViewById(R.id.btnadv);
+        Button pre1 = findViewById(R.id.btn1);
+        Button pre2 = findViewById(R.id.btn2);
+        Button pre3 = findViewById(R.id.btn3);
+        Button pre4 = findViewById(R.id.btn4);
+        Button adv = findViewById(R.id.btnadv);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         i1 = prefs.getString("pre1", null);
@@ -141,9 +141,9 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
         adv.setOnLongClickListener(this);
 
 
-        TextView htext = (TextView) findViewById(R.id.text_hour);
-        TextView mtext = (TextView) findViewById(R.id.text_min);
-        TextView stext = (TextView) findViewById(R.id.text_sec);
+        TextView htext = findViewById(R.id.text_hour);
+        TextView mtext = findViewById(R.id.text_min);
+        TextView stext = findViewById(R.id.text_sec);
 
         htext.setOnClickListener(this);
         mtext.setOnClickListener(this);
@@ -341,42 +341,6 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
         set.addAnimation(animation);
 
         return animation;
-    }
-
-    public static Animation slideUp(final View view) {
-
-        AnimationSet set = new AnimationSet(true);
-
-        Animation animation = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, -1.0f);
-        animation.setDuration(200);
-        animation.setAnimationListener(new AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                // TODO Auto-generated method stub
-                view.clearAnimation();
-                view.setVisibility(View.GONE);
-            }
-        });
-        set.addAnimation(animation);
-
-        return animation;
-
     }
 
 }
