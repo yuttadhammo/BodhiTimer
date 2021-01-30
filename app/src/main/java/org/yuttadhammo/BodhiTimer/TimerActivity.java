@@ -63,9 +63,9 @@ import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.Service.SessionType;
 import org.yuttadhammo.BodhiTimer.Service.TimerList;
-import org.yuttadhammo.BodhiTimer.SimpleNumberPicker.OnNNumberPickedListener;
 import org.yuttadhammo.BodhiTimer.Util.Notification;
 import org.yuttadhammo.BodhiTimer.Util.Time;
+import org.yuttadhammo.BodhiTimer.NNumberPicker;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -85,7 +85,7 @@ import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_UPDATE;
  *
  * @author Ralph Gootee (rgootee@gmail.com)
  */
-public class TimerActivity extends AppCompatActivity implements OnClickListener, OnNNumberPickedListener, OnSharedPreferenceChangeListener {
+public class TimerActivity extends AppCompatActivity implements OnClickListener, OnSharedPreferenceChangeListener {
 
     /**
      * Should the logs be shown
@@ -578,7 +578,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
     private void showNumberPicker() {
-        Intent i = new Intent(this, SimpleNumberPicker.class);
+        Intent i = new Intent(this, NNumberPicker.class);
 
 
         int lastTimePicked = prefs.getInt("LastSimpleTime", 0);

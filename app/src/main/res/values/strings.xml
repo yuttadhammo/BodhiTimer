@@ -155,9 +155,9 @@
     <string name="set">Set</string>
     <string name="pause">Pause</string>
 
-    <string name="H">H</string>
-    <string name="M">M</string>
-    <string name="S">S</string>
+    <string name="H">Hrs</string>
+    <string name="M">Min</string>
+    <string name="S">Sec</string>
 
     <string name="pre1">one</string>
     <string name="pre2">two</string>
