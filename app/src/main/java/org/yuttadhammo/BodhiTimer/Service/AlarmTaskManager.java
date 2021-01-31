@@ -323,6 +323,7 @@ public class AlarmTaskManager extends AndroidViewModel {
                         }
                     }
                 },
+                TIMER_TIC,
                 TIMER_TIC
         );
 

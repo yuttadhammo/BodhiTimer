@@ -142,7 +142,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
         mAlarmTaskManager = new ViewModelProvider(this).get(AlarmTaskManager.class);
-
+        setupListener();
 
 
         setContentView(R.layout.main);
@@ -205,7 +205,43 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
 
+    // TODO: This could be done with liveData....
 
+    private void setupListener() {
+
+        mAlarmTaskManager.setListener(new AlarmTaskManager.AlarmTaskListener() {
+            @Override
+            public void onEnterState(int state) {
+                enterState(state);
+            }
+
+            @Override
+            public void onObjectReady(String title) {
+                //AlarmTaskManager
+            }
+
+            @Override
+            public void onDataLoaded(String data) {
+                // Code to handle data loaded from network
+                // Use the data here!
+            }
+
+            @Override
+            public void onUpdateTime(int elapsed, int duration) {
+                updateInterfaceWithTime(elapsed, duration);
+            }
+
+            @Override
+            public void onEndTimers() {
+                if (prefs.getBoolean("AutoRestart", false)) {
+                    Log.i(TAG, "AUTO RESTART");
+                    mAlarmTaskManager.stopAlarmsAndTicker();
+                    startAdvancedAlarm(retrieveTimerList());
+                    enterState(RUNNING);
+                }
+            }
+        });
+    }
 
     /**
      * {@inheritDoc}
