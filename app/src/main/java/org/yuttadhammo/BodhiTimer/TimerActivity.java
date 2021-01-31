@@ -45,7 +45,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -57,7 +56,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
@@ -65,12 +67,9 @@ import org.yuttadhammo.BodhiTimer.Service.SessionType;
 import org.yuttadhammo.BodhiTimer.Service.TimerList;
 import org.yuttadhammo.BodhiTimer.Util.Notification;
 import org.yuttadhammo.BodhiTimer.Util.Time;
-import org.yuttadhammo.BodhiTimer.NNumberPicker;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Timer;
 
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
@@ -106,15 +105,13 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     private TimerAnimation mTimerAnimation;
     private TextView mTimerLabel;
-    private TextView mAltLabel;
+    private TextView mPreviewLabel;
 
     private Bitmap mPlayBitmap, mPauseBitmap;
-
 
     public AlarmTaskManager mAlarmTaskManager;
 
     private SharedPreferences prefs;
-
 
     private boolean widget;
 
@@ -124,9 +121,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     private ImageView blackView;
 
-
     private boolean invertColors = false;
-
 
     private TextToSpeech tts;
 
@@ -140,17 +135,27 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         Log.i(TAG, "CREATE");
         super.onCreate(savedInstanceState);
 
-        // Setup a new AlarmTaskManager
-        mAlarmTaskManager = new AlarmTaskManager(this);
+        context = this;
+        mAlarmTaskManager = new ViewModelProvider(this).get(AlarmTaskManager.class);
 
-        setupListener();
+        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        prefs.registerOnSharedPreferenceChangeListener(this);
 
-        tts = new TextToSpeech(this, null);
+        setupObservers();
+        prepareUI();
 
 
+        IntentFilter filter2 = new IntentFilter();
+        filter2.addAction(BROADCAST_END);
+        registerReceiver(alarmEndReceiver, filter2);
+
+        Notification.createNotificationChannel(context);
+
+    }
+
+    private void prepareUI() {
         setContentView(R.layout.main);
 
-        context = this;
 
         mCancelButton = findViewById(R.id.cancelButton);
         mCancelButton.setOnClickListener(this);
@@ -183,64 +188,60 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 getResources(), R.drawable.play);
 
         mTimerLabel = findViewById(R.id.text_top);
-        mAltLabel = findViewById(R.id.text_alt);
+        mPreviewLabel = findViewById(R.id.text_preview);
 
         mTimerAnimation = findViewById(R.id.mainImage);
         mTimerAnimation.setOnClickListener(this);
 
         blackView = findViewById(R.id.black);
 
-        // Store some useful values
-        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
-
-        // Setup Last Times
-
-        prefs.registerOnSharedPreferenceChangeListener(this);
-
-
-        IntentFilter filter2 = new IntentFilter();
-        filter2.addAction(BROADCAST_END);
-        registerReceiver(alarmEndReceiver, filter2);
-
-        Notification.createNotificationChannel(context);
-
+        animationIndex = prefs.getInt("DrawingIndex", 1);
     }
 
-    private void setupListener() {
-
-        mAlarmTaskManager.setListener(new AlarmTaskManager.AlarmTaskListener() {
+    private void setupObservers() {
+        // Create the observer which updates the UI.
+        final Observer<String> timerLabelObserver = new Observer<String>() {
             @Override
-            public void onEnterState(int state) {
-                enterState(state);
+            public void onChanged(@Nullable final String newTime) {
+                mTimerLabel.setText(newTime);
             }
+        };
 
+        final Observer<String> previewLabelObserver = new Observer<String>() {
             @Override
-            public void onObjectReady(String title) {
-                //AlarmTaskManager
+            public void onChanged(@Nullable final String newText) {
+                mPreviewLabel.setText(newText);
             }
+        };
 
+        final Observer<Integer> timeLeftObserver = new Observer<Integer>() {
             @Override
-            public void onDataLoaded(String data) {
-                // Code to handle data loaded from network
-                // Use the data here!
+            public void onChanged(@Nullable final Integer timeLeft) {
+                updateInterfaceWithTime(timeLeft, mAlarmTaskManager.getCurTimerDurationVal());
             }
+        };
 
+        final Observer<Integer> durationObserver = new Observer<Integer>() {
             @Override
-            public void onUpdateTime(int elapsed, int duration) {
-                updateInterfaceWithTime(elapsed, duration);
+            public void onChanged(@Nullable final Integer duration) {
+                updateInterfaceWithTime(mAlarmTaskManager.getCurTimerLeftVal(), duration);
             }
+        };
 
+        final Observer<Integer> stateObserver = new Observer<Integer>() {
             @Override
-            public void onEndTimers() {
-                if (prefs.getBoolean("AutoRestart", false)) {
-                    Log.i(TAG, "AUTO RESTART");
-                    mAlarmTaskManager.stopAlarmsAndTicker();
-                    startAdvancedAlarm(retrieveTimerList());
-                    enterState(RUNNING);
-                }
+            public void onChanged(@Nullable final Integer state) {
+                hasEnteredState(state);
             }
-        });
+        };
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        mAlarmTaskManager.getTimerText().observe(this, timerLabelObserver);
+        mAlarmTaskManager.getPreviewText().observe(this, previewLabelObserver);
+        mAlarmTaskManager.getCurTimerDuration().observe(this, durationObserver);
+        mAlarmTaskManager.getCurTimerLeft().observe(this, timeLeftObserver);
+        mAlarmTaskManager.getCurrentState().observe(this, stateObserver);
+
     }
 
 
@@ -250,15 +251,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
-
-
+        Log.i(TAG, "RESUME");
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
 
         mAlarmTaskManager.appIsPaused = false;
         sendBroadcast(new Intent(BROADCAST_STOP)); // tell widgets to stop updating
-        mAlarmTaskManager.mTimer = new Timer();
-
 
         if (getIntent().hasExtra("set")) {
             Log.d(TAG, "Create From Widget");
@@ -272,110 +269,22 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         setupUI();
 
-        int state = prefs.getInt("State", STOPPED);
 
-        switch (state) {
-            case RUNNING:
-                Log.i(TAG, "RESUME, state RUNNING");
-                mAlarmTaskManager.restoreState();
+        if (mAlarmTaskManager.getCurrentState().getValue() == STOPPED) {
 
-                // We are resuming the app while timers are (presumably) still active
-                // We might not have access to any objects, since the app might have been killed in the meantime.
+            if (widget) {
+                if (prefs.getBoolean("SwitchTimeMode", false))
+                    startVoiceRecognitionActivity();
+                else
+                    showNumberPicker();
+                return;
+            }
 
-                long sessionTimeStamp = prefs.getLong("SessionTimeStamp", -1);
-                long curTimerStamp = prefs.getLong("TimeStamp", -1);
-
-                Log.i(TAG, "Resume while running: " + prefs.getLong("TimeStamp", -1));
-
-                Date now = new Date();
-                Date sessionEnd = new Date(sessionTimeStamp);
-                Date curTimerEnd = new Date(curTimerStamp);
-
-                // We still have timers running!
-                if (sessionEnd.after(now)) {
-                    // TODO:
-                    Log.i(TAG, "Still have timers");
-
-                    int sessionTimeLeft = (int) (sessionEnd.getTime() - now.getTime());
-                    int curTimerLeft = (int) (curTimerEnd.getTime() - now.getTime());
-                    int sessionDuration = prefs.getInt("SessionDuration", -1);
-
-                    Log.i(TAG, "Session Time Left " + sessionTimeLeft);
-                    //Log.i(TAG, "Cur Time Left " + curTimerLeft);
-                    Log.i(TAG, "SessionDuration " + sessionDuration);
-
-                    int timeElapsed = sessionDuration - sessionTimeLeft;
-
-                    // RECREATE ALARMS if empty, but we are running.
-                    // THEY WILL HAVE WRONG IDS.....
-                    if (mAlarmTaskManager.getAlarmCount() == 0) {
-                        Log.i(TAG, "Trying to recreate alarms");
-                        mAlarmTaskManager.addAlarms(retrieveTimerList(), -timeElapsed);
-
-                        // Resume ticker at correct position
-                        // Get duration of current alarm
-                        int curTimerDuration = mAlarmTaskManager.getCurrentAlarmDuration();
-
-                        Log.i(TAG, "Setting timer: " + curTimerLeft + " of " + curTimerDuration);
-                        mAlarmTaskManager.timerResume(curTimerLeft, curTimerDuration);
-
-                    } else {
-                        mAlarmTaskManager.timerResume(curTimerLeft);
-
-                    }
-
-
-                    enterState(RUNNING);
-
-                } else {
-                    Log.i(TAG, "Resumed to RUNNING, but all timers are over");
-                    mAlarmTaskManager.stopTicker();
-                    loadLastTimers();
-                    updateMainLabel(0);
-                }
-
-                break;
-
-            case STOPPED:
-                Log.i(TAG, "RESUME, state STOPPED");
-
-                loadLastTimers();
-
-                enterState(STOPPED);
-
-                if (widget) {
-                    if (prefs.getBoolean("SwitchTimeMode", false))
-                        startVoiceRecognitionActivity();
-                    else
-                        showNumberPicker();
-                    return;
-                }
-
-
-                updateMainLabel(0);
-
-                break;
-
-            case PAUSED:
-                Log.i(TAG, "RESUME, state PAUSED");
-                loadLastTimers();
-                mAlarmTaskManager.restoreState();
-
-                updateInterfaceWithTime(mAlarmTaskManager.getCurTimerLeftVal(), mAlarmTaskManager.getCurTimerDurationVal());
-                updateMainLabel(mAlarmTaskManager.getCurTimerLeftVal());
-
-                enterState(PAUSED);
-                break;
         }
+
         widget = false;
-
     }
 
-    private void loadLastTimers() {
-        // Populate the AlarmManager with our last used timers
-        mAlarmTaskManager.addAlarms(retrieveTimerList(), 0);
-        updatePreviewLabel();
-    }
 
     /**
      * { @inheritDoc}
@@ -387,23 +296,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAlarmTaskManager.appIsPaused = true; // tell gui timer to stop
         sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
 
-
         BitmapDrawable drawable = (BitmapDrawable) mTimerAnimation.getDrawable();
         if (drawable != null) {
             Bitmap bitmap = drawable.getBitmap();
             bitmap.recycle();
         }
-
-        // Save our settings
-        SharedPreferences.Editor editor = prefs.edit();
-        mAlarmTaskManager.saveState();
-        mTimerAnimation.saveState(prefs);
-
-        if (mAlarmTaskManager.mCurrentState == RUNNING) {
-            Log.i(TAG, "Pause while running at: " + new Date().getTime() + " Current timer left: " +  mAlarmTaskManager.getCurTimerLeftVal());
-        }
-
-        editor.apply();
 
     }
 
@@ -427,7 +324,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             Log.d(TAG, "TTSService Destroyed");
         }
 
-        //unregisterReceiver(resetReceiver);
         unregisterReceiver(alarmEndReceiver);
 
 
@@ -522,44 +418,30 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
             case R.id.pauseButton:
-                switch (mAlarmTaskManager.mCurrentState) {
+                switch (mAlarmTaskManager.getCurrentState().getValue()) {
                     case RUNNING:
                         mAlarmTaskManager.timerPause();
                         break;
                     case PAUSED:
-                        resumeTimer();
+                        mAlarmTaskManager.timerUnPause();
                         break;
                     case STOPPED:
                         // We are stopped and want to restore the last used timers.
-                        startAdvancedAlarm(retrieveTimerList());
+                        mAlarmTaskManager.startAlarms(mAlarmTaskManager.retrieveTimerList());
                         break;
                 }
                 break;
 
             case R.id.cancelButton:
                 mAlarmTaskManager.stopAlarmsAndTicker();
-                enterState(STOPPED);
+                mAlarmTaskManager.loadLastTimers();
                 break;
         }
     }
 
-    public void resumeTimer() {
-        // How far have we elapsed?
-        int sessionLeft = prefs.getInt("SessionTimeLeft", 0);
-        int currentTimerLeft = prefs.getInt("CurrentTimeLeft", 0);
-        int sessionDuration = mAlarmTaskManager.sessionDuration;
-
-        int timeElapsed = sessionDuration - sessionLeft;
-
-        // Setup the alarms
-        mAlarmTaskManager.addAlarms(retrieveTimerList(), -timeElapsed);
-        mAlarmTaskManager.timerResume(currentTimerLeft);
-        mAlarmTaskManager.startAllAlarms();
-    }
 
     @Override
     public boolean onKeyDown(int keycode, KeyEvent e) {
-        //mAlarmTaskManager.mNM.cancelAll();
         if (keycode == KeyEvent.KEYCODE_MENU) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
@@ -567,9 +449,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         return super.onKeyDown(keycode, e);
     }
 
-    public void onSingleAlarmEnd() {
-        updatePreviewLabel();
-    }
 
     private void setLowProfile() {
 
@@ -597,7 +476,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      * @param duration the duration of the current timer
      */
     public void updateInterfaceWithTime(int elapsed, int duration) {
-        updateMainLabel(elapsed);
+
+        // TODO: This is a hack, to show the full circle after stopped or finished..
+        if (elapsed == duration) {
+            elapsed = 0;
+        }
 
         if (animationIndex != 0) {
             blackView.setVisibility(View.GONE);
@@ -615,41 +498,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
     }
 
-
-    /**
-     * Updates the text label with the given time
-     *
-     * @param time in milliseconds
-     */
-    public void updateMainLabel(int time) {
-        if (time == 0) {
-            time = mAlarmTaskManager.getCurTimerDurationVal();
-        }
-
-        int remainingTime = (int) (Math.ceil(((float) time) / 1000) * 1000);  // round to seconds
-        mTimerLabel.setText(Time.time2hms(remainingTime));
-
+    public void startSimpleAlarm(int[] numbers, boolean startAll) {
+        startSimpleAlarm(Time.msFromArray(numbers), startAll);
     }
 
-    private void updatePreviewLabel() {
-        ArrayList<String> arr = makePreviewArray();
-        Log.v(TAG, "Update preview label");
-
-        String advTimeStringLeft = TextUtils.join("\n", arr);
-        mAltLabel.setText(advTimeStringLeft);
-    }
-
-    private void updatePreviewLabelFromSettings() {
-
-        ArrayList<String> arr = makePreviewArray();
-        Log.v(TAG, "Update preview label");
-
-        String advTimeStringLeft = TextUtils.join("\n", arr);
-        mAltLabel.setText(advTimeStringLeft);
-    }
-
-
-    public void startSimpleAlarm(int[] numbers) {
+    public void startSimpleAlarm(int time, boolean startAll) {
 
         int prepTime = prefs.getInt("preparationTime", 0) * 1000;
         String preUriString = prefs.getString("PreSoundUri", "");
@@ -684,37 +537,19 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
 
         // Add main timer
-        int mainTime = Time.msFromArray(numbers);
-        tL.timers.add(new TimerList.Timer(mainTime, notificationUri, SessionType.REAL));
 
-        saveTimerList(tL);
-        startAdvancedAlarm(tL);
+        tL.timers.add(new TimerList.Timer(time, notificationUri, SessionType.REAL));
+
+        mAlarmTaskManager.saveTimerList(tL);
+        mAlarmTaskManager.addAlarms(tL, 0);
+
+        if (startAll) {
+            mAlarmTaskManager.startAll();
+        }
+
 
     }
 
-    private void saveTimerList(TimerList tL) {
-        Editor editor = prefs.edit();
-        String ret = tL.getString();
-        Log.v(TAG, "Saved timer string: " + ret);
-        editor.putString("timeString", tL.getString());
-        editor.apply();
-    }
-
-    private String getTimeString() {
-        String prefString = prefs.getString("timeString", "");
-
-        if (prefString == "")
-            prefString = prefs.getString("advTimeString", "120000#sys_def");
-
-        return prefString;
-    }
-
-    private TimerList retrieveTimerList() {
-        String prefString = getTimeString();
-        TimerList tL = new TimerList(prefString);
-        Log.v(TAG, "Got timer string: " + prefString + " from Settings");
-        return tL;
-    }
 
     public void startAdvancedAlarm(String advTimeString) {
         TimerList list = new TimerList(advTimeString);
@@ -722,12 +557,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         Log.v(TAG, "advString: " + advTimeString);
         Log.v(TAG, "advString2: " + list.getString());
 
-        startAdvancedAlarm(list);
-    }
-
-    public void startAdvancedAlarm(TimerList list) {
-        mAlarmTaskManager.addAlarms(list, 0);
-        mAlarmTaskManager.startAll();
+        mAlarmTaskManager.startAlarms(list);
     }
 
 
@@ -755,42 +585,23 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 widget = false;
                 return;
             }
-
+            editor.putBoolean("LastWasSimple", false);
             startAdvancedAlarm(advTimeString);
-            updatePreviewLabel();
 
         } else {
             Log.v(TAG, "Saving simple time: " + Time.msFromArray(numbers));
             editor.putInt("LastSimpleTime", Time.msFromArray(numbers));
-            startSimpleAlarm(numbers);
+            editor.putBoolean("LastWasSimple", true);
+            startSimpleAlarm(numbers, true);
         }
 
         editor.commit();
-        updatePreviewLabel();
 
     }
 
 
-    /**
-     * This only refers to the visual state of the application, used to manage
-     * the view coming back into focus.
-     *
-     * @param state the visual state that is being entered
-     */
-    private void enterState(int state) {
-        if (mAlarmTaskManager.mCurrentState != state) {
-
-            // update preference for widget, notification
-
-            if (LOG) Log.v(TAG, "From/to states: " + mAlarmTaskManager.mCurrentState + " " + state);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("State", state);
-            editor.apply();
-            mAlarmTaskManager.mCurrentState = state;
-
-        }
-
-        switch (state) {
+    private void hasEnteredState(int newState) {
+        switch (newState) {
             case RUNNING:
                 mSetButton.setVisibility(View.GONE);
                 mCancelButton.setVisibility(View.VISIBLE);
@@ -798,10 +609,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 mPauseButton.setImageBitmap(mPauseBitmap);
                 setButtonAlpha(127);
                 break;
-            case STOPPED:
-                loadLastTimers();
-                mAlarmTaskManager.clearTime();
 
+            case STOPPED:
                 mPauseButton.setImageBitmap(mPlayBitmap);
                 mCancelButton.setVisibility(View.GONE);
                 mSetButton.setVisibility(View.VISIBLE);
@@ -818,6 +627,20 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
     }
 
+
+    /**
+     * This only refers to the visual state of the application, used to manage
+     * the view coming back into focus.
+     *
+     * @param state the visual state that is being entered
+     */
+    private void enterState(int state) {
+        mAlarmTaskManager.setCurrentState(state);
+
+        hasEnteredState(state);
+
+    }
+
     private void setButtonAlpha(int i) {
         mPauseButton.setImageAlpha(i);
         mCancelButton.setImageAlpha(i);
@@ -825,33 +648,18 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
 
-    // Shortens the array to max three
-    private ArrayList<String> makePreviewArray() {
-        ArrayList<String> arr = new ArrayList<>();
-        ArrayList<Integer> previewTimes = mAlarmTaskManager.getPreviewTimes();
-
-        for (int i = 0; i < previewTimes.size(); i++) {
-            if (i >= 2) {
-                arr.add("...");
-                break;
-            }
-            arr.add(Time.time2hms(previewTimes.get(i)));
-        }
-        return arr;
-    }
-
-
     /**
-     * Mostly used for the wakelock currently -- should be used for the visual components eventually
+     * Update visual components if preferences have changed
      */
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-        // We need to check if the
         if (key.equals("WakeLock")) {
             if (prefs.getBoolean("WakeLock", false))
                 getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
             else
                 getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else if ((key.equals("PreSoundUri") || key.equals("preparationTime")) && prefs.getBoolean("LastWasSimple", false)) {
+            int lastTime = prefs.getInt("LastSimpleTime", 1200);
+            startSimpleAlarm(lastTime, false);
         }
     }
 
@@ -960,6 +768,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
     }
 
+    // Should move to Manager....
     // receiver to get restart
     private final BroadcastReceiver alarmEndReceiver = new BroadcastReceiver() {
         @Override
@@ -968,7 +777,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             Log.d(TAG, "id " + intent.getIntExtra("id", -1));
 
             mAlarmTaskManager.onAlarmEnd(intent.getIntExtra("id", -1));
-            onSingleAlarmEnd();
         }
     };
 

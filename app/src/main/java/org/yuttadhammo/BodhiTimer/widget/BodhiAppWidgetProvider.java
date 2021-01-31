@@ -291,15 +291,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
      */
     public static String getTime(int time) {
         time += 999;  // round seconds upwards
-        String[] str = Time.ms2Str(time);
-        if (str.length == 3)
-            return (str[0] + ":" + str[1] + ":" + str[2]);
-        else if (str.length == 2)
-            return (str[0] + ":" + str[1]);
-        else if (str.length == 1)
-            return (str[0]);
-        else
-            return ("");
+        return Time.ms2Str(time);
 
     }
 

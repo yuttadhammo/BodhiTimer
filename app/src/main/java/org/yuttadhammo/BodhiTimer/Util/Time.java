@@ -46,21 +46,29 @@ public class Time {
         return msFromNumbers(numbers[0], numbers[1], numbers[2]);
     }
 
+    public static String padWithZeroes(int number) {
+        if (number > 9) {
+            return Integer.toString(number);
+        } else {
+            return "0" + number;
+        }
+    }
     /**
      * Converts a millisecond time to a string time
+     * Not meant to be pretty, but fast..
      *
      * @param ms the time in milliseconds
      * @return the formatted string
      */
-    public static String[] ms2Str(int ms) {
+    public static String ms2Str(int ms) {
         int[] time = time2Array(ms);
 
         if (time[0] == 0 && time[1] == 0) {
-            return new String[]{String.format("%01d", time[2])};
+            return Integer.toString(time[2]);
         } else if (time[0] == 0) {
-            return new String[]{String.format("%01d", time[1]), String.format("%02d", time[2])};
+            return Integer.toString(time[1]).concat(":").concat(padWithZeroes(time[2]));
         } else {
-            return new String[]{String.format("%01d", time[0]), String.format("%02d", time[1]), String.format("%02d", time[2])};
+            return Integer.toString(time[0]).concat(":").concat(padWithZeroes(time[1])).concat(":").concat(padWithZeroes(time[2]));
         }
     }
 
@@ -114,15 +122,7 @@ public class Time {
 
 
     public static String time2hms(int time) {
-        String[] str = ms2Str(time);
-        if (str.length == 3)
-            return (str[0] + ":" + str[1] + ":" + str[2]);
-        else if (str.length == 2)
-            return (str[0] + ":" + str[1]);
-        else if (str.length == 1)
-            return (str[0]);
-        else
-            return ("");
+        return ms2Str(time);
     }
 
     public static String str2complexTimeString(AppCompatActivity activity, String numberString) {

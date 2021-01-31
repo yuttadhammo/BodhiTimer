@@ -36,7 +36,7 @@
         android:textSize="58sp" />
 
     <TextView
-        android:id="@+id/text_alt"
+        android:id="@+id/text_preview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
