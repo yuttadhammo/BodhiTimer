@@ -58,6 +58,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
@@ -65,7 +66,6 @@ import org.yuttadhammo.BodhiTimer.Service.SessionType;
 import org.yuttadhammo.BodhiTimer.Service.TimerList;
 import org.yuttadhammo.BodhiTimer.Util.Notification;
 import org.yuttadhammo.BodhiTimer.Util.Time;
-import org.yuttadhammo.BodhiTimer.NNumberPicker;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -140,12 +140,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         Log.i(TAG, "CREATE");
         super.onCreate(savedInstanceState);
 
-        // Setup a new AlarmTaskManager
-        mAlarmTaskManager = new AlarmTaskManager(this);
 
-        setupListener();
+        mAlarmTaskManager = new ViewModelProvider(this).get(AlarmTaskManager.class);
 
-        tts = new TextToSpeech(this, null);
 
 
         setContentView(R.layout.main);
@@ -207,41 +204,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     }
 
-    private void setupListener() {
 
-        mAlarmTaskManager.setListener(new AlarmTaskManager.AlarmTaskListener() {
-            @Override
-            public void onEnterState(int state) {
-                enterState(state);
-            }
-
-            @Override
-            public void onObjectReady(String title) {
-                //AlarmTaskManager
-            }
-
-            @Override
-            public void onDataLoaded(String data) {
-                // Code to handle data loaded from network
-                // Use the data here!
-            }
-
-            @Override
-            public void onUpdateTime(int elapsed, int duration) {
-                updateInterfaceWithTime(elapsed, duration);
-            }
-
-            @Override
-            public void onEndTimers() {
-                if (prefs.getBoolean("AutoRestart", false)) {
-                    Log.i(TAG, "AUTO RESTART");
-                    mAlarmTaskManager.stopAlarmsAndTicker();
-                    startAdvancedAlarm(retrieveTimerList());
-                    enterState(RUNNING);
-                }
-            }
-        });
-    }
 
 
     /**

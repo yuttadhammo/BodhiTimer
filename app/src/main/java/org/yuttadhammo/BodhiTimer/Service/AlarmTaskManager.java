@@ -1,5 +1,6 @@
 package org.yuttadhammo.BodhiTimer.Service;
 
+import android.app.Application;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,9 +10,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -28,7 +30,7 @@ import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_RESET;
 
 @SuppressWarnings("UnnecessaryBoxing")
-public class AlarmTaskManager extends BroadcastReceiver {
+public class AlarmTaskManager extends AndroidViewModel {
     private final String TAG = AlarmTaskManager.class.getSimpleName();
 
     /**
@@ -47,9 +49,6 @@ public class AlarmTaskManager extends BroadcastReceiver {
     private final Stack<AlarmTask> alarms;
     private int lastId = 0;
 
-    // The context to start the service in
-    private final Context mContext;
-
     public boolean appIsPaused;
 
 
@@ -58,6 +57,8 @@ public class AlarmTaskManager extends BroadcastReceiver {
     private long sessionTimeStamp;
     public int sessionDuration;
     private int sessionTimeLeft;
+
+    Application mApp;
 
     // Live Data
     private final MutableLiveData<Integer> currentTimerDuration = new MutableLiveData<>();
@@ -104,12 +105,15 @@ public class AlarmTaskManager extends BroadcastReceiver {
     private final SharedPreferences prefs;
 
 
-    public AlarmTaskManager(Context context) {
-        mContext = context;
+    public AlarmTaskManager(Application app) {
+        super(app);
+
+        mApp = app;
+
         alarms = new Stack<>();
 
-        mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        mNM = (NotificationManager) app.getSystemService(Context.NOTIFICATION_SERVICE);
+        prefs = PreferenceManager.getDefaultSharedPreferences(app.getApplicationContext());
 
         setCurTimerLeft(0);
         setCurTimerDuration(0);
@@ -188,7 +192,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
     public AlarmTask addAlarmWithUri(int offset, int duration, String uri, SessionType sessionType) {
 
         Log.i(TAG, "Creating new alarm task, uri " + uri + " type: " + sessionType + " due in " + (duration + offset));
-        AlarmTask alarm = new AlarmTask(mContext, offset, duration);
+        AlarmTask alarm = new AlarmTask(mApp.getApplicationContext(), offset, duration);
         alarm.setUri(uri);
         alarm.setSessionType(sessionType);
 
@@ -506,7 +510,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
         broadcast.putExtra("time", duration);
         broadcast.setAction(BROADCAST_RESET);
-        mContext.sendBroadcast(broadcast);
+        mApp.sendBroadcast(broadcast);
     }
 
 
@@ -535,7 +539,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
     private void startDND() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean("doNotDisturb", false)) {
             try {
-                NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager mNotificationManager = (NotificationManager) mApp.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
@@ -546,7 +550,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
     private void stopDND() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean("doNotDisturb", false)) {
             try {
-                NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager mNotificationManager = (NotificationManager) mApp.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
@@ -554,7 +558,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
         }
     }
 
-    @Override
+    //@Override
     public void onReceive(Context context, Intent mIntent) {
 
         Log.v(TAG, "MANAGER Received alarm callback ");
