@@ -207,9 +207,17 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
             return;
         }
 
-        int h = Integer.parseInt(ts.substring(0, 2));
-        int m = Integer.parseInt(ts.substring(3, 5));
-        int s = Integer.parseInt(ts.substring(6, 8));
+        int h = 0;
+        int m = 0;
+        int s = 0;
+
+        try {
+            h = Integer.parseInt(ts.substring(0, 2));
+            m = Integer.parseInt(ts.substring(3, 5));
+            s = Integer.parseInt(ts.substring(6, 8));
+        } catch (Exception e) {
+
+        }
 
         if (h != 0 || m != 0 || s != 0) {
             int[] values = {h, m, s};
@@ -217,8 +225,9 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
             i.putExtra("times", values);
             setResult(Activity.RESULT_OK, i);
             finish();
-        } else
+        } else {
             Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setFromAdv() {
