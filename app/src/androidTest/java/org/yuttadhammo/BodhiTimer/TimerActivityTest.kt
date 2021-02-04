@@ -18,6 +18,7 @@ import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import tools.fastlane.screengrab.Screengrab
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -29,6 +30,7 @@ class TimerActivityTest {
 
     @Test
     fun timerActivityTest() {
+        Screengrab.screenshot("main");
         val appCompatImageButton = onView(
                 allOf(withId(R.id.setButton), withContentDescription("Set"),
                         childAtPosition(
