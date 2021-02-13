@@ -1,0 +1,13 @@
+5.4.0
+* Add a Setting to enable "Do Not Disturb" Mode when meditating
+* Add Auto repeat function
+* Use green as the highlight color
+* Fix an issue when the device was rotated
+
+5.3.0
+* Completely refactor Alarm Handling. It should be much more reliable, especially when the phone is in battery saver mode.
+* Fix some bugs introduced in the last major release. Thanks everyone for your help :)
+* Modernize the way notifications are shown
+* Refactored preference screen
+* Updated translations
+* Monospaced timer font
