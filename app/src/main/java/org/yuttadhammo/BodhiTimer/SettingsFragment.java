@@ -58,15 +58,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         setupTonePicker();
         setupAnimations();
+        setupDND();
 
+    }
 
+    private void setupDND() {
+        // Hide on API <23
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            preferenceScreen.findPreference("doNotDisturb").setVisible(false);
+        }
     }
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
         String key = preference.getKey();
 
-        //noinspection SwitchStatementWithTooFewBranches
         switch (key) {
             case "aboutPref":
                 showAboutScreen();
@@ -92,16 +98,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         wv.loadData(getString(R.string.about_text), "text/html", "utf-8");
 
         AlertDialog.Builder p = new AlertDialog.Builder(mContext).setView(view);
-        final AlertDialog alrt = p.create();
-        alrt.setIcon(R.drawable.icon);
-        alrt.setTitle(getString(R.string.about_title));
-        alrt.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.close),
+        final AlertDialog alert = p.create();
+        alert.setIcon(R.drawable.icon);
+        alert.setTitle(getString(R.string.about_title));
+        alert.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.close),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int whichButton) {
                     }
                 });
-        alrt.show();
+        alert.show();
 
     }
 
