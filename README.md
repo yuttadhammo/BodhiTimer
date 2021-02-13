@@ -1,29 +1,25 @@
-About
-=====
+# About
 
-Bodhi Timer is an elegant, minimalist countdown timer.  It is designed mainly for use as a meditation timer but can easily be used for any similar purpose.
+Bodhi Timer is an elegant, minimalist countdown timer.
+It is designed mainly for use as a meditation timer but can easily be used for any similar purpose.
+Bodhi Timer is free and [open-source](https://github.com/yuttadhammo/BodhiTimer) software. It collects no data and uses the minimal permissions necessary.
+
+
+## How to use
 
 Set the time via the clock icon in the top left.  You may set presets by choosing a time then holding down on one of the three preset buttons.
 
 Pause / resume via the button in the bottom left, and stop the timer via the button in the bottom right.  The top right button is the preference button.
 
-You may add a timer widget to your desktop via the App Drawer, or on your lockscreen (Android 4.2+).
-
 Animation may be toggled between an image and one of four circle animations, chosen from the preferences screen.
-
-Bodhi Timer is based on the free and open source TeaTimer by Ralph Gootee:
-
-https://play.google.com/store/apps/details?id=goo.TeaTimer
 
 It uses Android's built-in notification system to trigger the alarm, which means it works even when your device is asleep.
 
-Features
-========
+## Features
 
 - minimalist full screen UI, no clutter
 - uses scroll and fling gestures to set the time
 - set up to three presets on the time chooser
-- add timer widgets to the home screen and lock screen
 
 - option for timer auto-repeating
 - option to set multiple consecutive timers via the "adv" button
@@ -33,16 +29,16 @@ Features
 - option to use custom image for fade in
 - four themes for the animated circle: three colour themes and a draw in Zen Enso (brush circle)
 
-- includes five meditation timer sounds (Burmese bell, Tibetan bell, Tibetan singing bowl, Zen gong, and bird song)
+- includes different meditation timer sounds (Burmese bell, Tibetan bell, Tibetan singing bowls, Zen gong, and bird song)
 - option to use any ring tone as timer sound
 - option to use custom sound file as timer sound
 - vibration and LED blinking options
 
-- free and open source: https://github.com/yuttadhammo/BodhiTimer
-- licensed under the GPL 3+: https://www.gnu.org/licenses/gpl.html
+- licensed under the [GPL 3+](https://www.gnu.org/licenses/gpl.html)
 
-Credits
-=========
+## Credits
+
+Some code is based on the free and open source [TeaTimer by Ralph Gootee](https://play.google.com/store/apps/details?id=goo.TeaTimer).
 
 The Enso image was drawn by Ryōnen Gensō (1646-1711).
 Next to the Enso she has written:
@@ -50,8 +46,8 @@ Next to the Enso she has written:
 there is not one thing."
 
 Singing Bowl Low sound
-Recorded by juskiddink
+[Recorded by juskiddink](https://freesound.org/people/juskiddink/sounds/122647/)
 Licensed under CC-BY-SA 3.0
-https://freesound.org/people/juskiddink/sounds/122647/
+
 
 <!-- Regenerate: pandoc -f gfm -t html -o fastlane/metadata/android/en-US/full_description.txt README.md -->
