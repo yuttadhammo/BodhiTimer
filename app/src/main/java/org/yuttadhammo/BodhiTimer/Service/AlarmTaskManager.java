@@ -187,7 +187,7 @@ public class AlarmTaskManager extends BroadcastReceiver {
      */
     public AlarmTask addAlarmWithUri(int offset, int duration, String uri, SessionType sessionType) {
 
-        Log.i(TAG, "Creating new alarm task, uri " + uri + " type: " + sessionType + " due in " + (duration + offset) / 1000);
+        Log.i(TAG, "Creating new alarm task, uri " + uri + " type: " + sessionType + " due in " + (duration + offset));
         AlarmTask alarm = new AlarmTask(mContext, offset, duration);
         alarm.setUri(uri);
         alarm.setSessionType(sessionType);

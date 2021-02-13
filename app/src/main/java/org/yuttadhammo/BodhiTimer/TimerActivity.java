@@ -277,6 +277,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         switch (state) {
             case RUNNING:
                 Log.i(TAG, "RESUME, state RUNNING");
+                mAlarmTaskManager.restoreState();
+
                 // We are resuming the app while timers are (presumably) still active
                 // We might not have access to any objects, since the app might have been killed in the meantime.
 
@@ -313,7 +315,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                         // Resume ticker at correct position
                         // Get duration of current alarm
                         int curTimerDuration = mAlarmTaskManager.getCurrentAlarmDuration();
-                        curTimerLeft = mAlarmTaskManager.getTotalDuration() - sessionTimeLeft;
 
                         Log.i(TAG, "Setting timer: " + curTimerLeft + " of " + curTimerDuration);
                         mAlarmTaskManager.timerResume(curTimerLeft, curTimerDuration);
@@ -399,7 +400,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mTimerAnimation.saveState(prefs);
 
         if (mAlarmTaskManager.mCurrentState == RUNNING) {
-            Log.i(TAG, "Pause while running: " + new Date().getTime() + mAlarmTaskManager.getCurTimerLeftVal());
+            Log.i(TAG, "Pause while running at: " + new Date().getTime() + " Current timer left: " +  mAlarmTaskManager.getCurTimerLeftVal());
         }
 
         editor.apply();
