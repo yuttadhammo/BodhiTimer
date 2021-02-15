@@ -58,7 +58,7 @@
                 android:id="@+id/clear"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:text="c" />
+                android:text="@string/cancel_short" />
         </LinearLayout>
 
         <LinearLayout

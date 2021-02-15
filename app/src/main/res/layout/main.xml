@@ -18,9 +18,7 @@
         android:id="@+id/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FF000000"
-        android:contentDescription="background image" />
-
+        android:background="#FF000000" />
 
     <TextView
         android:id="@+id/text_top"
@@ -29,10 +27,11 @@
         android:textColor="#FFFFFF"
         android:text=""
         android:textAlignment="center"
-        android:textSize="50sp"
+        android:textSize="58sp"
         android:gravity="center"
         android:layout_centerInParent="true"
-        android:fontFamily="@font/main" />
+        android:fontFamily="@font/source_sans"
+        android:textFontWeight="400"/>
 
     <TextView
         android:id="@+id/text_alt"
@@ -41,12 +40,13 @@
         android:textColor="#FFFFFF"
         android:text=""
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="32sp"
         android:gravity="center"
         android:singleLine="false"
-        android:fontFamily="@font/main"
+        android:fontFamily="@font/source_sans"
         android:layout_below="@id/text_top"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:textFontWeight="400" />
 
     <ImageButton
         android:contentDescription="@string/set"
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         app:srcCompat="@drawable/set"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:background="#00000000"
         android:padding="20dp"
         android:gravity="center" />
@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         app:srcCompat="@drawable/preferences"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:background="#00000000"
         android:padding="20dp"
         android:gravity="center" />
@@ -80,7 +80,7 @@
         android:gravity="center"
         app:srcCompat="@drawable/pause"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:background="#00000000"
         android:padding="20dp" />
 
@@ -92,7 +92,7 @@
         android:gravity="center"
         app:srcCompat="@drawable/stop"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:background="#00000000"
         android:padding="20dp" />
 </RelativeLayout>

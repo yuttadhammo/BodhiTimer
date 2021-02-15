@@ -159,16 +159,17 @@
     <string name="M">Min</string>
     <string name="S">Sec</string>
 
-    <string name="pre1">one</string>
-    <string name="pre2">two</string>
-    <string name="pre3">three</string>
-    <string name="pre4">four</string>
-    <string name="adv">adv</string>
+    <string name="pre1">One</string>
+    <string name="pre2">Two</string>
+    <string name="pre3">Three</string>
+    <string name="pre4">Four</string>
+    <string name="adv">Adv</string>
     <string name="advanced">Advanced</string>
     <string name="add">Add</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="empty_list">empty</string>
+    <string name="cancel_short">C</string>
+    <string name="empty_list">Empty</string>
 
     <string name="sys_def">System Default</string>
     <string name="get_file_man">Please install a File Manager.</string>
