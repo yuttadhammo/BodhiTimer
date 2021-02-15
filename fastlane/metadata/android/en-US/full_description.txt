@@ -1,28 +1,29 @@
-<h1 id="about">About</h1>
+<h1 id="about"><b>About</b></h1>
 <p>Bodhi Timer is an elegant, minimalist countdown timer. It is designed mainly for use as a meditation timer but can easily be used for any similar purpose. Bodhi Timer is free and <a href="https://github.com/yuttadhammo/BodhiTimer">open-source</a> software. It collects no data and uses the minimal permissions necessary.</p>
-<h2 id="how-to-use">How to use</h2>
-<p>Set the time via the clock icon in the top left. You may set presets by choosing a time then holding down on one of the three preset buttons.</p>
-<p>Pause / resume via the button in the bottom left, and stop the timer via the button in the bottom right. The top right button is the preference button.</p>
-<p>Animation may be toggled between an image and one of four circle animations, chosen from the preferences screen.</p>
-<p>It uses Android's built-in notification system to trigger the alarm, which means it works even when your device is asleep.</p>
-<h2 id="features">Features</h2>
-<ul>
-<li><p>minimalist full screen UI, no clutter</p></li>
-<li><p>uses scroll and fling gestures to set the time</p></li>
-<li><p>set up to three presets on the time chooser</p></li>
-<li><p>option for timer auto-repeating</p></li>
-<li><p>option to set multiple consecutive timers via the "adv" button</p></li>
-<li><p>speech recognition via long-press on clock button (set multiple timers separated by the word "again")</p></li>
-<li><p>displays two animation types: fade in static image (defaults to Bodhi leaf) and animated circle</p></li>
-<li><p>option to use custom image for fade in</p></li>
-<li><p>four themes for the animated circle: three colour themes and a draw in Zen Enso (brush circle)</p></li>
-<li><p>includes different meditation timer sounds (Burmese bell, Tibetan bell, Tibetan singing bowls, Zen gong, and bird song)</p></li>
-<li><p>option to use any ring tone as timer sound</p></li>
-<li><p>option to use custom sound file as timer sound</p></li>
-<li><p>vibration and LED blinking options</p></li>
-<li><p>licensed under the <a href="https://www.gnu.org/licenses/gpl.html">GPL 3+</a></p></li>
-</ul>
-<h2 id="credits">Credits</h2>
-<p>Some code is based on the free and open source <a href="https://play.google.com/store/apps/details?id=goo.TeaTimer">TeaTimer by Ralph Gootee</a>.</p>
-<p>The Enso image was drawn by Ryōnen Gensō (1646-1711). Next to the Enso she has written: "When you do understand yourself fully, there is not one thing."</p>
-<p>Singing Bowl Low sound <a href="https://freesound.org/people/juskiddink/sounds/122647/">Recorded by juskiddink</a> Licensed under CC-BY-SA 3.0</p>
+
+<h2 id="how-to-use"><b>How to use</b></h2>
+🔷 Set the time via the clock icon in the top left. You may set presets by choosing a time then holding down on one of the three preset buttons.
+🔷 Pause / resume via the button in the bottom left, and stop the timer via the button in the bottom right. The top right button is the preference button.
+🔷 Animation may be toggled between an image and one of four circle animations, chosen from the preferences screen.
+🔷 It uses Android's built-in notification system to trigger the alarm, which means it works even when your device is asleep.
+
+<h2 id="features"><b>Features</b></h2>
+• minimalist full screen UI, no clutter
+• uses scroll and fling gestures to set the time
+• set up to three presets on the time chooser
+• option for timer auto-repeating
+• option to set multiple consecutive timers via the "adv" button
+• speech recognition via long-press on clock button (set multiple timers separated by the word "again")
+• displays two animation types: fade in static image (defaults to Bodhi leaf) and animated circle
+• option to use custom image for fade in
+• four themes for the animated circle: three colour themes and a draw in Zen Enso (brush circle)
+• includes different meditation timer sounds (Burmese bell, Tibetan bell, Tibetan singing bowls, Zen gong, and bird song)
+• option to use any ring tone as timer sound
+• option to use custom sound file as timer sound
+• vibration and LED blinking options
+• licensed under the <a href="https://www.gnu.org/licenses/gpl.html">GPL 3+</a>
+
+<h2 id="credits"><b>Credits</b></h2>
+• Some code is based on the free and open source <a href="https://play.google.com/store/apps/details?id=goo.TeaTimer">TeaTimer by Ralph Gootee</a>.
+• The Enso image was drawn by Ryōnen Gensō (1646-1711). Next to the Enso she has written: "When you do understand yourself fully, there is not one thing."
+• Singing Bowl Low sound <a href="https://freesound.org/people/juskiddink/sounds/122647/">Recorded by juskiddink</a> Licensed under CC-BY-SA 3.0
