@@ -24,20 +24,23 @@
         android:id="@+id/text_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
+        android:layout_centerInParent="true"
+        android:paddingTop="00sp"
+        android:paddingBottom="2sp"
+        android:fontFamily="@font/source_sans"
+        android:gravity="center"
         android:text=""
         android:textAlignment="center"
-        android:textSize="58sp"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:fontFamily="@font/source_sans"
-        android:textFontWeight="400"/>
+        android:textColor="#FFFFFF"
+        android:textFontWeight="400"
+        android:textSize="58sp" />
 
     <TextView
         android:id="@+id/text_alt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
+
         android:text=""
         android:textAlignment="center"
         android:textSize="32sp"
