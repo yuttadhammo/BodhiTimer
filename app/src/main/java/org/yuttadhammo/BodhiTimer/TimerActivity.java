@@ -61,6 +61,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.jetbrains.annotations.NotNull;
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.Service.SessionType;
@@ -474,6 +475,20 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     public void startSimpleAlarm(int time, boolean startAll) {
 
+        TimerList tL = createSimpleTimerList(time);
+
+        mAlarmTaskManager.saveTimerList(tL);
+        mAlarmTaskManager.addAlarms(tL, 0);
+
+        if (startAll) {
+            mAlarmTaskManager.startAll();
+        }
+
+
+    }
+
+    @NotNull
+    private TimerList createSimpleTimerList(int time) {
         int prepTime = prefs.getInt("preparationTime", 0) * 1000;
         String preUriString = prefs.getString("PreSoundUri", "");
 
@@ -509,15 +524,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         // Add main timer
 
         tL.timers.add(new TimerList.Timer(time, notificationUri, SessionType.REAL));
-
-        mAlarmTaskManager.saveTimerList(tL);
-        mAlarmTaskManager.addAlarms(tL, 0);
-
-        if (startAll) {
-            mAlarmTaskManager.startAll();
-        }
-
-
+        return tL;
     }
 
 
@@ -616,7 +623,10 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
         } else if ((key.equals("PreSoundUri") || key.equals("preparationTime")) && prefs.getBoolean("LastWasSimple", false)) {
             int lastTime = prefs.getInt("LastSimpleTime", 1200);
-            startSimpleAlarm(lastTime, false);
+
+            if  (mAlarmTaskManager.getCurrentState().getValue() == STOPPED) {
+                startSimpleAlarm(lastTime, false);
+            }
         }
     }
 
