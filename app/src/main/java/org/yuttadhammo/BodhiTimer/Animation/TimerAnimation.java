@@ -34,7 +34,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
 
     SharedPreferences prefs;
 
-    Context mContext;
+    final Context mContext;
 
 
     public interface TimerDrawing {

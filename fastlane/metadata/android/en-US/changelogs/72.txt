@@ -1,6 +1,6 @@
 5.3.5
 * Add back auto repeat function
-* Use green as the hightlight color
+* Use green as the highlight color
 * Fixed custom sounds not playing
 
 5.3.0

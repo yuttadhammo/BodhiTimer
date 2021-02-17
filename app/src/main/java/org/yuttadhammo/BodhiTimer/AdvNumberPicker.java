@@ -330,19 +330,16 @@ public class AdvNumberPicker extends AppCompatActivity {
     }
 
     private String descriptionFromUri(String uri) {
-        switch (uri) {
-            case "sys_def":
-                return getString(R.string.sys_def);
-            default:
-                // Is it part of our tones?
-                int index = Arrays.asList(customUris).indexOf(uri);
+        if ("sys_def".equals(uri)) {
+            return getString(R.string.sys_def);
+        }// Is it part of our tones?
+        int index = Arrays.asList(customUris).indexOf(uri);
 
-                if (index != -1) {
-                    return customSounds[index];
-                }
-
-                return getString(R.string.custom_sound);
+        if (index != -1) {
+            return customSounds[index];
         }
+
+        return getString(R.string.custom_sound);
     }
 
     private void removeItem(int p) {
@@ -351,7 +348,7 @@ public class AdvNumberPicker extends AppCompatActivity {
         for (int i = 0; i < times.length; i++) {
             if (i == p)
                 continue;
-            advTimeString += (advTimeString.length() == 0 ? "" : "^") + times[i];
+            advTimeString = advTimeString.concat((advTimeString.length() == 0 ? "" : "^") + times[i]);
         }
         updateDataSet();
     }

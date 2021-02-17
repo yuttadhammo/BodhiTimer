@@ -228,12 +228,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             }
         };
 
-        final Observer<Integer> stateObserver = new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable final Integer state) {
-                hasEnteredState(state);
-            }
-        };
+        final Observer<Integer> stateObserver = this::hasEnteredState;
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         mAlarmTaskManager.getTimerText().observe(this, timerLabelObserver);
@@ -627,19 +622,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
     }
 
-
-    /**
-     * This only refers to the visual state of the application, used to manage
-     * the view coming back into focus.
-     *
-     * @param state the visual state that is being entered
-     */
-    private void enterState(int state) {
-        mAlarmTaskManager.setCurrentState(state);
-
-        hasEnteredState(state);
-
-    }
 
     private void setButtonAlpha(int i) {
         mPauseButton.setImageAlpha(i);

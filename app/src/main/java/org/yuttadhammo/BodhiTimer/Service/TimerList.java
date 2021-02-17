@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class TimerList {
 
     public static class Timer {
-        public int duration;
-        public String uri;
-        public SessionType sessionType;
+        public final int duration;
+        public final String uri;
+        public final SessionType sessionType;
 
         public Timer(int mDuration, String mUri) {
             super();
@@ -27,7 +27,7 @@ public class TimerList {
         }
     }
 
-    public ArrayList<Timer> timers;
+    public final ArrayList<Timer> timers;
 
     public TimerList(String advTimeString) {
         timers = timeStringToList(advTimeString);
@@ -57,7 +57,7 @@ public class TimerList {
                 Timer timer = new Timer(duration, thisAdvTime[1]);
                 list.add(timer);
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
 
         }
