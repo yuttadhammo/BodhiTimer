@@ -534,15 +534,23 @@ public class AlarmTaskManager extends BroadcastReceiver {
 
     private void startDND() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean("doNotDisturb", false)) {
-            NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+            try {
+                NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
         }
     }
 
     private void stopDND() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M  && prefs.getBoolean("doNotDisturb", false)) {
-            NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean("doNotDisturb", false)) {
+            try {
+                NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
         }
     }
 
