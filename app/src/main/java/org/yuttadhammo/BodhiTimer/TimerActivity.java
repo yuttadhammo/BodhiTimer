@@ -162,17 +162,12 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         mSetButton = findViewById(R.id.setButton);
         mSetButton.setOnClickListener(this);
-        mSetButton.setOnLongClickListener(new OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View v) {
-                if (prefs.getBoolean("SwitchTimeMode", false))
-                    showNumberPicker();
-                else
-                    startVoiceRecognitionActivity();
-                return false;
-            }
-
+        mSetButton.setOnLongClickListener(v -> {
+            if (prefs.getBoolean("SwitchTimeMode", false))
+                showNumberPicker();
+            else
+                startVoiceRecognitionActivity();
+            return false;
         });
 
         mPauseButton = findViewById(R.id.pauseButton);
@@ -200,33 +195,13 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
     private void setupObservers() {
         // Create the observer which updates the UI.
-        final Observer<String> timerLabelObserver = new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable final String newTime) {
-                mTimerLabel.setText(newTime);
-            }
-        };
+        final Observer<String> timerLabelObserver = newTime -> mTimerLabel.setText(newTime);
 
-        final Observer<String> previewLabelObserver = new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable final String newText) {
-                mPreviewLabel.setText(newText);
-            }
-        };
+        final Observer<String> previewLabelObserver = newText -> mPreviewLabel.setText(newText);
 
-        final Observer<Integer> timeLeftObserver = new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable final Integer timeLeft) {
-                updateInterfaceWithTime(timeLeft, mAlarmTaskManager.getCurTimerDurationVal());
-            }
-        };
+        final Observer<Integer> timeLeftObserver = timeLeft -> updateInterfaceWithTime(timeLeft, mAlarmTaskManager.getCurTimerDurationVal());
 
-        final Observer<Integer> durationObserver = new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable final Integer duration) {
-                updateInterfaceWithTime(mAlarmTaskManager.getCurTimerLeftVal(), duration);
-            }
-        };
+        final Observer<Integer> durationObserver = duration -> updateInterfaceWithTime(mAlarmTaskManager.getCurTimerLeftVal(), duration);
 
         final Observer<Integer> stateObserver = this::hasEnteredState;
 
@@ -716,15 +691,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     editor.putString("timeString", complexTime);
                     editor.apply();
                     if (prefs.getBoolean("SpeakTime", false)) {
-                        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-
-                            @Override
-                            public void onInit(int status) {
-                                if (status == TextToSpeech.SUCCESS) {
-                                    tts.speak(getString(R.string.adv_speech_recognized), TextToSpeech.QUEUE_ADD, null);
-                                } else
-                                    Log.e("error", "Initialization failed!");
-                            }
+                        tts = new TextToSpeech(this, status -> {
+                            if (status == TextToSpeech.SUCCESS) {
+                                tts.speak(getString(R.string.adv_speech_recognized), TextToSpeech.QUEUE_ADD, null);
+                            } else
+                                Log.e("error", "Initialization failed!");
                         });
                     }
                     Toast.makeText(this, getString(R.string.adv_speech_recognized), Toast.LENGTH_SHORT).show();

@@ -137,110 +137,82 @@ public class AdvNumberPicker extends AppCompatActivity {
             }
         });
 
-        uriText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builderSingle = new AlertDialog.Builder(
-                        context);
-                builderSingle.setIcon(R.drawable.icon);
+        uriText.setOnClickListener(view -> {
+            AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+                    context);
+            builderSingle.setIcon(R.drawable.icon);
 
-                //builderSingle.setTitle("Select One Name:-");
+            //builderSingle.setTitle("Select One Name:-");
 
-                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
-                arrayAdapter.add(getString(R.string.sys_def));
+            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
+            arrayAdapter.add(getString(R.string.sys_def));
 
 
-                for (String s : customSounds) {
-                    arrayAdapter.add(s);
-                }
-
-                builderSingle.setNegativeButton(getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                builderSingle.setAdapter(arrayAdapter,
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                if (which > 0) {
-                                    customUri = customUris[which - 1];
-                                }
-
-                                if (which == 0) {
-                                    customUri = "sys_def";
-                                } else if (customUri.equals("system")) {
-                                    mDialog = dialog;
-                                    Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-                                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
-                                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
-                                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
-                                    context.startActivityForResult(intent, SELECT_RINGTONE);
-                                } else if (customUri.equals("file")) {
-                                    mDialog = dialog;
-
-                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                                    intent.setType("audio/*");
-                                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-                                    try {
-                                        context.startActivityForResult(Intent.createChooser(intent, "Select Sound File"), SELECT_FILE);
-                                    } catch (ActivityNotFoundException ex) {
-                                        Toast.makeText(context, getString(R.string.get_file_man),
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                uriText.setText(arrayAdapter.getItem(which));
-                                dialog.dismiss();
-                            }
-                        });
-                builderSingle.show();
+            for (String s : customSounds) {
+                arrayAdapter.add(s);
             }
+
+            builderSingle.setNegativeButton(getString(R.string.cancel),
+                    (dialog, which) -> dialog.dismiss());
+
+            builderSingle.setAdapter(arrayAdapter,
+                    (dialog, which) -> {
+
+                        if (which > 0) {
+                            customUri = customUris[which - 1];
+                        }
+
+                        if (which == 0) {
+                            customUri = "sys_def";
+                        } else if (customUri.equals("system")) {
+                            mDialog = dialog;
+                            Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
+                            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
+                            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+                            context.startActivityForResult(intent, SELECT_RINGTONE);
+                        } else if (customUri.equals("file")) {
+                            mDialog = dialog;
+
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            intent.setType("audio/*");
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                            try {
+                                context.startActivityForResult(Intent.createChooser(intent, "Select Sound File"), SELECT_FILE);
+                            } catch (ActivityNotFoundException ex) {
+                                Toast.makeText(context, getString(R.string.get_file_man),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        uriText.setText(arrayAdapter.getItem(which));
+                        dialog.dismiss();
+                    });
+            builderSingle.show();
         });
 
         listView = findViewById(R.id.timesList);
         TextView emptyText = findViewById(android.R.id.empty);
         listView.setEmptyView(emptyText);
 
-        clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hours.setText("");
-                mins.setText("");
-                secs.setText("");
-            }
+        clear.setOnClickListener(v -> {
+            hours.setText("");
+            mins.setText("");
+            secs.setText("");
         });
 
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addTimeToList();
-            }
-        });
+        add.setOnClickListener(v -> addTimeToList());
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        cancel.setOnClickListener(v -> finish());
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("advTimeString", advTimeString);
-                editor.apply();
-                Intent i = new Intent();
-                setResult(AppCompatActivity.RESULT_OK, i);
-                finish();
-            }
+        save.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("advTimeString", advTimeString);
+            editor.apply();
+            Intent i = new Intent();
+            setResult(AppCompatActivity.RESULT_OK, i);
+            finish();
         });
 
         updateDataSet();
@@ -317,12 +289,7 @@ public class AdvNumberPicker extends AppCompatActivity {
                 }
             }
             Button b = rowView.findViewById(R.id.delete);
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    removeItem(position);
-                }
-            });
+            b.setOnClickListener(v -> removeItem(position));
 
             return rowView;
 
