@@ -41,24 +41,11 @@ public class AdvPicker {
     @Test
     public void advPicker() {
         ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.setButton), withContentDescription("Set"),
-                        childAtPosition(
-                                allOf(withId(R.id.mainLayout),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                4),
-                        isDisplayed()));
+                allOf(withId(R.id.setButton)));
         appCompatImageButton.perform(click());
 
         ViewInteraction button = onView(
-                allOf(withId(R.id.btnadv), withText("adv"),
-                        childAtPosition(
-                                allOf(withId(R.id.pre_button_cont),
-                                        childAtPosition(
-                                                withId(R.id.container),
-                                                4)),
-                                8)));
+                allOf(withId(R.id.btnadv), withText("adv")));
         button.perform(scrollTo(), click());
 
         ViewInteraction appCompatEditText = onView(
