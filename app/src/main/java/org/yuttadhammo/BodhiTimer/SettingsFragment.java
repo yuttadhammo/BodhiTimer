@@ -19,11 +19,14 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
+
+import org.yuttadhammo.BodhiTimer.Util.ThemeProvider;
 
 import java.io.IOException;
 
@@ -60,14 +63,29 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         setupAnimations();
         setupDND();
 
+
+        ListPreference nightMode = preferenceScreen.findPreference("night_mode");
+
+
+
+        nightMode.setOnPreferenceChangeListener((preference, value) -> {
+
+            if ()
+            // Only open file picker if its being enabled
+            Log.v(TAG, "Night mode: " + value);
+            ThemeProvider.getTheme(value);
+            return true;
+        });
+
+//            <CheckBoxPreference
+//        android:title="@string/invert_colors"
+//        android:key="invert_colors"
+//        app:iconSpaceReserved="false" />
+//
+
+
     }
 
-    private void setupDND() {
-        // Hide on API <23
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            preferenceScreen.findPreference("doNotDisturb").setVisible(false);
-        }
-    }
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
@@ -115,6 +133,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         intent.putExtra("android.provider.extra.APP_PACKAGE", mContext.getPackageName());
 
         startActivity(intent);
+    }
+
+
+    private void setupDND() {
+        CheckBoxPreference checkbox = preferenceScreen.findPreference("doNotDisturb");
+
+        // Hide on API <23
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            checkbox.setVisible(false);
+        } else {
+            NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (!mNotificationManager.isNotificationPolicyAccessGranted()) {
+                checkbox.setChecked(false);
+            }
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

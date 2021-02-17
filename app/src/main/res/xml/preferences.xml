@@ -85,6 +85,13 @@
     <PreferenceCategory
         android:title="@string/visual"
         app:iconSpaceReserved="false" />
+    <ListPreference
+        app:entries="@array/themes_entries"
+        app:entryValues="@array/themes_values"
+        app:key="night_mode"
+        app:defaultValue="@string/system_theme_preference_value"
+        app:title="@string/night_theme_title"
+        app:iconSpaceReserved="false" />
     <Preference
         android:title="@string/bmp_or_circle"
         android:key="DrawingIndex"
@@ -115,10 +122,7 @@
         android:summary="@string/hide_time_desc"
         android:defaultValue="False"
         app:iconSpaceReserved="false" />
-    <CheckBoxPreference
-        android:title="@string/invert_colors"
-        android:key="invert_colors"
-        app:iconSpaceReserved="false" />
+
     <PreferenceCategory
         android:title="@string/misc"
         app:iconSpaceReserved="false" />

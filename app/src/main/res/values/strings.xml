@@ -207,7 +207,10 @@
     <string name="show_system_settings_desc">Notifications can be customized in Android System Settings</string>
     <string name="do_not_disturb">Do not Disturb</string>
     <string name="do_not_disturb_desc">Enter "Do Not Disturb" Mode when meditating</string>
-
+    <string name="dark_theme_preference_value">Dark</string>
+    <string name="light_theme_preference_value">Light</string>
+    <string name="system_theme_preference_value">System default</string>
+    <string name="night_theme_title">Dark/Light mode</string>
 </resources>
 
 

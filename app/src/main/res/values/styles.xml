@@ -12,6 +12,7 @@
         <item name="fontFamily">@font/source_sans</item> <!-- target android sdk versions < 26 and > 14 if theme other than AppCompat -->
         <item name="fontWeight">300</item>
         <item name="android:buttonStyle">@style/Button</item>
+        <item name="android:navigationBarColor">@color/themeD1</item>
     </style>
 
 
