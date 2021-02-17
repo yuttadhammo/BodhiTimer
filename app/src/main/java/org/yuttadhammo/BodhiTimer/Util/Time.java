@@ -66,9 +66,9 @@ public class Time {
         if (time[0] == 0 && time[1] == 0) {
             return Integer.toString(time[2]);
         } else if (time[0] == 0) {
-            return padWithZeroes(time[1]).concat(":").concat(padWithZeroes(time[2]));
+            return Integer.toString(time[1]).concat(":").concat(padWithZeroes(time[2]));
         } else {
-            return padWithZeroes(time[0]).concat(":").concat(padWithZeroes(time[1])).concat(":").concat(padWithZeroes(time[2]));
+            return Integer.toString(time[0]).concat(":").concat(padWithZeroes(time[1])).concat(":").concat(padWithZeroes(time[2]));
         }
     }
 

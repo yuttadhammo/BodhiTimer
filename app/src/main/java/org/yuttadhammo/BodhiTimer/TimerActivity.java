@@ -253,7 +253,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
-
+        Log.i(TAG, "RESUME");
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         mAlarmTaskManager.appIsPaused = false;
@@ -285,18 +285,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         mAlarmTaskManager.appIsPaused = true; // tell gui timer to stop
         sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
 
-
         BitmapDrawable drawable = (BitmapDrawable) mTimerAnimation.getDrawable();
         if (drawable != null) {
             Bitmap bitmap = drawable.getBitmap();
             bitmap.recycle();
         }
-
-        // Save our settings
-        SharedPreferences.Editor editor = prefs.edit();
-        mTimerAnimation.saveState(prefs);
-
-        editor.apply();
 
     }
 
@@ -431,7 +424,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
             case R.id.cancelButton:
                 mAlarmTaskManager.stopAlarmsAndTicker();
                 mAlarmTaskManager.loadLastTimers();
-                enterState(STOPPED);
                 break;
         }
     }
@@ -473,6 +465,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      * @param duration the duration of the current timer
      */
     public void updateInterfaceWithTime(int elapsed, int duration) {
+
+        // TODO: This is a hack, to show the full circle after stopped or finished..
+        if (elapsed == duration) {
+            elapsed = 0;
+        }
 
         if (animationIndex != 0) {
             blackView.setVisibility(View.GONE);
@@ -577,12 +574,13 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 widget = false;
                 return;
             }
-
+            editor.putBoolean("LastWasSimple", false);
             startAdvancedAlarm(advTimeString);
 
         } else {
             Log.v(TAG, "Saving simple time: " + Time.msFromArray(numbers));
             editor.putInt("LastSimpleTime", Time.msFromArray(numbers));
+            editor.putBoolean("LastWasSimple", true);
             startSimpleAlarm(numbers, true);
         }
 
@@ -640,17 +638,15 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
 
     /**
-     * Mostly used for the wakelock currently -- should be used for the visual components eventually
+     * Update visual components if preferences have changed
      */
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // FIXME: add preptime...
-        // We need to check if the
         if (key.equals("WakeLock")) {
             if (prefs.getBoolean("WakeLock", false))
                 getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
             else
                 getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
-        } else if (key.equals("PreSoundUri") || key.equals("preparationTime")) {
+        } else if ((key.equals("PreSoundUri") || key.equals("preparationTime")) && prefs.getBoolean("LastWasSimple", false)) {
             int lastTime = prefs.getInt("LastSimpleTime", 1200);
             startSimpleAlarm(lastTime, false);
         }

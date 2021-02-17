@@ -45,8 +45,7 @@ public class AlarmTaskManager extends AndroidViewModel {
     private int lastId = 0;
 
     public boolean appIsPaused;
-
-
+    
     // Data
     public long timeStamp;
     private long sessionTimeStamp;
@@ -191,8 +190,8 @@ public class AlarmTaskManager extends AndroidViewModel {
             case STOPPED:
                 Log.i(TAG, "CREATE, state STOPPED");
                 loadLastTimers();
-                setCurrentState(STOPPED);
 
+                // FIXME:
 //                if (widget) {
 //                    if (prefs.getBoolean("SwitchTimeMode", false))
 //                        startVoiceRecognitionActivity();
@@ -207,12 +206,12 @@ public class AlarmTaskManager extends AndroidViewModel {
             case PAUSED:
                 Log.i(TAG, "CREATE, state PAUSED");
 
-                // FIXME: There is a bug here!
-                loadLastTimers();
+                int sessionLeft = prefs.getInt("SessionTimeLeft", 0);
+                int timeElapsed = sessionDuration - sessionLeft;
 
-                //updateInterfaceWithTime(mAlarmTaskManager.getCurTimerLeftVal(), mAlarmTaskManager.getCurTimerDurationVal());
+                // Setup the alarms
+                loadLastTimers(-timeElapsed);
 
-                setCurrentState(PAUSED);
                 break;
         }
 
@@ -221,9 +220,7 @@ public class AlarmTaskManager extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-
         Log.i(TAG, "View model cleared");
-        // FIXME:
         saveState();
     }
 
@@ -323,7 +320,6 @@ public class AlarmTaskManager extends AndroidViewModel {
             sessionDur += alarm.duration;
         }
 
-
         int dur = getCurTimerDurationVal();
         sessionDuration = sessionDur;
         setSessionTimeStamp(sessionDur);
@@ -332,14 +328,18 @@ public class AlarmTaskManager extends AndroidViewModel {
         Log.v(TAG, "Started ticker & timer, first duration: " + dur);
     }
 
+
     private void resetCurrentAlarm() {
         int dur = getCurrentAlarmDuration();
         setCurTimerDuration(dur);
 
-        setCurTimerLeft(0);
 
-        // FIXME: There is a bug here
-        updateTimerText(dur - getCurTimerLeftVal());
+        // FIXME: WRONG ressetiing when unpause creating..
+        if (mCurrentState.getValue() != PAUSED) {
+            setCurTimerLeft(dur);
+        }
+
+        updateTimerText();
     }
 
     public int getCurrentAlarmDuration() {
@@ -443,7 +443,6 @@ public class AlarmTaskManager extends AndroidViewModel {
         // How far have we elapsed?
         int sessionLeft = prefs.getInt("SessionTimeLeft", 0);
         int currentTimerLeft = prefs.getInt("CurrentTimeLeft", 0);
-
 
         int timeElapsed = sessionDuration - sessionLeft;
 
@@ -677,6 +676,9 @@ public class AlarmTaskManager extends AndroidViewModel {
             // in case AutoRepeat is on.
             handleAutoRepeat();
             stopDND();
+            stopAlarmsAndTicker();
+            loadLastTimers();
+
 
         } else {
             switchToTimer(alarms.firstElement());
@@ -736,7 +738,6 @@ public class AlarmTaskManager extends AndroidViewModel {
             try {
                 NotificationManager mNotificationManager = (NotificationManager) mApp.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
-
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
