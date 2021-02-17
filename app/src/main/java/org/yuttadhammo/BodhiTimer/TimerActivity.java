@@ -135,15 +135,27 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         Log.i(TAG, "CREATE");
         super.onCreate(savedInstanceState);
 
-
+        context = this;
         mAlarmTaskManager = new ViewModelProvider(this).get(AlarmTaskManager.class);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        prefs.registerOnSharedPreferenceChangeListener(this);
+
         setupObservers();
+        prepareUI();
 
 
+        IntentFilter filter2 = new IntentFilter();
+        filter2.addAction(BROADCAST_END);
+        registerReceiver(alarmEndReceiver, filter2);
+
+        Notification.createNotificationChannel(context);
+
+    }
+
+    private void prepareUI() {
         setContentView(R.layout.main);
 
-        context = this;
 
         mCancelButton = findViewById(R.id.cancelButton);
         mCancelButton.setOnClickListener(this);
@@ -183,21 +195,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         blackView = findViewById(R.id.black);
 
-        // Store some useful values
-        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
-
-        // Setup Last Times
-
-        prefs.registerOnSharedPreferenceChangeListener(this);
-
-
-        IntentFilter filter2 = new IntentFilter();
-        filter2.addAction(BROADCAST_END);
-        registerReceiver(alarmEndReceiver, filter2);
-
-        Notification.createNotificationChannel(context);
-
+        animationIndex = prefs.getInt("DrawingIndex", 1);
     }
 
     private void setupObservers() {
@@ -270,6 +268,19 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         animationIndex = prefs.getInt("DrawingIndex", 1);
 
         setupUI();
+
+
+        if (mAlarmTaskManager.getCurrentState().getValue() == STOPPED) {
+
+            if (widget) {
+                if (prefs.getBoolean("SwitchTimeMode", false))
+                    startVoiceRecognitionActivity();
+                else
+                    showNumberPicker();
+                return;
+            }
+
+        }
 
         widget = false;
     }

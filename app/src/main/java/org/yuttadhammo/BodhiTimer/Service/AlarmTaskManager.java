@@ -191,15 +191,6 @@ public class AlarmTaskManager extends AndroidViewModel {
                 Log.i(TAG, "CREATE, state STOPPED");
                 loadLastTimers();
 
-                // FIXME:
-//                if (widget) {
-//                    if (prefs.getBoolean("SwitchTimeMode", false))
-//                        startVoiceRecognitionActivity();
-//                    else
-//                        showNumberPicker();
-//                    return;
-//                }
-
                 break;
 
 
@@ -333,8 +324,6 @@ public class AlarmTaskManager extends AndroidViewModel {
         int dur = getCurrentAlarmDuration();
         setCurTimerDuration(dur);
 
-
-        // FIXME: WRONG ressetiing when unpause creating..
         if (mCurrentState.getValue() != PAUSED) {
             setCurTimerLeft(dur);
         }
