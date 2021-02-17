@@ -58,6 +58,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -135,6 +136,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "CREATE");
         super.onCreate(savedInstanceState);
+
 
         context = this;
         mAlarmTaskManager = new ViewModelProvider(this).get(AlarmTaskManager.class);
@@ -333,6 +335,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 mCancelButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.stop_black));
                 findViewById(R.id.mainLayout).setBackgroundColor(0xFFFFFFFF);
                 mTimerLabel.setTextColor(0xFF000000);
+                mPreviewLabel.setTextColor(0xFF000000);
             } else {
                 mPauseBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pause);
 
@@ -348,10 +351,18 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 mCancelButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.stop));
                 findViewById(R.id.mainLayout).setBackgroundColor(0xFF000000);
                 mTimerLabel.setTextColor(0xFFFFFFFF);
+                mPreviewLabel.setTextColor(0xFFFFFFFF);
             }
 
             invertColors = newInvertColors;
         }
+
+        if (invertColors) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+
 
         setLowProfile();
         if (prefs.getBoolean("WakeLock", false))
