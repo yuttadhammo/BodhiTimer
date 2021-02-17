@@ -313,6 +313,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressWarnings("deprecation")
     private int getMinute() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return timePicker.getMinute();
@@ -321,6 +322,7 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressWarnings("deprecation")
     private int getHour() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return timePicker.getHour();

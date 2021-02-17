@@ -30,7 +30,7 @@ class TimerActivityTest {
 
     @Test
     fun timerActivityTest() {
-        Screengrab.screenshot("main");
+        Screengrab.screenshot("main")
         val appCompatImageButton = onView(
                 allOf(withId(R.id.setButton), withContentDescription("Set"),
                         childAtPosition(

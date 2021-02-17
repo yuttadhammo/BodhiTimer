@@ -39,7 +39,7 @@ public class AlarmTaskManager extends AndroidViewModel {
      */
     public final static int TIMER_TIC = 100;
 
-    public Timer mTimer = new Timer();
+    public final Timer mTimer = new Timer();
 
     private final Stack<AlarmTask> alarms;
     private int lastId = 0;
@@ -52,7 +52,7 @@ public class AlarmTaskManager extends AndroidViewModel {
     public int sessionDuration;
     private int sessionTimeLeft;
 
-    Application mApp;
+    final Application mApp;
 
     // Live Data
     private final MutableLiveData<Integer> currentTimerLeft = new MutableLiveData<>();
@@ -79,7 +79,7 @@ public class AlarmTaskManager extends AndroidViewModel {
     }
 
     public void setCurrentState(Integer newState) {
-        if (newState != mCurrentState.getValue()) {
+
             Log.v(TAG, "Entering state: " + newState);
 
             SharedPreferences.Editor editor = prefs.edit();
@@ -87,16 +87,16 @@ public class AlarmTaskManager extends AndroidViewModel {
             editor.apply();
 
             mCurrentState.setValue(newState);
-        }
+
 
     }
 
     public LiveData<String> getTimerText() {
-        return (LiveData) timerText;
+        return (LiveData<String>) timerText;
     }
 
     public LiveData<String> getPreviewText() {
-        return (LiveData) previewText;
+        return (LiveData<String>) previewText;
     }
 
 
@@ -126,7 +126,7 @@ public class AlarmTaskManager extends AndroidViewModel {
 
 
     // TODO: These need to be handled outside
-    public NotificationManager mNM;
+    public final NotificationManager mNM;
     private final SharedPreferences prefs;
 
 
@@ -269,7 +269,7 @@ public class AlarmTaskManager extends AndroidViewModel {
         return alarm;
     }
 
-    public int addAlarms(TimerList list, int offset) {
+    public void addAlarms(TimerList list, int offset) {
         // If adding a complete list, clear all previous alarms
         cancelAllAlarms(true);
 
@@ -292,8 +292,6 @@ public class AlarmTaskManager extends AndroidViewModel {
         }
 
         resetCurrentAlarm();
-
-        return totalDuration;
 
     }
 
@@ -527,7 +525,7 @@ public class AlarmTaskManager extends AndroidViewModel {
     private String getTimeString() {
         String prefString = prefs.getString("timeString", "");
 
-        if (prefString == "")
+        if (prefString.equals(""))
             prefString = prefs.getString("advTimeString", "120000#sys_def");
 
         return prefString;

@@ -27,11 +27,12 @@ class SoundManager(private val mContext: Context) {
             player.prepare()
             getWakeLock(mContext, player.duration)
             player.isLooping = false
-            player.setOnCompletionListener(OnCompletionListener { mp ->
+
+            player.setOnCompletionListener { mp ->
                 Log.v(TAG, "Resetting media player...")
                 mp.reset()
                 mp.release()
-            })
+            }
 
             player.setOnErrorListener { mp, what, extra ->
                 Log.e("Player error", "what:$what extra:$extra")

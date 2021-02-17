@@ -90,7 +90,7 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
         min = findViewById(R.id.gallery_min);
         sec = findViewById(R.id.gallery_sec);
 
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context, R.layout.gallery_item, numbers);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(context, R.layout.gallery_item, numbers);
 
         hour.setAdapter(adapter1);
         min.setAdapter(adapter1);
@@ -216,7 +216,7 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
             m = Integer.parseInt(ts.substring(3, 5));
             s = Integer.parseInt(ts.substring(6, 8));
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         if (h != 0 || m != 0 || s != 0) {
