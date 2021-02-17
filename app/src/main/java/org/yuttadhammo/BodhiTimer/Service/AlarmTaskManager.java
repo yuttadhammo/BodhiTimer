@@ -251,7 +251,7 @@ public class AlarmTaskManager extends AndroidViewModel {
     }
 
 
-    private void loadLastTimers() {
+    public void loadLastTimers() {
         loadLastTimers(0);
     }
 
@@ -523,7 +523,7 @@ public class AlarmTaskManager extends AndroidViewModel {
      * HELPER FUNCTIONS
      */
 
-    public void startAdvancedAlarm(TimerList list) {
+    public void startAlarms(TimerList list) {
         addAlarms(list, 0);
         startAll();
     }
@@ -689,7 +689,7 @@ public class AlarmTaskManager extends AndroidViewModel {
         if (prefs.getBoolean("AutoRestart", false)) {
             Log.i(TAG, "AUTO RESTART");
             stopAlarmsAndTicker();
-            startAdvancedAlarm(retrieveTimerList());
+            startAlarms(retrieveTimerList());
             setCurrentState(RUNNING);
         }
     }
@@ -733,15 +733,24 @@ public class AlarmTaskManager extends AndroidViewModel {
 
     private void startDND() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean("doNotDisturb", false)) {
-            NotificationManager mNotificationManager = (NotificationManager) mApp.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+            try {
+                NotificationManager mNotificationManager = (NotificationManager) mApp.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
         }
     }
 
     private void stopDND() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean("doNotDisturb", false)) {
-            NotificationManager mNotificationManager = (NotificationManager) mApp.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+            try {
+                NotificationManager mNotificationManager = (NotificationManager) mApp.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
         }
     }
 

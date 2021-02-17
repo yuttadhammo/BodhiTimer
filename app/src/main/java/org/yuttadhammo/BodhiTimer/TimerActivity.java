@@ -423,13 +423,14 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                         break;
                     case STOPPED:
                         // We are stopped and want to restore the last used timers.
-                        mAlarmTaskManager.startAdvancedAlarm(mAlarmTaskManager.retrieveTimerList());
+                        mAlarmTaskManager.startAlarms(mAlarmTaskManager.retrieveTimerList());
                         break;
                 }
                 break;
 
             case R.id.cancelButton:
                 mAlarmTaskManager.stopAlarmsAndTicker();
+                mAlarmTaskManager.loadLastTimers();
                 enterState(STOPPED);
                 break;
         }
@@ -444,7 +445,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
         return super.onKeyDown(keycode, e);
     }
-
 
 
     private void setLowProfile() {
@@ -490,9 +490,11 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
     }
 
+    public void startSimpleAlarm(int[] numbers, boolean startAll) {
+        startSimpleAlarm(Time.msFromArray(numbers), startAll);
+    }
 
-
-    public void startSimpleAlarm(int[] numbers) {
+    public void startSimpleAlarm(int time, boolean startAll) {
 
         int prepTime = prefs.getInt("preparationTime", 0) * 1000;
         String preUriString = prefs.getString("PreSoundUri", "");
@@ -527,14 +529,18 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
 
         // Add main timer
-        int mainTime = Time.msFromArray(numbers);
-        tL.timers.add(new TimerList.Timer(mainTime, notificationUri, SessionType.REAL));
+
+        tL.timers.add(new TimerList.Timer(time, notificationUri, SessionType.REAL));
 
         mAlarmTaskManager.saveTimerList(tL);
-        mAlarmTaskManager.startAdvancedAlarm(tL);
+        mAlarmTaskManager.addAlarms(tL, 0);
+
+        if (startAll) {
+            mAlarmTaskManager.startAll();
+        }
+
 
     }
-
 
 
     public void startAdvancedAlarm(String advTimeString) {
@@ -543,10 +549,8 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         Log.v(TAG, "advString: " + advTimeString);
         Log.v(TAG, "advString2: " + list.getString());
 
-        mAlarmTaskManager.startAdvancedAlarm(list);
+        mAlarmTaskManager.startAlarms(list);
     }
-
-
 
 
     /**
@@ -579,13 +583,12 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         } else {
             Log.v(TAG, "Saving simple time: " + Time.msFromArray(numbers));
             editor.putInt("LastSimpleTime", Time.msFromArray(numbers));
-            startSimpleAlarm(numbers);
+            startSimpleAlarm(numbers, true);
         }
 
         editor.commit();
 
     }
-
 
 
     private void hasEnteredState(int newState) {
@@ -636,7 +639,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     }
 
 
-
     /**
      * Mostly used for the wakelock currently -- should be used for the visual components eventually
      */
@@ -648,6 +650,9 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                 getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
             else
                 getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else if (key.equals("PreSoundUri") || key.equals("preparationTime")) {
+            int lastTime = prefs.getInt("LastSimpleTime", 1200);
+            startSimpleAlarm(lastTime, false);
         }
     }
 
