@@ -102,10 +102,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         alert.setIcon(R.drawable.icon);
         alert.setTitle(getString(R.string.about_title));
         alert.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.close),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                    }
+                (dialog, whichButton) -> {
                 });
         alert.show();
 
@@ -135,24 +132,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         // Custom image chooser
         final Preference customImage = preferenceScreen.findPreference("custom_bmp");
 
-        customImage.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        customImage.setOnPreferenceChangeListener((preference, checked) -> {
 
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object checked) {
+            // Only open file picker if its being enabled
+            if ((Boolean) checked) {
+                Uri uri = Uri.parse("content://com.android.externalstorage.documents/document/");
 
-                // Only open file picker if its being enabled
-                if ((Boolean) checked) {
-                    Uri uri = Uri.parse("content://com.android.externalstorage.documents/document/");
+                Intent photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                photoPickerIntent.setType("image/*");
+                photoPickerIntent.putExtra("android.provider.extra.INITIAL_URI", uri);
 
-                    Intent photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    photoPickerIntent.setType("image/*");
-                    photoPickerIntent.putExtra("android.provider.extra.INITIAL_URI", uri);
-
-                    getActivity().startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-                }
-                return true;
+                getActivity().startActivityForResult(photoPickerIntent, SELECT_PHOTO);
             }
+            return true;
         });
 
 
@@ -169,30 +162,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             circleTheme.setEnabled(true);
         }
 
-        indexPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        indexPref.setOnPreferenceClickListener(preference -> {
+            int dIndex1 = prefs.getInt("DrawingIndex", 1);
+            dIndex1++;
+            dIndex1 %= 2;
 
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                int dIndex = prefs.getInt("DrawingIndex", 1);
-                dIndex++;
-                dIndex %= 2;
-
-                if (dIndex == 0) {
-                    indexPref.setSummary(getString(R.string.is_bitmap));
-                    circleTheme.setEnabled(false);
-                    customImage.setEnabled(true);
-                } else {
-                    indexPref.setSummary(getString(R.string.is_circle));
-                    circleTheme.setEnabled(true);
-                    customImage.setEnabled(false);
-                }
-
-                SharedPreferences.Editor mSettingsEdit = prefs.edit();
-                mSettingsEdit.putInt("DrawingIndex", dIndex);
-                mSettingsEdit.apply();
-                return true;
-
+            if (dIndex1 == 0) {
+                indexPref.setSummary(getString(R.string.is_bitmap));
+                circleTheme.setEnabled(false);
+                customImage.setEnabled(true);
+            } else {
+                indexPref.setSummary(getString(R.string.is_circle));
+                circleTheme.setEnabled(true);
+                customImage.setEnabled(false);
             }
+
+            SharedPreferences.Editor mSettingsEdit = prefs.edit();
+            mSettingsEdit.putInt("DrawingIndex", dIndex1);
+            mSettingsEdit.apply();
+            return true;
 
         });
     }
@@ -223,47 +211,28 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         player = new MediaPlayer();
 
 
-        tone.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                selectTone(newValue, SELECT_RINGTONE, SELECT_FILE);
-                return true;
-            }
-
+        tone.setOnPreferenceChangeListener((preference, newValue) -> {
+            selectTone(newValue, SELECT_RINGTONE, SELECT_FILE);
+            return true;
         });
 
-        pretone.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                selectTone(newValue, SELECT_PRE_RINGTONE, SELECT_PRE_FILE);
-                return true;
-            }
-
+        pretone.setOnPreferenceChangeListener((preference, newValue) -> {
+            selectTone(newValue, SELECT_PRE_RINGTONE, SELECT_PRE_FILE);
+            return true;
         });
 
-        play.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        play.setOnPreferenceClickListener(preference -> {
+            String notificationUri = prefs.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
+            prePlayTone(notificationUri, preference);
 
-            @Override
-            public boolean onPreferenceClick(final Preference preference) {
-                String notificationUri = prefs.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
-                prePlayTone(notificationUri, preference);
-
-                return false;
-            }
-
+            return false;
         });
 
-        prePlay.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(final Preference preference) {
-                String PreSoundUri = prefs.getString("PreSoundUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
-                prePlayTone(PreSoundUri, preference);
+        prePlay.setOnPreferenceClickListener(preference -> {
+            String PreSoundUri = prefs.getString("PreSoundUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
+            prePlayTone(PreSoundUri, preference);
 
-                return false;
-            }
-
+            return false;
         });
 
     }
@@ -339,14 +308,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             player.setDataSource(mContext, Uri.parse(ToneUri));
             player.prepare();
             player.setLooping(false);
-            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    preference.setTitle(mContext.getString(R.string.play_sound));
-                    preference.setSummary(mContext.getString(R.string.play_sound_desc));
-                    Log.v(TAG, "Resetting media player...");
-                    mp.reset();
-                }
+            player.setOnCompletionListener(mp -> {
+                preference.setTitle(mContext.getString(R.string.play_sound));
+                preference.setSummary(mContext.getString(R.string.play_sound_desc));
+                Log.v(TAG, "Resetting media player...");
+                mp.reset();
             });
             player.start();
             preference.setTitle(mContext.getString(R.string.playing_sound));

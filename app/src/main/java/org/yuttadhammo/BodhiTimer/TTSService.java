@@ -47,12 +47,9 @@ public class TTSService extends Service implements TextToSpeech.OnInitListener {
 
             Log.e("TTSService", "speaking: " + spokenText);
 
-            mTts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
-                @Override
-                public void onUtteranceCompleted(String s) {
-                    Log.d("TTSService", "utterance completed");
-                    stopSelf();
-                }
+            mTts.setOnUtteranceCompletedListener(s -> {
+                Log.d("TTSService", "utterance completed");
+                stopSelf();
             });
 
             mTts.speak(spokenText, TextToSpeech.QUEUE_FLUSH, hashAudio);
