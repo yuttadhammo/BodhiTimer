@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:padding="12dp"
+        android:padding="6dp"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"
         app:srcCompat="@drawable/leaf" />

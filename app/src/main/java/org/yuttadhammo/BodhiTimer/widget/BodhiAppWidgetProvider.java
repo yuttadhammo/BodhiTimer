@@ -63,34 +63,21 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
     private static AppWidgetManager appWidgetManager;
 
-    /**
-     * debug string
-     */
     private final static String TAG = "BodhiAppWidgetProvider";
-
     private static Timer mTimer;
-
     private static boolean stopTicking;
-
     private boolean isRegistered = false;
-
     private int[] widgetIds;
 
     private Bitmap originalBitmap;
-
     private Context mContext;
-
     private HashMap<Integer, Integer> backgrounds;
 
     public static final String ACTION_CLOCK_UPDATE = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_UPDATE";
-
     private static RemoteViews views;
-
     private static long timeStamp;
-
     private static int mLastTime;
-
-    private static int themeid;
+    private static int themeId;
 
     public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.i(TAG, "onUpdate");
@@ -119,8 +106,6 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
     public void onDisabled(Context context) {
         Log.i(TAG, "onDisabled");
         super.onDisabled(context);
-
-
     }
 
     public void onDeleted(Context context, int[] appWidgetIds) {
@@ -191,20 +176,20 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
                 views.setOnClickPendingIntent(R.id.mainImage, pendingIntent);
 
                 // set background
-                themeid = mSettings.getInt("widget_theme_" + widgetId, R.drawable.widget_background_black_square);
-                views.setImageViewResource(R.id.backImage, themeid);
-                backgrounds.put(widgetId, themeid);
+                 themeId = mSettings.getInt("widget_theme_" + widgetId, R.drawable.widget_background_black_square);
+                 views.setImageViewResource(R.id.backImage, themeId);
+                 backgrounds.put(widgetId, themeId);
                 appWidgetManager.updateAppWidget(widgetId, views);
             }
         }
     }
 
-    int tick = 5;
+    int tick = 50;
 
     private Bitmap bmp;
 
     private void doTick() {
-        //Log.e(TAG,"ticking");
+        Log.e(TAG,"ticking");
         if (widgetIds.length == 0 || stopTicking)
             return;
 
@@ -220,12 +205,10 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         // We still have a timer running!
         if (then.after(now) && state == RUNNING) {
             //Log.d(TAG, "running");
-            views.setTextViewText(R.id.time, getTime(delta));
+            views.setTextViewText(R.id.time, Time.ms2Str(delta));
             mTimer.schedule(new TimerTask() {
                                 public void run() {
-                                    if (mHandler != null) {
-                                        mHandler.sendEmptyMessage(0);
-                                    }
+                                    mHandler.sendEmptyMessage(0);
                                 }
                             },
                     AlarmTaskManager.TIMER_TIC
@@ -257,11 +240,11 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         for (int widgetId : widgetIds) {
             // set background
             if (backgrounds.containsKey(widgetId))
-                themeid = backgrounds.get(widgetId);
+                themeId = backgrounds.get(widgetId);
             else
-                themeid = R.drawable.widget_background_black;
+                themeId = R.drawable.widget_background_black;
 
-            views.setImageViewResource(R.id.backImage, themeid);
+            views.setImageViewResource(R.id.backImage, themeId);
             appWidgetManager.updateAppWidget(widgetId, views);
         }
     }
@@ -284,16 +267,6 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         return mutableBitmap;
     }
 
-    /**
-     * Updates the text label with the given time
-     *
-     * @param time in milliseconds
-     */
-    public static String getTime(int time) {
-        time += 999;  // round seconds upwards
-        return Time.ms2Str(time);
-
-    }
 
     /**
      * Handler for the message from the timer service
