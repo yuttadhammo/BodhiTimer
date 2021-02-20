@@ -467,6 +467,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         if (animationIndex != 0) {
             blackView.setVisibility(View.GONE);
             mTimerAnimation.updateImage(elapsed, duration);
+
         } else {
             float p = (duration != 0) ? (elapsed / (float) duration) : 0;
             int alpha = Math.round(255 * p);

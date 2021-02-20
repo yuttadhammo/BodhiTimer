@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 
@@ -48,6 +49,7 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         void updateImage(Canvas canvas, int time, int max);
 
         void configure();
+
     }
 
 
@@ -70,7 +72,6 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         prefs.registerOnSharedPreferenceChangeListener(this);
 
-        //setOnClickListener(this);
     }
 
     public void setIndex(int i) throws FileNotFoundException {
@@ -101,6 +102,10 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
         mDrawings.get(mIndex).updateImage(canvas, mLastTime, mLastMax);
     }
 
+    @Override
+    public void setBackgroundDrawable(Drawable background) {
+        super.setBackgroundDrawable(background);
+    }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 

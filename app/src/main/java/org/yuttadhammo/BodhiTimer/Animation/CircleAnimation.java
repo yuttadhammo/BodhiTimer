@@ -97,6 +97,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         mArcRect = new RectF();
 
         configure();
+
     }
 
     private static Bitmap getBitmapFromVector(VectorDrawable vectorDrawable) {
@@ -200,6 +201,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         mEnsoBitmap = getBitmapFromVector(mContext, R.drawable.enso);
         eHeight = mEnsoBitmap.getHeight();
         eWidth = mEnsoBitmap.getWidth();
+
 
         if (invertColors)
             mEnsoBitmap = invert(mEnsoBitmap);
@@ -330,6 +332,8 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
             rd = new Rect(0, 0, h, h);
             canvas.translate(w / -2f + (w - h) / 2f, h / -2f);
         }
+
+        // FIXME: Don't draw bitmap new on every frame!
         canvas.drawBitmap(mEnsoBitmap, rs, rd, null);
 
         canvas.restore();
@@ -378,5 +382,10 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
         // Inner paint
         canvas.drawCircle(0, 0, mInnerRadius, mInnerPaint);
         canvas.restore();
+    }
+
+    @Override
+    public void setBackgroundDrawable(Drawable background) {
+        super.setBackgroundDrawable(background);
     }
 }
