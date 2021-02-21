@@ -1,0 +1,10 @@
+5.5.1
+* Improve performance and battery usage
+* Fix a bug where long sounds were sometimes not played completely
+
+5.4.0
+* Use consistent font across the app
+* Add a Setting to enable "Do Not Disturb" Mode when meditating
+* Add Auto repeat function
+* Completely refactor Alarm Handling. It should be much more reliable, especially when the phone is in battery saver mode.
+* Modernize the way notifications are shown
