@@ -71,13 +71,6 @@
                 android:resource="@xml/bodhi_appwidget_info" />
         </receiver>
 
-        <activity
-            android:name=".widget.AppWidgetConfigure"
-            android:theme="@style/AppCompatTheme">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
 
         <receiver android:name=".TimerReceiver" />
 

@@ -28,56 +28,30 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.PorterDuff;
-import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 import org.yuttadhammo.BodhiTimer.R;
-import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.TimerActivity;
-import org.yuttadhammo.BodhiTimer.Util.Time;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
-import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
-import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
-import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_STOP;
 
 public class BodhiAppWidgetProvider extends AppWidgetProvider {
-
-    private static SharedPreferences mSettings;
-
-    private static int state;
 
     private static AppWidgetManager appWidgetManager;
 
     private final static String TAG = "BodhiAppWidgetProvider";
-    private static Timer mTimer;
-    private static boolean stopTicking;
     private boolean isRegistered = false;
     private int[] widgetIds;
 
     private Bitmap originalBitmap;
     private Context mContext;
-    private HashMap<Integer, Integer> backgrounds;
 
     public static final String ACTION_CLOCK_UPDATE = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_UPDATE";
     private static RemoteViews views;
-    private static long timeStamp;
-    private static int mLastTime;
-    private static int themeId;
+    private static final int themeId =  R.drawable.widget_background_black;
+    //private boolean stopTicking;
 
     public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.i(TAG, "onUpdate");
@@ -111,10 +85,6 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         Log.d(TAG, "onDeleted");
 
-        // When the user deletes the widget, delete the preference associated with it.
-        for (int appWidgetId : appWidgetIds) {
-            AppWidgetConfigure.deletePref(context, appWidgetId);
-        }
     }
 
     @Override
@@ -123,7 +93,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
         final String action = i.getAction();
 
-        stopTicking = action.equals(BROADCAST_STOP) || action.equals(Intent.ACTION_SCREEN_OFF);
+        //stopTicking = action.equals(BROADCAST_STOP) || action.equals(Intent.ACTION_SCREEN_OFF);
 
         doUpdate(context);
         doTick();
@@ -132,7 +102,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
     private void doUpdate(Context context) {
         Log.i(TAG, "updating");
 
-        mSettings = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(context);
         mContext = context;
         if (views == null)
             views = new RemoteViews(context.getPackageName(), R.layout.appwidget);
@@ -143,31 +113,15 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if (!mSettings.getBoolean("custom_bmp", false) || mSettings.getString("bmp_url", "").length() == 0) {
-            Resources resources = context.getResources();
-            originalBitmap = BitmapFactory.decodeResource(resources, R.drawable.leaf);
-        } else {
-            String bmpUrl = mSettings.getString("bmp_url", "");
-            Uri selectedImage = Uri.parse(bmpUrl);
-            InputStream imageStream = null;
-            try {
-                imageStream = context.getContentResolver().openInputStream(selectedImage);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            originalBitmap = BitmapFactory.decodeStream(imageStream);
-        }
+       Resources resources = context.getResources();
+       originalBitmap = BitmapFactory.decodeResource(resources, R.drawable.leaf);
 
-        mTimer = new Timer();
-        timeStamp = mSettings.getLong("TimeStamp", -1);
-        mLastTime = mSettings.getInt("LastSimpleTime", 0);
-        state = mSettings.getInt("State", STOPPED);
 
         appWidgetManager = AppWidgetManager.getInstance(context);
         ComponentName appWidgets = new ComponentName(context.getPackageName(), "org.yuttadhammo.BodhiTimer.widget.BodhiAppWidgetProvider");
         widgetIds = appWidgetManager.getAppWidgetIds(appWidgets);
 
-        backgrounds = new HashMap<>();
+        HashMap<Integer, Integer> backgrounds = new HashMap<>();
         if (widgetIds.length > 0) {
             for (int widgetId : widgetIds) {
 
@@ -176,7 +130,6 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
                 views.setOnClickPendingIntent(R.id.mainImage, pendingIntent);
 
                 // set background
-                 themeId = mSettings.getInt("widget_theme_" + widgetId, R.drawable.widget_background_black_square);
                  views.setImageViewResource(R.id.backImage, themeId);
                  backgrounds.put(widgetId, themeId);
                 appWidgetManager.updateAppWidget(widgetId, views);
@@ -184,99 +137,28 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    int tick = 50;
-
-    private Bitmap bmp;
 
     private void doTick() {
-        Log.e(TAG,"ticking");
-        if (widgetIds.length == 0 || stopTicking)
-            return;
 
-        views = new RemoteViews(mContext.getPackageName(), R.layout.appwidget);
-
-        Date now = new Date();
-        Date then = new Date(timeStamp);
-
-        int delta = (int) (then.getTime() - now.getTime());
-
-        //Log.d(TAG, "Delta: "+delta);
-
-        // We still have a timer running!
-        if (then.after(now) && state == RUNNING) {
-            //Log.d(TAG, "running");
-            views.setTextViewText(R.id.time, Time.ms2Str(delta));
-            mTimer.schedule(new TimerTask() {
-                                public void run() {
-                                    mHandler.sendEmptyMessage(0);
-                                }
-                            },
-                    AlarmTaskManager.TIMER_TIC
-            );
-        } else if (state == PAUSED) {
-            Log.d(TAG, "paused");
-
-            int time = mSettings.getInt("CurrentTimeLeft", 0);
-            int rtime = Math.round(((float) time) / 1000) * 1000;  // round to seconds
-            views.setTextViewText(R.id.time, Time.time2hms(rtime));
-        } else {
-            Log.d(TAG, "stopped");
-            views.setTextViewText(R.id.time, "");
-        }
-
-        float p = (mLastTime != 0) ? (delta / (float) mLastTime) : 0;
-
-        if (then.after(now) && state == RUNNING) {
-            if (bmp == null || ++tick == 10) {
-                bmp = adjustOpacity(originalBitmap, (int) (255 - (255 * p)));
-                tick = 0;
-            }
-        } else
-            bmp = originalBitmap;
-
-        views.setImageViewBitmap(R.id.mainImage, bmp);
-
-        // Tell the widget manager
-        for (int widgetId : widgetIds) {
-            // set background
-            if (backgrounds.containsKey(widgetId))
-                themeId = backgrounds.get(widgetId);
-            else
-                themeId = R.drawable.widget_background_black;
-
-            views.setImageViewResource(R.id.backImage, themeId);
-            appWidgetManager.updateAppWidget(widgetId, views);
-        }
+//        if (widgetIds.length == 0)
+//            return;
+//
+//        views = new RemoteViews(mContext.getPackageName(), R.layout.appwidget);
+//
+//        Bitmap bmp = originalBitmap;
+//
+//        views.setImageViewBitmap(R.id.mainImage, bmp);
+//
+//        // Tell the widget manager
+//        for (int widgetId : widgetIds) {
+//            // set background
+//            views.setImageViewResource(R.id.backImage, themeId);
+//            appWidgetManager.updateAppWidget(widgetId, views);
+//        }
     }
 
 
-    /**
-     * @param bitmap  The source bitmap.
-     * @param opacity a value between 0 (completely transparent) and 255 (completely
-     *                opaque).
-     * @return The opacity-adjusted bitmap.  If the source bitmap is mutable it will be
-     * adjusted and returned, otherwise a new bitmap is created.
-     */
-    private static Bitmap adjustOpacity(Bitmap bitmap, int opacity) {
-        Bitmap mutableBitmap = bitmap.isMutable()
-                ? bitmap
-                : bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(mutableBitmap);
-        int colour = (opacity & 0xFF) << 24;
-        canvas.drawColor(colour, PorterDuff.Mode.DST_IN);
-        return mutableBitmap;
-    }
 
 
-    /**
-     * Handler for the message from the timer service
-     */
-    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
-
-        @Override
-        public void handleMessage(Message msg) {
-            doTick();
-        }
-    };
 
 }
