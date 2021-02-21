@@ -652,7 +652,6 @@ public class AlarmTaskManager extends AndroidViewModel {
 
         if (alarm == null) return;
 
-
         // Remove alarm
         alarms.remove(alarm);
 
