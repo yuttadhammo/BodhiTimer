@@ -53,6 +53,7 @@ public class Time {
             return "0" + number;
         }
     }
+
     /**
      * Converts a millisecond time to a string time
      * Not meant to be pretty, but fast..

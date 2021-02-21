@@ -47,10 +47,6 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
     }
 
 
-    private int hsel;
-    private int msel;
-    private int ssel;
-
     private Gallery hour;
     private Gallery min;
     private Gallery sec;
@@ -66,8 +62,6 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
     private SharedPreferences prefs;
 
     private Context context;
-
-    private int[] time;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,9 +153,9 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
         switch (v.getId()) {
             case R.id.btnOk:
 
-                hsel = hour.getSelectedItemPosition();
-                msel = min.getSelectedItemPosition();
-                ssel = sec.getSelectedItemPosition();
+                int hsel = hour.getSelectedItemPosition();
+                int msel = min.getSelectedItemPosition();
+                int ssel = sec.getSelectedItemPosition();
 
                 int[] values = {hsel, msel, ssel};
                 Intent i = new Intent();
@@ -169,6 +163,7 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
                 setResult(Activity.RESULT_OK, i);
                 finish();
                 break;
+
             case R.id.btnCancel:
                 finish();
                 break;
@@ -310,10 +305,9 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
     }
 
     public void setTimes(int[] _times) {
-        time = _times;
-        hour.setSelection(time[0]);
-        min.setSelection(time[1]);
-        sec.setSelection(time[2]);
+        hour.setSelection(_times[0]);
+        min.setSelection(_times[1]);
+        sec.setSelection(_times[2]);
     }
 
 
