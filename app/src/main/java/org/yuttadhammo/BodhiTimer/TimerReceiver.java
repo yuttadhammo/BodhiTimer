@@ -61,8 +61,6 @@ public class TimerReceiver extends BroadcastReceiver {
         String notificationUri = mIntent.getStringExtra("uri");
         int duration = mIntent.getIntExtra("duration", 0);
 
-        //SoundManager mSoundManager = new SoundManager(mContext);
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         boolean alwaysShow = prefs.getBoolean("showAlwaysNotifications", false);
 

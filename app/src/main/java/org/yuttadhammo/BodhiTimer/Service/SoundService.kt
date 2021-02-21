@@ -46,7 +46,6 @@ class SoundService : Service() {
     private fun play(mUri: Uri, volume: Int) {
 
         try {
-            //mediaPlayer = MediaPlayer()
             mediaPlayer.reset()
 
             if (volume != 0) {
