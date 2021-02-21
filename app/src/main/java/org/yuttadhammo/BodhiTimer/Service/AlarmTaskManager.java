@@ -259,7 +259,8 @@ public class AlarmTaskManager extends AndroidViewModel {
         alarm.setSessionType(sessionType);
 
         lastId++;
-        alarm.id = lastId;
+
+        alarm.setId(lastId);
 
         alarms.push(alarm);
 
@@ -306,7 +307,7 @@ public class AlarmTaskManager extends AndroidViewModel {
 
         for (AlarmTask alarm : alarms) {
             alarm.run();
-            sessionDur += alarm.duration;
+            sessionDur += alarm.getDuration();
         }
 
         int dur = getCurTimerDurationVal();
@@ -332,7 +333,7 @@ public class AlarmTaskManager extends AndroidViewModel {
     public int getCurrentAlarmDuration() {
         if (!alarms.empty()) {
             AlarmTask firstAlarm = alarms.firstElement();
-            return firstAlarm.duration;
+            return firstAlarm.getDuration();
         } else {
             return 0;
         }
@@ -342,7 +343,7 @@ public class AlarmTaskManager extends AndroidViewModel {
         int sessionDur = 0;
 
         for (AlarmTask alarm : alarms) {
-            sessionDur += alarm.duration;
+            sessionDur += alarm.getDuration();
         }
 
         return sessionDur;
@@ -373,7 +374,7 @@ public class AlarmTaskManager extends AndroidViewModel {
         ArrayList<Integer> previewTimes = new ArrayList<>();
         for (int i = 1; i < alarms.size(); i++) {
             AlarmTask alarm = alarms.elementAt(i);
-            previewTimes.add(alarm.duration);
+            previewTimes.add(alarm.getDuration());
         }
         return previewTimes;
     }
@@ -638,7 +639,7 @@ public class AlarmTaskManager extends AndroidViewModel {
     public AlarmTask getAlarmById(int id) {
         AlarmTask found = null;
         for (AlarmTask alarm : alarms) {
-            if (alarm.id == id) found = alarm;
+            if (alarm.getId() == id) found = alarm;
         }
 
         return found;
@@ -683,7 +684,7 @@ public class AlarmTaskManager extends AndroidViewModel {
     }
 
     private void switchToTimer(AlarmTask alarm) {
-        int duration = alarm.duration;
+        int duration = alarm.getDuration();
         setCurTimerDuration(duration);
         setTimeStamp(duration);
         setCurTimerLeft(0);
