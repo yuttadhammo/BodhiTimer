@@ -1,56 +1,82 @@
 package org.yuttadhammo.BodhiTimer.Service
 
+import android.app.Service
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
+import android.media.session.PlaybackState
 import android.net.Uri
+import android.os.IBinder
 import android.os.PowerManager
-import android.os.PowerManager.WakeLock
 import android.util.Log
 import androidx.preference.PreferenceManager
+import kotlin.math.ln
 
-class SoundManager(private val mContext: Context) {
+const val ACTION_PLAY: String = "org.yuttadhammo.BodhiTimer.Service.PLAY"
+private const val TAG: String = "SoundManager"
 
-    private val TAG: String = "SoundManager"
-    private val flags: Int = PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP
+class SoundService : Service() {
 
-    private var player: MediaPlayer = MediaPlayer()
-    private val pm = mContext.getSystemService(Context.POWER_SERVICE) as PowerManager
-    private var wL: WakeLock = pm.newWakeLock(flags, "Bodhi:Alarm")
 
-    private fun play(mUri: Uri) {
+
+    private val flags: Int = PowerManager.PARTIAL_WAKE_LOCK
+
+    private var mediaPlayer: MediaPlayer = MediaPlayer()
+
+//    private val pm = applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
+//    private var wL: PowerManager.WakeLock = pm.newWakeLock(flags, "Bodhi:Alarm")
+
+
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        val action = intent.action
+        if (ACTION_PLAY == action) {
+
+            val volume = intent.getIntExtra("volume", 100)
+            val uri = intent.getStringExtra("uri")
+
+            if (uri != null) {
+                play(uri, volume)
+            }
+
+        }
+
+        return START_NOT_STICKY
+    }
+
+    private fun play(mUri: Uri, volume: Int) {
 
         try {
-            player.reset()
-            val currVolume: Int = PreferenceManager.getDefaultSharedPreferences(mContext).getInt("tone_volume", 0)
-            if (currVolume != 0) {
-                val log1 = (Math.log((100 - currVolume).toDouble()) / Math.log(100.0)).toFloat()
-                player.setVolume(1 - log1, 1 - log1)
-            }
-            player.setDataSource(mContext, mUri)
-            player.prepare()
-            getWakeLock(player.duration)
-            player.isLooping = false
+            mediaPlayer.reset()
 
-            player.setOnCompletionListener { mp ->
+            if (volume != 0) {
+                val log1 = (ln((100 - volume).toDouble()) / ln(100.0)).toFloat()
+                mediaPlayer.setVolume(1 - log1, 1 - log1)
+            }
+            mediaPlayer.setDataSource(applicationContext, mUri)
+            mediaPlayer.prepare()
+            //getWakeLock(mediaPlayer.duration)
+            mediaPlayer.isLooping = false
+
+            mediaPlayer.setOnCompletionListener { mp ->
                 Log.v(TAG, "Resetting media player...")
                 mp.reset()
                 mp.release()
 
-                releaseWakeLock()
+                //releaseWakeLock()
             }
 
-            player.setOnErrorListener { mp, what, extra ->
+            mediaPlayer.setOnErrorListener { mp, what, extra ->
                 Log.e("Player error", "what:$what extra:$extra")
                 true
             }
 
-            player.setOnInfoListener { mp, what, extra ->
+            mediaPlayer.setOnInfoListener { mp, what, extra ->
                 Log.e("Player info", "what:$what extra:$extra")
                 true
             }
 
-            player.setWakeMode(mContext, flags)
-            player.start()
+            mediaPlayer.setWakeMode(applicationContext, flags)
+            mediaPlayer.start()
 
             Log.v(TAG, "Playing sound")
         } catch (e: Exception) {
@@ -59,28 +85,40 @@ class SoundManager(private val mContext: Context) {
 
     }
 
-    fun play(mUri: String) {
+    override fun onBind(intent: Intent): IBinder {
+        TODO("Return the communication channel to the service.")
+    }
+
+    private fun play(mUri: String, volume: Int) {
         var uri = mUri
 
         if (mUri == "sys_def") {
-            uri = PreferenceManager.getDefaultSharedPreferences(mContext).getString("NotificationUri", "").toString()
+            uri = PreferenceManager.getDefaultSharedPreferences(applicationContext).getString("NotificationUri", "").toString()
         }
 
-        play(Uri.parse(uri))
+        play(Uri.parse(uri), volume)
     }
 
     // Make sure we can play the sound until it's finished
-    private fun getWakeLock(dur: Int) {
-        if (wL != null && wL.isHeld) {
-            Log.v(TAG, "Acquiring Wake Lock for $dur")
-            wL.acquire((dur + 1000).toLong())
-        }
+//    private fun getWakeLock(dur: Int) {
+//        if (wL != null && wL.isHeld) {
+//            Log.v(TAG, "Acquiring Wake Lock for $dur")
+//            wL.acquire((dur + 1000).toLong())
+//        }
+//    }
+//
+//    private fun releaseWakeLock() {
+//        if (wL != null && wL.isHeld) {
+//            Log.v(TAG, "Releasing Wake Lock")
+//            wL.release()
+//        }
+//    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
     }
 
-    private fun releaseWakeLock() {
-        if (wL != null && wL.isHeld) {
-            Log.v(TAG, "Releasing Wake Lock")
-            wL.release()
-        }
-    }
+
+
 }
