@@ -26,7 +26,8 @@ android:layout_height="match_parent" >
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#DDDDDD" />
+        android:background="#DDDDDD"
+        android:contentDescription="@null" />
 
     <LinearLayout
         android:id="@+id/pre_button_cont"
@@ -48,6 +49,7 @@ android:layout_height="match_parent" >
             android:layout_width="1dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
+            android:contentDescription="@null"
             android:background="#DDDDDD" />
 
         <Button
@@ -62,6 +64,7 @@ android:layout_height="match_parent" >
         <ImageView
             android:layout_width="1dp"
             android:layout_height="20dp"
+            android:contentDescription="@null"
             android:layout_gravity="center_vertical"
             android:background="#DDDDDD" />
 
@@ -78,6 +81,7 @@ android:layout_height="match_parent" >
             android:layout_width="1dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
+            android:contentDescription="@null"
             android:background="#DDDDDD"
             android:visibility="gone" />
 
@@ -95,6 +99,7 @@ android:layout_height="match_parent" >
             android:layout_width="1dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
+            android:contentDescription="@null"
             android:background="#DDDDDD" />
 
         <Button
@@ -110,6 +115,7 @@ android:layout_height="match_parent" >
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:contentDescription="@null"
         android:background="#DDDDDD" />
 
     <LinearLayout
@@ -132,6 +138,7 @@ android:layout_height="match_parent" >
             android:layout_width="1dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
+            android:contentDescription="@null"
             android:background="#DDDDDD" />
 
         <Button

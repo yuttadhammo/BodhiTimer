@@ -12,13 +12,16 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:adjustViewBounds="true"
-        android:scaleType="centerInside" />
+        android:scaleType="centerInside"
+        android:contentDescription="@null"
+        />
 
     <ImageView
         android:id="@+id/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FF000000" />
+        android:background="#FF000000"
+        android:contentDescription="@null" />
 
     <TextView
         android:id="@+id/text_top"

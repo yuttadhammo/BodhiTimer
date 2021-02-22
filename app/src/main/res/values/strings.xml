@@ -207,6 +207,7 @@
     <string name="show_system_settings_desc">Notifications can be customized in Android System Settings</string>
     <string name="do_not_disturb">Do not Disturb</string>
     <string name="do_not_disturb_desc">Enter "Do Not Disturb" Mode when meditating</string>
+    <string name="open_timer">Open BodhiTimer</string>
 
 </resources>
 
