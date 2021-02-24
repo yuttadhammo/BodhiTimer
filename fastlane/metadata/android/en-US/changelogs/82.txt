@@ -1,0 +1,10 @@
+5.5.2
+* There was a bug in 5.5.1. This release is the same as 5.5.0 for those who had installed the buggy version.
+* Improve performance and battery usage
+
+5.4.0
+* Use consistent font across the app
+* Add a Setting to enable "Do Not Disturb" Mode when meditating
+* Add Auto repeat function
+* Completely refactor Alarm Handling. It should be much more reliable, especially when the phone is in battery saver mode.
+* Modernize the way notifications are shown
