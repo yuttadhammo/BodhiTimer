@@ -71,7 +71,7 @@ class SoundManager(private val mContext: Context) {
 
     // Make sure we can play the sound until it's finished
     private fun getWakeLock(dur: Int) {
-        if (wL != null && wL.isHeld) {
+        if (wL != null && !wL.isHeld) {
             Log.v(TAG, "Acquiring Wake Lock for $dur")
             wL.acquire((dur + 1000).toLong())
         }
