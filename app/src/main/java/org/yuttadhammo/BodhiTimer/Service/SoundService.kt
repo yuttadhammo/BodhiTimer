@@ -1,122 +1,123 @@
 package org.yuttadhammo.BodhiTimer.Service
 
+import android.app.Notification
+import android.app.PendingIntent
 import android.app.Service
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
-import android.media.session.PlaybackState
-import android.net.Uri
+import android.content.IntentFilter
 import android.os.IBinder
-import android.os.PowerManager
 import android.util.Log
-import androidx.preference.PreferenceManager
-import kotlin.math.ln
+import androidx.core.app.NotificationCompat
+import org.yuttadhammo.BodhiTimer.R
+import org.yuttadhammo.BodhiTimer.TimerActivity
+import org.yuttadhammo.BodhiTimer.Util.BroadcastTypes
+import org.yuttadhammo.BodhiTimer.Util.Notifications
 
 const val ACTION_PLAY: String = "org.yuttadhammo.BodhiTimer.Service.PLAY"
-private const val TAG: String = "SoundManager"
+private const val TAG: String = "SoundService"
 
 class SoundService : Service() {
 
 
+    private var stop: Boolean = false
+    private var lastStamp: Long = 0L
 
-    private val flags: Int = PowerManager.PARTIAL_WAKE_LOCK
 
-    private var mediaPlayer: MediaPlayer = MediaPlayer()
+    //private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var soundManager: SoundManager
 
-//    private val pm = applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
-//    private var wL: PowerManager.WakeLock = pm.newWakeLock(flags, "Bodhi:Alarm")
 
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+
+        val pendingIntent: PendingIntent =
+                Intent(this, TimerActivity::class.java).let { notificationIntent ->
+                    PendingIntent.getActivity(this, 0, notificationIntent, 0)
+                }
+
+
+        val notification: Notification = NotificationCompat.Builder(this, Notifications.SERVICE_CHANNEL_ID)
+                .setContentTitle(getText(R.string.app_name))
+                .setContentText(getText(R.string.service_text))
+                .setSmallIcon(R.drawable.icon)
+                .setContentIntent(pendingIntent)
+                .setTicker(getText(R.string.service_text))
+                .build()
+
+        startForeground(2, notification)
+
+        soundManager = SoundManager(applicationContext)
+
+
         val action = intent.action
+
         if (ACTION_PLAY == action) {
-
-            val volume = intent.getIntExtra("volume", 100)
-            val uri = intent.getStringExtra("uri")
-
-            if (uri != null) {
-                play(uri, volume)
-            }
-
+            Log.v(TAG, "Received Play Start")
+            playIntent(intent)
         }
+
+        val filter = IntentFilter()
+        filter.addAction(BroadcastTypes.BROADCAST_END)
+        registerReceiver(alarmEndReceiver, filter)
+
+        val filter2 = IntentFilter()
+        filter2.addAction(BroadcastTypes.BROADCAST_STOP)
+        registerReceiver(stopReceiver, filter2)
+
+
 
         return START_NOT_STICKY
     }
 
-    private fun play(mUri: Uri, volume: Int) {
+    fun playIntent(intent: Intent) {
+        val stamp = intent.getLongExtra("stamp", 0L)
+        val volume = intent.getIntExtra("volume", 100)
+        val uri = intent.getStringExtra("uri")
 
-        try {
-            mediaPlayer.reset()
 
-            if (volume != 0) {
-                val log1 = (ln((100 - volume).toDouble()) / ln(100.0)).toFloat()
-                mediaPlayer.setVolume(1 - log1, 1 - log1)
-            }
-            mediaPlayer.setDataSource(applicationContext, mUri)
-            mediaPlayer.prepare()
-            //getWakeLock(mediaPlayer.duration)
-            mediaPlayer.isLooping = false
-
-            mediaPlayer.setOnCompletionListener { mp ->
+        if (uri != null && stamp != lastStamp) {
+            lastStamp = stamp
+            var mediaPlayer = soundManager.play(uri, volume)
+            mediaPlayer!!.setOnCompletionListener { mp ->
                 Log.v(TAG, "Resetting media player...")
                 mp.reset()
                 mp.release()
-
-                //releaseWakeLock()
+                if (stop) {
+                    Log.v(TAG, "Stopping service")
+                    stopSelf()
+                }
             }
-
-            mediaPlayer.setOnErrorListener { mp, what, extra ->
-                Log.e("Player error", "what:$what extra:$extra")
-                true
-            }
-
-            mediaPlayer.setOnInfoListener { mp, what, extra ->
-                Log.e("Player info", "what:$what extra:$extra")
-                true
-            }
-
-            mediaPlayer.setWakeMode(applicationContext, flags)
-            mediaPlayer.start()
-
-            Log.v(TAG, "Playing sound")
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } else {
+            Log.v(TAG, "Skipping play")
         }
-
     }
+
 
     override fun onBind(intent: Intent): IBinder {
         TODO("Return the communication channel to the service.")
     }
 
-    private fun play(mUri: String, volume: Int) {
-        var uri = mUri
-
-        if (mUri == "sys_def") {
-            uri = PreferenceManager.getDefaultSharedPreferences(applicationContext).getString("NotificationUri", "").toString()
-        }
-
-        play(Uri.parse(uri), volume)
-    }
-
-    // Make sure we can play the sound until it's finished
-//    private fun getWakeLock(dur: Int) {
-//        if (wL != null && wL.isHeld) {
-//            Log.v(TAG, "Acquiring Wake Lock for $dur")
-//            wL.acquire((dur + 1000).toLong())
-//        }
-//    }
-//
-//    private fun releaseWakeLock() {
-//        if (wL != null && wL.isHeld) {
-//            Log.v(TAG, "Releasing Wake Lock")
-//            wL.release()
-//        }
-//    }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        unregisterReceiver(alarmEndReceiver)
+        unregisterReceiver(stopReceiver)
+    }
+
+    private val alarmEndReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.v(TAG, "Received Broadcast")
+            playIntent(intent)
+        }
+    }
+
+    private val stopReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.e(TAG, "Received Stop Broadcast")
+            stop = true
+        }
     }
 
 

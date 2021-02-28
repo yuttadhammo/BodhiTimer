@@ -17,6 +17,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
+import org.yuttadhammo.BodhiTimer.Util.BroadcastTypes;
 import org.yuttadhammo.BodhiTimer.Util.Time;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.yuttadhammo.BodhiTimer.Service.SoundServiceKt.ACTION_PLAY;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
@@ -407,6 +409,7 @@ public class AlarmTaskManager extends AndroidViewModel {
         );
 
         startDND();
+        startService();
     }
 
 
@@ -420,11 +423,13 @@ public class AlarmTaskManager extends AndroidViewModel {
         cancelAllAlarms(false);
 
         stopDND();
+        stopService();
 
         // Stop our timer service
         setCurrentState(STOPPED);
 
     }
+
 
 
     public void timerUnPause() {
@@ -663,6 +668,7 @@ public class AlarmTaskManager extends AndroidViewModel {
             // in case AutoRepeat is on.
             handleAutoRepeat();
             stopDND();
+            stopService();
             stopAlarmsAndTicker();
             loadLastTimers();
 
@@ -741,5 +747,19 @@ public class AlarmTaskManager extends AndroidViewModel {
             }
         }
     }
+
+    private void startService() {
+        Intent startIntent = new Intent(mApp.getApplicationContext(), SoundService.class);
+        mApp.getApplicationContext().startService(startIntent);
+    }
+
+    private void stopService() {
+        mApp.sendBroadcast(new Intent(BroadcastTypes.BROADCAST_STOP));
+    }
+
+
+
+
+
 
 }

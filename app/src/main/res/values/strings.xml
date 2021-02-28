@@ -175,31 +175,16 @@
     <string name="get_file_man">Please install a File Manager.</string>
     <string name="sys_tone">System Tone</string>
     <string name="sound_file">Sound File</string>
-    <string name="speak_time_desc">Audible playback when recogizing speech</string>
+    <string name="speak_time_desc">Audible playback when recognizing speech</string>
     <string name="speak_time">Speak Recognized Time</string>
     <string name="timer_done">timer finished</string>
     <string name="input_text">Text To Speech</string>
     <string name="input_text_desc">Input text to be spoken</string>
     <string name="NoVoiceRecognitionInstalled">Please install a voice recognition app!</string>
     <string name="general">General</string>
-    <string name="disable_battery_optim">Disable battery optimization</string>
-    <string name="disable_battery_optim_desc">BodhiTimer needs to be excluded from battery optimization in order for the alarm to work precisely</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="channel_name">Alarms</string>
-    <string name="channel_description">The timers that are the main purpose of the app.</string>
+    <string name="alarm_channel_name">Alarms</string>
+    <string name="alarm_channel_description">The timers that are the main purpose of the app.</string>
     <string name="custom_sound">Custom</string>
     <string name="notification_always">Always show a notification</string>
     <string name="notification_always_desc">Even if a tone is played</string>
@@ -208,6 +193,9 @@
     <string name="do_not_disturb">Do not Disturb</string>
     <string name="do_not_disturb_desc">Enter "Do Not Disturb" Mode when meditating</string>
     <string name="open_timer">Open BodhiTimer</string>
+    <string name="service_channel_name">Service</string>
+    <string name="service_channel_description">Notification that Bodhi Timer is running</string>
+    <string name="service_text">Timer is running</string>
 
 </resources>
 

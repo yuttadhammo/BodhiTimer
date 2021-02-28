@@ -44,6 +44,8 @@ public class TimerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context mContext, Intent mIntent) {
 
+        long stamp = System.currentTimeMillis();
+
         Log.v(TAG, "Received system alarm callback ");
 
         // Send Broadcast to main activity
@@ -53,6 +55,7 @@ public class TimerReceiver extends BroadcastReceiver {
         broadcast.putExtra("duration", mIntent.getIntExtra("duration", 0));
         broadcast.putExtra("id", mIntent.getIntExtra("id", 0));
         broadcast.putExtra("uri", mIntent.getStringExtra("uri"));
+        broadcast.putExtra("stamp", stamp);
         broadcast.setAction(BROADCAST_END);
         mContext.sendBroadcast(broadcast);
 
@@ -74,6 +77,7 @@ public class TimerReceiver extends BroadcastReceiver {
           playIntent.setAction(ACTION_PLAY);
           playIntent.putExtra("uri", notificationUri);
           playIntent.putExtra("volume", volume);
+          playIntent.putExtra("stamp", stamp);
           mContext.startService(playIntent);
         }
     }

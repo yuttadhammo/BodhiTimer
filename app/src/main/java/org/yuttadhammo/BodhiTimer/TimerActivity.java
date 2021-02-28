@@ -75,7 +75,6 @@ import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
 import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
-import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_STOP;
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_UPDATE;
 
 
@@ -227,7 +226,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         mAlarmTaskManager.appIsPaused = false;
-        sendBroadcast(new Intent(BROADCAST_STOP)); // tell widgets to stop updating
 
         if (getIntent().hasExtra("set")) {
             Log.d(TAG, "Create From Widget");
