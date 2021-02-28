@@ -124,6 +124,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
     private boolean invertColors = false;
 
     private TextToSpeech tts;
+    private float lastp;
 
 
     /**
@@ -457,16 +458,28 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      */
     public void updateInterfaceWithTime(int elapsed, int duration) {
 
+
         // TODO: This is a hack, to show the full circle after stopped or finished..
         if (elapsed == duration) {
             elapsed = 0;
         }
 
+        float p = (duration != 0) ? (elapsed / (float) duration) : 0;
+
+
+        if ((lastp - p) < 0.001 && (lastp - p) > 0) {
+            // The change in progress was minimal
+            return;
+        }
+        lastp = p;
+
+
+
         if (animationIndex != 0) {
             blackView.setVisibility(View.GONE);
             mTimerAnimation.updateImage(elapsed, duration);
         } else {
-            float p = (duration != 0) ? (elapsed / (float) duration) : 0;
+
             int alpha = Math.round(255 * p);
             alpha = Math.min(Math.max(0, alpha), 255);
 

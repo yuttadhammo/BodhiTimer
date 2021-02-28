@@ -322,7 +322,7 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
 
         Rect rs = new Rect(0, 0, eWidth, eHeight);
         Rect rd;
-        //canvas.save();
+
         if (w < h) {
             rd = new Rect(0, 0, w, w);
             canvas.translate(w / -2f, h / -2f + (h - w) / 2f);

@@ -97,7 +97,8 @@ public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView
 
     @Override
     public void onDraw(Canvas canvas) {
-        if (mIndex < 0 || mIndex >= mDrawings.size()) mIndex = 0;
+        if (mIndex < 0 || mIndex >= mDrawings.size())
+            mIndex = 0;
         mDrawings.get(mIndex).updateImage(canvas, mLastTime, mLastMax);
     }
 
