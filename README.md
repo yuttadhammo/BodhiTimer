@@ -1,5 +1,5 @@
 # About
-
+**Want to help with translating the app? [It's easy](https://www.transifex.com/bodhi-timer/bodhi-timer-app/)**
 Bodhi Timer is an elegant, minimalist countdown timer.
 It is designed mainly for use as a meditation timer but can easily be used for any similar purpose.
 Bodhi Timer is free and [open-source](https://github.com/yuttadhammo/BodhiTimer) software. It collects no data and uses the minimal permissions necessary.
