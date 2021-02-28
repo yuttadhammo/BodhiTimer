@@ -65,7 +65,7 @@ import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.Service.SessionType;
 import org.yuttadhammo.BodhiTimer.Service.TimerList;
-import org.yuttadhammo.BodhiTimer.Util.Notification;
+import org.yuttadhammo.BodhiTimer.Util.Notifications;
 import org.yuttadhammo.BodhiTimer.Util.Time;
 
 import java.io.FileNotFoundException;
@@ -151,7 +151,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         filter2.addAction(BROADCAST_END);
         registerReceiver(alarmEndReceiver, filter2);
 
-        Notification.createNotificationChannel(context);
+        Notifications.Companion.createNotificationChannel(context);
 
     }
 

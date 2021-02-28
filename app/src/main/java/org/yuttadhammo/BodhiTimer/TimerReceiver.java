@@ -24,9 +24,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import org.yuttadhammo.BodhiTimer.Service.SoundManager;
 import org.yuttadhammo.BodhiTimer.Service.SoundService;
-import org.yuttadhammo.BodhiTimer.Util.Notification;
+import org.yuttadhammo.BodhiTimer.Util.Notifications;
 
 import static org.yuttadhammo.BodhiTimer.Service.SoundServiceKt.ACTION_PLAY;
 import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
@@ -65,7 +64,7 @@ public class TimerReceiver extends BroadcastReceiver {
         boolean alwaysShow = prefs.getBoolean("showAlwaysNotifications", false);
 
         if (alwaysShow || notificationUri == null) {
-            Notification.show(mContext, duration);
+            Notifications.Companion.show(mContext, duration);
         }
 
         int volume = PreferenceManager.getDefaultSharedPreferences(mContext).getInt("tone_volume", 0);
