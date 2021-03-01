@@ -17,7 +17,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
-import org.yuttadhammo.BodhiTimer.Util.BroadcastTypes;
+import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes;
+import org.yuttadhammo.BodhiTimer.Const.SessionTypes;
 import org.yuttadhammo.BodhiTimer.Util.Time;
 
 import java.util.ArrayList;
@@ -26,11 +27,10 @@ import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static org.yuttadhammo.BodhiTimer.Service.SoundServiceKt.ACTION_PLAY;
-import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
-import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
-import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
-import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_RESET;
+import static org.yuttadhammo.BodhiTimer.Const.TimerState.PAUSED;
+import static org.yuttadhammo.BodhiTimer.Const.TimerState.RUNNING;
+import static org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED;
+import static org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_RESET;
 
 @SuppressWarnings("UnnecessaryBoxing")
 public class AlarmTaskManager extends AndroidViewModel {
@@ -253,7 +253,7 @@ public class AlarmTaskManager extends AndroidViewModel {
     /**
      * Show an alarm for a certain date when the alarm is called it will pop up a notification
      */
-    public AlarmTask addAlarmWithUri(int offset, int duration, String uri, SessionType sessionType) {
+    public AlarmTask addAlarmWithUri(int offset, int duration, String uri, SessionTypes sessionType) {
 
         Log.i(TAG, "Creating new alarm task, uri " + uri + " type: " + sessionType + " due in " + (duration + offset));
         AlarmTask alarm = new AlarmTask(mApp.getApplicationContext(), offset, duration);

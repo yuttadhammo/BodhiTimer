@@ -8,7 +8,8 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import org.yuttadhammo.BodhiTimer.TimerReceiver
-import org.yuttadhammo.BodhiTimer.Util.BroadcastTypes
+import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
+import org.yuttadhammo.BodhiTimer.Const.SessionTypes
 
 private const val TAG = "AlarmTask"
 
@@ -19,7 +20,7 @@ data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
     private var mAlarmMgr: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private var mPendingIntent: PendingIntent? = null
 
-    var sessionType: SessionType = SessionType.INVALID
+    var sessionType: SessionTypes = SessionTypes.INVALID
     var uri: String = ""
     var id: Int = 0
 

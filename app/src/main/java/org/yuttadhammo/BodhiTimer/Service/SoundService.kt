@@ -12,8 +12,9 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import org.yuttadhammo.BodhiTimer.R
 import org.yuttadhammo.BodhiTimer.TimerActivity
-import org.yuttadhammo.BodhiTimer.Util.BroadcastTypes
+import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
 import org.yuttadhammo.BodhiTimer.Util.Notifications
+import org.yuttadhammo.BodhiTimer.Util.Sounds
 
 const val ACTION_PLAY: String = "org.yuttadhammo.BodhiTimer.Service.PLAY"
 private const val TAG: String = "SoundService"
@@ -27,7 +28,7 @@ class SoundService : Service() {
 
 
     //private lateinit var mediaPlayer: MediaPlayer
-    private lateinit var soundManager: SoundManager
+    private lateinit var soundManager: Sounds
 
 
 
@@ -49,7 +50,7 @@ class SoundService : Service() {
 
         startForeground(2, notification)
 
-        soundManager = SoundManager(applicationContext)
+        soundManager = Sounds(applicationContext)
 
 
         val action = intent.action

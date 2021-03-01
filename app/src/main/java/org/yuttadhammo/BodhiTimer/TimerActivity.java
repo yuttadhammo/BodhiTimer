@@ -63,7 +63,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.jetbrains.annotations.NotNull;
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
 import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
-import org.yuttadhammo.BodhiTimer.Service.SessionType;
+import org.yuttadhammo.BodhiTimer.Const.SessionTypes;
 import org.yuttadhammo.BodhiTimer.Service.TimerList;
 import org.yuttadhammo.BodhiTimer.Util.Notifications;
 import org.yuttadhammo.BodhiTimer.Util.Time;
@@ -71,11 +71,11 @@ import org.yuttadhammo.BodhiTimer.Util.Time;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import static org.yuttadhammo.BodhiTimer.Service.TimerState.PAUSED;
-import static org.yuttadhammo.BodhiTimer.Service.TimerState.RUNNING;
-import static org.yuttadhammo.BodhiTimer.Service.TimerState.STOPPED;
-import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
-import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_UPDATE;
+import static org.yuttadhammo.BodhiTimer.Const.TimerState.PAUSED;
+import static org.yuttadhammo.BodhiTimer.Const.TimerState.RUNNING;
+import static org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED;
+import static org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_END;
+import static org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_UPDATE;
 
 
 /**
@@ -526,7 +526,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
                     break;
             }
 
-            tL.timers.add(new TimerList.Timer(prepTime, preUriString, SessionType.PREPARATION));
+            tL.timers.add(new TimerList.Timer(prepTime, preUriString, SessionTypes.PREPARATION));
         }
 
 
@@ -543,7 +543,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // Add main timer
 
-        tL.timers.add(new TimerList.Timer(time, notificationUri, SessionType.REAL));
+        tL.timers.add(new TimerList.Timer(time, notificationUri, SessionTypes.REAL));
         return tL;
     }
 

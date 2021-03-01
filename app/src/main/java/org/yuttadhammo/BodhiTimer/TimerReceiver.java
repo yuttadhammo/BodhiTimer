@@ -28,7 +28,7 @@ import org.yuttadhammo.BodhiTimer.Service.SoundService;
 import org.yuttadhammo.BodhiTimer.Util.Notifications;
 
 import static org.yuttadhammo.BodhiTimer.Service.SoundServiceKt.ACTION_PLAY;
-import static org.yuttadhammo.BodhiTimer.Util.BroadcastTypes.BROADCAST_END;
+import static org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_END;
 
 
 // This class handles the alarm callback
