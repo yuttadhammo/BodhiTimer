@@ -15,7 +15,7 @@
     along with Bodhi Timer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package org.yuttadhammo.BodhiTimer;
+package org.yuttadhammo.BodhiTimer.Service;
 
 import android.app.Service;
 import android.content.Intent;

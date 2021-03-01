@@ -1,0 +1,69 @@
+/*
+    This file is part of Bodhi Timer.
+
+    Bodhi Timer is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Bodhi Timer is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Bodhi Timer.  If not, see <http://www.gnu.org/licenses/>.
+*/
+package org.yuttadhammo.BodhiTimer.Service
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.util.Log
+import androidx.preference.PreferenceManager
+import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_END
+import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_PLAY
+import org.yuttadhammo.BodhiTimer.Util.Notifications.Companion.show
+
+// This class handles the alarm callback
+class TimerReceiver : BroadcastReceiver() {
+    override fun onReceive(mContext: Context, mIntent: Intent) {
+        val stamp = System.currentTimeMillis()
+        Log.v(TAG, "Received system alarm callback ")
+
+        // Send Broadcast to main activity
+        // This will be only received if the app is not stopped (or destroyed)...
+        val broadcast = Intent()
+        broadcast.putExtra("duration", mIntent.getIntExtra("duration", 0))
+        broadcast.putExtra("id", mIntent.getIntExtra("id", 0))
+        broadcast.putExtra("uri", mIntent.getStringExtra("uri"))
+        broadcast.putExtra("stamp", stamp)
+        broadcast.action = BROADCAST_END
+        mContext.sendBroadcast(broadcast)
+
+        // Show notification
+        val notificationUri = mIntent.getStringExtra("uri")
+        val duration = mIntent.getIntExtra("duration", 0)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
+        val alwaysShow = prefs.getBoolean("showAlwaysNotifications", false)
+
+        if (alwaysShow || notificationUri == null) {
+            show(mContext, duration)
+        }
+
+        val volume = PreferenceManager.getDefaultSharedPreferences(mContext).getInt("tone_volume", 0)
+
+        if (notificationUri != null) {
+            val playIntent = Intent(mContext, SoundService::class.java)
+            playIntent.action = BROADCAST_PLAY
+            playIntent.putExtra("uri", notificationUri)
+            playIntent.putExtra("volume", volume)
+            playIntent.putExtra("stamp", stamp)
+            mContext.startService(playIntent)
+        }
+    }
+
+    companion object {
+        private const val TAG = "TimerReceiver"
+    }
+}

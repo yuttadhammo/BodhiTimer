@@ -8,9 +8,10 @@ import android.util.Log
 import androidx.preference.PreferenceManager
 import kotlin.math.ln
 
-private const val TAG: String = "Sound Util"
+
 
 class Sounds(private val mContext: Context) {
+    private val TAG: String = "Sound Util"
 
     private val flags: Int = PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP
 

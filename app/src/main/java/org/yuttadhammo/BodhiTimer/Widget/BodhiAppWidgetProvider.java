@@ -15,7 +15,7 @@
     along with Bodhi Timer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package org.yuttadhammo.BodhiTimer.widget;
+package org.yuttadhammo.BodhiTimer.Widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;

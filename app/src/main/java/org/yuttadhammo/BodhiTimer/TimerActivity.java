@@ -62,9 +62,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
-import org.yuttadhammo.BodhiTimer.Service.AlarmTaskManager;
+import org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager;
 import org.yuttadhammo.BodhiTimer.Const.SessionTypes;
-import org.yuttadhammo.BodhiTimer.Service.TimerList;
+import org.yuttadhammo.BodhiTimer.Models.TimerList;
 import org.yuttadhammo.BodhiTimer.Util.Notifications;
 import org.yuttadhammo.BodhiTimer.Util.Time;
 

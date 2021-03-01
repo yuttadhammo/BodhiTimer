@@ -1,4 +1,4 @@
-package org.yuttadhammo.BodhiTimer.Service
+package org.yuttadhammo.BodhiTimer.Models
 
 import android.app.AlarmManager
 import android.app.AlarmManager.AlarmClockInfo
@@ -7,11 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import org.yuttadhammo.BodhiTimer.TimerReceiver
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
 import org.yuttadhammo.BodhiTimer.Const.SessionTypes
+import org.yuttadhammo.BodhiTimer.Service.TimerReceiver
 
-private const val TAG = "AlarmTask"
+
 
 data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
 
@@ -49,5 +49,9 @@ data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
 
     fun cancel() {
         if (mPendingIntent != null) mAlarmMgr.cancel(mPendingIntent)
+    }
+
+    companion object {
+        const val TAG = "AlarmTask"
     }
 }

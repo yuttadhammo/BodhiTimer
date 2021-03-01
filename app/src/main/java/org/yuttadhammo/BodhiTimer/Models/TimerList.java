@@ -1,4 +1,4 @@
-package org.yuttadhammo.BodhiTimer.Service;
+package org.yuttadhammo.BodhiTimer.Models;
 
 import android.text.TextUtils;
 

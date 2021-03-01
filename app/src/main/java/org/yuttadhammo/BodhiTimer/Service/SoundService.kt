@@ -10,24 +10,21 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
+import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_PLAY
 import org.yuttadhammo.BodhiTimer.R
 import org.yuttadhammo.BodhiTimer.TimerActivity
-import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
 import org.yuttadhammo.BodhiTimer.Util.Notifications
 import org.yuttadhammo.BodhiTimer.Util.Sounds
 
-const val ACTION_PLAY: String = "org.yuttadhammo.BodhiTimer.Service.PLAY"
-private const val TAG: String = "SoundService"
-
 class SoundService : Service() {
 
+    private val TAG: String = "SoundService"
 
     private var stop: Boolean = false
     private var lastStamp: Long = 0L
     private var active: Int = 0
 
-
-    //private lateinit var mediaPlayer: MediaPlayer
     private lateinit var soundManager: Sounds
 
 
@@ -55,7 +52,7 @@ class SoundService : Service() {
 
         val action = intent.action
 
-        if (ACTION_PLAY == action) {
+        if (BROADCAST_PLAY == action) {
             Log.v(TAG, "Received Play Start")
             playIntent(intent)
         }
@@ -126,6 +123,8 @@ class SoundService : Service() {
             stop = true
         }
     }
+
+
 
 
 
