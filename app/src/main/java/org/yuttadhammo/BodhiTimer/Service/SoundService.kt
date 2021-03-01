@@ -23,6 +23,7 @@ class SoundService : Service() {
 
     private var stop: Boolean = false
     private var lastStamp: Long = 0L
+    private var active: Int = 0
 
 
     //private lateinit var mediaPlayer: MediaPlayer
@@ -79,13 +80,18 @@ class SoundService : Service() {
 
         if (uri != null && stamp != lastStamp) {
             lastStamp = stamp
+            active++;
+
             var mediaPlayer = soundManager.play(uri, volume)
             mediaPlayer!!.setOnCompletionListener { mp ->
                 Log.v(TAG, "Resetting media player...")
                 mp.reset()
                 mp.release()
-                if (stop) {
+                active--;
+
+                if (stop && active < 1) {
                     Log.v(TAG, "Stopping service")
+
                     stopSelf()
                 }
             }
