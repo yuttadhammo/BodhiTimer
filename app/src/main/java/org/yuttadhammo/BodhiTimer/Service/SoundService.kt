@@ -1,7 +1,5 @@
 package org.yuttadhammo.BodhiTimer.Service
 
-import android.app.Notification
-import android.app.PendingIntent
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,17 +7,14 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
-import androidx.core.app.NotificationCompat
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_PLAY
-import org.yuttadhammo.BodhiTimer.R
-import org.yuttadhammo.BodhiTimer.TimerActivity
-import org.yuttadhammo.BodhiTimer.Util.Notifications
+import org.yuttadhammo.BodhiTimer.Util.Notifications.Companion.getServiceNotification
 import org.yuttadhammo.BodhiTimer.Util.Sounds
 
 class SoundService : Service() {
 
-    private val TAG: String = "SoundService"
+
 
     private var stop: Boolean = false
     private var lastStamp: Long = 0L
@@ -31,24 +26,9 @@ class SoundService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
-        val pendingIntent: PendingIntent =
-                Intent(this, TimerActivity::class.java).let { notificationIntent ->
-                    PendingIntent.getActivity(this, 0, notificationIntent, 0)
-                }
-
-
-        val notification: Notification = NotificationCompat.Builder(this, Notifications.SERVICE_CHANNEL_ID)
-                .setContentTitle(getText(R.string.app_name))
-                .setContentText(getText(R.string.service_text))
-                .setSmallIcon(R.drawable.icon)
-                .setContentIntent(pendingIntent)
-                .setTicker(getText(R.string.service_text))
-                .build()
-
-        startForeground(2, notification)
+        startForeground(1312, getServiceNotification(this))
 
         soundManager = Sounds(applicationContext)
-
 
         val action = intent.action
 
@@ -64,8 +44,6 @@ class SoundService : Service() {
         val filter2 = IntentFilter()
         filter2.addAction(BroadcastTypes.BROADCAST_STOP)
         registerReceiver(stopReceiver, filter2)
-
-
 
         return START_NOT_STICKY
     }
@@ -125,7 +103,8 @@ class SoundService : Service() {
     }
 
 
-
-
+    companion object {
+        private  const val TAG: String = "SoundService"
+    }
 
 }

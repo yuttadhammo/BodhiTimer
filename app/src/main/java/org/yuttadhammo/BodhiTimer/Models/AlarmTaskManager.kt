@@ -28,7 +28,7 @@ import java.util.*
 
 
 class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
-    private val TAG = "AlarmTaskManager"
+
     private val mTimer = Timer()
     private val alarms: Stack<AlarmTask> = Stack()
     private var lastId = 0
@@ -546,12 +546,7 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         mApp.sendBroadcast(Intent(BroadcastTypes.BROADCAST_STOP))
     }
 
-    companion object {
-        /**
-         * Update rate of the internal timer
-         */
-        const val TIMER_TIC = 100
-    }
+
 
     init {
         updatePreviewText()
@@ -612,5 +607,11 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
                 loadLastTimers(-timeElapsed)
             }
         }
+    }
+
+    companion object {
+        // Update rate of the internal timer
+        const val TIMER_TIC = 100
+        private const val TAG = "AlarmTaskManager"
     }
 }
