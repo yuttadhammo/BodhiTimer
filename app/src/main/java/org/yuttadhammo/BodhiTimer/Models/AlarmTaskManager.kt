@@ -378,28 +378,26 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         val nextAlarm = Date(timeStamp)
         val sessionEnd = Date(sessionTimeStamp)
         val timeLeft = nextAlarm.time - now.time
-        currentTimerLeft.setValue(timeLeft.toInt())
-        updateTimerText(timeLeft.toInt())
+
         sessionTimeLeft = (sessionEnd.time - now.time).toInt()
-        if (currentTimerLeft.value!! <= 0) {
+
+        if (timeLeft < 0) {
             if (alarms.size > 0) {
-                Log.v(TAG, "Tick cycled ended")
+                Log.e(TAG, "Tick cycled ended")
             } else {
                 Log.e(TAG, "Error: Time up. This probably means that the Broadcast was not received")
                 stopTicker()
             }
-
-
-            // Update the time
         } else {
+            currentTimerLeft.value = timeLeft.toInt()
+            updateTimerText(timeLeft.toInt())
+
             // Internal thread to properly update the GUI
             mTimer.schedule(object : TimerTask() {
                 override fun run() {
                     mHandler?.sendEmptyMessage(0)
                 }
-            },
-                    TIMER_TIC
-                            .toLong())
+            }, TIMER_TIC.toLong())
         }
     }
 
