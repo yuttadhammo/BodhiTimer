@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Binder
 import android.os.IBinder
 import android.util.Log
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_PLAY
 import org.yuttadhammo.BodhiTimer.Util.Notifications.Companion.getServiceNotification
 import org.yuttadhammo.BodhiTimer.Util.Sounds
+import java.lang.ref.WeakReference
 
 class SoundService : Service() {
 
@@ -24,8 +26,18 @@ class SoundService : Service() {
 
 
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    // Create the instance on the service.
+    private val binder = LocalBinder()
 
+    override fun onCreate() {
+        super.onCreate()
+        startForeground(1312, getServiceNotification(this))
+        Log.v(TAG, "here")
+    }
+
+
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        Log.v(TAG, "there")
         startForeground(1312, getServiceNotification(this))
 
         soundManager = Sounds(applicationContext)
@@ -78,7 +90,8 @@ class SoundService : Service() {
 
 
     override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
+        binder.onBind(this);
+        return binder
     }
 
 
@@ -102,6 +115,18 @@ class SoundService : Service() {
         }
     }
 
+    class LocalBinder : Binder() {
+        private var weakService: WeakReference<SoundService>? = null
+
+        // Inject service instance to weak reference.
+        fun onBind(service: SoundService) {
+            weakService = WeakReference(service)
+        }
+
+        fun getService(): SoundService? {
+            return weakService?.get()
+        }
+    }
 
     companion object {
         private  const val TAG: String = "SoundService"

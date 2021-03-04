@@ -196,6 +196,8 @@
     <string name="service_channel_name">Service</string>
     <string name="service_channel_description">Notification that Bodhi Timer is running</string>
     <string name="service_text">Timer is running</string>
+    <string name="use_old_notification">Use old Notification Method</string>
+    <string name="use_old_notification_desc">If you expirience crashes or unreliable alarms, try to check this.</string>
 
 </resources>
 

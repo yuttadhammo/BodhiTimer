@@ -69,12 +69,12 @@
 
 
 
-<!--    <CheckBoxPreference-->
-<!--        android:key="AutoClear"-->
-<!--        android:title="@string/auto_clear"-->
-<!--        android:summary="@string/auto_clear_desc"-->
-<!--        android:defaultValue="False"-->
-<!--        app:iconSpaceReserved="false" />-->
+    <CheckBoxPreference
+        android:key="useOldNotification"
+        android:title="@string/use_old_notification"
+        android:summary="@string/use_old_notification_desc"
+        android:defaultValue="False"
+        app:iconSpaceReserved="false" />
 
     <Preference
         android:key="showSystemSettings"

@@ -122,7 +122,6 @@ class Notifications {
                 // because notification channels don't allow changing sounds.
                 alarmChannel.setSound(null, null)
 
-
                 // Register the channel with the system; you can't change the importance
                 // or other notification behaviors after this
                 mNotificationManager.createNotificationChannel(alarmChannel)

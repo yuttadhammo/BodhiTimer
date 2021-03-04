@@ -538,12 +538,17 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
     }
 
     private fun startService() {
-        val startIntent = Intent(mApp.applicationContext, SoundService::class.java)
-        mApp.applicationContext.startService(startIntent)
+        if (!prefs.getBoolean("useOldNotification", false)) {
+            val startIntent = Intent(mApp.applicationContext, SoundService::class.java)
+            mApp.applicationContext.startService(startIntent)
+        }
+
     }
 
     private fun stopService() {
-        mApp.sendBroadcast(Intent(BroadcastTypes.BROADCAST_STOP))
+        if (!prefs.getBoolean("useOldNotification", false)) {
+            mApp.sendBroadcast(Intent(BroadcastTypes.BROADCAST_STOP))
+        }
     }
 
 
