@@ -69,27 +69,20 @@ class TimerReceiver : BroadcastReceiver() {
         if (!prefs.getBoolean("useOldNotification", false)) {
             var playIntent = getServiceIntent(mContext)
 
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                try {
-                    mContext.bindService(playIntent, connection, Context.BIND_AUTO_CREATE);
-                } catch (e: Exception) {
-                    Log.e(TAG, e.toString())
-                    Log.e(TAG, "Could not bind to service")
+            try {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     mContext.startForegroundService(playIntent)
-                }
-            } else {
-                try {
+                } else {
                     mContext.startService(playIntent)
-                } catch (e: java.lang.Exception) {
-                    Log.e(TAG, "Could not start service")
-                    Sounds(mContext).play(notificationUri!!, volume)
                 }
+            } catch (e: Exception) {
+                Log.e(TAG, "Could not start service")
+                Sounds(mContext).play(notificationUri!!, volume)
             }
         } else {
             Sounds(mContext).play(notificationUri!!, volume)
         }
     }
-
 
 
     // Create the service connection.
@@ -126,7 +119,7 @@ class TimerReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun getServiceIntent(mContext: Context ): Intent {
+    private fun getServiceIntent(mContext: Context): Intent {
         val playIntent = Intent(mContext, SoundService::class.java)
         playIntent.action = BROADCAST_PLAY
         playIntent.putExtra("uri", notificationUri)

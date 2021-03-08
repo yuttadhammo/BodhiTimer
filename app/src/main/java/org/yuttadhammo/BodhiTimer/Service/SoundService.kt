@@ -79,7 +79,6 @@ class SoundService : Service() {
 
                 if (stop && active < 1) {
                     Log.v(TAG, "Stopping service")
-
                     stopSelf()
                 }
             }
@@ -110,7 +109,12 @@ class SoundService : Service() {
 
     private val stopReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            Log.e(TAG, "Received Stop Broadcast")
+            Log.e(TAG, "Received Stop Broadcast, active = " + active)
+
+            if (active == 0) {
+                Log.v(TAG, "Stopping service")
+                stopSelf();
+            }
             stop = true
         }
     }
