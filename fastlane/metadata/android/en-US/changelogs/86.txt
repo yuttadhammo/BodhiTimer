@@ -1,0 +1,10 @@
+5.6.0
+* Fix a problem where Timer sounds were cut off. If you expirience problems with the new system, please activate the old method in the preferences and let me know: bodhitimer@riseup.net
+* Improve performance and battery usage
+
+5.4.0
+* Use consistent font across the app
+* Add a Setting to enable "Do Not Disturb" Mode when meditating
+* Add Auto repeat function
+* Completely refactor Alarm Handling. It should be much more reliable, especially when the phone is in battery saver mode.
+* Modernize the way notifications are shown
