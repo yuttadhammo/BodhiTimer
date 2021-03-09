@@ -43,12 +43,12 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
     private var sessionTimeLeft = 0
 
     // Live Data
-    private val currentTimerLeft = MutableLiveData<Int>()
-    private val currentTimerDuration = MutableLiveData<Int>()
+    private val currentTimerLeft = MutableLiveData<Int>(-1)
+    private val currentTimerDuration = MutableLiveData<Int>(-1)
+    private val mIndex = MutableLiveData<Int>()
     private val timerText = MutableLiveData<String>()
     private val previewText = MutableLiveData<String>()
-    private val mIndex = MutableLiveData<Int>()
-    private val mCurrentState = MutableLiveData<Int>()
+    private val mCurrentState = MutableLiveData<Int>(-1)
     private var lastTextGenerated = 0
 
     // Accessors
@@ -58,6 +58,13 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         get() = currentTimerDuration
     val currentState: LiveData<Int>
         get() = mCurrentState
+
+    val curTimerLeftVal: Int
+        get() = currentTimerLeft.value!!
+    val curTimerDurationVal: Int
+        get() = currentTimerDuration.value!!
+    val indexVal: Int?
+        get() = mIndex.value
 
     private fun setCurrentState(newState: Int) {
         Log.v(TAG, "Entering state: $newState")
@@ -75,12 +82,7 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         return previewText
     }
 
-    val curTimerDurationVal: Int
-        get() = currentTimerDuration.value!!
-    val curTimerLeftVal: Int?
-        get() = currentTimerLeft.value
-    val indexVal: Int?
-        get() = mIndex.value
+
 
     private fun setCurTimerDuration(newDuration: Int) {
         currentTimerDuration.value = Integer.valueOf(newDuration)
@@ -102,22 +104,22 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         saveState()
     }
 
-    fun saveState() {
+    private fun saveState() {
         val editor = prefs.edit()
         editor.putInt("CurrentTimerDuration", curTimerDurationVal)
-        editor.putInt("CurrentTimeLeft", curTimerLeftVal!!)
+        editor.putInt("CurrentTimeLeft", curTimerLeftVal)
         editor.putInt("State", mCurrentState.value!!)
         editor.putInt("SessionDuration", sessionDuration)
         editor.putInt("SessionTimeLeft", sessionTimeLeft)
         editor.apply()
     }
 
-    fun restoreState() {
-        setCurTimerDuration(prefs.getInt("CurrentTimerDuration", 0))
-        setCurTimerLeft(prefs.getInt("CurrentTimeLeft", 0))
-        sessionDuration = prefs.getInt("SessionDuration", 0)
-        sessionTimeLeft = prefs.getInt("SessionTimeLeft", 0)
-        mCurrentState.value = prefs.getInt("State", 0)
+    private fun restoreState() {
+        setCurTimerDuration(prefs.getInt("CurrentTimerDuration", DEFAULT_DURATION))
+        setCurTimerLeft(prefs.getInt("CurrentTimeLeft", DEFAULT_DURATION))
+        sessionDuration = prefs.getInt("SessionDuration", DEFAULT_DURATION)
+        sessionTimeLeft = prefs.getInt("SessionTimeLeft", DEFAULT_DURATION)
+        mCurrentState.value = prefs.getInt("State", 1)
     }
 
     @JvmOverloads
@@ -288,7 +290,7 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
      */
     fun timerResume() {
         Log.v(TAG, "Resuming the timer...")
-        startTicker(currentTimerLeft.value!!)
+        startTicker(curTimerLeftVal)
         setCurrentState(RUNNING)
     }
 
@@ -358,7 +360,7 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
     private val timeString: String?
         private get() {
             var prefString = prefs.getString("timeString", "")
-            if (prefString == "") prefString = prefs.getString("advTimeString", "120000#sys_def")
+            if (prefString == "") prefString = prefs.getString("advTimeString", DEFAULT_TIME_STRING)
             return prefString
         }
 
@@ -401,7 +403,7 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         }
     }
 
-    private fun updateTimerText(timeLeft: Int = currentTimerLeft.value!!) {
+    private fun updateTimerText(timeLeft: Int = curTimerLeftVal) {
         // Calculate text only if time has changed
         val rounded = timeLeft / 1000 * 1000
         if (lastTextGenerated != rounded) {
@@ -618,5 +620,8 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         // Update rate of the internal timer
         const val TIMER_TIC = 100
         private const val TAG = "AlarmTaskManager"
+
+        const val DEFAULT_DURATION = 120000
+        const val DEFAULT_TIME_STRING = "$DEFAULT_DURATION#sys_def"
     }
 }

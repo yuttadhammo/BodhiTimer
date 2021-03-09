@@ -76,6 +76,9 @@ import static org.yuttadhammo.BodhiTimer.Const.TimerState.RUNNING;
 import static org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED;
 import static org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_END;
 import static org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_UPDATE;
+import static org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager.DEFAULT_DURATION;
+import static org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager.DEFAULT_TIME_STRING;
+import static org.yuttadhammo.BodhiTimer.Util.Sounds.DEFAULT_SOUND;
 
 
 /**
@@ -530,7 +533,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         }
 
 
-        String notificationUri = prefs.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
+        String notificationUri = prefs.getString("NotificationUri", DEFAULT_SOUND);
 
         switch (notificationUri) {
             case "system":
@@ -573,7 +576,7 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
 
         // advanced timer - 0 will be -1
         if (numbers[0] == -1) {
-            String advTimeString = prefs.getString("advTimeString", "120000#sys_def");
+            String advTimeString = prefs.getString("advTimeString", DEFAULT_TIME_STRING);
 
             // Overwrite the current timeString
             editor.putString("timeString", advTimeString);
@@ -636,18 +639,26 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      * Update visual components if preferences have changed
      */
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("WakeLock")) {
-            if (prefs.getBoolean("WakeLock", false))
-                getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
-            else
-                getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
-        } else if ((key.equals("PreSoundUri") || key.equals("preparationTime")) && prefs.getBoolean("LastWasSimple", false)) {
-            int lastTime = prefs.getInt("LastSimpleTime", 1200);
+        // Case PreSystemUri
+        switch (key) {
+            case "WakeLock":
+                if (prefs.getBoolean("WakeLock", false))
+                    getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+                else
+                    getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-            if  (mAlarmTaskManager.getCurrentState().getValue() == STOPPED) {
-                startSimpleAlarm(lastTime, false);
-            }
+            case "PreSoundUri":
+            case "PreSystemUri":
+            case "SoundUri":
+            case "NotificationUri":
+            case "preparationTime":
+                int lastTime = prefs.getInt("LastSimpleTime", DEFAULT_DURATION);
+
+                if  (mAlarmTaskManager.getCurrentState().getValue() == STOPPED && prefs.getBoolean("LastWasSimple", true)) {
+                    startSimpleAlarm(lastTime, false);
+                }
         }
+
     }
 
 

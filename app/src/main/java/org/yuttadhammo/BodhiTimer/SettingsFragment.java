@@ -26,6 +26,8 @@ import androidx.preference.PreferenceScreen;
 
 import java.io.IOException;
 
+import static org.yuttadhammo.BodhiTimer.Util.Sounds.DEFAULT_SOUND;
+
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private SharedPreferences prefs;
@@ -221,14 +223,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         play.setOnPreferenceClickListener(preference -> {
-            String notificationUri = prefs.getString("NotificationUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
+            String notificationUri = prefs.getString("NotificationUri", DEFAULT_SOUND);
             prePlayTone(notificationUri, preference);
 
             return false;
         });
 
         prePlay.setOnPreferenceClickListener(preference -> {
-            String PreSoundUri = prefs.getString("PreSoundUri", "android.resource://org.yuttadhammo.BodhiTimer/" + R.raw.bell);
+            String PreSoundUri = prefs.getString("PreSoundUri", DEFAULT_SOUND);
             prePlayTone(PreSoundUri, preference);
 
             return false;

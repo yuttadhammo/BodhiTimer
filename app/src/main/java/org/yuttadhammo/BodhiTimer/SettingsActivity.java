@@ -99,7 +99,7 @@ public class SettingsActivity extends AppCompatActivity {
                     break;
             }
 
-            settings.apply();
+            settings.commit();
         }
     }
 

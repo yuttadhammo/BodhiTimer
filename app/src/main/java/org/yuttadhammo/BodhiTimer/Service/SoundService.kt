@@ -71,7 +71,8 @@ class SoundService : Service() {
             active++;
 
             var mediaPlayer = soundManager.play(uri, volume)
-            mediaPlayer!!.setOnCompletionListener { mp ->
+
+            mediaPlayer?.setOnCompletionListener { mp ->
                 Log.v(TAG, "Resetting media player...")
                 mp.reset()
                 mp.release()
@@ -82,6 +83,7 @@ class SoundService : Service() {
                     stopSelf()
                 }
             }
+
         } else {
             Log.v(TAG, "Skipping play")
         }
@@ -109,7 +111,7 @@ class SoundService : Service() {
 
     private val stopReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            Log.e(TAG, "Received Stop Broadcast, active = " + active)
+            Log.e(TAG, "Received Stop Broadcast, active = $active")
 
             if (active == 0) {
                 Log.v(TAG, "Stopping service")

@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.PowerManager
 import android.util.Log
 import androidx.preference.PreferenceManager
+import org.yuttadhammo.BodhiTimer.R
 import kotlin.math.ln
 
 
@@ -15,21 +16,16 @@ class Sounds(private val mContext: Context) {
 
     private val flags: Int = PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP
 
-    private lateinit var mediaPlayer: MediaPlayer
-
     private fun play(mUri: Uri, volume: Int): MediaPlayer? {
 
         try {
-            if (::mediaPlayer.isInitialized) {
-                mediaPlayer.reset()
-            } else {
-                mediaPlayer = MediaPlayer()
-            }
+            var mediaPlayer = MediaPlayer()
 
             if (volume != 0) {
                 val log1 = (ln((100 - volume).toDouble()) / ln(100.0)).toFloat()
                 mediaPlayer.setVolume(1 - log1, 1 - log1)
             }
+
             mediaPlayer.setDataSource(mContext, mUri)
             mediaPlayer.prepare()
 
@@ -39,15 +35,14 @@ class Sounds(private val mContext: Context) {
                 Log.v(TAG, "Resetting media player...")
                 mp.reset()
                 mp.release()
-
             }
 
-            mediaPlayer.setOnErrorListener { mp, what, extra ->
+            mediaPlayer.setOnErrorListener { _, what, extra ->
                 Log.e("Player error", "what:$what extra:$extra")
                 true
             }
 
-            mediaPlayer.setOnInfoListener { mp, what, extra ->
+            mediaPlayer.setOnInfoListener { _, what, extra ->
                 Log.e("Player info", "what:$what extra:$extra")
                 true
             }
@@ -55,13 +50,13 @@ class Sounds(private val mContext: Context) {
             mediaPlayer.setWakeMode(mContext, flags)
             mediaPlayer.start()
 
-
-
             Log.v(TAG, "Playing sound")
 
             return mediaPlayer
         } catch (e: Exception) {
+            Log.w(TAG, "Problem playing sound, uri: $mUri")
             e.printStackTrace()
+            //throw (e)
         }
 
         return null
@@ -69,17 +64,38 @@ class Sounds(private val mContext: Context) {
 
 
     fun play(mUri: String, volume: Int): MediaPlayer? {
-        var uri = mUri
+        var uri = resolveUri(mUri, mContext)
 
-        if (mUri == "sys_def") {
-            uri = PreferenceManager.getDefaultSharedPreferences(mContext).getString("NotificationUri", "").toString()
-        }
-
-        if (uri != null) {
+        if (uri != "") {
             return play(Uri.parse(uri), volume)
         }
 
         return null
+    }
+
+    companion object {
+        const val DEFAULT_SOUND = "android.resource://org.yuttadhammo.BodhiTimer/${R.raw.bell}"
+
+        fun resolveUri(mUri: String, mContext: Context): String {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
+            var result = "";
+
+            if (mUri != null) {
+                result = mUri
+            }
+
+            if (result == "sys_def") {
+                result = prefs.getString("NotificationUri", "").toString()
+            }
+
+            when (result) {
+                "system" -> result = prefs.getString("SystemUri", "")!!
+                "file" -> result = prefs.getString("FileUri", "")!!
+            }
+
+            return result
+
+        }
     }
 
 
