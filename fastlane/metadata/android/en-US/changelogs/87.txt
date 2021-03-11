@@ -1,0 +1,6 @@
+5.6.1
+* Fix a crash on Xiaomi devices
+
+5.6.0
+* Fix a problem where Timer sounds were cut off. If you expirience problems with the new system, please activate the old method in the preferences and let me know: bodhitimer@riseup.net
+* Improve performance and battery usage
