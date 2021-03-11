@@ -100,7 +100,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         AlertDialog.Builder p = new AlertDialog.Builder(mContext).setView(view);
         final AlertDialog alert = p.create();
-        alert.setIcon(R.drawable.icon);
+        alert.setIcon(R.mipmap.ic_launcher);
         alert.setTitle(getString(R.string.about_title));
         alert.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.close),
                 (dialog, whichButton) -> {

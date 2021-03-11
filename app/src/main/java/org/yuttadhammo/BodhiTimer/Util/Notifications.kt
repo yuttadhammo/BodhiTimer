@@ -65,7 +65,7 @@ class Notifications {
             return NotificationCompat.Builder(context, SERVICE_CHANNEL_ID)
                     .setContentTitle(context.getText(R.string.app_name))
                     .setContentText(context.getText(R.string.service_text))
-                    .setSmallIcon(R.drawable.icon)
+                    .setSmallIcon(R.drawable.notification)
                     .setContentIntent(pendingIntent)
                     .setTicker(context.getText(R.string.service_text))
                     .build()

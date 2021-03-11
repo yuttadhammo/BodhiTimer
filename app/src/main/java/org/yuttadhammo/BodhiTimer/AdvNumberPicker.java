@@ -140,9 +140,8 @@ public class AdvNumberPicker extends AppCompatActivity {
         uriText.setOnClickListener(view -> {
             AlertDialog.Builder builderSingle = new AlertDialog.Builder(
                     context);
-            builderSingle.setIcon(R.drawable.icon);
+            builderSingle.setIcon(R.mipmap.ic_launcher);
 
-            //builderSingle.setTitle("Select One Name:-");
 
             final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
             arrayAdapter.add(getString(R.string.sys_def));
