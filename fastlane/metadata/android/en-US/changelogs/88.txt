@@ -1,0 +1,6 @@
+5.6.2
+* Fix Auto Repeat
+
+5.6.0
+* Fix a problem where Timer sounds were cut off. If you experience problems with the new system, please activate the old method in the preferences and let me know: bodhitimer@riseup.net
+* Improve performance and battery usage
