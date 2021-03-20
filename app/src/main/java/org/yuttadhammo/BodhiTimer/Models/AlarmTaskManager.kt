@@ -21,6 +21,7 @@ import org.yuttadhammo.BodhiTimer.Const.SessionTypes
 import org.yuttadhammo.BodhiTimer.Const.TimerState.PAUSED
 import org.yuttadhammo.BodhiTimer.Const.TimerState.RUNNING
 import org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED
+import org.yuttadhammo.BodhiTimer.Const.TimerState.getText
 import org.yuttadhammo.BodhiTimer.Service.SoundService
 import org.yuttadhammo.BodhiTimer.Util.Time
 import java.util.*
@@ -67,7 +68,7 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         get() = mIndex.value
 
     private fun setCurrentState(newState: Int) {
-        Log.v(TAG, "Entering state: $newState")
+        Log.v(TAG, "Entering state: " + getText(newState))
         val editor = prefs.edit()
         editor.putInt("State", newState)
         editor.apply()
