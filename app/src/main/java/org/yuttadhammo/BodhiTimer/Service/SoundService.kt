@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.os.Binder
 import android.os.IBinder
 import android.util.Log
+import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_PLAY
 import org.yuttadhammo.BodhiTimer.Util.Notifications.Companion.getServiceNotification
@@ -23,7 +24,6 @@ class SoundService : Service() {
     private var active: Int = 0
 
     private lateinit var soundManager: Sounds
-
 
 
     // Create the instance on the service.
@@ -61,8 +61,9 @@ class SoundService : Service() {
     }
 
     fun playIntent(intent: Intent) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val stamp = intent.getLongExtra("stamp", 0L)
-        val volume = intent.getIntExtra("volume", 100)
+        val volume =  prefs.getInt("tone_volume", 90);
         val uri = intent.getStringExtra("uri")
 
 

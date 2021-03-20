@@ -10,7 +10,6 @@ import org.yuttadhammo.BodhiTimer.R
 import kotlin.math.ln
 
 
-
 class Sounds(private val mContext: Context) {
     private val TAG: String = "Sound Util"
 
@@ -21,13 +20,17 @@ class Sounds(private val mContext: Context) {
         try {
             var mediaPlayer = MediaPlayer()
 
-            if (volume != 0) {
-                val log1 = (ln((100 - volume).toDouble()) / ln(100.0)).toFloat()
-                mediaPlayer.setVolume(1 - log1, 1 - log1)
-            }
 
             mediaPlayer.setDataSource(mContext, mUri)
             mediaPlayer.prepare()
+
+            //Log.v(TAG, "Volume: " + volume)
+            if (volume != 0) {
+                val log1 = (ln((100 - volume).toDouble()) / ln(100.0)).toFloat()
+                mediaPlayer.setVolume(1 - log1, 1 - log1)
+                //Log.v(TAG, "Volume: " + (1 -log1))
+            }
+
 
             mediaPlayer.isLooping = false
 
