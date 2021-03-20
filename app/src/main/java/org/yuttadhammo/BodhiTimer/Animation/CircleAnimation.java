@@ -36,7 +36,7 @@ import android.graphics.SweepGradient;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;

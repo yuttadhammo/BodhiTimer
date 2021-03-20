@@ -30,7 +30,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import org.yuttadhammo.BodhiTimer.R;
 
