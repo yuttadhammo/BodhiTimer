@@ -463,13 +463,14 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         // Update labels
         if (alarms.empty()) {
 
-            // Send message to activity,
-            // in case AutoRepeat is on.
-            handleAutoRepeat()
+
             stopDND()
             stopService()
             stopAlarmsAndTicker()
             loadLastTimers()
+            // Send message to activity,
+            // in case AutoRepeat is on.
+            handleAutoRepeat()
         } else {
             switchToTimer(alarms.firstElement())
         }
@@ -480,7 +481,6 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
     private fun handleAutoRepeat() {
         if (prefs.getBoolean("AutoRestart", false)) {
             Log.i(TAG, "AUTO RESTART")
-            stopAlarmsAndTicker()
             startAlarms(retrieveTimerList())
             setCurrentState(RUNNING)
         }
