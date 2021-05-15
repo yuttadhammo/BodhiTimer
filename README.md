@@ -1,6 +1,12 @@
 # Install
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/en/packages/org.yuttadhammo.BodhiTimer/)
 
+## Screenshots
+
+| Timer | Setting up timer | Customization | Settings |
+| :--: | :--: | :--: | :--: |
+| ![Timer](/fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png) | ![Setting up timer](/fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png) | ![Customization](/fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png) | ![Settings](/fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png) | 
+
 # About
 **Want to help with translating the app? [It's easy](https://www.transifex.com/bodhi-timer/bodhi-timer-app/)** <br>
 Bodhi Timer is an elegant, minimalist countdown timer.
