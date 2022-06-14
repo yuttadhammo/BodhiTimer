@@ -41,6 +41,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
@@ -70,6 +71,7 @@ import org.yuttadhammo.BodhiTimer.Util.Time;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Set;
 
 import static org.yuttadhammo.BodhiTimer.Const.TimerState.PAUSED;
 import static org.yuttadhammo.BodhiTimer.Const.TimerState.RUNNING;
@@ -138,7 +140,6 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         Log.i(TAG, "CREATE");
         super.onCreate(savedInstanceState);
 
-
         context = this;
         mAlarmTaskManager = new ViewModelProvider(this).get(AlarmTaskManager.class);
 
@@ -148,13 +149,57 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
         setupObservers();
         prepareUI();
 
-
         IntentFilter filter2 = new IntentFilter();
         filter2.addAction(BROADCAST_END);
         registerReceiver(alarmEndReceiver, filter2);
 
         Notifications.Companion.createNotificationChannel(context);
 
+        this.checkForDeepLink(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        this.checkForDeepLink(intent);
+    }
+
+    /**
+     * Check the given intent if the app was opened by a url like bodhi://timer?times=10,20 and
+     * start the timers with the specified times in seconds.
+     *
+     * @param intent    An intent that may contain the data key when opened using URI.
+     */
+    private void checkForDeepLink(Intent intent) {
+        Uri data = intent.getData();
+
+        if (data == null) {
+            return;
+        }
+
+        Set<String> paramNames = data.getQueryParameterNames();
+
+        if (paramNames.contains("times")) {
+            String notificationUri = prefs.getString("NotificationUri", DEFAULT_SOUND);
+            TimerList timers = new TimerList();
+
+            switch (notificationUri) {
+                case "system":
+                    notificationUri = prefs.getString("SystemUri", "");
+                    break;
+                case "file":
+                    notificationUri = prefs.getString("FileUri", "");
+                    break;
+            }
+
+            // parse times, e.g. ?times=10,20,30 means three timers (first 10 SECONDS etc.)
+            for (String timeStr : data.getQueryParameter("times").split(",")) {
+                int time = Integer.valueOf(timeStr);
+                timers.timers.add(new TimerList.Timer(time * 1000, notificationUri, SessionTypes.REAL));
+            }
+
+            mAlarmTaskManager.startAlarms(timers);
+        }
     }
 
     private void prepareUI() {
