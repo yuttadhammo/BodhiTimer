@@ -163,8 +163,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private fun setupTonePicker() {
         val tone = preferenceScreen!!.findPreference<ListPreference>("NotificationUri")
         play = findPreference("playSound")
+
         val pretone = preferenceScreen!!.findPreference<ListPreference>("PreSoundUri")
         prePlay = preferenceScreen!!.findPreference("playPreSound")
+
         val entries = resources.getStringArray(R.array.sound_names)
         val entryValues = resources.getStringArray(R.array.sound_uris)
 
@@ -173,6 +175,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         tone.setDefaultValue(entryValues[1])
         tone.entries = entries
         tone.entryValues = entryValues
+
         if (pretone!!.value == null) pretone.value = entryValues[0]
         pretone.setDefaultValue(entryValues[0])
         pretone.entries = entries
@@ -235,7 +238,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun prePlayTone(ToneUri: String?, preference: Preference) {
-        var ToneUri = ToneUri
+        var toneUri = ToneUri
         val isPre = preference.key == "playPreSound"
         if (player!!.isPlaying) {
             player!!.stop()
@@ -246,22 +249,22 @@ class SettingsFragment : PreferenceFragmentCompat() {
             return
         }
         try {
-            if (isPre && ToneUri == "system") ToneUri = prefs!!.getString(
+            if (isPre && toneUri == "system") toneUri = prefs!!.getString(
                 "PreSystemUri",
                 ""
-            ) else if (!isPre && ToneUri == "system") ToneUri =
-                prefs!!.getString("SystemUri", "") else if (isPre && ToneUri == "file") ToneUri =
-                prefs!!.getString("PreFileUri", "") else if (!isPre && ToneUri == "file") ToneUri =
+            ) else if (!isPre && toneUri == "system") toneUri =
+                prefs!!.getString("SystemUri", "") else if (isPre && toneUri == "file") toneUri =
+                prefs!!.getString("PreFileUri", "") else if (!isPre && toneUri == "file") toneUri =
                 prefs!!.getString("FileUri", "")
-            if (ToneUri == "") return
-            Log.v(TAG, "Playing Uri: $ToneUri")
+            if (toneUri == "") return
+            Log.v(TAG, "Playing Uri: $toneUri")
             player!!.reset()
             val currVolume = prefs!!.getInt("tone_volume", 0)
             if (currVolume != 0) {
                 val log1 = (ln((100 - currVolume).toDouble()) / ln(100.0)).toFloat()
                 player!!.setVolume(1 - log1, 1 - log1)
             }
-            player!!.setDataSource(mContext!!, Uri.parse(ToneUri))
+            player!!.setDataSource(mContext!!, Uri.parse(toneUri))
             player!!.prepare()
             player!!.isLooping = false
             player!!.setOnCompletionListener { mp: MediaPlayer ->
@@ -274,7 +277,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             preference.title = mContext!!.getString(R.string.playing_sound)
             preference.summary = mContext!!.getString(R.string.playing_sound_desc)
         } catch (e: IOException) {
-            Log.e(TAG, "Failed to play uri: $ToneUri")
+            Log.e(TAG, "Failed to play uri: $toneUri")
             e.printStackTrace()
         }
     }
