@@ -1,455 +1,365 @@
 /*
-    This file is part of Bodhi Timer.
-
-    Bodhi Timer is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Bodhi Timer is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Bodhi Timer.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/* @file TimerActivity.java
+ * TimerActivity.kt
+ * Copyright (C) 2014-2022 BodhiTimer developers
  *
- * TeaTimer is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version. More info: http://www.gnu.org/licenses/
- *
- * Copyright 2009 Ralph Gootee <rgootee@gmail.com>
- *
+ * Distributed under terms of the GNU GPLv3 license.
  */
 
-package org.yuttadhammo.BodhiTimer;
+package org.yuttadhammo.BodhiTimer
 
-import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.AudioManager;
-import android.os.Bundle;
-import androidx.preference.PreferenceManager;
-import android.speech.RecognizerIntent;
-import android.speech.tts.TextToSpeech;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.WindowManager.LayoutParams;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-import org.jetbrains.annotations.NotNull;
-import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation;
-import org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager;
-import org.yuttadhammo.BodhiTimer.Const.SessionTypes;
-import org.yuttadhammo.BodhiTimer.Models.TimerList;
-import org.yuttadhammo.BodhiTimer.Util.Notifications;
-import org.yuttadhammo.BodhiTimer.Util.Time;
-
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
-import static org.yuttadhammo.BodhiTimer.Const.TimerState.PAUSED;
-import static org.yuttadhammo.BodhiTimer.Const.TimerState.RUNNING;
-import static org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED;
-import static org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_END;
-import static org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_UPDATE;
-import static org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager.DEFAULT_DURATION;
-import static org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager.DEFAULT_TIME_STRING;
-import static org.yuttadhammo.BodhiTimer.Util.Sounds.DEFAULT_SOUND;
-
+import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.media.AudioManager
+import android.os.Bundle
+import android.speech.RecognizerIntent
+import android.speech.tts.TextToSpeech
+import android.util.Log
+import android.view.KeyEvent
+import android.view.View
+import android.view.WindowManager
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
+import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation
+import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_END
+import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_UPDATE
+import org.yuttadhammo.BodhiTimer.Const.SessionTypes
+import org.yuttadhammo.BodhiTimer.Const.TimerState.PAUSED
+import org.yuttadhammo.BodhiTimer.Const.TimerState.RUNNING
+import org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED
+import org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager
+import org.yuttadhammo.BodhiTimer.Models.TimerList
+import org.yuttadhammo.BodhiTimer.Util.Notifications.Companion.createNotificationChannel
+import org.yuttadhammo.BodhiTimer.Util.Sounds
+import org.yuttadhammo.BodhiTimer.Util.Time
+import org.yuttadhammo.BodhiTimer.Util.Time.msFromArray
+import org.yuttadhammo.BodhiTimer.Util.Time.str2complexTimeString
+import org.yuttadhammo.BodhiTimer.Util.Time.str2timeString
+import org.yuttadhammo.BodhiTimer.Util.Time.time2Array
+import org.yuttadhammo.BodhiTimer.Util.Time.time2humanStr
+import java.io.FileNotFoundException
+import java.util.Locale
+import kotlin.math.max
+import kotlin.math.roundToInt
 
 /**
  * The main activity which shows the timer and allows the user to set the time
- *
- * @author Ralph Gootee (rgootee@gmail.com)
  */
-public class TimerActivity extends AppCompatActivity implements OnClickListener, OnSharedPreferenceChangeListener {
-
-    /**
-     * Should the logs be shown
-     */
-    private final static boolean LOG = true;
-
-
+class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPreferenceChangeListener {
     /**
      * debug string
      */
-    private final String TAG = "TimerActivity";
-
+    private val TAG = "TimerActivity"
 
     /**
      * To save having to traverse the view tree
      */
-    private ImageButton mPauseButton, mCancelButton, mSetButton, mPrefButton;
+    private lateinit var mPauseButton: ImageButton
+    private lateinit var mCancelButton: ImageButton
+    private lateinit var mSetButton: ImageButton
+    private lateinit var mPrefButton: ImageButton
+    private lateinit var mTimerAnimation: TimerAnimation
+    private lateinit var mTimerLabel: TextView
+    private lateinit var mPreviewLabel: TextView
 
-    private TimerAnimation mTimerAnimation;
-    private TextView mTimerLabel;
-    private TextView mPreviewLabel;
+    private var mPlayBitmap: Bitmap? = null
+    private var mPauseBitmap: Bitmap? = null
+    var mAlarmTaskManager: AlarmTaskManager? = null
 
-    private Bitmap mPlayBitmap, mPauseBitmap;
-
-    public AlarmTaskManager mAlarmTaskManager;
-
-    private SharedPreferences prefs;
-
-    private boolean widget;
-
-    private TimerActivity context;
-
-    private int animationIndex;
-
-    private ImageView blackView;
-
-    private boolean invertColors = false;
-
-    private TextToSpeech tts;
-    private float lastp;
-
+    private lateinit var prefs: SharedPreferences
+    private var widget = false
+    private var context: TimerActivity? = null
+    private var animationIndex = 0
+    private var blackView: ImageView? = null
+    private var invertColors = false
+    private var tts: TextToSpeech? = null
+    private var lastp = 0f
 
     /**
      * Called when the activity is first created.
      * { @inheritDoc}
      */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "CREATE");
-        super.onCreate(savedInstanceState);
-
-
-        context = this;
-        mAlarmTaskManager = new ViewModelProvider(this).get(AlarmTaskManager.class);
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        prefs.registerOnSharedPreferenceChangeListener(this);
-
-        setupObservers();
-        prepareUI();
-
-
-        IntentFilter filter2 = new IntentFilter();
-        filter2.addAction(BROADCAST_END);
-        registerReceiver(alarmEndReceiver, filter2);
-
-        Notifications.Companion.createNotificationChannel(context);
-
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i(TAG, "CREATE")
+        super.onCreate(savedInstanceState)
+        context = this
+        mAlarmTaskManager = ViewModelProvider(this).get(AlarmTaskManager::class.java)
+        prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
+        prefs.registerOnSharedPreferenceChangeListener(this)
+        setupObservers()
+        prepareUI()
+        val filter2 = IntentFilter()
+        filter2.addAction(BROADCAST_END)
+        registerReceiver(alarmEndReceiver, filter2)
+        createNotificationChannel(context!!)
     }
 
-    private void prepareUI() {
-        setContentView(R.layout.main);
-
-
-        mCancelButton = findViewById(R.id.cancelButton);
-        mCancelButton.setOnClickListener(this);
-
-        mSetButton = findViewById(R.id.setButton);
-        mSetButton.setOnClickListener(this);
-        mSetButton.setOnLongClickListener(v -> {
-            if (prefs.getBoolean("SwitchTimeMode", false))
-                showNumberPicker();
-            else
-                startVoiceRecognitionActivity();
-            return false;
-        });
-
-        mPauseButton = findViewById(R.id.pauseButton);
-        mPauseButton.setOnClickListener(this);
-
-        mPrefButton = findViewById(R.id.prefButton);
-        mPrefButton.setOnClickListener(this);
-
+    private fun prepareUI() {
+        setContentView(R.layout.main)
+        mCancelButton = findViewById(R.id.cancelButton)
+        mCancelButton.setOnClickListener(this)
+        mSetButton = findViewById(R.id.setButton)
+        mSetButton.setOnClickListener(this)
+        mSetButton.setOnLongClickListener {
+            if (prefs.getBoolean(
+                    "SwitchTimeMode",
+                    false
+                )
+            ) showNumberPicker() else startVoiceRecognitionActivity()
+            false
+        }
+        mPauseButton = findViewById(R.id.pauseButton)
+        mPauseButton.setOnClickListener(this)
+        mPrefButton = findViewById(R.id.prefButton)
+        mPrefButton.setOnClickListener(this)
         mPauseBitmap = BitmapFactory.decodeResource(
-                getResources(), R.drawable.pause);
-
+            resources, R.drawable.pause
+        )
         mPlayBitmap = BitmapFactory.decodeResource(
-                getResources(), R.drawable.play);
-
-        mTimerLabel = findViewById(R.id.text_top);
-        mPreviewLabel = findViewById(R.id.text_preview);
-
-        mTimerAnimation = findViewById(R.id.mainImage);
-        mTimerAnimation.setOnClickListener(this);
-
-        blackView = findViewById(R.id.black);
-
-        animationIndex = prefs.getInt("DrawingIndex", 1);
+            resources, R.drawable.play
+        )
+        mTimerLabel = findViewById(R.id.text_top)
+        mPreviewLabel = findViewById(R.id.text_preview)
+        mTimerAnimation = findViewById(R.id.mainImage)
+        mTimerAnimation.setOnClickListener(this)
+        blackView = findViewById(R.id.black)
+        animationIndex = prefs.getInt("DrawingIndex", 1)
     }
 
-    private void setupObservers() {
+    private fun setupObservers() {
         // Create the observer which updates the UI.
-        final Observer<String> timerLabelObserver = newTime -> mTimerLabel.setText(newTime);
+        val timerLabelObserver = Observer { newTime: String? -> mTimerLabel.text = newTime }
+        val previewLabelObserver = Observer { newText: String? -> mPreviewLabel.text = newText }
 
-        final Observer<String> previewLabelObserver = newText -> mPreviewLabel.setText(newText);
+        val timeLeftObserver = Observer { timeLeft: Int ->
+            updateInterfaceWithTime(
+                timeLeft,
+                mAlarmTaskManager!!.curTimerDurationVal
+            )
+        }
 
-        final Observer<Integer> timeLeftObserver = timeLeft -> updateInterfaceWithTime(timeLeft, mAlarmTaskManager.getCurTimerDurationVal());
+        val durationObserver = Observer { duration: Int ->
+            updateInterfaceWithTime(
+                mAlarmTaskManager!!.curTimerLeftVal, duration
+            )
+        }
 
-        final Observer<Integer> durationObserver = duration -> updateInterfaceWithTime(mAlarmTaskManager.getCurTimerLeftVal(), duration);
-
-        final Observer<Integer> stateObserver = this::hasEnteredState;
+        val stateObserver = Observer { newState: Int -> hasEnteredState(newState) }
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        mAlarmTaskManager.getTimerText().observe(this, timerLabelObserver);
-        mAlarmTaskManager.getPreviewText().observe(this, previewLabelObserver);
-        mAlarmTaskManager.getCurTimerDuration().observe(this, durationObserver);
-        mAlarmTaskManager.getCurTimerLeft().observe(this, timeLeftObserver);
-        mAlarmTaskManager.getCurrentState().observe(this, stateObserver);
-
+        mAlarmTaskManager!!.getTimerText().observe(this, timerLabelObserver)
+        mAlarmTaskManager!!.getPreviewText().observe(this, previewLabelObserver)
+        mAlarmTaskManager!!.curTimerDuration.observe(this, durationObserver)
+        mAlarmTaskManager!!.curTimerLeft.observe(this, timeLeftObserver)
+        mAlarmTaskManager!!.currentState.observe(this, stateObserver)
     }
-
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "RESUME");
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-        mAlarmTaskManager.appIsPaused = false;
-
-        if (getIntent().hasExtra("set")) {
-            Log.d(TAG, "Create From Widget");
-            widget = true;
-            getIntent().removeExtra("set");
+    public override fun onResume() {
+        super.onResume()
+        Log.i(TAG, "RESUME")
+        volumeControlStream = AudioManager.STREAM_MUSIC
+        mAlarmTaskManager!!.appIsPaused = false
+        if (intent.hasExtra("set")) {
+            Log.d(TAG, "Create From Widget")
+            widget = true
+            intent.removeExtra("set")
         }
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        animationIndex = prefs.getInt("DrawingIndex", 1);
-
-        setupUI();
-
-
-        if (mAlarmTaskManager.getCurrentState().getValue() == STOPPED) {
-
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        animationIndex = prefs.getInt("DrawingIndex", 1)
+        setupUI()
+        if (mAlarmTaskManager!!.currentState.value == STOPPED) {
             if (widget) {
-                if (prefs.getBoolean("SwitchTimeMode", false))
-                    startVoiceRecognitionActivity();
-                else
-                    showNumberPicker();
-                return;
+                if (prefs.getBoolean(
+                        "SwitchTimeMode",
+                        false
+                    )
+                ) startVoiceRecognitionActivity() else showNumberPicker()
+                return
             }
-
         }
-
-        widget = false;
+        widget = false
     }
-
 
     /**
      * { @inheritDoc}
      */
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "PAUSE");
-        mAlarmTaskManager.appIsPaused = true; // tell gui timer to stop
-        sendBroadcast(new Intent(BROADCAST_UPDATE)); // tell widgets to update
-
-        BitmapDrawable drawable = (BitmapDrawable) mTimerAnimation.getDrawable();
-        if (drawable != null) {
-            Bitmap bitmap = drawable.getBitmap();
-            bitmap.recycle();
-        }
-
+    public override fun onPause() {
+        super.onPause()
+        Log.i(TAG, "PAUSE")
+        mAlarmTaskManager!!.appIsPaused = true // tell gui timer to stop
+        sendBroadcast(Intent(BROADCAST_UPDATE)) // tell widgets to update
     }
 
-    @Override
-    protected void onStop() {
+    override fun onStop() {
         // When our activity is stopped ensure we also stop the connection to the service
         // this stops us leaking our activity into the system *bad*
-        Log.d(TAG, "STOPPED");
-
-        super.onStop();
+        Log.d(TAG, "STOPPED")
+        super.onStop()
     }
 
-    @Override
-    public void onDestroy() {
-        Log.d(TAG, "DESTROY");
+    public override fun onDestroy() {
+        Log.d(TAG, "DESTROY")
         //Close the Text to Speech Library
         if (tts != null) {
-
-            tts.stop();
-            tts.shutdown();
-            Log.d(TAG, "TTSService Destroyed");
+            tts!!.stop()
+            tts!!.shutdown()
+            Log.d(TAG, "TTSService Destroyed")
         }
-
-        unregisterReceiver(alarmEndReceiver);
-
-
-        super.onDestroy();
+        unregisterReceiver(alarmEndReceiver)
+        super.onDestroy()
     }
 
-    private void setupUI() {
+    private fun setupUI() {
         try {
-            mTimerAnimation.setIndex(animationIndex);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            mTimerAnimation.index = animationIndex
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
         }
-
-        if (prefs.getBoolean("hideTime", false))
-            mTimerLabel.setVisibility(View.INVISIBLE);
-        else
-            mTimerLabel.setVisibility(View.VISIBLE);
-
-
-        boolean newInvertColors = prefs.getBoolean("invert_colors", false);
-
+        if (prefs.getBoolean("hideTime", false)) mTimerLabel.visibility =
+            View.INVISIBLE else mTimerLabel.visibility = View.VISIBLE
+        val newInvertColors = prefs.getBoolean("invert_colors", false)
         if (newInvertColors != invertColors) {
-
             if (newInvertColors) {
-                mPauseBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pause_black);
-
-                mPlayBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.play_black);
-                mSetButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.set_black));
-
-                if (prefs.getInt("State", STOPPED) == RUNNING)
-                    mPauseButton.setImageBitmap(mPauseBitmap);
-                else
-                    mPauseButton.setImageBitmap(mPlayBitmap);
-
-                mPrefButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.preferences_black));
-                mCancelButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.stop_black));
-                findViewById(R.id.mainLayout).setBackgroundColor(0xFFFFFFFF);
-                mTimerLabel.setTextColor(0xFF000000);
-                mPreviewLabel.setTextColor(0xFF000000);
+                mPauseBitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_black)
+                mPlayBitmap = BitmapFactory.decodeResource(resources, R.drawable.play_black)
+                mSetButton.setImageBitmap(
+                    BitmapFactory.decodeResource(
+                        resources,
+                        R.drawable.set_black
+                    )
+                )
+                if (prefs.getInt("State", STOPPED) == RUNNING) mPauseButton.setImageBitmap(
+                    mPauseBitmap
+                ) else mPauseButton.setImageBitmap(mPlayBitmap)
+                mPrefButton.setImageBitmap(
+                    BitmapFactory.decodeResource(
+                        resources,
+                        R.drawable.preferences_black
+                    )
+                )
+                mCancelButton.setImageBitmap(
+                    BitmapFactory.decodeResource(
+                        resources,
+                        R.drawable.stop_black
+                    )
+                )
+                findViewById<View>(R.id.mainLayout).setBackgroundColor(-0x1)
+                mTimerLabel.setTextColor(-0x1000000)
+                mPreviewLabel.setTextColor(-0x1000000)
             } else {
-                mPauseBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pause);
-
-                mPlayBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.play);
-                mSetButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.set));
-
-                if (prefs.getInt("State", STOPPED) == RUNNING)
-                    mPauseButton.setImageBitmap(mPauseBitmap);
-                else
-                    mPauseButton.setImageBitmap(mPlayBitmap);
-
-                mPrefButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.preferences));
-                mCancelButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.stop));
-                findViewById(R.id.mainLayout).setBackgroundColor(0xFF000000);
-                mTimerLabel.setTextColor(0xFFFFFFFF);
-                mPreviewLabel.setTextColor(0xFFFFFFFF);
+                mPauseBitmap = BitmapFactory.decodeResource(resources, R.drawable.pause)
+                mPlayBitmap = BitmapFactory.decodeResource(resources, R.drawable.play)
+                mSetButton.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.set))
+                if (prefs.getInt("State", STOPPED) == RUNNING) mPauseButton.setImageBitmap(
+                    mPauseBitmap
+                ) else mPauseButton.setImageBitmap(mPlayBitmap)
+                mPrefButton.setImageBitmap(
+                    BitmapFactory.decodeResource(
+                        resources,
+                        R.drawable.preferences
+                    )
+                )
+                mCancelButton.setImageBitmap(
+                    BitmapFactory.decodeResource(
+                        resources,
+                        R.drawable.stop
+                    )
+                )
+                findViewById<View>(R.id.mainLayout).setBackgroundColor(-0x1000000)
+                mTimerLabel.setTextColor(-0x1)
+                mPreviewLabel.setTextColor(-0x1)
             }
-
-            invertColors = newInvertColors;
+            invertColors = newInvertColors
         }
-
         if (invertColors) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
-
-
-        setLowProfile();
-        if (prefs.getBoolean("WakeLock", false))
-            getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        if (prefs.getBoolean("FULLSCREEN", false))
-            getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN, LayoutParams.FLAG_FULLSCREEN);
-        else
-            getWindow().clearFlags(LayoutParams.FLAG_FULLSCREEN);
+        setLowProfile()
+        if (prefs.getBoolean(
+                "WakeLock",
+                false
+            )
+        ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (prefs.getBoolean(
+                "FULLSCREEN",
+                false
+            )
+        ) window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        ) else window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
-
 
     /**
      * {@inheritDoc}
      */
-    public void onClick(View v) {
-
-        setLowProfile();
-
-
-        switch (v.getId()) {
-            case R.id.setButton:
-                Log.i("Timer", "set button clicked");
-                if (prefs.getBoolean("SwitchTimeMode", false))
-                    startVoiceRecognitionActivity();
-                else
-                    showNumberPicker();
-                break;
-
-            case R.id.prefButton:
-                Log.i("Timer", "pref button clicked");
-                widget = false;
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-
-
-            case R.id.pauseButton:
-                switch (mAlarmTaskManager.getCurrentState().getValue()) {
-                    case RUNNING:
-                        mAlarmTaskManager.timerPause();
-                        break;
-                    case PAUSED:
-                        mAlarmTaskManager.timerUnPause();
-                        break;
-                    case STOPPED:
-                        // We are stopped and want to restore the last used timers.
-                        mAlarmTaskManager.startAlarms(mAlarmTaskManager.retrieveTimerList());
-                        break;
-                }
-                break;
-
-            case R.id.cancelButton:
-                mAlarmTaskManager.stopAlarmsAndTicker();
-                mAlarmTaskManager.loadLastTimers();
-                break;
+    override fun onClick(v: View) {
+        setLowProfile()
+        when (v.id) {
+            R.id.setButton -> {
+                Log.i("Timer", "set button clicked")
+                if (prefs.getBoolean(
+                        "SwitchTimeMode",
+                        false
+                    )
+                ) startVoiceRecognitionActivity() else showNumberPicker()
+            }
+            R.id.prefButton -> {
+                Log.i("Timer", "pref button clicked")
+                widget = false
+                startActivity(Intent(this, SettingsActivity::class.java))
+            }
+            R.id.pauseButton -> when (mAlarmTaskManager!!.currentState.value) {
+                RUNNING -> mAlarmTaskManager!!.timerPause()
+                PAUSED -> mAlarmTaskManager!!.timerUnPause()
+                STOPPED ->                         // We are stopped and want to restore the last used timers.
+                    mAlarmTaskManager!!.startAlarms(mAlarmTaskManager!!.retrieveTimerList())
+            }
+            R.id.cancelButton -> {
+                mAlarmTaskManager!!.stopAlarmsAndTicker()
+                mAlarmTaskManager!!.loadLastTimers()
+            }
         }
     }
 
-
-    @Override
-    public boolean onKeyDown(int keycode, KeyEvent e) {
+    override fun onKeyDown(keycode: Int, e: KeyEvent): Boolean {
         if (keycode == KeyEvent.KEYCODE_MENU) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
+            startActivity(Intent(this, SettingsActivity::class.java))
+            return true
         }
-        return super.onKeyDown(keycode, e);
+        return super.onKeyDown(keycode, e)
     }
 
-
-    private void setLowProfile() {
-
-        View rootView = getWindow().getDecorView();
-        rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-
+    private fun setLowProfile() {
+        val rootView = window.decorView
+        rootView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
 
-    private void showNumberPicker() {
-        Intent i = new Intent(this, NNumberPicker.class);
-
-
-        int lastTimePicked = prefs.getInt("LastSimpleTime", 0);
-
-        i.putExtra("times", Time.time2Array(lastTimePicked));
-
-        startActivityForResult(i, NUMBER_PICK_REQUEST_CODE);
+    private fun showNumberPicker() {
+        val i = Intent(this, NNumberPicker::class.java)
+        val lastTimePicked = prefs.getInt("LastSimpleTime", 0)
+        i.putExtra("times", time2Array(lastTimePicked))
+        startActivityForResult(i, NUMBER_PICK_REQUEST_CODE)
     }
-
 
     /**
      * Updates the time
@@ -457,322 +367,316 @@ public class TimerActivity extends AppCompatActivity implements OnClickListener,
      * @param elapsed  the elapsed time of the current timer
      * @param duration the duration of the current timer
      */
-    public void updateInterfaceWithTime(int elapsed, int duration) {
-
+    private fun updateInterfaceWithTime(elapsed: Int, duration: Int) {
 
         // TODO: This is a hack, to show the full circle after stopped or finished..
+        var elapsed = elapsed
         if (elapsed == duration) {
-            elapsed = 0;
+            elapsed = 0
         }
-
-        float p = (duration != 0) ? (elapsed / (float) duration) : 0;
-
-
-        if ((lastp - p) < 0.001 && (lastp - p) > 0) {
+        val p: Float = if (duration != 0) elapsed / duration.toFloat() else 0f
+        if (lastp - p < 0.001 && lastp - p > 0) {
             // The change in progress was minimal
-            return;
+            return
         }
-        lastp = p;
-
-
-
+        lastp = p
         if (animationIndex != 0) {
-            blackView.setVisibility(View.GONE);
-            mTimerAnimation.updateImage(elapsed, duration);
+            blackView!!.visibility = View.GONE
+            mTimerAnimation.updateImage(elapsed, duration)
         } else {
-
-            int alpha = Math.round(255 * p);
-            alpha = Math.min(Math.max(0, alpha), 255);
-
-            int val = (invertColors ? 255 : 0);
-
-            int color = Color.argb(alpha, val, val, val);
-            blackView.setBackgroundColor(color);
-            blackView.setVisibility(View.VISIBLE);
+            var alpha = (255 * p).roundToInt()
+            alpha = max(0, alpha).coerceAtMost(255)
+            val `val` = if (invertColors) 255 else 0
+            val color = Color.argb(alpha, `val`, `val`, `val`)
+            blackView!!.setBackgroundColor(color)
+            blackView!!.visibility = View.VISIBLE
         }
     }
 
-    public void startSimpleAlarm(int[] numbers, boolean startAll) {
-        startSimpleAlarm(Time.msFromArray(numbers), startAll);
+    private fun startSimpleAlarm(numbers: IntArray?, startAll: Boolean) {
+        startSimpleAlarm(msFromArray(numbers!!), startAll)
     }
 
-    public void startSimpleAlarm(int time, boolean startAll) {
-
-        TimerList tL = createSimpleTimerList(time);
-
-        mAlarmTaskManager.saveTimerList(tL);
-        mAlarmTaskManager.addAlarms(tL, 0);
-
+    private fun startSimpleAlarm(time: Int, startAll: Boolean) {
+        val tL = createSimpleTimerList(time)
+        mAlarmTaskManager!!.saveTimerList(tL)
+        mAlarmTaskManager!!.addAlarms(tL, 0)
         if (startAll) {
-            mAlarmTaskManager.startAll();
+            mAlarmTaskManager!!.startAll()
         }
-
-
     }
 
-    @NotNull
-    private TimerList createSimpleTimerList(int time) {
-        int prepTime = prefs.getInt("preparationTime", 0) * 1000;
-        String preUriString = prefs.getString("PreSoundUri", "");
+    private fun createSimpleTimerList(time: Int): TimerList {
+        val prepTime = prefs.getInt("preparationTime", 0) * 1000
+        var preUriString = prefs.getString("PreSoundUri", "")
+        val tL = TimerList()
 
-        TimerList tL = new TimerList();
-
-        // Add a preparatory timer
-        if (!preUriString.equals("")) {
-
-            switch (preUriString) {
-                case "system":
-                    preUriString = prefs.getString("PreSystemUri", "");
-                    break;
-                case "file":
-                    preUriString = prefs.getString("PreFileUri", "");
-                    break;
+        // Add a preparatory timer if the user picked a tone
+        if (preUriString != "") {
+            when (preUriString) {
+                "system" -> preUriString = prefs.getString("PreSystemUri", "")
+                "file" -> preUriString = prefs.getString("PreFileUri", "")
             }
-
-            tL.timers.add(new TimerList.Timer(prepTime, preUriString, SessionTypes.PREPARATION));
+            tL.timers.add(TimerList.Timer(prepTime, preUriString, SessionTypes.PREPARATION))
         }
 
+        var notificationUri = prefs.getString("NotificationUri", Sounds.DEFAULT_SOUND)
 
-        String notificationUri = prefs.getString("NotificationUri", DEFAULT_SOUND);
-
-        switch (notificationUri) {
-            case "system":
-                notificationUri = prefs.getString("SystemUri", "");
-                break;
-            case "file":
-                notificationUri = prefs.getString("FileUri", "");
-                break;
+        when (notificationUri) {
+            "system" -> notificationUri = prefs.getString("SystemUri", "")
+            "file" -> notificationUri = prefs.getString("FileUri", "")
         }
 
         // Add main timer
+        tL.timers.add(TimerList.Timer(time, notificationUri, SessionTypes.REAL))
 
-        tL.timers.add(new TimerList.Timer(time, notificationUri, SessionTypes.REAL));
-        return tL;
+        return tL
     }
 
-
-    public void startAdvancedAlarm(String advTimeString) {
-        TimerList list = new TimerList(advTimeString);
-
-        Log.v(TAG, "advString: " + advTimeString);
-        Log.v(TAG, "advString2: " + list.getString());
-
-        mAlarmTaskManager.startAlarms(list);
+    private fun startAdvancedAlarm(advTimeString: String) {
+        val list = TimerList(advTimeString)
+        Log.v(TAG, "advString: $advTimeString")
+        Log.v(TAG, "advString2: " + list.string)
+        mAlarmTaskManager!!.startAlarms(list)
     }
-
 
     /**
      * Callback for the number picker dialog
      */
-    public void onNumbersPicked(int[] numbers) {
+    private fun onNumbersPicked(numbers: IntArray?) {
         if (numbers == null) {
-            widget = false;
-            return;
+            widget = false
+            return
         }
 
-        mAlarmTaskManager.stopAlarmsAndTicker();
-
-        Editor editor = prefs.edit();
+        mAlarmTaskManager!!.stopAlarmsAndTicker()
+        val editor = prefs.edit()
 
         // advanced timer - 0 will be -1
         if (numbers[0] == -1) {
-            String advTimeString = prefs.getString("advTimeString", DEFAULT_TIME_STRING);
+            val advTimeString =
+                prefs.getString("advTimeString", AlarmTaskManager.DEFAULT_TIME_STRING)
 
             // Overwrite the current timeString
-            editor.putString("timeString", advTimeString);
-
-            if (advTimeString == null || advTimeString.length() == 0) {
-                widget = false;
-                return;
+            editor.putString("timeString", advTimeString)
+            if (advTimeString == null || advTimeString.isEmpty()) {
+                widget = false
+                return
             }
-            editor.putBoolean("LastWasSimple", false);
-            startAdvancedAlarm(advTimeString);
-
+            editor.putBoolean("LastWasSimple", false)
+            startAdvancedAlarm(advTimeString)
         } else {
-            Log.v(TAG, "Saving simple time: " + Time.msFromArray(numbers));
-            editor.putInt("LastSimpleTime", Time.msFromArray(numbers));
-            editor.putBoolean("LastWasSimple", true);
-            startSimpleAlarm(numbers, true);
+            Log.v(TAG, "Saving simple time: " + msFromArray(numbers))
+            editor.putInt("LastSimpleTime", msFromArray(numbers))
+            editor.putBoolean("LastWasSimple", true)
+            startSimpleAlarm(numbers, true)
         }
-
-        editor.commit();
-
+        editor.commit()
     }
 
-
-    private void hasEnteredState(int newState) {
-        switch (newState) {
-            case RUNNING:
-                mSetButton.setVisibility(View.GONE);
-                mCancelButton.setVisibility(View.VISIBLE);
-                mPauseButton.setVisibility(View.VISIBLE);
-                mPauseButton.setImageBitmap(mPauseBitmap);
-                setButtonAlpha(127);
-                break;
-
-            case STOPPED:
-                mPauseButton.setImageBitmap(mPlayBitmap);
-                mCancelButton.setVisibility(View.GONE);
-                mSetButton.setVisibility(View.VISIBLE);
-                setButtonAlpha(255);
-                break;
-
-            case PAUSED:
-                mSetButton.setVisibility(View.GONE);
-                mPauseButton.setVisibility(View.VISIBLE);
-                mCancelButton.setVisibility(View.VISIBLE);
-                mPauseButton.setImageBitmap(mPlayBitmap);
-                setButtonAlpha(255);
-                break;
+    private fun hasEnteredState(newState: Int) {
+        when (newState) {
+            RUNNING -> {
+                mSetButton.visibility = View.GONE
+                mCancelButton.visibility = View.VISIBLE
+                mPauseButton.visibility = View.VISIBLE
+                mPauseButton.setImageBitmap(mPauseBitmap)
+                setButtonAlpha(127)
+            }
+            STOPPED -> {
+                mPauseButton.setImageBitmap(mPlayBitmap)
+                mCancelButton.visibility = View.GONE
+                mSetButton.visibility = View.VISIBLE
+                setButtonAlpha(255)
+            }
+            PAUSED -> {
+                mSetButton.visibility = View.GONE
+                mPauseButton.visibility = View.VISIBLE
+                mCancelButton.visibility = View.VISIBLE
+                mPauseButton.setImageBitmap(mPlayBitmap)
+                setButtonAlpha(255)
+            }
         }
     }
 
-
-    private void setButtonAlpha(int i) {
-        mPauseButton.setImageAlpha(i);
-        mCancelButton.setImageAlpha(i);
-        mPrefButton.setImageAlpha(i);
+    private fun setButtonAlpha(i: Int) {
+        mPauseButton.imageAlpha = i
+        mCancelButton.imageAlpha = i
+        mPrefButton.imageAlpha = i
     }
-
 
     /**
      * Update visual components if preferences have changed
      */
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         // Case PreSystemUri
-        switch (key) {
-            case "WakeLock":
-                if (prefs.getBoolean("WakeLock", false))
-                    getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
-                else
-                    getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-            case "PreSoundUri":
-            case "PreSystemUri":
-            case "SoundUri":
-            case "NotificationUri":
-            case "preparationTime":
-                int lastTime = prefs.getInt("LastSimpleTime", DEFAULT_DURATION);
-
-                if  (mAlarmTaskManager.getCurrentState().getValue() == STOPPED && prefs.getBoolean("LastWasSimple", true)) {
-                    startSimpleAlarm(lastTime, false);
+        when (key) {
+            "WakeLock" -> {
+                if (prefs.getBoolean(
+                        "WakeLock",
+                        false
+                    )
+                ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) else window.clearFlags(
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                )
+                val lastTime = prefs.getInt("LastSimpleTime", AlarmTaskManager.DEFAULT_DURATION)
+                if (mAlarmTaskManager!!.currentState.value == STOPPED && prefs.getBoolean(
+                        "LastWasSimple",
+                        true
+                    )
+                ) {
+                    startSimpleAlarm(lastTime, false)
                 }
+            }
+            "PreSoundUri", "PreSystemUri", "SoundUri", "NotificationUri", "preparationTime" -> {
+                val lastTime = prefs.getInt("LastSimpleTime", AlarmTaskManager.DEFAULT_DURATION)
+                if (mAlarmTaskManager!!.currentState.value == STOPPED && prefs.getBoolean(
+                        "LastWasSimple",
+                        true
+                    )
+                ) {
+                    startSimpleAlarm(lastTime, false)
+                }
+            }
         }
-
     }
 
-
-    private final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
-    private final int NUMBER_PICK_REQUEST_CODE = 5678;
+    private val VOICE_RECOGNITION_REQUEST_CODE = 1234
+    private val NUMBER_PICK_REQUEST_CODE = 5678
 
     /**
      * Fire an intent to start the speech recognition activity.
      */
-    private void startVoiceRecognitionActivity() {
+    private fun startVoiceRecognitionActivity() {
         try {
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
 
             // Display an hint to the user about what he should say.
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_description));
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_description))
 
             // Give a hint to the recognizer about what the user is going to say
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-
-            intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 1000);
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+            intent.putExtra(
+                RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS,
+                1000
+            )
 
             // Specify how many results you want to receive. The results will be sorted
             // where the first result is the one with higher confidence.
-            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
-
-            startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, getString(R.string.NoVoiceRecognitionInstalled), Toast.LENGTH_SHORT).show();
-
+            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
+            startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(
+                this,
+                getString(R.string.NoVoiceRecognitionInstalled),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
-
 
     /**
      * Handle the all activities.
      */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (LOG) Log.v(TAG, "Got result");
-
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (LOG) Log.v(TAG, "Got result")
         if (requestCode == NUMBER_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
-            int[] values = data.getIntArrayExtra("times");
-
-            onNumbersPicked(values);
+            val values = data!!.getIntArrayExtra("times")
+            onNumbersPicked(values)
             if (widget) {
-                finish();
+                finish()
             }
         } else if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
             // Fill the list view with the strings the recognizer thought it could have heard
-            onVoiceSpoken(data);
+            onVoiceSpoken(data)
         }
-
-        widget = false;
-
-        super.onActivityResult(requestCode, resultCode, data);
+        widget = false
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private void onVoiceSpoken(Intent data) {
-        ArrayList<String> matches = data.getStringArrayListExtra(
-                RecognizerIntent.EXTRA_RESULTS);
-        for (String match : matches) {
-
-            match = match.toLowerCase();
-            Log.d(TAG, "Got speech: " + match);
-
+    private fun onVoiceSpoken(data: Intent?) {
+        val matches = data!!.getStringArrayListExtra(
+            RecognizerIntent.EXTRA_RESULTS
+        )
+        for (match in matches!!) {
+            val match = match.lowercase(Locale.getDefault())
+            Log.d(TAG, "Got speech: $match")
             if (match.contains(Time.TIME_SEPARATOR)) {
-                String complexTime = Time.str2complexTimeString(this, match);
-                if (complexTime.length() > 0) {
-                    Editor editor = prefs.edit();
-                    editor.putString("timeString", complexTime);
-                    editor.apply();
+                val complexTime = str2complexTimeString(this, match)
+                if (complexTime.isNotEmpty()) {
+                    val editor = prefs.edit()
+                    editor.putString("timeString", complexTime)
+                    editor.apply()
                     if (prefs.getBoolean("SpeakTime", false)) {
-                        tts = new TextToSpeech(this, status -> {
+                        tts = TextToSpeech(this) { status: Int ->
                             if (status == TextToSpeech.SUCCESS) {
-                                tts.speak(getString(R.string.adv_speech_recognized), TextToSpeech.QUEUE_ADD, null);
-                            } else
-                                Log.e("error", "Initialization failed!");
-                        });
+                                tts!!.speak(
+                                    getString(R.string.adv_speech_recognized),
+                                    TextToSpeech.QUEUE_ADD,
+                                    null
+                                )
+                            } else Log.e("error", "Initialization failed!")
+                        }
                     }
-                    Toast.makeText(this, getString(R.string.adv_speech_recognized), Toast.LENGTH_SHORT).show();
-                    int[] values = {-1, -1, -1};
-                    onNumbersPicked(values);
-                    break;
+                    Toast.makeText(
+                        this,
+                        getString(R.string.adv_speech_recognized),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    val values = intArrayOf(-1, -1, -1)
+                    onNumbersPicked(values)
+                    break
                 }
             } else {
-                final int speechTime = Time.str2timeString(this, match);
+                val speechTime = str2timeString(this, match)
                 if (speechTime != 0) {
-                    int[] values = Time.time2Array(speechTime);
-                    Toast.makeText(this, String.format(getString(R.string.speech_recognized), Time.time2humanStr(this, speechTime)), Toast.LENGTH_SHORT).show();
+                    val values = time2Array(speechTime)
+                    Toast.makeText(
+                        this,
+                        String.format(
+                            getString(R.string.speech_recognized),
+                            time2humanStr(this, speechTime)
+                        ),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     if (prefs.getBoolean("SpeakTime", false)) {
-                        Log.d(TAG, "Speaking time");
-                        tts.speak(String.format(getString(R.string.speech_recognized), Time.time2humanStr(context, speechTime)), TextToSpeech.QUEUE_ADD, null);
+                        Log.d(TAG, "Speaking time")
+                        tts!!.speak(
+                            String.format(
+                                getString(R.string.speech_recognized), time2humanStr(
+                                    context!!, speechTime
+                                )
+                            ), TextToSpeech.QUEUE_ADD, null
+                        )
                     }
-
-                    onNumbersPicked(values);
-                    break;
-                } else
-                    Toast.makeText(this, getString(R.string.speech_not_recognized), Toast.LENGTH_SHORT).show();
+                    onNumbersPicked(values)
+                    break
+                } else Toast.makeText(
+                    this,
+                    getString(R.string.speech_not_recognized),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
     // Should move to Manager....
     // receiver to get restart
-    private final BroadcastReceiver alarmEndReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.v(TAG, "Received app alarm callback");
-            Log.d(TAG, "id " + intent.getIntExtra("id", -1));
-
-            mAlarmTaskManager.onAlarmEnd(intent.getIntExtra("id", -1));
+    private val alarmEndReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.v(TAG, "Received app alarm callback")
+            Log.d(TAG, "id " + intent.getIntExtra("id", -1))
+            mAlarmTaskManager!!.onAlarmEnd(intent.getIntExtra("id", -1))
         }
-    };
+    }
 
-
+    companion object {
+        /**
+         * Should the logs be shown
+         */
+        private const val LOG = true
+    }
 }
