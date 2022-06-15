@@ -24,11 +24,14 @@ import org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED
 import org.yuttadhammo.BodhiTimer.Const.TimerState.getText
 import org.yuttadhammo.BodhiTimer.Service.SoundService
 import org.yuttadhammo.BodhiTimer.Util.Time
-import java.util.*
+import java.util.Date
+import java.util.Stack
+import java.util.Timer
+import java.util.TimerTask
 
 
 
-class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
+class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
     private val mTimer = Timer()
     private val alarms: Stack<AlarmTask> = Stack()
@@ -38,18 +41,18 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
     var appIsPaused = false
 
     // Data
-    var timeStamp: Long = 0
+    private var timeStamp: Long = 0
     private var sessionTimeStamp: Long = 0
-    var sessionDuration = 0
+    private var sessionDuration = 0
     private var sessionTimeLeft = 0
 
     // Live Data
-    private val currentTimerLeft = MutableLiveData<Int>(-1)
-    private val currentTimerDuration = MutableLiveData<Int>(-1)
+    private val currentTimerLeft = MutableLiveData(-1)
+    private val currentTimerDuration = MutableLiveData(-1)
     private val mIndex = MutableLiveData<Int>()
     private val timerText = MutableLiveData<String>()
     private val previewText = MutableLiveData<String>()
-    private val mCurrentState = MutableLiveData<Int>(-1)
+    private val mCurrentState = MutableLiveData(-1)
     private var lastTextGenerated = 0
 
     // Accessors
@@ -64,8 +67,8 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         get() = currentTimerLeft.value!!
     val curTimerDurationVal: Int
         get() = currentTimerDuration.value!!
-    val indexVal: Int?
-        get() = mIndex.value
+
+    private var previousInterruptionFilter: Int = 0
 
     private fun setCurrentState(newState: Int) {
         Log.v(TAG, "Entering state: " + getText(newState))
@@ -82,8 +85,6 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
     fun getPreviewText(): LiveData<String> {
         return previewText
     }
-
-
 
     private fun setCurTimerDuration(newDuration: Int) {
         currentTimerDuration.value = Integer.valueOf(newDuration)
@@ -212,9 +213,6 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
             return sessionDur
         }
 
-    val alarmCount: Int
-        get() = alarms.size
-
     private fun cancelAllAlarms(clear: Boolean) {
         for (alarm in alarms) {
             alarm.cancel()
@@ -244,7 +242,7 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
     private fun startTicker(time: Int) {
         Log.v(TAG, "Starting the ticker: $time")
         setCurrentState(RUNNING)
-        mCurrentState.setValue(RUNNING)
+        mCurrentState.value = RUNNING
         setCurTimerLeft(time)
         setTimeStamp(time)
         mTimer.schedule(
@@ -359,7 +357,7 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
     }
 
     private val timeString: String?
-        private get() {
+        get() {
             var prefString = prefs.getString("timeString", "")
             if (prefString == "") prefString = prefs.getString("advTimeString", DEFAULT_TIME_STRING)
             return prefString
@@ -438,7 +436,7 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
     /**
      * Handler for the message from the timer service
      */
-    private val mHandler: Handler? = object : Handler(Looper.getMainLooper()) {
+    private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             doTick()
         }
@@ -522,6 +520,7 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean("doNotDisturb", false)) {
             try {
                 val mNotificationManager = mApp.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                previousInterruptionFilter = mNotificationManager.currentInterruptionFilter
                 mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
             } catch (e: Exception) {
                 Log.e(TAG, e.toString())
@@ -532,8 +531,9 @@ class AlarmTaskManager(val mApp: Application) : AndroidViewModel(mApp) {
     private fun stopDND() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean("doNotDisturb", false)) {
             try {
+                val newFilter = if (previousInterruptionFilter != 0) previousInterruptionFilter else NotificationManager.INTERRUPTION_FILTER_ALL
                 val mNotificationManager = mApp.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+                mNotificationManager.setInterruptionFilter(newFilter)
             } catch (e: Exception) {
                 Log.e(TAG, e.toString())
             }
