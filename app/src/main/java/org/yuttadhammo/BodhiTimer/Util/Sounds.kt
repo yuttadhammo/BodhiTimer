@@ -83,9 +83,7 @@ class Sounds(private val mContext: Context) {
             val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
             var result = "";
 
-            if (mUri != null) {
-                result = mUri
-            }
+            result = mUri
 
             if (result == "sys_def") {
                 result = prefs.getString("NotificationUri", "").toString()
