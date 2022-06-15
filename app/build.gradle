@@ -9,7 +9,6 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.1'
 
     defaultConfig {
         applicationId "org.yuttadhammo.BodhiTimer"
