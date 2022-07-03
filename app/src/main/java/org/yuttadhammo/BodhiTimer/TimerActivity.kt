@@ -126,11 +126,21 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             }
 
             for (timeStr in data.getQueryParameter("times")!!.split(",").toTypedArray()) {
-                val time = Integer.valueOf(timeStr)
-                tL.timers.add(TimerList.Timer(time * 1000, notificationUri, SessionTypes.REAL))
+                var time = 0
+                try {
+                    time = Integer.parseInt(timeStr)
+                } catch (e: NumberFormatException) {
+                    Log.e(TAG, "Invalid number format provided: " + timeStr, e)
+                }
+
+                if (time > 0) {
+                    tL.timers.add(TimerList.Timer(time * 1000, notificationUri, SessionTypes.REAL))
+                }
             }
 
-            mAlarmTaskManager?.startAlarms(tL)
+            if (tL.timers.size > 0) {
+                mAlarmTaskManager?.startAlarms(tL)
+            }
         }
     }
 
