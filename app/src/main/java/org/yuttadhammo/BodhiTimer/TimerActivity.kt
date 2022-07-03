@@ -7,17 +7,13 @@
 
 package org.yuttadhammo.BodhiTimer
 
-import android.content.ActivityNotFoundException
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.SharedPreferences
+import android.content.*
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
@@ -52,9 +48,10 @@ import org.yuttadhammo.BodhiTimer.Util.Time.str2timeString
 import org.yuttadhammo.BodhiTimer.Util.Time.time2Array
 import org.yuttadhammo.BodhiTimer.Util.Time.time2humanStr
 import java.io.FileNotFoundException
-import java.util.Locale
+import java.util.*
 import kotlin.math.max
 import kotlin.math.roundToInt
+
 
 /**
  * The main activity which shows the timer and allows the user to set the time
@@ -106,6 +103,35 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         filter2.addAction(BROADCAST_END)
         registerReceiver(alarmEndReceiver, filter2)
         createNotificationChannel(context!!)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        checkForDeepLink(intent)
+    }
+
+    private fun checkForDeepLink(intent: Intent?) {
+        val data: Uri = intent?.data ?: return
+
+        val paramNames = data.getQueryParameterNames()
+
+        if (paramNames.contains("times")) {
+            val tL = TimerList()
+
+            var notificationUri = prefs.getString("NotificationUri", Sounds.DEFAULT_SOUND)
+
+            when (notificationUri) {
+                "system" -> notificationUri = prefs.getString("SystemUri", "")
+                "file" -> notificationUri = prefs.getString("FileUri", "")
+            }
+
+            for (timeStr in data.getQueryParameter("times")!!.split(",").toTypedArray()) {
+                val time = Integer.valueOf(timeStr)
+                tL.timers.add(TimerList.Timer(time * 1000, notificationUri, SessionTypes.REAL))
+            }
+
+            mAlarmTaskManager?.startAlarms(tL)
+        }
     }
 
     private fun prepareUI() {
