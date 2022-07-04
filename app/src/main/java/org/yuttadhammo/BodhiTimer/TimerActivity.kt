@@ -7,7 +7,12 @@
 
 package org.yuttadhammo.BodhiTimer
 
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -48,7 +53,7 @@ import org.yuttadhammo.BodhiTimer.Util.Time.str2timeString
 import org.yuttadhammo.BodhiTimer.Util.Time.time2Array
 import org.yuttadhammo.BodhiTimer.Util.Time.time2humanStr
 import java.io.FileNotFoundException
-import java.util.*
+import java.util.Locale
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -113,7 +118,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     private fun checkForDeepLink(intent: Intent?) {
         val data: Uri = intent?.data ?: return
 
-        val paramNames = data.getQueryParameterNames()
+        val paramNames = data.queryParameterNames
 
         if (paramNames.contains("times")) {
             val tL = TimerList()
@@ -130,7 +135,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
                 try {
                     time = Integer.parseInt(timeStr)
                 } catch (e: NumberFormatException) {
-                    Log.e(TAG, "Invalid number format provided: " + timeStr, e)
+                    Log.e(TAG, "Invalid number format provided: $timeStr", e)
                 }
 
                 if (time > 0) {
