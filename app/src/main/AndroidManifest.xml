@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.yuttadhammo.BodhiTimer"
-    android:versionCode="88"
-    android:versionName="5.6.2">
+    android:versionCode="89"
+    android:versionName="6.0.0">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
