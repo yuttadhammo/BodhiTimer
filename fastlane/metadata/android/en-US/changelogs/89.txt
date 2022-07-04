@@ -1,0 +1,4 @@
+6.0.0
+
+* Update app to support latest Android versions.
+* Add support for other app to start an alarm using an URL like bodhi://timer?times=60,120
