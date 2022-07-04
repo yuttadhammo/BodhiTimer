@@ -18,6 +18,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
@@ -55,6 +56,7 @@ import java.io.FileNotFoundException
 import java.util.Locale
 import kotlin.math.max
 import kotlin.math.roundToInt
+
 
 /**
  * The main activity which shows the timer and allows the user to set the time
@@ -106,6 +108,45 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         filter2.addAction(BROADCAST_END)
         registerReceiver(alarmEndReceiver, filter2)
         createNotificationChannel(context!!)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        checkForDeepLink(intent)
+    }
+
+    private fun checkForDeepLink(intent: Intent?) {
+        val data: Uri = intent?.data ?: return
+
+        val paramNames = data.queryParameterNames
+
+        if (paramNames.contains("times")) {
+            val tL = TimerList()
+
+            var notificationUri = prefs.getString("NotificationUri", Sounds.DEFAULT_SOUND)
+
+            when (notificationUri) {
+                "system" -> notificationUri = prefs.getString("SystemUri", "")
+                "file" -> notificationUri = prefs.getString("FileUri", "")
+            }
+
+            for (timeStr in data.getQueryParameter("times")!!.split(",").toTypedArray()) {
+                var time = 0
+                try {
+                    time = Integer.parseInt(timeStr)
+                } catch (e: NumberFormatException) {
+                    Log.e(TAG, "Invalid number format provided: $timeStr", e)
+                }
+
+                if (time > 0) {
+                    tL.timers.add(TimerList.Timer(time * 1000, notificationUri, SessionTypes.REAL))
+                }
+            }
+
+            if (tL.timers.size > 0) {
+                mAlarmTaskManager?.startAlarms(tL)
+            }
+        }
     }
 
     private fun prepareUI() {
