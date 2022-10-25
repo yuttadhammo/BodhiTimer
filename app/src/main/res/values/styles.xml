@@ -3,20 +3,19 @@
 
     <!-- Base application theme. -->
     <style name="AppCompatTheme" parent="Theme.Material3.DynamicColors.DayNight">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimary</item>
-        <item name="colorControlActivated">@color/colorPrimary</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:fontFamily">@font/source_sans</item>
         <item name="fontFamily">@font/source_sans</item> <!-- target android sdk versions < 26 and > 14 if theme other than AppCompat -->
         <item name="fontWeight">300</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="android:buttonStyle">@style/Button</item>
     </style>
 
 
-    <style name="NoTitleBar" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    <style name="NoTitleBar" parent="AppCompatTheme">
         <item name="android:windowNoTitle">true</item>
     </style>
 

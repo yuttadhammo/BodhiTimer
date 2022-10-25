@@ -8,140 +8,135 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.R
 import org.yuttadhammo.BodhiTimer.TimerActivity
+import timber.log.Timber
 
 
-class Notifications {
+object Notifications {
 
-    companion object {
-
-        const val TAG = "NOTIFY"
-        private const val ALARM_CHANNEL_ID = "ALARMS"
-        private const val SERVICE_CHANNEL_ID = "SERVICE"
+    const val TAG = "NOTIFY"
+    private const val ALARM_CHANNEL_ID = "ALARMS"
+    private const val SERVICE_CHANNEL_ID = "SERVICE"
 
 
-        fun show(context: Context, time: Int) {
-            Log.v(TAG, "Showing notification... $time")
+    fun show(context: Context, time: Int) {
+        Timber.v("Showing notification... $time")
 
-            // Get Notification Manager & Prefs
-            val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-
-            // Cancel any previous notifications
-            mNotificationManager.cancelAll()
+        // Get Notification Manager & Prefs
+        val mNotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
 
-            // Construct strings
-            val setTimeStr = Time.time2humanStr(context, time)
-            val text = context.getText(R.string.Notification)
-            val textLatest: CharSequence = String.format(context.getString(R.string.timer_for_x), setTimeStr)
+        // Cancel any previous notifications
+        mNotificationManager.cancelAll()
 
 
-            // Create the notification
-            val mBuilder = NotificationCompat.Builder(context.applicationContext, ALARM_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.notification)
-                    .setContentTitle(text)
-                    .setContentText(textLatest)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+        // Construct strings
+        val setTimeStr = Time.time2humanStr(context, time)
+        val text = context.getText(R.string.Notification)
+        val textLatest: CharSequence =
+            String.format(context.getString(R.string.timer_for_x), setTimeStr)
 
-            // Handle light and vibrate in older devices
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                legacyHandler(mBuilder, prefs)
-            }
-            mNotificationManager.notify(0, mBuilder.build())
+
+        // Create the notification
+        val mBuilder = NotificationCompat.Builder(context.applicationContext, ALARM_CHANNEL_ID)
+            .setSmallIcon(R.drawable.notification)
+            .setContentTitle(text)
+            .setContentText(textLatest)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        // Handle light and vibrate in older devices
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            legacyHandler(mBuilder, prefs)
         }
 
-        fun getServiceNotification(context: Context): Notification {
-            val pendingIntent: PendingIntent =
-                    Intent(context, TimerActivity::class.java).let { notificationIntent ->
-                        PendingIntent.getActivity(context, 0, notificationIntent, 0)
-                    }
+        mNotificationManager.notify(0, mBuilder.build())
+    }
 
-            // Create pending intent to be triggered when user clicks on notification
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-            new Intent(this, TimerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+    fun getServiceNotification(context: Context): Notification {
 
-            mBuilder.setContentIntent(contentIntent);
+        // Create pending intent to be triggered when user clicks on notification
+        val contentIntent = PendingIntent.getActivity(
+            context, 0,
+            Intent(context, TimerActivity::class.java), PendingIntent.FLAG_IMMUTABLE
+        )
 
-            return NotificationCompat.Builder(context, SERVICE_CHANNEL_ID)
-                    .setContentTitle(context.getText(R.string.app_name))
-                    .setContentText(context.getText(R.string.service_text))
-                    .setSmallIcon(R.drawable.notification)
-                    .setContentIntent(pendingIntent)
-                    .setTicker(context.getText(R.string.service_text))
-                    .build()
+        return NotificationCompat.Builder(context, SERVICE_CHANNEL_ID)
+            .setContentTitle(context.getText(R.string.app_name))
+            .setContentText(context.getText(R.string.service_text))
+            .setSmallIcon(R.drawable.notification)
+            .setContentIntent(contentIntent)
+            .setTicker(context.getText(R.string.service_text))
+            .build()
+    }
+
+    private fun legacyHandler(mBuilder: NotificationCompat.Builder, prefs: SharedPreferences) {
+        val vibrate = prefs.getBoolean("Vibrate", true)
+        val led = prefs.getBoolean("LED", false)
+
+        // Vibrate
+        if (vibrate) {
+            mBuilder.setDefaults(Notification.DEFAULT_VIBRATE)
         }
 
-        private fun legacyHandler(mBuilder: NotificationCompat.Builder, prefs: SharedPreferences) {
+        // Have a light
+        if (led) {
+            mBuilder.setLights(-0xff0100, 300, 1000)
+        }
+    }
+
+    fun createNotificationChannel(context: Context) {
+        // Get Notification Manager & Prefs
+        val mNotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            var name: CharSequence = context.getString(R.string.alarm_channel_name)
+            var description = context.getString(R.string.alarm_channel_description)
+            var importance = NotificationManager.IMPORTANCE_HIGH
+
+            val alarmChannel = NotificationChannel(ALARM_CHANNEL_ID, name, importance)
+            alarmChannel.description = description
+
+            // Customize
             val vibrate = prefs.getBoolean("Vibrate", true)
             val led = prefs.getBoolean("LED", false)
 
             // Vibrate
             if (vibrate) {
-                mBuilder.setDefaults(Notification.DEFAULT_VIBRATE)
+                val pattern = longArrayOf(0, 400, 200, 400)
+                alarmChannel.vibrationPattern = pattern
+                alarmChannel.enableVibration(true)
             }
 
             // Have a light
             if (led) {
-                mBuilder.setLights(-0xff0100, 300, 1000)
+                alarmChannel.lightColor = -0xff0100
+                alarmChannel.enableLights(true)
             }
-        }
 
-        fun createNotificationChannel(context: Context) {
-            // Get Notification Manager & Prefs
-            val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            // We are playing the sound ourselves,
+            // because notification channels don't allow changing sounds.
+            alarmChannel.setSound(null, null)
 
-            // Create the NotificationChannel, but only on API 26+ because
-            // the NotificationChannel class is new and not in the support library
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                var name: CharSequence = context.getString(R.string.alarm_channel_name)
-                var description = context.getString(R.string.alarm_channel_description)
-                var importance = NotificationManager.IMPORTANCE_HIGH
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            mNotificationManager.createNotificationChannel(alarmChannel)
 
-                val alarmChannel = NotificationChannel(ALARM_CHANNEL_ID, name, importance)
-                alarmChannel.description = description
+            name = context.getString(R.string.service_channel_name)
+            description = context.getString(R.string.service_channel_description)
+            importance = NotificationManager.IMPORTANCE_LOW
 
-                // Customize
-                val vibrate = prefs.getBoolean("Vibrate", true)
-                val led = prefs.getBoolean("LED", false)
-
-                // Vibrate
-                if (vibrate) {
-                    val pattern = longArrayOf(0, 400, 200, 400)
-                    alarmChannel.vibrationPattern = pattern
-                    alarmChannel.enableVibration(true)
-                }
-
-                // Have a light
-                if (led) {
-                    alarmChannel.lightColor = -0xff0100
-                    alarmChannel.enableLights(true)
-                }
-
-                // We are playing the sound ourselves,
-                // because notification channels don't allow changing sounds.
-                alarmChannel.setSound(null, null)
-
-                // Register the channel with the system; you can't change the importance
-                // or other notification behaviors after this
-                mNotificationManager.createNotificationChannel(alarmChannel)
-
-                name = context.getString(R.string.service_channel_name)
-                description = context.getString(R.string.service_channel_description)
-                importance = NotificationManager.IMPORTANCE_LOW
-
-                val serviceChannel = NotificationChannel(SERVICE_CHANNEL_ID, name, importance)
-                serviceChannel.description = description
-                mNotificationManager.createNotificationChannel(serviceChannel)
-            }
+            val serviceChannel = NotificationChannel(SERVICE_CHANNEL_ID, name, importance)
+            serviceChannel.description = description
+            mNotificationManager.createNotificationChannel(serviceChannel)
         }
     }
-
-
 }

@@ -19,12 +19,12 @@ package org.yuttadhammo.BodhiTimer.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_END
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_PLAY
-import org.yuttadhammo.BodhiTimer.Util.Notifications.Companion.show
+import org.yuttadhammo.BodhiTimer.Util.Notifications.show
 import org.yuttadhammo.BodhiTimer.Util.Sounds
+import timber.log.Timber
 
 
 // This class handles the alarm callback
@@ -36,7 +36,7 @@ class TimerReceiver : BroadcastReceiver() {
 
 
     override fun onReceive(context: Context, mIntent: Intent) {
-        Log.v(TAG, "Received system alarm callback ")
+        Timber.v("Received system alarm callback ")
 
         stamp = System.currentTimeMillis()
         mContext = context
@@ -76,7 +76,7 @@ class TimerReceiver : BroadcastReceiver() {
                     mContext.startService(playIntent)
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Could not start service")
+                Timber.e("Could not start service")
                 Sounds(mContext).play(notificationUri!!, volume)
             }
         } else {

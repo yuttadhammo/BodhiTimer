@@ -9,9 +9,9 @@ package org.yuttadhammo.BodhiTimer.Util
 
 import android.content.Context
 import android.text.TextUtils
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import org.yuttadhammo.BodhiTimer.R
+import timber.log.Timber
 import java.util.regex.Pattern
 
 object Time {
@@ -152,7 +152,7 @@ object Time {
             val match = m.group(1)
             seconds += match?.toInt() ?: 0
         }
-        Log.d(TAG, "Got numbers: $hours hours, $minutes minutes, $seconds seconds")
+        Timber.d("Got numbers: $hours hours, $minutes minutes, $seconds seconds")
         var total = hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000
         if (total > 60 * 60 * 60 * 1000 + 59 * 60 * 1000 + 59 * 1000) total =
             60 * 60 * 60 * 1000 + 59 * 60 * 1000 + 59 * 1000

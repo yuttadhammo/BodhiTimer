@@ -14,261 +14,211 @@
     You should have received a copy of the GNU General Public License
     along with Bodhi Timer.  If not, see <http://www.gnu.org/licenses/>.
 */
+package org.yuttadhammo.BodhiTimer.Animation
 
-package org.yuttadhammo.BodhiTimer.Animation;
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.RadialGradient
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.Shader
+import android.graphics.SweepGradient
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.VectorDrawable
+import android.util.TypedValue
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
+import com.google.android.material.color.MaterialColors
+import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation.TimerDrawing
+import org.yuttadhammo.BodhiTimer.R
+import org.yuttadhammo.BodhiTimer.Util.Settings
+import org.yuttadhammo.BodhiTimer.Util.Time.time2Array
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.RadialGradient;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Shader;
-import android.graphics.SweepGradient;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
-import androidx.preference.PreferenceManager;
-
-import androidx.annotation.DrawableRes;
-import androidx.core.content.ContextCompat;
-
-import org.yuttadhammo.BodhiTimer.R;
-import org.yuttadhammo.BodhiTimer.Util.Time;
-
-class CircleAnimation implements TimerAnimation.TimerDrawing {
-    private static final float MAX_SIZE = 1000;
-
-    private float mRadius = MAX_SIZE * 0.75f, mInnerRadius = MAX_SIZE / 3f, mSecondRadius = MAX_SIZE, mMsRadius = mSecondRadius + MAX_SIZE / 50f;
-    private float scale;
-
-    private Paint mCirclePaint;
-    private Paint mInnerPaint;
-    private Paint mArcPaint;
-    private Paint mMsPaint;
-
-    private Bitmap mEnsoBitmap;
+internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
+    private var mRadius = MAX_SIZE * 0.75f
+    private var mInnerRadius = MAX_SIZE / 3f
+    private var mSecondRadius = MAX_SIZE
+    private var mMsRadius = mSecondRadius + MAX_SIZE / 50f
+    private var scale = 0f
+    private var mCirclePaint: Paint? = null
+    private var mInnerPaint: Paint? = null
+    private var mArcPaint: Paint? = null
+    private var mMsPaint: Paint? = null
+    private var mEnsoBitmap: Bitmap? = null
 
     /**
      * Paint for the seconds arc
      */
-    private Paint mSecondPaint, mSecondBgPaint;
-
-    int mInnerColor = 0;
-
-    boolean mMsFlipper = false;
-    private int[] mLastTime;
+    private var mSecondPaint: Paint? = null
+    private var mSecondBgPaint: Paint? = null
+    var mInnerColor = 0
+    var mMsFlipper = false
+    private var mLastTime: IntArray? = null
 
     /**
      * Rects for the arcs
      */
-    private final RectF mArcRect;
-    private final RectF mSecondRect;
+    private val mArcRect: RectF
+    private val mSecondRect: RectF
+    private var mWidth = 0
+    private var mHeight = 0
+    private var eWidth = 0
+    private var eHeight = 0
+    private var mSecondGap = 0f
+    private var mMsGap = 0f
+    private var theme = 0
 
-    private final Context mContext;
-
-    private int mWidth;
-
-    private int mHeight;
-
-    private int eWidth;
-
-    private int eHeight;
-
-    private float mSecondGap;
-
-    private float mMsGap;
-
-    private int theme;
-
-    public CircleAnimation(Context context) {
-        mContext = context;
+    init {
 
         // Create the rects
-        mSecondRect = new RectF();
-        mArcRect = new RectF();
-
-        configure();
+        mSecondRect = RectF()
+        mArcRect = RectF()
+        configure()
     }
 
-    private static Bitmap getBitmapFromVector(VectorDrawable vectorDrawable) {
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        vectorDrawable.draw(canvas);
-        return bitmap;
+    fun invert(src: Bitmap?): Bitmap {
+        val height = src!!.height
+        val width = src.width
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        val matrixGrayscale = ColorMatrix()
+        matrixGrayscale.setSaturation(0f)
+        val matrixInvert = ColorMatrix()
+        matrixInvert.set(
+            floatArrayOf(
+                -1.0f, 0.0f, 0.0f, 0.0f, 255.0f,
+                0.0f, -1.0f, 0.0f, 0.0f, 255.0f,
+                0.0f, 0.0f, -1.0f, 0.0f, 255.0f,
+                0.0f, 0.0f, 0.0f, 1.0f, 0.0f
+            )
+        )
+        matrixInvert.preConcat(matrixGrayscale)
+        val filter = ColorMatrixColorFilter(matrixInvert)
+        paint.colorFilter = filter
+        canvas.drawBitmap(src, 0f, 0f, paint)
+        return bitmap
     }
 
-
-    public static Bitmap getBitmapFromVector(Context context, @DrawableRes int drawableResId) {
-        Drawable drawable = ContextCompat.getDrawable(context, drawableResId);
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        } else if (drawable instanceof VectorDrawable) {
-            return getBitmapFromVector((VectorDrawable) drawable);
-        } else {
-            throw new IllegalArgumentException("Unsupported drawable type");
-        }
+    @ColorInt
+    fun Context.getColorFromAttr(
+        @AttrRes attrColor: Int,
+        typedValue: TypedValue = TypedValue(),
+        resolveRefs: Boolean = true
+    ): Int {
+        theme.resolveAttribute(attrColor, typedValue, resolveRefs)
+        return typedValue.data
     }
 
-
-    public Bitmap invert(Bitmap src) {
-        int height = src.getHeight();
-        int width = src.getWidth();
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-
-        ColorMatrix matrixGrayscale = new ColorMatrix();
-        matrixGrayscale.setSaturation(0);
-
-        ColorMatrix matrixInvert = new ColorMatrix();
-        matrixInvert.set(new float[]
-                {
-                        -1.0f, 0.0f, 0.0f, 0.0f, 255.0f,
-                        0.0f, -1.0f, 0.0f, 0.0f, 255.0f,
-                        0.0f, 0.0f, -1.0f, 0.0f, 255.0f,
-                        0.0f, 0.0f, 0.0f, 1.0f, 0.0f
-                });
-        matrixInvert.preConcat(matrixGrayscale);
-
-        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrixInvert);
-        paint.setColorFilter(filter);
-
-        canvas.drawBitmap(src, 0, 0, paint);
-        return bitmap;
-    }
-
-    public void configure() {
-        Resources resources = mContext.getResources();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+    override fun configure() {
+        val resources = mContext.resources
+        val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
 
         // Load the correct theme
-        theme = Integer.parseInt(prefs.getString("CircleTheme", "3"));
-        boolean invertColors = prefs.getBoolean("invert_colors", false);
+        theme = Settings.circleTheme
+        val invertColors = prefs.getBoolean("invert_colors", false)
+        val colors: IntArray
 
-        int[] colors;
-
-        switch (theme) {
-            case 0:
-                colors = new int[]{resources.getColor(R.color.themeA1),
-                        resources.getColor(R.color.themeA2),
-                        resources.getColor(R.color.themeA3),
-                        resources.getColor(R.color.themeA4),
-                        resources.getColor(R.color.themeA5)
-                };
-                break;
-
-            case 1:
-                colors = new int[]{resources.getColor(R.color.themeB1),
-                        resources.getColor(R.color.themeB2),
-                        resources.getColor(R.color.themeB3),
-                        resources.getColor(R.color.themeB4),
-                        resources.getColor(R.color.themeB5)
-                };
-                break;
-
-            case 2:
-                colors = new int[]{resources.getColor(R.color.themeC1),
-                        resources.getColor(R.color.themeC2),
-                        resources.getColor(R.color.themeC3),
-                        resources.getColor(R.color.themeC4),
-                        resources.getColor(R.color.themeC5)
-                };
-                break;
-            case 3:
-            default:
-                colors = new int[]{resources.getColor(invertColors ? R.color.themeE1 : R.color.themeD1),
-                        resources.getColor(invertColors ? R.color.themeE2 : R.color.themeD2),
-                        resources.getColor(invertColors ? R.color.themeE3 : R.color.themeD3),
-                        resources.getColor(invertColors ? R.color.themeE4 : R.color.themeD4),
-                        resources.getColor(invertColors ? R.color.themeE5 : R.color.themeD5)
-                };
-                break;
+        colors = when (theme) {
+            0 -> intArrayOf(
+                resources.getColor(R.color.themeA1),
+                resources.getColor(R.color.themeA2),
+                resources.getColor(R.color.themeA3),
+                resources.getColor(R.color.themeA4),
+                resources.getColor(R.color.themeA5)
+            )
+            1 -> intArrayOf(
+                resources.getColor(R.color.themeB1),
+                resources.getColor(R.color.themeB2),
+                resources.getColor(R.color.themeB3),
+                resources.getColor(R.color.themeB4),
+                resources.getColor(R.color.themeB5)
+            )
+            2 -> intArrayOf(
+                resources.getColor(R.color.themeC1),
+                resources.getColor(R.color.themeC2),
+                resources.getColor(R.color.themeC3),
+                resources.getColor(R.color.themeC4),
+                resources.getColor(R.color.themeC5)
+            )
+            3 -> intArrayOf(
+                MaterialColors.getColor(mContext, R.attr.colorSurface, 0),
+                MaterialColors.getColor(mContext, R.attr.colorOnSurface, 1),
+                MaterialColors.getColor(mContext, R.attr.colorSurface, 0),
+                MaterialColors.getColor(mContext, R.attr.colorSurfaceVariant, 0),
+                MaterialColors.getColor(mContext, R.attr.colorOnSurface, 1)
+            )
+            else -> intArrayOf(
+                resources.getColor(if (invertColors) R.color.themeE1 else R.color.themeD1),
+                resources.getColor(if (invertColors) R.color.themeE2 else R.color.themeD2),
+                resources.getColor(if (invertColors) R.color.themeE3 else R.color.themeD3),
+                resources.getColor(if (invertColors) R.color.themeE4 else R.color.themeD4),
+                resources.getColor(if (invertColors) R.color.themeE5 else R.color.themeD5)
+            )
         }
-
-        mEnsoBitmap = getBitmapFromVector(mContext, R.drawable.enso);
-        eHeight = mEnsoBitmap.getHeight();
-        eWidth = mEnsoBitmap.getWidth();
-
-        if (invertColors)
-            mEnsoBitmap = invert(mEnsoBitmap);
-
-
-        mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mCirclePaint.setColor(colors[0]);
-
-        mInnerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mInnerPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        mEnsoBitmap = getBitmapFromVector(mContext, R.drawable.enso)
+        eHeight = mEnsoBitmap!!.height
+        eWidth = mEnsoBitmap!!.width
+        if (invertColors) mEnsoBitmap = invert(mEnsoBitmap)
+        mCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        mCirclePaint!!.color = colors[0]
+        mInnerPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        mInnerPaint!!.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
 
         // Paint for the seconds line
-        mSecondPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mSecondPaint.setColor(colors[3]);
-
-        mSecondBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mSecondBgPaint.setColor(colors[1]);
+        mSecondPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        mSecondPaint!!.color = colors[3]
+        mSecondBgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        mSecondBgPaint!!.color = colors[1]
 
         // Paint for the milliseconds
-        mMsPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mMsPaint.setColor(colors[4]);
-
-        mInnerColor = colors[2];
-
-        mArcPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mArcPaint.setStyle(Paint.Style.FILL);
-
-        Paint mLeadPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mLeadPaint.setStyle(Paint.Style.FILL);
-
-        Paint mTickerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTickerPaint.setColor(0xFFFFFFFF);
-
-        scale = resources.getDisplayMetrics().density;
-
-        if (mWidth != 0 && mHeight != 0) sizeChange(mWidth, mHeight);
+        mMsPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        mMsPaint!!.color = colors[4]
+        mInnerColor = colors[2]
+        mArcPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        mArcPaint!!.style = Paint.Style.FILL
+        val mLeadPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        mLeadPaint.style = Paint.Style.FILL
+        val mTickerPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        mTickerPaint.color = -0x1
+        scale = resources.displayMetrics.density
+        if (mWidth != 0 && mHeight != 0) sizeChange(mWidth, mHeight)
     }
 
-    public void sizeChange(int w, int h) {
-
-        mWidth = w;
-        mHeight = h;
-
-        mMsRadius = Math.min(Math.min(w / 2.0f, h / 2.0f), MAX_SIZE * scale);
-        mMsGap = mMsRadius * .95f;
-        mSecondRadius = mMsRadius * .97f;
-        mSecondGap = mMsRadius * .93f;
-        mRadius = mMsRadius * .93f;
-        mInnerRadius = mMsRadius * 0.4f;
+    fun sizeChange(w: Int, h: Int) {
+        mWidth = w
+        mHeight = h
+        mMsRadius = Math.min(Math.min(w / 2.0f, h / 2.0f), MAX_SIZE * scale)
+        mMsGap = mMsRadius * .95f
+        mSecondRadius = mMsRadius * .97f
+        mSecondGap = mMsRadius * .93f
+        mRadius = mMsRadius * .93f
+        mInnerRadius = mMsRadius * 0.4f
 
         // gradient
-
         if (theme != 3) {
-
-            int offset = 75;
-
-            int r = Color.red(mInnerColor) - offset;
-            int g = Color.green(mInnerColor) - offset;
-            int b = Color.blue(mInnerColor) - offset;
-
-            int start = Color.rgb(r, g, b);
-
-            Shader shader = new RadialGradient(0, 0, mRadius, start, mInnerColor, Shader.TileMode.CLAMP);
-            mArcPaint.setShader(shader);
+            val offset = 75
+            val r = Color.red(mInnerColor) - offset
+            val g = Color.green(mInnerColor) - offset
+            val b = Color.blue(mInnerColor) - offset
+            val start = Color.rgb(r, g, b)
+            val shader: Shader =
+                RadialGradient(0F, 0F, mRadius, start, mInnerColor, Shader.TileMode.CLAMP)
+            mArcPaint!!.shader = shader
         } else {
-            Shader shader = new SweepGradient(0, 0, mInnerColor, mInnerColor);
-            mArcPaint.setShader(shader);
+            val shader: Shader = SweepGradient(0F, 0F, mInnerColor, mInnerColor)
+            mArcPaint!!.shader = shader
         }
-
     }
 
     /**
@@ -277,34 +227,27 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
      * @param time in milliseconds
      * @param max  the original time set in milliseconds
      */
-    public void updateImage(Canvas canvas, int time, int max) {
-
-        canvas.save();
-
-        float progress = (max == 0) ? 0 : (time / (float) max);
-        int[] timeVec = Time.time2Array(time);
-        if (mLastTime == null) mLastTime = timeVec;
-        if (mLastTime[2] != timeVec[2]) mMsFlipper = !mMsFlipper;
-
-        float pSecond = (max == 0) ? 1 : (timeVec[2] + timeVec[3] / 1000.0f) / 60.0f;
-        float thetaSecond = pSecond * 360;
-
-        if (mWidth != canvas.getClipBounds().width() || mHeight != canvas.getClipBounds().height())
-            sizeChange(canvas.getClipBounds().width(), canvas.getClipBounds().height());
-
-        canvas.translate(mWidth / 2.0f, mHeight / 2.0f);
-
-        mSecondRect.set(-mSecondRadius, -mSecondRadius, mSecondRadius, mSecondRadius);
-        mArcRect.set(-mRadius, -mRadius, mRadius, mRadius);
-
-        mLastTime = timeVec;
-
+    override fun updateImage(canvas: Canvas, time: Int, max: Int) {
+        canvas.save()
+        val progress: Float = if (max == 0) 0F else time / max.toFloat()
+        val timeVec = time2Array(time)
+        if (mLastTime == null) mLastTime = timeVec
+        if (mLastTime!![2] != timeVec[2]) mMsFlipper = !mMsFlipper
+        val pSecond: Float = if (max == 0) 1F else (timeVec[2] + timeVec[3] / 1000.0f) / 60.0f
+        val thetaSecond = pSecond * 360
+        if (mWidth != canvas.clipBounds.width() || mHeight != canvas.clipBounds.height()) sizeChange(
+            canvas.clipBounds.width(),
+            canvas.clipBounds.height()
+        )
+        canvas.translate(mWidth / 2.0f, mHeight / 2.0f)
+        mSecondRect[-mSecondRadius, -mSecondRadius, mSecondRadius] = mSecondRadius
+        mArcRect[-mRadius, -mRadius, mRadius] = mRadius
+        mLastTime = timeVec
         if (theme == 3) {
-            drawEnso(canvas, progress);
+            drawEnso(canvas, progress)
         } else {
-            drawGenericCircle(canvas, progress, thetaSecond);
+            drawGenericCircle(canvas, progress, thetaSecond)
         }
-
     }
 
     /**
@@ -313,39 +256,29 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
      * @param canvas   The canvas to draw on
      * @param progress the original time set in milliseconds
      */
-    private void drawEnso(Canvas canvas, float progress) {
-
-        int START_ANGLE = 117;
-
-        int w = canvas.getClipBounds().width();
-        int h = canvas.getClipBounds().height();
-
-        Rect rs = new Rect(0, 0, eWidth, eHeight);
-        Rect rd;
-
+    private fun drawEnso(canvas: Canvas, progress: Float) {
+        val START_ANGLE = 117
+        val w = canvas.clipBounds.width()
+        val h = canvas.clipBounds.height()
+        val rs = Rect(0, 0, eWidth, eHeight)
+        val rd: Rect
         if (w < h) {
-            rd = new Rect(0, 0, w, w);
-            canvas.translate(w / -2f, h / -2f + (h - w) / 2f);
+            rd = Rect(0, 0, w, w)
+            canvas.translate(w / -2f, h / -2f + (h - w) / 2f)
         } else {
-            rd = new Rect(0, 0, h, h);
-            canvas.translate(w / -2f + (w - h) / 2f, h / -2f);
+            rd = Rect(0, 0, h, h)
+            canvas.translate(w / -2f + (w - h) / 2f, h / -2f)
         }
-        canvas.drawBitmap(mEnsoBitmap, rs, rd, null);
-
-        canvas.restore();
-        canvas.translate(mWidth / 2.0f, mHeight / 2.0f);
+        canvas.drawBitmap(mEnsoBitmap!!, rs, rd, null)
+        canvas.restore()
+        canvas.translate(mWidth / 2.0f, mHeight / 2.0f)
 
         // Uncover arc
-        float timeAngle = 360 * (1 - progress);
-
-        float ucAngle = START_ANGLE + timeAngle;
-
-        if (ucAngle > 360)
-            ucAngle = ucAngle - 360;
-
-        canvas.drawArc(mArcRect, ucAngle, 360 - 360 * (1 - progress), true, mArcPaint);
+        val timeAngle = 360 * (1 - progress)
+        var ucAngle = START_ANGLE + timeAngle
+        if (ucAngle > 360) ucAngle = ucAngle - 360
+        canvas.drawArc(mArcRect, ucAngle, 360 - 360 * (1 - progress), true, mArcPaint!!)
     }
-
 
     /**
      * Draws a circle based on the current time
@@ -353,30 +286,55 @@ class CircleAnimation implements TimerAnimation.TimerDrawing {
      * @param canvas   The canvas to draw on
      * @param progress the original time set in milliseconds
      */
-    private void drawGenericCircle(Canvas canvas, float progress, float thetaSecond) {
-        int START_ANGLE = 90;
+    private fun drawGenericCircle(canvas: Canvas, progress: Float, thetaSecond: Float) {
+        val START_ANGLE = 90
 
         // We want to draw a very thin border
-        canvas.drawCircle(0, 0, mMsRadius, mMsPaint);
+        canvas.drawCircle(0f, 0f, mMsRadius, mMsPaint!!)
 
         // Gap between the ms and seconds
-        canvas.drawCircle(0, 0, mMsGap, mInnerPaint);
+        canvas.drawCircle(0f, 0f, mMsGap, mInnerPaint!!)
 
         // Second arc
-        canvas.drawCircle(0, 0, mSecondRadius, mSecondBgPaint);
-        canvas.drawArc(mSecondRect, START_ANGLE, thetaSecond, true, mSecondPaint);
+        canvas.drawCircle(0f, 0f, mSecondRadius, mSecondBgPaint!!)
+        canvas.drawArc(mSecondRect, START_ANGLE.toFloat(), thetaSecond, true, mSecondPaint!!)
 
         // Gap between the seconds and the inner radius
-        canvas.drawCircle(0, 0, mSecondGap, mInnerPaint);
+        canvas.drawCircle(0f, 0f, mSecondGap, mInnerPaint!!)
 
 
         // Background fill
-        canvas.drawCircle(0, 0, mRadius, mCirclePaint);
+        canvas.drawCircle(0f, 0f, mRadius, mCirclePaint!!)
 
         // Main arc
-        canvas.drawArc(mArcRect, START_ANGLE, 360 * (1 - progress), true, mArcPaint);
+        canvas.drawArc(mArcRect, START_ANGLE.toFloat(), 360 * (1 - progress), true, mArcPaint!!)
         // Inner paint
-        canvas.drawCircle(0, 0, mInnerRadius, mInnerPaint);
-        canvas.restore();
+        canvas.drawCircle(0f, 0f, mInnerRadius, mInnerPaint!!)
+        canvas.restore()
+    }
+
+    companion object {
+        private const val MAX_SIZE = 1000f
+        private fun getBitmapFromVector(vectorDrawable: VectorDrawable): Bitmap {
+            val bitmap = Bitmap.createBitmap(
+                vectorDrawable.intrinsicWidth,
+                vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+            )
+            val canvas = Canvas(bitmap)
+            vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
+            vectorDrawable.draw(canvas)
+            return bitmap
+        }
+
+        fun getBitmapFromVector(context: Context?, @DrawableRes drawableResId: Int): Bitmap {
+            val drawable = ContextCompat.getDrawable(context!!, drawableResId)
+            return if (drawable is BitmapDrawable) {
+                drawable.bitmap
+            } else if (drawable is VectorDrawable) {
+                getBitmapFromVector(drawable)
+            } else {
+                throw IllegalArgumentException("Unsupported drawable type")
+            }
+        }
     }
 }

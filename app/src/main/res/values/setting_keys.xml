@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setting_key.theme" translatable="false">theme</string>
+    <string name="setting_key.theme_light" translatable="false">light</string>
+    <string name="setting_key.theme_dark" translatable="false">dark</string>
+    <string name="setting_key.theme_black" translatable="false">black</string>
+    <string name="setting_key.theme_day_night" translatable="false">dayNight</string>
+</resources>

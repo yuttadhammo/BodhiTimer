@@ -37,6 +37,8 @@ import org.yuttadhammo.BodhiTimer.TimerActivity;
 
 import java.util.HashMap;
 
+import timber.log.Timber;
+
 public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
     private static AppWidgetManager appWidgetManager;
@@ -45,16 +47,13 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
     private boolean isRegistered = false;
     private int[] widgetIds;
 
-    private Bitmap originalBitmap;
-    private Context mContext;
-
     public static final String ACTION_CLOCK_UPDATE = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_UPDATE";
     private static RemoteViews views;
     private static final int themeId =  R.drawable.widget_background_black;
     //private boolean stopTicking;
 
     public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.i(TAG, "onUpdate");
+        Timber.i("onUpdate");
 
         if (!isRegistered) {
             context.getApplicationContext().registerReceiver(this, new IntentFilter(Intent.ACTION_SCREEN_ON));
@@ -67,7 +66,7 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        Log.i(TAG, "onEnabled");
+        Timber.i("onEnabled");
         if (!isRegistered) {
             context.getApplicationContext().registerReceiver(this, new IntentFilter(Intent.ACTION_SCREEN_ON));
             context.getApplicationContext().registerReceiver(this, new IntentFilter(Intent.ACTION_SCREEN_OFF));
@@ -78,12 +77,12 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDisabled(Context context) {
-        Log.i(TAG, "onDisabled");
+        Timber.i("onDisabled");
         super.onDisabled(context);
     }
 
     public void onDeleted(Context context, int[] appWidgetIds) {
-        Log.d(TAG, "onDeleted");
+        Timber.d("onDeleted");
 
     }
 
@@ -100,10 +99,9 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
     }
 
     private void doUpdate(Context context) {
-        Log.i(TAG, "updating");
+        Timber.i("updating");
 
         SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(context);
-        mContext = context;
         if (views == null)
             views = new RemoteViews(context.getPackageName(), R.layout.appwidget);
 
@@ -111,10 +109,10 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
         intent.putExtra("set", "true");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
        Resources resources = context.getResources();
-       originalBitmap = BitmapFactory.decodeResource(resources, R.drawable.leaf);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(resources, R.drawable.leaf);
 
 
         appWidgetManager = AppWidgetManager.getInstance(context);
@@ -156,9 +154,4 @@ public class BodhiAppWidgetProvider extends AppWidgetProvider {
 //            appWidgetManager.updateAppWidget(widgetId, views);
 //        }
     }
-
-
-
-
-
 }

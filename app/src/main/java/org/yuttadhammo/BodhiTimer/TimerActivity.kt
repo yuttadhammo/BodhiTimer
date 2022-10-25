@@ -31,7 +31,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
@@ -44,7 +43,7 @@ import org.yuttadhammo.BodhiTimer.Const.TimerState.RUNNING
 import org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED
 import org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager
 import org.yuttadhammo.BodhiTimer.Models.TimerList
-import org.yuttadhammo.BodhiTimer.Util.Notifications.Companion.createNotificationChannel
+import org.yuttadhammo.BodhiTimer.Util.Notifications.createNotificationChannel
 import org.yuttadhammo.BodhiTimer.Util.Sounds
 import org.yuttadhammo.BodhiTimer.Util.Time
 import org.yuttadhammo.BodhiTimer.Util.Time.msFromArray
@@ -52,6 +51,7 @@ import org.yuttadhammo.BodhiTimer.Util.Time.str2complexTimeString
 import org.yuttadhammo.BodhiTimer.Util.Time.str2timeString
 import org.yuttadhammo.BodhiTimer.Util.Time.time2Array
 import org.yuttadhammo.BodhiTimer.Util.Time.time2humanStr
+import timber.log.Timber
 import java.io.FileNotFoundException
 import java.util.Locale
 import kotlin.math.max
@@ -62,10 +62,6 @@ import kotlin.math.roundToInt
  * The main activity which shows the timer and allows the user to set the time
  */
 class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPreferenceChangeListener {
-    /**
-     * debug string
-     */
-    private val TAG = "TimerActivity"
 
     /**
      * To save having to traverse the view tree
@@ -96,7 +92,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
      * { @inheritDoc}
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
-        Log.i(TAG, "CREATE")
+        Timber.i("CREATE")
         super.onCreate(savedInstanceState)
         context = this
         mAlarmTaskManager = ViewModelProvider(this).get(AlarmTaskManager::class.java)
@@ -135,7 +131,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
                 try {
                     time = Integer.parseInt(timeStr)
                 } catch (e: NumberFormatException) {
-                    Log.e(TAG, "Invalid number format provided: $timeStr", e)
+                    Timber.e("Invalid number format provided: $timeStr", e)
                 }
 
                 if (time > 0) {
@@ -171,7 +167,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             resources, R.drawable.pause
         )
         mPlayBitmap = BitmapFactory.decodeResource(
-            resources, R.drawable.play
+            resources, R.drawable.play_tinted
         )
         mTimerLabel = findViewById(R.id.text_top)
         mPreviewLabel = findViewById(R.id.text_preview)
@@ -214,11 +210,11 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
      */
     public override fun onResume() {
         super.onResume()
-        Log.i(TAG, "RESUME")
+        Timber.i("RESUME")
         volumeControlStream = AudioManager.STREAM_MUSIC
         mAlarmTaskManager!!.appIsPaused = false
         if (intent.hasExtra("set")) {
-            Log.d(TAG, "Create From Widget")
+            Timber.d("Create From Widget")
             widget = true
             intent.removeExtra("set")
         }
@@ -243,7 +239,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
      */
     public override fun onPause() {
         super.onPause()
-        Log.i(TAG, "PAUSE")
+        Timber.i("PAUSE")
         mAlarmTaskManager!!.appIsPaused = true // tell gui timer to stop
         sendBroadcast(Intent(BROADCAST_UPDATE)) // tell widgets to update
     }
@@ -251,17 +247,17 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     override fun onStop() {
         // When our activity is stopped ensure we also stop the connection to the service
         // this stops us leaking our activity into the system *bad*
-        Log.d(TAG, "STOPPED")
+        Timber.d("STOPPED")
         super.onStop()
     }
 
     public override fun onDestroy() {
-        Log.d(TAG, "DESTROY")
+        Timber.d("DESTROY")
         //Close the Text to Speech Library
         if (tts != null) {
             tts!!.stop()
             tts!!.shutdown()
-            Log.d(TAG, "TTSService Destroyed")
+            Timber.d("TTSService Destroyed")
         }
         unregisterReceiver(alarmEndReceiver)
         super.onDestroy()
@@ -275,65 +271,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         }
         if (prefs.getBoolean("hideTime", false)) mTimerLabel.visibility =
             View.INVISIBLE else mTimerLabel.visibility = View.VISIBLE
-        val newInvertColors = prefs.getBoolean("invert_colors", false)
-        if (newInvertColors != invertColors) {
-            if (newInvertColors) {
-                mPauseBitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_black)
-                mPlayBitmap = BitmapFactory.decodeResource(resources, R.drawable.play_black)
-                mSetButton.setImageBitmap(
-                    BitmapFactory.decodeResource(
-                        resources,
-                        R.drawable.set_black
-                    )
-                )
-                if (prefs.getInt("State", STOPPED) == RUNNING) mPauseButton.setImageBitmap(
-                    mPauseBitmap
-                ) else mPauseButton.setImageBitmap(mPlayBitmap)
-                mPrefButton.setImageBitmap(
-                    BitmapFactory.decodeResource(
-                        resources,
-                        R.drawable.preferences_black
-                    )
-                )
-                mCancelButton.setImageBitmap(
-                    BitmapFactory.decodeResource(
-                        resources,
-                        R.drawable.stop_black
-                    )
-                )
-                findViewById<View>(R.id.mainLayout).setBackgroundColor(-0x1)
-                mTimerLabel.setTextColor(-0x1000000)
-                mPreviewLabel.setTextColor(-0x1000000)
-            } else {
-                mPauseBitmap = BitmapFactory.decodeResource(resources, R.drawable.pause)
-                mPlayBitmap = BitmapFactory.decodeResource(resources, R.drawable.play)
-                mSetButton.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.set))
-                if (prefs.getInt("State", STOPPED) == RUNNING) mPauseButton.setImageBitmap(
-                    mPauseBitmap
-                ) else mPauseButton.setImageBitmap(mPlayBitmap)
-                mPrefButton.setImageBitmap(
-                    BitmapFactory.decodeResource(
-                        resources,
-                        R.drawable.preferences
-                    )
-                )
-                mCancelButton.setImageBitmap(
-                    BitmapFactory.decodeResource(
-                        resources,
-                        R.drawable.stop
-                    )
-                )
-                findViewById<View>(R.id.mainLayout).setBackgroundColor(-0x1000000)
-                mTimerLabel.setTextColor(-0x1)
-                mPreviewLabel.setTextColor(-0x1)
-            }
-            invertColors = newInvertColors
-        }
-        if (invertColors) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
+
         setLowProfile()
         if (prefs.getBoolean(
                 "WakeLock",
@@ -476,8 +414,8 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
 
     private fun startAdvancedAlarm(advTimeString: String) {
         val list = TimerList(advTimeString)
-        Log.v(TAG, "advString: $advTimeString")
-        Log.v(TAG, "advString2: " + list.string)
+        Timber.v("advString: $advTimeString")
+        Timber.v("advString2: " + list.string)
         mAlarmTaskManager!!.startAlarms(list)
     }
 
@@ -507,7 +445,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             editor.putBoolean("LastWasSimple", false)
             startAdvancedAlarm(advTimeString)
         } else {
-            Log.v(TAG, "Saving simple time: " + msFromArray(numbers))
+            Timber.v("Saving simple time: " + msFromArray(numbers))
             editor.putInt("LastSimpleTime", msFromArray(numbers))
             editor.putBoolean("LastWasSimple", true)
             startSimpleAlarm(numbers, true)
@@ -623,7 +561,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
      */
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (LOG) Log.v(TAG, "Got result")
+        if (LOG) Timber.v("Got result")
         if (requestCode == NUMBER_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
             val values = data!!.getIntArrayExtra("times")
             onNumbersPicked(values)
@@ -644,7 +582,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         )
         for (match in matches!!) {
             val match = match.lowercase(Locale.getDefault())
-            Log.d(TAG, "Got speech: $match")
+            Timber.d("Got speech: $match")
             if (match.contains(Time.TIME_SEPARATOR)) {
                 val complexTime = str2complexTimeString(this, match)
                 if (complexTime.isNotEmpty()) {
@@ -684,7 +622,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
                         Toast.LENGTH_SHORT
                     ).show()
                     if (prefs.getBoolean("SpeakTime", false)) {
-                        Log.d(TAG, "Speaking time")
+                        Timber.d("Speaking time")
                         tts!!.speak(
                             String.format(
                                 getString(R.string.speech_recognized), time2humanStr(
@@ -708,8 +646,8 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     // receiver to get restart
     private val alarmEndReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            Log.v(TAG, "Received app alarm callback")
-            Log.d(TAG, "id " + intent.getIntExtra("id", -1))
+            Timber.v("Received app alarm callback")
+            Timber.d("id " + intent.getIntExtra("id", -1))
             mAlarmTaskManager!!.onAlarmEnd(intent.getIntExtra("id", -1))
         }
     }

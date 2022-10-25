@@ -101,6 +101,12 @@
 
     <string name="misc">Misc</string>
 
+    <string name="settings.theme_day_night">Day &amp; Night</string>
+    <string name="settings.theme_light">Light</string>
+    <string name="settings.theme_dark">Dark</string>
+    <string name="settings.theme_black">Black</string>
+    <string name="settings.theme_title">Color theme</string>
+
     <string name="nag_dialog">Popup When Silent</string>
     <string name="nag_dialog_desc">When the phone is set to silent show a popup dialog.</string>
 

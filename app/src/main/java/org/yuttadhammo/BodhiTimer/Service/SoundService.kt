@@ -7,12 +7,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
 import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_PLAY
-import org.yuttadhammo.BodhiTimer.Util.Notifications.Companion.getServiceNotification
+import org.yuttadhammo.BodhiTimer.Util.Notifications.getServiceNotification
 import org.yuttadhammo.BodhiTimer.Util.Sounds
+import timber.log.Timber
 import java.lang.ref.WeakReference
 
 class SoundService : Service() {
@@ -32,12 +32,12 @@ class SoundService : Service() {
     override fun onCreate() {
         super.onCreate()
         startForeground(1312, getServiceNotification(this))
-        Log.v(TAG, "here")
+        Timber.v("here")
     }
 
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Log.v(TAG, "there")
+        Timber.v("there")
         startForeground(1312, getServiceNotification(this))
 
         soundManager = Sounds(applicationContext)
@@ -45,7 +45,7 @@ class SoundService : Service() {
         val action = intent.action
 
         if (BROADCAST_PLAY == action) {
-            Log.v(TAG, "Received Play Start")
+            Timber.v("Received Play Start")
             playIntent(intent)
         }
 
@@ -74,19 +74,19 @@ class SoundService : Service() {
             var mediaPlayer = soundManager.play(uri, volume)
 
             mediaPlayer?.setOnCompletionListener { mp ->
-                Log.v(TAG, "Resetting media player...")
+                Timber.v("Resetting media player...")
                 mp.reset()
                 mp.release()
                 active--;
 
                 if (stop && active < 1) {
-                    Log.v(TAG, "Stopping service")
+                    Timber.v("Stopping service")
                     stopSelf()
                 }
             }
 
         } else {
-            Log.v(TAG, "Skipping play")
+            Timber.v("Skipping play")
         }
     }
 
@@ -105,17 +105,17 @@ class SoundService : Service() {
 
     private val alarmEndReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            Log.v(TAG, "Received Broadcast")
+            Timber.v("Received Broadcast")
             playIntent(intent)
         }
     }
 
     private val stopReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            Log.e(TAG, "Received Stop Broadcast, active = $active")
+            Timber.e("Received Stop Broadcast, active = $active")
 
             if (active == 0) {
-                Log.v(TAG, "Stopping service")
+                Timber.v("Stopping service")
                 stopSelf();
             }
             stop = true

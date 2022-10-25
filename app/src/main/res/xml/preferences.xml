@@ -1,155 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen xmlns:a="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <PreferenceCategory
-        android:title="@string/sound"
+        a:title="@string/sound"
         app:iconSpaceReserved="false" />
 
     <ListPreference
-        android:key="NotificationUri"
-        android:title="@string/notification_sound"
-        android:summary="@string/notification_sound_desc"
+        a:key="NotificationUri"
+        a:title="@string/notification_sound"
+        a:summary="@string/notification_sound_desc"
         app:iconSpaceReserved="false" />
     <Preference
-        android:title="@string/play_sound"
-        android:summary="@string/play_sound_desc"
-        android:key="playSound"
+        a:title="@string/play_sound"
+        a:summary="@string/play_sound_desc"
+        a:key="playSound"
         app:iconSpaceReserved="false" />
 
 
     <ListPreference
-        android:key="PreSoundUri"
-        android:title="@string/pre_sound"
-        android:summary="@string/pre_sound_desc"
+        a:key="PreSoundUri"
+        a:title="@string/pre_sound"
+        a:summary="@string/pre_sound_desc"
         app:iconSpaceReserved="false" />
     <Preference
-        android:title="@string/play_pre_sound"
-        android:summary="@string/play_pre_sound_desc"
-        android:key="playPreSound"
+        a:title="@string/play_pre_sound"
+        a:summary="@string/play_pre_sound_desc"
+        a:key="playPreSound"
         app:iconSpaceReserved="false" />
 
     <SeekBarPreference
-        android:key="tone_volume"
-        android:title="@string/volume"
-        android:summary="@string/volume_desc"
-        android:max="100"
-        android:defaultValue="90"
+        a:key="tone_volume"
+        a:title="@string/volume"
+        a:summary="@string/volume_desc"
+        a:max="100"
+        a:defaultValue="90"
         app:iconSpaceReserved="false"
         app:showSeekBarValue="true" />
 
     <SeekBarPreference
-        android:key="preparationTime"
-        android:title="@string/preparation_time"
-        android:summary="@string/preparation_time_desc"
+        a:key="preparationTime"
+        a:title="@string/preparation_time"
+        a:summary="@string/preparation_time_desc"
         app:iconSpaceReserved="false"
         app:showSeekBarValue="true"
-        android:max="120" />
+        a:max="120" />
 
     <CheckBoxPreference
-        android:key="doNotDisturb"
-        android:title="@string/do_not_disturb"
-        android:summary="@string/do_not_disturb_desc"
-        android:defaultValue="false"
+        a:key="doNotDisturb"
+        a:title="@string/do_not_disturb"
+        a:summary="@string/do_not_disturb_desc"
+        a:defaultValue="false"
         app:iconSpaceReserved="false" />
 
 
     <PreferenceCategory
-        android:title="@string/notification"
+        a:title="@string/notification"
         app:iconSpaceReserved="false" />
 
     <CheckBoxPreference
-        android:key="showAlwaysNotifications"
-        android:title="@string/notification_always"
-        android:summary="@string/notification_always_desc"
-        android:defaultValue="false"
+        a:key="showAlwaysNotifications"
+        a:title="@string/notification_always"
+        a:summary="@string/notification_always_desc"
+        a:defaultValue="false"
         app:iconSpaceReserved="false" />
 
 
 
     <CheckBoxPreference
-        android:key="useOldNotification"
-        android:title="@string/use_old_notification"
-        android:summary="@string/use_old_notification_desc"
-        android:defaultValue="False"
+        a:key="useOldNotification"
+        a:title="@string/use_old_notification"
+        a:summary="@string/use_old_notification_desc"
+        a:defaultValue="False"
         app:iconSpaceReserved="false" />
 
     <Preference
-        android:key="showSystemSettings"
-        android:title="@string/show_system_settings"
-        android:summary="@string/show_system_settings_desc"
+        a:key="showSystemSettings"
+        a:title="@string/show_system_settings"
+        a:summary="@string/show_system_settings_desc"
         app:iconSpaceReserved="false" />
 
     <PreferenceCategory
-        android:title="@string/visual"
+        a:title="@string/visual"
         app:iconSpaceReserved="false" />
-    <Preference
-        android:title="@string/bmp_or_circle"
-        android:key="DrawingIndex"
-        android:defaultValue="1"
-        app:iconSpaceReserved="false" />
-    <CheckBoxPreference
-        android:title="@string/custom_bmp"
-        android:key="custom_bmp"
-        app:iconSpaceReserved="false"
-        android:enabled="false" />
+
     <ListPreference
-        android:title="@string/circle_theme"
-        android:summary="@string/circle_theme_desc"
-        android:key="CircleTheme"
-        android:entries="@array/themes"
-        android:defaultValue="3"
-        android:entryValues="@array/themeValues"
+        a:defaultValue="@string/setting_key.theme_day_night"
+        a:entries="@array/themeNames"
+        a:entryValues="@array/themeValues"
+        a:key="@string/setting_key.theme"
+        a:title="@string/settings.theme_title"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        a:title="@string/bmp_or_circle"
+        a:key="DrawingIndex"
+        a:defaultValue="1"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        android:key="FULLSCREEN"
-        android:title="@string/fullscreen"
-        android:summary="@string/fullscreen_desc"
-        android:defaultValue="False"
+        a:title="@string/custom_bmp"
+        a:key="custom_bmp"
+        app:iconSpaceReserved="false"
+        a:enabled="false" />
+    <ListPreference
+        a:title="@string/circle_theme"
+        a:summary="@string/circle_theme_desc"
+        a:key="CircleTheme"
+        a:entries="@array/themes"
+        a:defaultValue="3"
+        a:entryValues="@array/circleThemeValues"
+        app:iconSpaceReserved="false" />
+
+    <CheckBoxPreference
+        a:key="FULLSCREEN"
+        a:title="@string/fullscreen"
+        a:summary="@string/fullscreen_desc"
+        a:defaultValue="False"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        android:key="hideTime"
-        android:title="@string/hide_time"
-        android:summary="@string/hide_time_desc"
-        android:defaultValue="False"
+        a:key="hideTime"
+        a:title="@string/hide_time"
+        a:summary="@string/hide_time_desc"
+        a:defaultValue="False"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        android:title="@string/invert_colors"
-        android:key="invert_colors"
+        a:title="@string/invert_colors"
+        a:key="invert_colors"
         app:iconSpaceReserved="false" />
     <PreferenceCategory
-        android:title="@string/misc"
+        a:title="@string/misc"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        android:key="AutoRestart"
-        android:title="@string/auto_restart"
-        android:summary="@string/auto_restart_desc"
-        android:defaultValue="False"
+        a:key="AutoRestart"
+        a:title="@string/auto_restart"
+        a:summary="@string/auto_restart_desc"
+        a:defaultValue="False"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        android:key="SwitchTimeMode"
-        android:title="@string/switch_time"
-        android:summary="@string/switch_time_desc"
-        android:defaultValue="False"
+        a:key="SwitchTimeMode"
+        a:title="@string/switch_time"
+        a:summary="@string/switch_time_desc"
+        a:defaultValue="False"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        android:key="SpeakTime"
-        android:title="@string/speak_time"
-        android:summary="@string/speak_time_desc"
-        android:defaultValue="False"
+        a:key="SpeakTime"
+        a:title="@string/speak_time"
+        a:summary="@string/speak_time_desc"
+        a:defaultValue="False"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        android:key="WakeLock"
-        android:title="@string/stay_awake"
-        android:summary="@string/stay_awake_desc"
-        android:defaultValue="False"
+        a:key="WakeLock"
+        a:title="@string/stay_awake"
+        a:summary="@string/stay_awake_desc"
+        a:defaultValue="False"
         app:iconSpaceReserved="false" />
     <Preference
-        android:title="@string/about"
-        android:summary="@string/about_desc"
-        android:key="aboutPref"
+        a:title="@string/about"
+        a:summary="@string/about_desc"
+        a:key="aboutPref"
         app:iconSpaceReserved="false" />
 
 </androidx.preference.PreferenceScreen>

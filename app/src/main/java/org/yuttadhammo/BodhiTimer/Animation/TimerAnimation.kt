@@ -14,104 +14,83 @@
     You should have received a copy of the GNU General Public License
     along with Bodhi Timer.  If not, see <http://www.gnu.org/licenses/>.
 */
+package org.yuttadhammo.BodhiTimer.Animation
 
-package org.yuttadhammo.BodhiTimer.Animation;
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.graphics.Canvas
+import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.preference.PreferenceManager
+import java.io.FileNotFoundException
+import java.util.Vector
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.graphics.Canvas;
-import androidx.preference.PreferenceManager;
-import android.util.AttributeSet;
+class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
+    var mDrawings = Vector<TimerDrawing>()
+    var mIndex = 1
+    var mLastTime = 0
+    var mLastMax = 0
+    var prefs: SharedPreferences? = null
+    val mContext: Context
 
-import java.io.FileNotFoundException;
-import java.util.Vector;
-
-public class TimerAnimation extends androidx.appcompat.widget.AppCompatImageView implements OnSharedPreferenceChangeListener {
-    Vector<TimerDrawing> mDrawings = new Vector<>();
-    int mIndex = 1;
-    int mLastTime = 0, mLastMax = 0;
-
-    SharedPreferences prefs;
-
-    final Context mContext;
-
-
-    public interface TimerDrawing {
-
+    interface TimerDrawing {
         /**
          * Updates the image to be in sync with the current time
          *
          * @param time in milliseconds
          * @param max  the original time set in milliseconds
          */
-        void updateImage(Canvas canvas, int time, int max);
-
-        void configure();
+        fun updateImage(canvas: Canvas, time: Int, max: Int)
+        fun configure()
     }
 
-
-    public TimerAnimation(Context context) {
-
-        super(context);
-        mContext = context;
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        prefs.registerOnSharedPreferenceChangeListener(this);
+    constructor(context: Context) : super(context) {
+        mContext = context
+        prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
+        prefs!!.registerOnSharedPreferenceChangeListener(this)
 
         //setOnClickListener(this);
     }
 
-    public TimerAnimation(Context context, AttributeSet attrs) {
-
-        super(context, attrs);
-        mContext = context;
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        prefs.registerOnSharedPreferenceChangeListener(this);
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        mContext = context
+        val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
+        prefs.registerOnSharedPreferenceChangeListener(this)
 
         //setOnClickListener(this);
     }
 
-    public void setIndex(int i) throws FileNotFoundException {
+    @set:Throws(FileNotFoundException::class)
+    var index: Int
+        get() = mIndex
+        set(i) {
+            var i = i
+            mDrawings = Vector()
+            mDrawings.add(BodhiLeaf(mContext))
+            mDrawings.add(CircleAnimation(mContext))
+            if (i < 0 || i >= mDrawings.size) i = 0
+            mIndex = i
+            invalidate()
+        }
 
-        mDrawings = new Vector<>();
-        mDrawings.add(new BodhiLeaf(mContext));
-        mDrawings.add(new CircleAnimation(mContext));
-
-        if (i < 0 || i >= mDrawings.size()) i = 0;
-        mIndex = i;
-        invalidate();
+    fun updateImage(time: Int, max: Int) {
+        mLastTime = time
+        mLastMax = max
+        invalidate()
     }
 
-    public int getIndex() {
-        return mIndex;
+    public override fun onDraw(canvas: Canvas) {
+        if (mIndex < 0 || mIndex >= mDrawings.size) mIndex = 0
+        mDrawings[mIndex].updateImage(canvas, mLastTime, mLastMax)
     }
 
-    public void updateImage(int time, int max) {
-        mLastTime = time;
-        mLastMax = max;
-
-        invalidate();
-    }
-
-    @Override
-    public void onDraw(Canvas canvas) {
-        if (mIndex < 0 || mIndex >= mDrawings.size())
-            mIndex = 0;
-        mDrawings.get(mIndex).updateImage(canvas, mLastTime, mLastMax);
-    }
-
-
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-        if (key.equals("CircleTheme")) {
-            for (TimerDrawing drawing : mDrawings) {
-                drawing.configure();
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+        if (key == "CircleTheme") {
+            for (drawing in mDrawings) {
+                drawing.configure()
             }
         }
-        invalidate();
+        invalidate()
     }
-
-
 }

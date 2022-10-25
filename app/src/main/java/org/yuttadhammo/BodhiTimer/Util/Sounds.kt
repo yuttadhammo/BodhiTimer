@@ -7,6 +7,7 @@ import android.os.PowerManager
 import android.util.Log
 import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.R
+import timber.log.Timber
 import kotlin.math.ln
 
 
@@ -20,22 +21,21 @@ class Sounds(private val mContext: Context) {
         try {
             var mediaPlayer = MediaPlayer()
 
-
             mediaPlayer.setDataSource(mContext, mUri)
             mediaPlayer.prepare()
 
-            //Log.v(TAG, "Volume: " + volume)
+            //Timber.v("Volume: " + volume)
             if (volume != 0) {
                 val log1 = (ln((100 - volume).toDouble()) / ln(100.0)).toFloat()
                 mediaPlayer.setVolume(1 - log1, 1 - log1)
-                //Log.v(TAG, "Volume: " + (1 -log1))
+                //Timber.v("Volume: " + (1 -log1))
             }
 
 
             mediaPlayer.isLooping = false
 
             mediaPlayer.setOnCompletionListener { mp ->
-                Log.v(TAG, "Resetting media player...")
+                Timber.v("Resetting media player...")
                 mp.reset()
                 mp.release()
             }
@@ -53,11 +53,11 @@ class Sounds(private val mContext: Context) {
             mediaPlayer.setWakeMode(mContext, flags)
             mediaPlayer.start()
 
-            Log.v(TAG, "Playing sound")
+            Timber.v("Playing sound")
 
             return mediaPlayer
         } catch (e: Exception) {
-            Log.w(TAG, "Problem playing sound, uri: $mUri")
+            Timber.w("Problem playing sound, uri: $mUri")
             e.printStackTrace()
             //throw (e)
         }

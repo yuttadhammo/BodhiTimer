@@ -10,7 +10,6 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.text.TextUtils
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +23,7 @@ import org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED
 import org.yuttadhammo.BodhiTimer.Const.TimerState.getText
 import org.yuttadhammo.BodhiTimer.Service.SoundService
 import org.yuttadhammo.BodhiTimer.Util.Time
+import timber.log.Timber
 import java.util.Date
 import java.util.Stack
 import java.util.Timer
@@ -71,7 +71,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     private var previousInterruptionFilter: Int = 0
 
     private fun setCurrentState(newState: Int) {
-        Log.v(TAG, "Entering state: " + getText(newState))
+        Timber.v("Entering state: " + getText(newState))
         val editor = prefs.edit()
         editor.putInt("State", newState)
         editor.apply()
@@ -102,7 +102,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
     override fun onCleared() {
         super.onCleared()
-        Log.i(TAG, "View model cleared")
+        Timber.e("View model cleared")
         saveState()
     }
 
@@ -134,7 +134,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
      * Show an alarm for a certain date when the alarm is called it will pop up a notification
      */
     private fun addAlarmWithUri(offset: Int, duration: Int, uri: String, sessionType: SessionTypes): AlarmTask {
-        Log.i(TAG, "Creating new alarm task, uri " + uri + " type: " + sessionType + " due in " + (duration + offset))
+        Timber.i("Creating new alarm task, uri " + uri + " type: " + sessionType + " due in " + (duration + offset))
         val alarm = AlarmTask(mApp.applicationContext, offset, duration)
         alarm.uri = uri
         alarm.sessionType = sessionType
@@ -184,7 +184,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         sessionDuration = sessionDur
         setSessionTimeStamp(sessionDur)
         startTicker(dur)
-        Log.v(TAG, "Started ticker & timer, first duration: $dur")
+        Timber.v("Started ticker & timer, first duration: $dur")
     }
 
     private fun resetCurrentAlarm() {
@@ -240,7 +240,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
      * @param time with which to count down
      */
     private fun startTicker(time: Int) {
-        Log.v(TAG, "Starting the ticker: $time")
+        Timber.v("Starting the ticker: $time")
         setCurrentState(RUNNING)
         mCurrentState.value = RUNNING
         setCurTimerLeft(time)
@@ -262,7 +262,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
      * Stops the timer
      */
     private fun stopTicker() {
-        Log.v(TAG, "Timer stopped")
+        Timber.v("Timer stopped")
         clearTime()
         cancelAllAlarms(false)
         stopDND()
@@ -288,7 +288,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
      * Resume the time after being paused
      */
     fun timerResume() {
-        Log.v(TAG, "Resuming the timer...")
+        Timber.v("Resuming the timer...")
         startTicker(curTimerLeftVal)
         setCurrentState(RUNNING)
     }
@@ -297,7 +297,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
      * Resume the time after being paused
      */
     private fun timerResume(timeLeft: Int) {
-        Log.v(TAG, "Resuming the timer...")
+        Timber.v("Resuming the timer...")
         startTicker(timeLeft)
         setCurrentState(RUNNING)
     }
@@ -306,7 +306,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
      * Resume the time after being paused
      */
     private fun timerResume(timeLeft: Int, curDuration: Int) {
-        Log.v(TAG, "Resuming the timer...")
+        Timber.v("Resuming the timer...")
         currentTimerDuration.value = curDuration
         startTicker(timeLeft)
         setCurrentState(RUNNING)
@@ -316,7 +316,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
      * Pause the timer and stop the timer service
      */
     fun timerPause() {
-        Log.v(TAG, "Pausing the timer...")
+        Timber.v("Pausing the timer...")
         saveState()
         cancelAllAlarms(false)
         setCurrentState(PAUSED)
@@ -334,7 +334,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
      * Cancels the alarm portion of the timer
      */
     fun stopAlarmsAndTicker() {
-        Log.v(TAG, "Stopping Alarms and Ticker ...")
+        Timber.v("Stopping Alarms and Ticker ...")
         cancelAllAlarms(false)
         stopTicker()
         clearTime()
@@ -351,7 +351,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     fun saveTimerList(tL: TimerList) {
         val editor = prefs.edit()
         val ret = tL.string
-        Log.v(TAG, "Saved timer string: $ret")
+        Timber.v("Saved timer string: $ret")
         editor.putString("timeString", tL.string)
         editor.apply()
     }
@@ -366,7 +366,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     fun retrieveTimerList(): TimerList {
         val prefString = timeString
         val tL = TimerList(prefString)
-        Log.v(TAG, "Got timer string: $prefString from Settings")
+        Timber.v("Got timer string: $prefString from Settings")
         return tL
     }
 
@@ -384,9 +384,9 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
         if (timeLeft < 0) {
             if (alarms.size > 0) {
-                Log.e(TAG, "Tick cycled ended")
+                Timber.e("Tick cycled ended")
             } else {
-                Log.e(TAG, "Error: Time up. This probably means that the Broadcast was not received")
+                Timber.e("Error: Time up. This probably means that the Broadcast was not received")
                 stopTicker()
             }
         } else {
@@ -452,7 +452,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
     fun onAlarmEnd(id: Int) {
         val left = alarms.size - 1
-        Log.v(TAG, "Alarm has ended. There are $left alarms left")
+        Timber.v("Alarm has ended. There are $left alarms left")
         val alarm = getAlarmById(id) ?: return
 
         // Remove alarm
@@ -478,7 +478,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
     private fun handleAutoRepeat() {
         if (prefs.getBoolean("AutoRestart", false)) {
-            Log.i(TAG, "AUTO RESTART")
+            Timber.i("AUTO RESTART")
             startAlarms(retrieveTimerList())
             setCurrentState(RUNNING)
         }
@@ -497,7 +497,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     }
 
     private fun setTimeStamp(duration: Int) {
-        Log.v(TAG, "Next alarm will finish in: $duration")
+        Timber.v("Next alarm will finish in: $duration")
         val editor = prefs.edit()
         timeStamp = Date().time + duration
 
@@ -507,7 +507,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     }
 
     private fun setSessionTimeStamp(duration: Int) {
-        Log.v(TAG, "Session will finish in: $duration")
+        Timber.v("Session will finish in: $duration")
         val editor = prefs.edit()
         sessionTimeStamp = Date().time + duration
 
@@ -523,7 +523,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
                 previousInterruptionFilter = mNotificationManager.currentInterruptionFilter
                 mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
             } catch (e: Exception) {
-                Log.e(TAG, e.toString())
+                Timber.e(e.toString())
             }
         }
     }
@@ -535,7 +535,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
                 val mNotificationManager = mApp.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 mNotificationManager.setInterruptionFilter(newFilter)
             } catch (e: Exception) {
-                Log.e(TAG, e.toString())
+                Timber.e(e.toString())
             }
         }
     }
@@ -564,7 +564,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
         when (mCurrentState.value) {
             RUNNING -> {
-                Log.i(TAG, "CREATE, state RUNNING")
+                Timber.i("CREATE, state RUNNING")
 
                 // We are resuming the app while timers are (presumably) still active
                 val sessionTimeStamp = prefs.getLong("SessionTimeStamp", -1)
@@ -575,39 +575,39 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
                 // We still have timers running!
                 if (sessionEnd.after(now)) {
-                    Log.i(TAG, "Still have timers")
+                    Timber.i("Still have timers")
                     val sessionTimeLeft = (sessionEnd.time - now.time).toInt()
                     val curTimerLeft = (curTimerEnd.time - now.time).toInt()
                     val sessionDuration = prefs.getInt("SessionDuration", -1)
-                    Log.i(TAG, "Session Time Left $sessionTimeLeft")
-                    //Log.i(TAG, "Cur Time Left " + curTimerLeft);
-                    Log.i(TAG, "SessionDuration $sessionDuration")
+                    Timber.i("Session Time Left $sessionTimeLeft")
+                    //Timber.i("Cur Time Left " + curTimerLeft);
+                    Timber.i("SessionDuration $sessionDuration")
                     val timeElapsed = sessionDuration - sessionTimeLeft
 
                     // RECREATE ALARMS if empty, but we are running.
                     // THEY WILL HAVE WRONG IDS.....
-                    Log.i(TAG, "Trying to recreate alarms")
+                    Timber.i("Trying to recreate alarms")
                     loadLastTimers(-timeElapsed)
 
                     // Resume ticker at correct position
                     // Get duration of current alarm
                     val curTimerDuration = currentAlarmDuration
-                    Log.i(TAG, "Setting timer: $curTimerLeft of $curTimerDuration")
+                    Timber.i("Setting timer: $curTimerLeft of $curTimerDuration")
                     timerResume(curTimerLeft, curTimerDuration)
                 } else {
-                    Log.i(TAG, "Resumed to RUNNING, but all timers are over")
+                    Timber.i("Resumed to RUNNING, but all timers are over")
                     loadLastTimers()
                 }
                 loadLastTimers()
             }
 
             STOPPED -> {
-                Log.i(TAG, "CREATE, state STOPPED")
+                Timber.i("CREATE, state STOPPED")
                 loadLastTimers()
             }
 
             PAUSED -> {
-                Log.i(TAG, "CREATE, state PAUSED")
+                Timber.i("CREATE, state PAUSED")
                 val sessionLeft = prefs.getInt("SessionTimeLeft", 0)
                 val timeElapsed = sessionDuration - sessionLeft
 

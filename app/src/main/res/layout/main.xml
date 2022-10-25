@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="#000000"
     android:id="@+id/mainLayout"
     android:layout_height="match_parent">
 
@@ -20,7 +19,6 @@
         android:id="@+id/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FF000000"
         android:contentDescription="@null" />
 
     <TextView
@@ -62,9 +60,10 @@
         app:srcCompat="@drawable/set"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:background="#00000000"
         android:padding="20dp"
-        android:gravity="center" />
+        android:gravity="center"
+        app:tint="?attr/colorOnSurface"
+        android:background="@null" />
 
     <ImageButton
         android:contentDescription="@string/prefs"
@@ -74,8 +73,9 @@
         app:srcCompat="@drawable/preferences"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:background="#00000000"
         android:padding="20dp"
+        android:background="@null"
+        app:tint="?attr/colorOnSurface"
         android:gravity="center" />
 
     <ImageButton
@@ -87,7 +87,8 @@
         app:srcCompat="@drawable/pause"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:background="#00000000"
+        android:background="@null"
+        app:tint="?attr/colorOnSurface"
         android:padding="20dp" />
 
     <ImageButton
@@ -99,7 +100,8 @@
         app:srcCompat="@drawable/stop"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:background="#00000000"
+        android:background="@null"
+        app:tint="?attr/colorOnSurface"
         android:padding="20dp" />
 </RelativeLayout>
 

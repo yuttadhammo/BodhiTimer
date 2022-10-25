@@ -1,117 +1,135 @@
-package org.yuttadhammo.BodhiTimer;
+package org.yuttadhammo.BodhiTimer
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
+import android.content.Intent
+import android.content.SharedPreferences
+import android.media.RingtoneManager
+import android.net.Uri
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.preference.PreferenceManager
+import timber.log.Timber
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.preference.PreferenceManager;
+class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+    private var prefs: SharedPreferences? = null
 
-
-public class SettingsActivity extends AppCompatActivity {
-
-    private static final String TAG = SettingsActivity.class.getSimpleName();
-    private SharedPreferences prefs;
-
-    private final int SELECT_RINGTONE = 0;
-    private final int SELECT_FILE = 1;
-    private final int SELECT_PRE_RINGTONE = 2;
-    private final int SELECT_PRE_FILE = 3;
-    private final int SELECT_PHOTO = 4;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
-
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.settings_activity)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        val actionBar = supportActionBar
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getString(R.string.preferences));
-            toolbar.setNavigationOnClickListener(v -> onBackPressed());
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.title = getString(R.string.preferences)
+            toolbar.setNavigationOnClickListener { v: View? -> onBackPressed() }
         }
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.settings, new SettingsFragment())
-                .commit();
-
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.settings, SettingsFragment())
+            .commit()
+        prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
     }
 
+    override fun onResume() {
+        super.onResume()
+        prefs!!.registerOnSharedPreferenceChangeListener(this)
+    }
 
-    @Override
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == Activity.RESULT_OK) {
-            Uri uri = intent.getData();
-            String uriString = intent.getDataString();
+    override fun onPause() {
+        super.onPause()
+        prefs!!.unregisterOnSharedPreferenceChangeListener(this)
+    }
 
-            SharedPreferences.Editor settings = prefs.edit();
-            switch (requestCode) {
-                case SELECT_RINGTONE:
-                    uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (resultCode == RESULT_OK) {
+            var uri = intent!!.data
+            val uriString = intent.dataString
+            val settings = prefs!!.edit()
+            when (requestCode) {
+                SELECT_RINGTONE -> {
+                    uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                     if (uri != null) {
-                        Log.i(TAG, "Got ringtone " + uri.toString());
-                        settings.putString("SystemUri", uri.toString());
+                        Timber.i("Got ringtone $uri")
+                        settings.putString("SystemUri", uri.toString())
                     }
-                    break;
-                case SELECT_PRE_RINGTONE:
-                    uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                }
+                SELECT_PRE_RINGTONE -> {
+                    uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                     if (uri != null) {
-                        Log.i(TAG, "Got ringtone " + uri.toString());
-                        settings.putString("PreSystemUri", uri.toString());
+                        Timber.i("Got ringtone $uri")
+                        settings.putString("PreSystemUri", uri.toString())
                     }
-                    break;
-                case SELECT_FILE:
-                    // Get the Uri of the selected file
+                }
+                SELECT_FILE ->                     // Get the Uri of the selected file
                     if (uriString != null) {
-                        getPersistablePermission(uri);
-                        Log.i(TAG, "File Path: " + uri.toString());
-                        settings.putString("FileUri", uri.toString());
+                        getPersistablePermission(uri)
+                        Timber.i("File Path: " + uri.toString())
+                        settings.putString("FileUri", uri.toString())
                     }
-                    break;
-                case SELECT_PRE_FILE:
-                    // Get the Uri of the selected file
+                SELECT_PRE_FILE ->                     // Get the Uri of the selected file
                     if (uriString != null) {
-                        getPersistablePermission(uri);
-                        Log.i(TAG, "File Path: " + uri.toString());
-                        settings.putString("PreFileUri", uri.toString());
+                        getPersistablePermission(uri)
+                        Timber.i("File Path: " + uri.toString())
+                        settings.putString("PreFileUri", uri.toString())
                     }
-                    break;
-                case SELECT_PHOTO:
-                    if (uri != null) {
-                        getPersistablePermission(uri);
-                        settings.putString("bmp_url", uri.toString());
-                    }
-                    break;
+                SELECT_PHOTO -> if (uri != null) {
+                    getPersistablePermission(uri)
+                    settings.putString("bmp_url", uri.toString())
+                }
             }
-
-            settings.commit();
+            settings.commit()
         }
     }
 
-    private void getPersistablePermission(Uri uri) {
+    private fun getPersistablePermission(uri: Uri?) {
         try {
-            getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            contentResolver.takePersistableUriPermission(
+                uri!!,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        } catch (e: Exception) {
+            Timber.e(e.toString())
         }
     }
 
 
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+        updatePreferenceSummaries(key)
+    }
+
+    /**
+     * Update preference summaries to reflect the current select item (or entered text) in the UI
+     *
+     * @param key: The key of the preference to update
+     */
+    private fun updatePreferenceSummaries(key: String) {
+        // TODO
+//        try {
+//            when (val pref: Preference? = findPreference()) {
+//                is ListPreference -> {
+//                    pref.summary = pref.entry
+//                }
+//                is EditTextPreference -> {
+//                    pref.summary = pref.text
+//                }
+//            }
+//        } catch (ignored: Exception) {
+//            // If we have updated a ListPreferences possible values, and the user has now an
+//            // impossible value, getEntry() will throw an Exception.
+//        }
+    }
+
+    companion object {
+        private val TAG = SettingsActivity::class.java.simpleName
+        private const val SELECT_RINGTONE = 0
+        private const val SELECT_FILE = 1
+        private const val SELECT_PRE_RINGTONE = 2
+        private const val SELECT_PRE_FILE = 3
+        private const val SELECT_PHOTO = 4
+
+    }
 }
-
-

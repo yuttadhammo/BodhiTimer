@@ -19,7 +19,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.webkit.WebView
 import android.widget.Toast
@@ -30,6 +29,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.Util.Sounds
+import timber.log.Timber
 import java.io.IOException
 import kotlin.math.ln
 
@@ -257,7 +257,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 prefs!!.getString("PreFileUri", "") else if (!isPre && toneUri == "file") toneUri =
                 prefs!!.getString("FileUri", "")
             if (toneUri == "") return
-            Log.v(TAG, "Playing Uri: $toneUri")
+            Timber.v("Playing Uri: $toneUri")
             player!!.reset()
             val currVolume = prefs!!.getInt("tone_volume", 0)
             if (currVolume != 0) {
@@ -270,14 +270,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
             player!!.setOnCompletionListener { mp: MediaPlayer ->
                 preference.title = mContext!!.getString(R.string.play_sound)
                 preference.summary = mContext!!.getString(R.string.play_sound_desc)
-                Log.v(TAG, "Resetting media player...")
+                Timber.v("Resetting media player...")
                 mp.reset()
             }
             player!!.start()
             preference.title = mContext!!.getString(R.string.playing_sound)
             preference.summary = mContext!!.getString(R.string.playing_sound_desc)
         } catch (e: IOException) {
-            Log.e(TAG, "Failed to play uri: $toneUri")
+            Timber.e("Failed to play uri: $toneUri")
             e.printStackTrace()
         }
     }
