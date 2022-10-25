@@ -62,6 +62,12 @@ class Notifications {
                         PendingIntent.getActivity(context, 0, notificationIntent, 0)
                     }
 
+            // Create pending intent to be triggered when user clicks on notification
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+            new Intent(this, TimerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+            mBuilder.setContentIntent(contentIntent);
+
             return NotificationCompat.Builder(context, SERVICE_CHANNEL_ID)
                     .setContentTitle(context.getText(R.string.app_name))
                     .setContentText(context.getText(R.string.service_text))
