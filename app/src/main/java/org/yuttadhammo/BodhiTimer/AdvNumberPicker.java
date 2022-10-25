@@ -41,6 +41,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class AdvNumberPicker extends AppCompatActivity {
 
     private AppCompatActivity context;
@@ -234,8 +236,8 @@ public class AdvNumberPicker extends AppCompatActivity {
         MyAdapter adapter = new MyAdapter(context, R.layout.adv_list_item, advTimeList);
         listView.setAdapter(adapter);
 
-        Log.d(TAG, "advTimeString: " + advTimeString);
-        Log.d(TAG, "adapter items: " + adapter.getCount());
+        Timber.d("advTimeString: %s", advTimeString);
+        Timber.d("adapter items: %s", adapter.getCount());
 
     }
 

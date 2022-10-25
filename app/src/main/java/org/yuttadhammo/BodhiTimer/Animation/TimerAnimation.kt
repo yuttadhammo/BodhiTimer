@@ -85,12 +85,16 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
         mDrawings[mIndex].updateImage(canvas, mLastTime, mLastMax)
     }
 
+    public fun configure() {
+        for (drawing in mDrawings) {
+            drawing.configure()
+        }
+    }
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == "CircleTheme") {
-            for (drawing in mDrawings) {
-                drawing.configure()
-            }
+            configure()
+            invalidate()
         }
-        invalidate()
     }
 }

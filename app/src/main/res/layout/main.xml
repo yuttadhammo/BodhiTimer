@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <org.yuttadhammo.BodhiTimer.Animation.TimerAnimation
         android:id="@+id/mainImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:adjustViewBounds="true"
-        android:scaleType="centerInside"
         android:contentDescription="@null"
-        />
+        android:gravity="center"
+        android:scaleType="centerInside"
+        android:background="@null" />
 
     <ImageView
         android:id="@+id/black"
@@ -26,13 +26,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:paddingTop="00sp"
-        android:paddingBottom="2sp"
         android:fontFamily="@font/source_sans"
         android:gravity="center"
+        android:paddingTop="00sp"
+        android:paddingBottom="2sp"
         android:text=""
         android:textAlignment="center"
-        android:textColor="#FFFFFF"
+        android:textColor="?attr/colorOnSurface"
         android:textFontWeight="400"
         android:textSize="58sp" />
 
@@ -40,68 +40,67 @@
         android:id="@+id/text_preview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
-
-        android:text=""
-        android:textAlignment="center"
-        android:textSize="32sp"
-        android:gravity="center"
-        android:singleLine="false"
-        android:fontFamily="@font/source_sans"
         android:layout_below="@id/text_top"
         android:layout_centerInParent="true"
-        android:textFontWeight="400" />
+        android:fontFamily="@font/source_sans"
+        android:gravity="center"
+        android:singleLine="false"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnSurface"
+        android:textFontWeight="400"
+        android:textSize="32sp" />
 
     <ImageButton
-        android:contentDescription="@string/set"
         android:id="@+id/setButton"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@null"
+        android:contentDescription="@string/set"
+        android:gravity="center"
+        android:padding="20dp"
         app:srcCompat="@drawable/set"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:padding="20dp"
-        android:gravity="center"
-        app:tint="?attr/colorOnSurface"
-        android:background="@null" />
+        app:tint="?attr/colorOnSurface" />
 
     <ImageButton
-        android:contentDescription="@string/prefs"
         android:id="@+id/prefButton"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        app:srcCompat="@drawable/preferences"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:background="@null"
+        android:contentDescription="@string/prefs"
+        android:gravity="center"
         android:padding="20dp"
-        android:background="@null"
-        app:tint="?attr/colorOnSurface"
-        android:gravity="center" />
+        app:srcCompat="@drawable/preferences"
+        app:tint="?attr/colorOnSurface" />
 
     <ImageButton
-        android:contentDescription="@string/pause"
         android:id="@+id/pauseButton"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:gravity="center"
-        app:srcCompat="@drawable/pause"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         android:background="@null"
-        app:tint="?attr/colorOnSurface"
-        android:padding="20dp" />
+        android:contentDescription="@string/pause"
+        android:gravity="center"
+        android:padding="20dp"
+        app:srcCompat="@drawable/pause"
+        app:tint="?attr/colorOnSurface" />
 
     <ImageButton
-        android:contentDescription="@string/Stop"
         android:id="@+id/cancelButton"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:gravity="center"
-        app:srcCompat="@drawable/stop"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:background="@null"
-        app:tint="?attr/colorOnSurface"
-        android:padding="20dp" />
+        android:contentDescription="@string/Stop"
+        android:gravity="center"
+        android:padding="20dp"
+        app:srcCompat="@drawable/stop"
+        app:tint="?attr/colorOnSurface" />
 </RelativeLayout>
 

@@ -17,14 +17,13 @@
 package org.yuttadhammo.BodhiTimer.Animation
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.graphics.RadialGradient
 import android.graphics.Rect
 import android.graphics.RectF
@@ -32,12 +31,8 @@ import android.graphics.Shader
 import android.graphics.SweepGradient
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
-import android.util.TypedValue
-import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.preference.PreferenceManager
 import com.google.android.material.color.MaterialColors
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation.TimerDrawing
 import org.yuttadhammo.BodhiTimer.R
@@ -51,7 +46,7 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
     private var mMsRadius = mSecondRadius + MAX_SIZE / 50f
     private var scale = 0f
     private var mCirclePaint: Paint? = null
-    private var mInnerPaint: Paint? = null
+    private var mTransparentPaint: Paint? = null
     private var mArcPaint: Paint? = null
     private var mMsPaint: Paint? = null
     private var mEnsoBitmap: Bitmap? = null
@@ -110,23 +105,23 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
         return bitmap
     }
 
-    @ColorInt
-    fun Context.getColorFromAttr(
-        @AttrRes attrColor: Int,
-        typedValue: TypedValue = TypedValue(),
-        resolveRefs: Boolean = true
-    ): Int {
-        theme.resolveAttribute(attrColor, typedValue, resolveRefs)
-        return typedValue.data
-    }
+//    @ColorInt
+//    fun Context.getColorFromAttr(
+//        @AttrRes attrColor: Int,
+//        typedValue: TypedValue = TypedValue(),
+//        resolveRefs: Boolean = true
+//    ): Int {
+//        theme.resolveAttribute(attrColor, typedValue, resolveRefs)
+//        return typedValue.data
+//    }
 
     override fun configure() {
         val resources = mContext.resources
-        val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
 
         // Load the correct theme
         theme = Settings.circleTheme
-        val invertColors = prefs.getBoolean("invert_colors", false)
+        val dayNightMode = resources.getConfiguration().uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val lightTheme = (dayNightMode == Configuration.UI_MODE_NIGHT_NO)
         val colors: IntArray
 
         colors = when (theme) {
@@ -151,31 +146,29 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
                 resources.getColor(R.color.themeC4),
                 resources.getColor(R.color.themeC5)
             )
-            3 -> intArrayOf(
+            else -> intArrayOf(
                 MaterialColors.getColor(mContext, R.attr.colorSurface, 0),
                 MaterialColors.getColor(mContext, R.attr.colorOnSurface, 1),
                 MaterialColors.getColor(mContext, R.attr.colorSurface, 0),
                 MaterialColors.getColor(mContext, R.attr.colorSurfaceVariant, 0),
                 MaterialColors.getColor(mContext, R.attr.colorOnSurface, 1)
             )
-            else -> intArrayOf(
-                resources.getColor(if (invertColors) R.color.themeE1 else R.color.themeD1),
-                resources.getColor(if (invertColors) R.color.themeE2 else R.color.themeD2),
-                resources.getColor(if (invertColors) R.color.themeE3 else R.color.themeD3),
-                resources.getColor(if (invertColors) R.color.themeE4 else R.color.themeD4),
-                resources.getColor(if (invertColors) R.color.themeE5 else R.color.themeD5)
-            )
         }
+
         mEnsoBitmap = getBitmapFromVector(mContext, R.drawable.enso)
         eHeight = mEnsoBitmap!!.height
         eWidth = mEnsoBitmap!!.width
-        if (invertColors) mEnsoBitmap = invert(mEnsoBitmap)
+        if (lightTheme) mEnsoBitmap = invert(mEnsoBitmap)
+
         mCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mCirclePaint!!.color = colors[0]
-        mInnerPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mInnerPaint!!.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
 
-        // Paint for the seconds line
+        // This should be transparent but it doesnt work :(
+        mTransparentPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        mTransparentPaint!!.color = if (lightTheme) Color.WHITE else Color.BLACK
+        //mTransparentPaint!!.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+
+        // Paint for the second (reverse) line
         mSecondPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mSecondPaint!!.color = colors[3]
         mSecondBgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -185,8 +178,10 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
         mMsPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mMsPaint!!.color = colors[4]
         mInnerColor = colors[2]
+
         mArcPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mArcPaint!!.style = Paint.Style.FILL
+        mArcPaint!!.color = if (lightTheme) Color.RED else Color.BLUE
+
         val mLeadPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mLeadPaint.style = Paint.Style.FILL
         val mTickerPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -276,6 +271,8 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
         // Uncover arc
         val timeAngle = 360 * (1 - progress)
         var ucAngle = START_ANGLE + timeAngle
+//        val mArcPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+//        mArcPaint!!.color = MaterialColors.getColor(mContext, R.attr.colorPrimary, 0)
         if (ucAngle > 360) ucAngle = ucAngle - 360
         canvas.drawArc(mArcRect, ucAngle, 360 - 360 * (1 - progress), true, mArcPaint!!)
     }
@@ -293,14 +290,14 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
         canvas.drawCircle(0f, 0f, mMsRadius, mMsPaint!!)
 
         // Gap between the ms and seconds
-        canvas.drawCircle(0f, 0f, mMsGap, mInnerPaint!!)
+        canvas.drawCircle(0f, 0f, mMsGap, mTransparentPaint!!)
 
         // Second arc
         canvas.drawCircle(0f, 0f, mSecondRadius, mSecondBgPaint!!)
         canvas.drawArc(mSecondRect, START_ANGLE.toFloat(), thetaSecond, true, mSecondPaint!!)
 
         // Gap between the seconds and the inner radius
-        canvas.drawCircle(0f, 0f, mSecondGap, mInnerPaint!!)
+        canvas.drawCircle(0f, 0f, mSecondGap, mTransparentPaint!!)
 
 
         // Background fill
@@ -308,8 +305,10 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
 
         // Main arc
         canvas.drawArc(mArcRect, START_ANGLE.toFloat(), 360 * (1 - progress), true, mArcPaint!!)
+
         // Inner paint
-        canvas.drawCircle(0f, 0f, mInnerRadius, mInnerPaint!!)
+        canvas.drawCircle(0f, 0f, mInnerRadius, mTransparentPaint!!)
+
         canvas.restore()
     }
 

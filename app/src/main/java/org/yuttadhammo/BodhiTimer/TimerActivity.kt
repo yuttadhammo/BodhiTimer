@@ -167,7 +167,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             resources, R.drawable.pause
         )
         mPlayBitmap = BitmapFactory.decodeResource(
-            resources, R.drawable.play_tinted
+            resources, R.drawable.play
         )
         mTimerLabel = findViewById(R.id.text_top)
         mPreviewLabel = findViewById(R.id.text_preview)
@@ -271,6 +271,10 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         }
         if (prefs.getBoolean("hideTime", false)) mTimerLabel.visibility =
             View.INVISIBLE else mTimerLabel.visibility = View.VISIBLE
+
+
+        Timber.i("Configuring animation")
+        mTimerAnimation.configure()
 
         setLowProfile()
         if (prefs.getBoolean(
