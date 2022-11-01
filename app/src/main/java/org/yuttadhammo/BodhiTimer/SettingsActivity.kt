@@ -11,7 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.preference.PreferenceManager
 import timber.log.Timber
 
-class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsActivity : AppCompatActivity() {
     private var prefs: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,15 +32,6 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
     }
 
-    override fun onResume() {
-        super.onResume()
-        prefs!!.registerOnSharedPreferenceChangeListener(this)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        prefs!!.unregisterOnSharedPreferenceChangeListener(this)
-    }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
@@ -96,35 +87,7 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     }
 
 
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        updatePreferenceSummaries(key)
-    }
-
-    /**
-     * Update preference summaries to reflect the current select item (or entered text) in the UI
-     *
-     * @param key: The key of the preference to update
-     */
-    private fun updatePreferenceSummaries(key: String) {
-        // TODO
-//        try {
-//            when (val pref: Preference? = findPreference()) {
-//                is ListPreference -> {
-//                    pref.summary = pref.entry
-//                }
-//                is EditTextPreference -> {
-//                    pref.summary = pref.text
-//                }
-//            }
-//        } catch (ignored: Exception) {
-//            // If we have updated a ListPreferences possible values, and the user has now an
-//            // impossible value, getEntry() will throw an Exception.
-//        }
-    }
-
     companion object {
-        private val TAG = SettingsActivity::class.java.simpleName
         private const val SELECT_RINGTONE = 0
         private const val SELECT_FILE = 1
         private const val SELECT_PRE_RINGTONE = 2

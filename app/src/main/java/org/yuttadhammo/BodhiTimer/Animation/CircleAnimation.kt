@@ -74,11 +74,10 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
     private var theme = 0
 
     init {
-
         // Create the rects
         mSecondRect = RectF()
         mArcRect = RectF()
-        configure()
+        //configure()
     }
 
     fun invert(src: Bitmap?): Bitmap {
@@ -115,13 +114,19 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
 //        return typedValue.data
 //    }
 
-    override fun configure() {
+    override fun configure(isEditMode: Boolean) {
         val resources = mContext.resources
+        var lightTheme = true
 
         // Load the correct theme
-        theme = Settings.circleTheme
-        val dayNightMode = resources.getConfiguration().uiMode and Configuration.UI_MODE_NIGHT_MASK
-        val lightTheme = (dayNightMode == Configuration.UI_MODE_NIGHT_NO)
+        if (isEditMode) {
+            theme = 3
+        } else {
+            theme = Settings.circleTheme
+            val dayNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            lightTheme = (dayNightMode == Configuration.UI_MODE_NIGHT_NO)
+        }
+
         val colors: IntArray
 
         colors = when (theme) {
@@ -193,7 +198,7 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
     fun sizeChange(w: Int, h: Int) {
         mWidth = w
         mHeight = h
-        mMsRadius = Math.min(Math.min(w / 2.0f, h / 2.0f), MAX_SIZE * scale)
+        mMsRadius = Math.min(w / 2.0f, h / 2.0f).coerceAtMost(MAX_SIZE * scale)
         mMsGap = mMsRadius * .95f
         mSecondRadius = mMsRadius * .97f
         mSecondGap = mMsRadius * .93f
@@ -327,12 +332,16 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
 
         fun getBitmapFromVector(context: Context?, @DrawableRes drawableResId: Int): Bitmap {
             val drawable = ContextCompat.getDrawable(context!!, drawableResId)
-            return if (drawable is BitmapDrawable) {
-                drawable.bitmap
-            } else if (drawable is VectorDrawable) {
-                getBitmapFromVector(drawable)
-            } else {
-                throw IllegalArgumentException("Unsupported drawable type")
+            return when (drawable) {
+                is BitmapDrawable -> {
+                    drawable.bitmap
+                }
+                is VectorDrawable -> {
+                    getBitmapFromVector(drawable)
+                }
+                else -> {
+                    throw IllegalArgumentException("Unsupported drawable type")
+                }
             }
         }
     }

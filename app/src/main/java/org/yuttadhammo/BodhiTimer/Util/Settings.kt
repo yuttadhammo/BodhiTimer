@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.BodhiApp
+import org.yuttadhammo.BodhiTimer.IntSetting
 import org.yuttadhammo.BodhiTimer.R
 import org.yuttadhammo.BodhiTimer.StringIntSetting
 import org.yuttadhammo.BodhiTimer.StringSetting
@@ -34,6 +35,11 @@ object Settings {
     var circleTheme by StringIntSetting(
         "CircleTheme",
         3
+    )
+
+    var drawingIndex by IntSetting(
+        "DrawingIndex",
+        1
     )
 
 

@@ -93,7 +93,6 @@
         a:key="@string/setting_key.theme"
         a:title="@string/settings.theme_title"
         app:iconSpaceReserved="false"/>
-
     <Preference
         a:title="@string/bmp_or_circle"
         a:key="DrawingIndex"
@@ -104,15 +103,6 @@
         a:key="custom_bmp"
         app:iconSpaceReserved="false"
         a:enabled="false" />
-    <ListPreference
-        a:title="@string/circle_theme"
-        a:summary="@string/circle_theme_desc"
-        a:key="CircleTheme"
-        a:entries="@array/themes"
-        a:defaultValue="3"
-        a:entryValues="@array/circleThemeValues"
-        app:iconSpaceReserved="false" />
-
     <CheckBoxPreference
         a:key="FULLSCREEN"
         a:title="@string/fullscreen"
@@ -124,10 +114,6 @@
         a:title="@string/hide_time"
         a:summary="@string/hide_time_desc"
         a:defaultValue="False"
-        app:iconSpaceReserved="false" />
-    <CheckBoxPreference
-        a:title="@string/invert_colors"
-        a:key="invert_colors"
         app:iconSpaceReserved="false" />
     <PreferenceCategory
         a:title="@string/misc"

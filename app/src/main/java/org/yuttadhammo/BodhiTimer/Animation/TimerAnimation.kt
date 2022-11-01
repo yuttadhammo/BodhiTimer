@@ -23,6 +23,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.preference.PreferenceManager
+import timber.log.Timber
 import java.io.FileNotFoundException
 import java.util.Vector
 
@@ -32,7 +33,8 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
     var mLastTime = 0
     var mLastMax = 0
     var prefs: SharedPreferences? = null
-    val mContext: Context
+    private val mContext: Context
+
 
     interface TimerDrawing {
         /**
@@ -42,14 +44,14 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
          * @param max  the original time set in milliseconds
          */
         fun updateImage(canvas: Canvas, time: Int, max: Int)
-        fun configure()
+        fun configure(isEditMode: Boolean)
     }
 
     constructor(context: Context) : super(context) {
         mContext = context
         prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
         prefs!!.registerOnSharedPreferenceChangeListener(this)
-
+        createDrawings(mContext)
         //setOnClickListener(this);
     }
 
@@ -57,20 +59,33 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
         mContext = context
         val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
         prefs.registerOnSharedPreferenceChangeListener(this)
-
+        createDrawings(mContext)
         //setOnClickListener(this);
+    }
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
+        mContext = context
+        val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
+        prefs.registerOnSharedPreferenceChangeListener(this)
+        createDrawings(mContext)
+    }
+
+    private fun createDrawings(mContext: Context) {
+        mDrawings = Vector()
+        mDrawings.add(BodhiLeaf(mContext))
+        mDrawings.add(CircleAnimation(mContext))
     }
 
     @set:Throws(FileNotFoundException::class)
     var index: Int
         get() = mIndex
         set(i) {
-            var i = i
-            mDrawings = Vector()
-            mDrawings.add(BodhiLeaf(mContext))
-            mDrawings.add(CircleAnimation(mContext))
-            if (i < 0 || i >= mDrawings.size) i = 0
-            mIndex = i
+            Timber.e("Calling Set $i")
+            mIndex = i.coerceAtLeast(0).coerceAtMost(mDrawings.size)
             invalidate()
         }
 
@@ -82,12 +97,16 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
 
     public override fun onDraw(canvas: Canvas) {
         if (mIndex < 0 || mIndex >= mDrawings.size) mIndex = 0
+        if (isInEditMode) {
+            createDrawings(context)
+            configure()
+        }
         mDrawings[mIndex].updateImage(canvas, mLastTime, mLastMax)
     }
 
-    public fun configure() {
+    fun configure() {
         for (drawing in mDrawings) {
-            drawing.configure()
+            drawing.configure(isInEditMode)
         }
     }
 

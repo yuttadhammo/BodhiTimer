@@ -18,22 +18,23 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
+import android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS
 import android.view.LayoutInflater
 import android.webkit.WebView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import org.yuttadhammo.BodhiTimer.Util.Settings
 import org.yuttadhammo.BodhiTimer.Util.Sounds
 import timber.log.Timber
 import java.io.IOException
 import kotlin.math.ln
 
-class SettingsFragment : PreferenceFragmentCompat() {
+class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
     private var prefs: SharedPreferences? = null
     private var mContext: Context? = null
     private var player: MediaPlayer? = null
@@ -51,14 +52,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
         mContext = context
         setupTonePicker()
         setupAnimations()
-        setupDND()
     }
 
-    private fun setupDND() {
-        // Hide on API <23
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            preferenceScreen!!.findPreference<Preference>("doNotDisturb")!!.isVisible =
-                false
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Get all setting keys and populate the summaries
+        Settings.getAllKeys().forEach {
+            updatePreferenceSummaries(it)
         }
     }
 
@@ -97,14 +98,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         startActivity(intent)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private fun toggleDoNotDisturb() {
         val mNotificationManager =
             requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Check if the notification policy access has been granted for the app.
         if (!mNotificationManager.isNotificationPolicyAccessGranted) {
-            val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+            val intent = Intent(ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
             startActivity(intent)
         }
     }
@@ -130,32 +130,25 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // Animation Style
         val indexPref = findPreference<Preference>("DrawingIndex")
-        val circleTheme = findPreference<Preference>("CircleTheme")
-        val dIndex = prefs!!.getInt("DrawingIndex", 1)
+        val dIndex = Settings.drawingIndex
         if (dIndex == 0) {
             indexPref!!.summary = getString(R.string.is_bitmap)
-            circleTheme!!.isEnabled = false
         } else {
             indexPref!!.summary = getString(R.string.is_circle)
-            circleTheme!!.isEnabled = true
         }
         indexPref.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
-                var dIndex1 = prefs!!.getInt("DrawingIndex", 1)
+                var dIndex1 = Settings.drawingIndex
                 dIndex1++
                 dIndex1 %= 2
                 if (dIndex1 == 0) {
                     indexPref.summary = getString(R.string.is_bitmap)
-                    circleTheme.isEnabled = false
                     customImage.isEnabled = true
                 } else {
                     indexPref.summary = getString(R.string.is_circle)
-                    circleTheme.isEnabled = true
                     customImage.isEnabled = false
                 }
-                val mSettingsEdit = prefs!!.edit()
-                mSettingsEdit.putInt("DrawingIndex", dIndex1)
-                mSettingsEdit.apply()
+                Settings.drawingIndex = dIndex1
                 true
             }
     }
@@ -282,7 +275,38 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    companion object {
-        private val TAG = SettingsActivity::class.java.simpleName
+    override fun onResume() {
+        super.onResume()
+        prefs!!.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        prefs!!.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+        updatePreferenceSummaries(key)
+    }
+
+    /**
+     * Update preference summaries to reflect the current select item (or entered text) in the UI
+     *
+     * @param key: The key of the preference to update
+     */
+    private fun updatePreferenceSummaries(key: String) {
+        try {
+            when (val pref: Preference? = findPreference(key)) {
+                is ListPreference -> {
+                    pref.summary = pref.entry
+                }
+                is EditTextPreference -> {
+                    pref.summary = pref.text
+                }
+            }
+        } catch (ignored: Exception) {
+            // If we have updated a ListPreferences possible values, and the user has now an
+            // impossible value, getEntry() will throw an Exception.
+        }
     }
 }

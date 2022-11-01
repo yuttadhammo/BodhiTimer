@@ -14,6 +14,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -27,7 +28,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -44,6 +44,7 @@ import org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED
 import org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager
 import org.yuttadhammo.BodhiTimer.Models.TimerList
 import org.yuttadhammo.BodhiTimer.Util.Notifications.createNotificationChannel
+import org.yuttadhammo.BodhiTimer.Util.Settings
 import org.yuttadhammo.BodhiTimer.Util.Sounds
 import org.yuttadhammo.BodhiTimer.Util.Time
 import org.yuttadhammo.BodhiTimer.Util.Time.msFromArray
@@ -82,7 +83,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     private var widget = false
     private var context: TimerActivity? = null
     private var animationIndex = 0
-    private var blackView: ImageView? = null
+    //private var blackView: ImageView? = null
     private var invertColors = false
     private var tts: TextToSpeech? = null
     private var lastp = 0f
@@ -173,8 +174,8 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         mPreviewLabel = findViewById(R.id.text_preview)
         mTimerAnimation = findViewById(R.id.mainImage)
         mTimerAnimation.setOnClickListener(this)
-        blackView = findViewById(R.id.black)
-        animationIndex = prefs.getInt("DrawingIndex", 1)
+        //blackView = findViewById(R.id.black)
+        animationIndex = Settings.drawingIndex
     }
 
     private fun setupObservers() {
@@ -219,7 +220,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             intent.removeExtra("set")
         }
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        animationIndex = prefs.getInt("DrawingIndex", 1)
+        animationIndex = Settings.drawingIndex
         setupUI()
         if (mAlarmTaskManager!!.currentState.value == STOPPED) {
             if (widget) {
@@ -275,6 +276,13 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
 
         Timber.i("Configuring animation")
         mTimerAnimation.configure()
+
+        val dayNightMode = resources.getConfiguration().uiMode and Configuration.UI_MODE_NIGHT_MASK
+
+        if (Settings.drawingIndex == 0) {
+            findViewById<TextView>(R.id.text_top).setTextColor(Color.WHITE)
+            findViewById<TextView>(R.id.text_preview).setTextColor(Color.WHITE)
+        }
 
         setLowProfile()
         if (prefs.getBoolean(
@@ -364,15 +372,15 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         }
         lastp = p
         if (animationIndex != 0) {
-            blackView!!.visibility = View.GONE
+            //blackView!!.visibility = View.GONE
             mTimerAnimation.updateImage(elapsed, duration)
         } else {
             var alpha = (255 * p).roundToInt()
             alpha = max(0, alpha).coerceAtMost(255)
             val `val` = if (invertColors) 255 else 0
             val color = Color.argb(alpha, `val`, `val`, `val`)
-            blackView!!.setBackgroundColor(color)
-            blackView!!.visibility = View.VISIBLE
+            //blackView!!.setBackgroundColor(color)
+            //blackView!!.visibility = View.VISIBLE
         }
     }
 
