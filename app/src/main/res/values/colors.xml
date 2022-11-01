@@ -2,15 +2,8 @@
 <resources>
     <color name="shade">#33000000</color>
 
-    <color name="colorPrimary">#43A047</color>
-    <color name="colorPrimaryDark">#33691E</color>
-    <color name="colorAccent">#43A047</color>
-    <color name="colorAccentVariant">#33691E</color>
-
     <color name="green">#43A047</color>
-    <color name="greenDark">#33691E</color>
     <color name="orange">#FF5722</color>
-    <color name="orangeDark">#BF360C</color>
     <color name="red">#B71C1C</color>
 
     <!-- Original Theme -->

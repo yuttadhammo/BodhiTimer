@@ -28,7 +28,7 @@
     </style>
 
     <style name="themeOverlay_timePicker" parent="ThemeOverlay.AppCompat">
-        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlActivated">?attr/colorPrimary</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button">

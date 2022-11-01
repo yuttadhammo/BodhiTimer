@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.BodhiApp
+import org.yuttadhammo.BodhiTimer.BooleanSetting
 import org.yuttadhammo.BodhiTimer.IntSetting
 import org.yuttadhammo.BodhiTimer.R
 import org.yuttadhammo.BodhiTimer.StringIntSetting
@@ -55,6 +56,28 @@ object Settings {
         val prefs = PreferenceManager.getDefaultSharedPreferences(BodhiApp.applicationContext())
         return prefs.all.keys.toList()
     }
+
+    var preset1 by StringSetting(
+    "pre1"
+    )
+    var preset2 by StringSetting(
+        "pre2"
+    )
+    var preset3 by StringSetting(
+        "pre3"
+    )
+    var preset4 by StringSetting(
+        "pre4"
+    )
+
+    var fullscreen by BooleanSetting(
+        "FULLSCREEN",
+        false
+    )
+
+    var advTimeString by StringSetting(
+        "advTimeString"
+    )
 
     private val appContext: Context
         get() = BodhiApp.applicationContext()

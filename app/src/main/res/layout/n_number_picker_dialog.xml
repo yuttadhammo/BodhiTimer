@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,19 +13,20 @@
 
         <LinearLayout
             android:id="@+id/container"
-            android:padding="5dp"
-            android:gravity="center"
             android:layout_width="300dp"
             android:layout_height="250dp"
+            android:background="?attr/colorSurface"
+            android:gravity="center"
             android:orientation="vertical"
-            android:background="#D2353535"
-            android:visibility="invisible">
+            android:padding="5dp"
+            android:visibility="invisible"
+            tools:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/hour_cont"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
@@ -32,24 +34,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/H"
                     android:padding="10dp"
-                    android:textSize="17sp"
-                    android:textColor="#FFFFFF" />
+                    android:text="@string/H"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="17sp" />
 
                 <Gallery
-                    android:layout_width="match_parent"
                     android:id="@+id/gallery_hour"
-                    android:spacing="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:layout_height="wrap_content" />
+                    android:spacing="6dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/min_cont"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
@@ -57,25 +59,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/M"
-                    android:textSize="17sp"
                     android:padding="10dp"
-                    android:textColor="#FFFFFF" />
+                    android:text="@string/M"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="17sp" />
 
                 <Gallery
-                    android:layout_width="match_parent"
                     android:id="@+id/gallery_min"
-                    android:spacing="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:textColor="@color/gallery_item_color"
-                    android:layout_height="wrap_content" />
+                    android:spacing="6dp"
+                    android:textColor="?attr/colorPrimary" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/sec_cont"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
@@ -83,146 +85,146 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textColor="#FFFFFF"
+                    android:padding="10dp"
                     android:text="@string/S"
-                    android:textSize="17sp"
-                    android:padding="10dp" />
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="17sp" />
 
                 <Gallery
-                    android:layout_width="match_parent"
                     android:id="@+id/gallery_sec"
-                    android:textColor="@color/gallery_item_color"
-                    android:spacing="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:layout_height="wrap_content" />
+                    android:spacing="6dp"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
             </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:contentDescription="@null"
-                android:background="#DDDDDD" />
+                android:background="#DDDDDD"
+                android:contentDescription="@null" />
 
             <LinearLayout
                 android:id="@+id/pre_button_cont"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn1"
-                    android:text="@string/pre1"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:background="#00000000"
-                    android:textColor="#FFFFFF" />
+                    android:text="@string/pre1"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <ImageView
                     android:layout_width="1dp"
                     android:layout_height="20dp"
-                    android:contentDescription="@null"
                     android:layout_gravity="center_vertical"
-                    android:background="#DDDDDD" />
+                    android:background="#DDDDDD"
+                    android:contentDescription="@null" />
 
                 <Button
                     android:id="@+id/btn2"
-                    android:text="@string/pre2"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:background="#00000000"
-                    android:textColor="#FFFFFF" />
+                    android:text="@string/pre2"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <ImageView
                     android:layout_width="1dp"
                     android:layout_height="20dp"
-                    android:contentDescription="@null"
                     android:layout_gravity="center_vertical"
-                    android:background="#DDDDDD" />
+                    android:background="#DDDDDD"
+                    android:contentDescription="@null" />
 
                 <Button
                     android:id="@+id/btn3"
-                    android:text="@string/pre3"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:background="#00000000"
-                    android:textColor="#FFFFFF" />
+                    android:text="@string/pre3"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <ImageView
                     android:layout_width="1dp"
                     android:layout_height="20dp"
-                    android:contentDescription="@null"
                     android:layout_gravity="center_vertical"
                     android:background="#DDDDDD"
+                    android:contentDescription="@null"
                     android:visibility="gone" />
 
                 <Button
                     android:id="@+id/btn4"
-                    android:visibility="gone"
-                    android:text="@string/pre4"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:background="#00000000"
-                    android:textColor="#FFFFFF" />
+                    android:text="@string/pre4"
+                    android:textColor="?attr/colorOnSurface"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:layout_width="1dp"
                     android:layout_height="20dp"
-                    android:contentDescription="@null"
                     android:layout_gravity="center_vertical"
-                    android:background="#DDDDDD" />
+                    android:background="#DDDDDD"
+                    android:contentDescription="@null" />
 
                 <Button
                     android:id="@+id/btnadv"
-                    android:text="@string/adv"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:background="#00000000"
-                    android:textColor="#FFFFFF" />
+                    android:text="@string/adv"
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:contentDescription="@null"
-                android:background="#DDDDDD" />
+                android:background="#DDDDDD"
+                android:contentDescription="@null" />
 
             <LinearLayout
                 android:id="@+id/button_cont"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btnCancel"
-                    android:text="@android:string/cancel"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="0.5"
                     android:background="#00000000"
-                    android:textColor="#FFFFFF" />
+                    android:text="@android:string/cancel"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <ImageView
                     android:layout_width="1dp"
                     android:layout_height="20dp"
-                    android:contentDescription="@null"
                     android:layout_gravity="center_vertical"
-                    android:background="#DDDDDD" />
+                    android:background="#DDDDDD"
+                    android:contentDescription="@null" />
 
                 <Button
                     android:id="@+id/btnOk"
-                    android:text="@android:string/ok"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="0.5"
                     android:background="#00000000"
-                    android:textColor="#FFFFFF" />
+                    android:text="@android:string/ok"
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

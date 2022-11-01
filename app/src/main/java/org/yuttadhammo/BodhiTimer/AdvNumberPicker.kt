@@ -4,338 +4,265 @@
  *
  * Distributed under terms of the GNU GPLv3 license.
  */
+package org.yuttadhammo.BodhiTimer
 
-package org.yuttadhammo.BodhiTimer;
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.content.SharedPreferences
+import android.media.RingtoneManager
+import android.net.Uri
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ListView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import org.yuttadhammo.BodhiTimer.Const.SessionTypes
+import org.yuttadhammo.BodhiTimer.Util.Settings
+import org.yuttadhammo.BodhiTimer.Util.Time.time2humanStr
+import timber.log.Timber
+import java.util.Arrays
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Bundle;
-import androidx.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import org.yuttadhammo.BodhiTimer.Const.SessionTypes;
-import org.yuttadhammo.BodhiTimer.Util.Time;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import timber.log.Timber;
-
-public class AdvNumberPicker extends AppCompatActivity {
-
-    private AppCompatActivity context;
-    private SharedPreferences prefs;
-    private String advTimeString;
-    private EditText hours;
-    private EditText mins;
-    private EditText secs;
-
-
-    ListView listView;
-
-    String customUri = "sys_def";
-    String[] customUris;
-    String[] customSounds;
-    private TextView uriText;
-    private DialogInterface mDialog;
-
-    private final int SELECT_RINGTONE = 0;
-    private final int SELECT_FILE = 1;
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private final String TAG = "AdvNumberPicker";
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        this.context = this;
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (prefs.getBoolean("FULLSCREEN", false))
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        else
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        customUris = getResources().getStringArray(R.array.sound_uris);
-        customSounds = getResources().getStringArray(R.array.sound_names);
-
-        advTimeString = prefs.getString("advTimeString", "");
-
-        setContentView(R.layout.adv_number_picker);
-        Button add = findViewById(R.id.add);
-        Button cancel = findViewById(R.id.cancel);
-        Button clear = findViewById(R.id.clear);
-        Button save = findViewById(R.id.save);
-
-        hours = findViewById(R.id.hours);
-        mins = findViewById(R.id.mins);
-        secs = findViewById(R.id.secs);
-
-        uriText = findViewById(R.id.uri);
-
-        hours.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                if (s.length() >= 2) {
-                    mins.requestFocus();
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                }
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
-
-        mins.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                if (s.length() >= 2) {
-                    secs.requestFocus();
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                }
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
-
-        uriText.setOnClickListener(view -> {
-            AlertDialog.Builder builderSingle = new AlertDialog.Builder(
-                    context);
-            builderSingle.setIcon(R.mipmap.ic_launcher);
-
-
-            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
-            arrayAdapter.add(getString(R.string.sys_def));
-
-
-            for (String s : customSounds) {
-                arrayAdapter.add(s);
-            }
-
-            builderSingle.setNegativeButton(getString(R.string.cancel),
-                    (dialog, which) -> dialog.dismiss());
-
-            builderSingle.setAdapter(arrayAdapter,
-                    (dialog, which) -> {
-
-                        if (which > 0) {
-                            customUri = customUris[which - 1];
-                        }
-
-                        if (which == 0) {
-                            customUri = "sys_def";
-                        } else if (customUri.equals("system")) {
-                            mDialog = dialog;
-                            Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-                            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
-                            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
-                            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
-                            context.startActivityForResult(intent, SELECT_RINGTONE);
-                        } else if (customUri.equals("file")) {
-                            mDialog = dialog;
-
-                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                            intent.setType("audio/*");
-                            intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-                            try {
-                                context.startActivityForResult(Intent.createChooser(intent, "Select Sound File"), SELECT_FILE);
-                            } catch (ActivityNotFoundException ex) {
-                                Toast.makeText(context, getString(R.string.get_file_man),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        uriText.setText(arrayAdapter.getItem(which));
-                        dialog.dismiss();
-                    });
-            builderSingle.show();
-        });
-
-        listView = findViewById(R.id.timesList);
-        TextView emptyText = findViewById(android.R.id.empty);
-        listView.setEmptyView(emptyText);
-
-        clear.setOnClickListener(v -> {
-            hours.setText("");
-            mins.setText("");
-            secs.setText("");
-        });
-
-        add.setOnClickListener(v -> addTimeToList());
-
-        cancel.setOnClickListener(v -> finish());
-
-        save.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("advTimeString", advTimeString);
-            editor.apply();
-            Intent i = new Intent();
-            setResult(AppCompatActivity.RESULT_OK, i);
-            finish();
-        });
-
-        updateDataSet();
-
-    }
-
-    private void addTimeToList() {
-        String hs = hours.getText().toString();
-        String ms = mins.getText().toString();
-        String ss = secs.getText().toString();
-
-        int h = hs.length() > 0 ? Integer.parseInt(hs) : 0;
-        int m = ms.length() > 0 ? Integer.parseInt(ms) : 0;
-        int s = ss.length() > 0 ? Integer.parseInt(ss) : 0;
-
-        int time = h * 60 * 60 * 1000 + m * 60 * 1000 + s * 1000;
-
-        advTimeString += (advTimeString.length() == 0 ? "" : "^") + time + "#" + customUri + "#" + SessionTypes.REAL;
-        updateDataSet();
-        hours.setText("");
-        mins.setText("");
-        secs.setText("");
-    }
-
-    private void updateDataSet() {
-        List<String> advTimeList;
-        if (advTimeString.equals("")) {
-            advTimeList = new ArrayList<>();
+class AdvNumberPicker : AppCompatActivity() {
+    private var context: AppCompatActivity? = null
+    private var prefs: SharedPreferences? = null
+    private var advTimeString: String? = null
+    private var hours: EditText? = null
+    private var mins: EditText? = null
+    private var secs: EditText? = null
+    var listView: ListView? = null
+    var customUri = "sys_def"
+    var customUris: Array<String> = arrayOf()
+    var customSounds: Array<String> = arrayOf()
+    private var uriText: TextView? = null
+    private var mDialog: DialogInterface? = null
+    private val SELECT_RINGTONE = 0
+    private val SELECT_FILE = 1
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context = this
+        if (Settings.fullscreen) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
         } else {
-            String[] advTime = advTimeString.split("\\^");
-            advTimeList = Arrays.asList(advTime);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
-        MyAdapter adapter = new MyAdapter(context, R.layout.adv_list_item, advTimeList);
-        listView.setAdapter(adapter);
+        customUris = resources.getStringArray(R.array.sound_uris)
+        customSounds = resources.getStringArray(R.array.sound_names)
+        advTimeString = Settings.advTimeString
+        setContentView(R.layout.adv_number_picker)
+        val add = findViewById<Button>(R.id.add)
+        val cancel = findViewById<Button>(R.id.cancel)
+        val clear = findViewById<Button>(R.id.clear)
+        val save = findViewById<Button>(R.id.save)
+        hours = findViewById(R.id.hours)
+        mins = findViewById(R.id.mins)
+        secs = findViewById(R.id.secs)
+        uriText = findViewById(R.id.uri)
 
-        Timber.d("advTimeString: %s", advTimeString);
-        Timber.d("adapter items: %s", adapter.getCount());
+        hours!!.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                if (s.length >= 2) {
+                    mins!!.requestFocus()
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+                }
+            }
 
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
+
+        mins!!.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                if (s.length >= 2) {
+                    secs!!.requestFocus()
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
+
+        uriText!!.setOnClickListener { view: View? ->
+            val builderSingle = AlertDialog.Builder(
+                context!!
+            )
+            builderSingle.setIcon(R.mipmap.ic_launcher)
+            val arrayAdapter =
+                ArrayAdapter<String>(context!!, android.R.layout.select_dialog_singlechoice)
+            arrayAdapter.add(getString(R.string.sys_def))
+            for (s in customSounds) {
+                arrayAdapter.add(s)
+            }
+            builderSingle.setNegativeButton(
+                getString(R.string.cancel)
+            ) { dialog: DialogInterface, which: Int -> dialog.dismiss() }
+            builderSingle.setAdapter(
+                arrayAdapter
+            ) { dialog: DialogInterface, which: Int ->
+                if (which > 0) {
+                    customUri = customUris[which - 1]
+                }
+                if (which == 0) {
+                    customUri = "sys_def"
+                } else if (customUri == "system") {
+                    mDialog = dialog
+                    val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone")
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, null as Uri?)
+                    context!!.startActivityForResult(intent, SELECT_RINGTONE)
+                } else if (customUri == "file") {
+                    mDialog = dialog
+                    val intent = Intent(Intent.ACTION_GET_CONTENT)
+                    intent.type = "audio/*"
+                    intent.addCategory(Intent.CATEGORY_OPENABLE)
+                    try {
+                        context!!.startActivityForResult(
+                            Intent.createChooser(
+                                intent,
+                                "Select Sound File"
+                            ), SELECT_FILE
+                        )
+                    } catch (ex: ActivityNotFoundException) {
+                        Toast.makeText(
+                            context, getString(R.string.get_file_man),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                uriText!!.text = arrayAdapter.getItem(which)
+                dialog.dismiss()
+            }
+            builderSingle.show()
+        }
+        listView = findViewById(R.id.timesList)
+        val emptyText = findViewById<TextView>(android.R.id.empty)
+        listView!!.emptyView = emptyText
+        clear.setOnClickListener { v: View? ->
+            hours!!.setText("")
+            mins!!.setText("")
+            secs!!.setText("")
+        }
+        add.setOnClickListener { v: View? -> addTimeToList() }
+        cancel.setOnClickListener { v: View? -> finish() }
+        save.setOnClickListener { v: View? ->
+            Settings.advTimeString = advTimeString!!
+            val i = Intent()
+            setResult(RESULT_OK, i)
+            finish()
+        }
+        updateDataSet()
     }
 
-    public class MyAdapter extends ArrayAdapter<String> {
+    private fun addTimeToList() {
+        val hs = hours!!.text.toString()
+        val ms = mins!!.text.toString()
+        val ss = secs!!.text.toString()
+        val h = if (hs.length > 0) hs.toInt() else 0
+        val m = if (ms.length > 0) ms.toInt() else 0
+        val s = if (ss.length > 0) ss.toInt() else 0
+        val time = h * 60 * 60 * 1000 + m * 60 * 1000 + s * 1000
+        advTimeString += (if (advTimeString!!.isEmpty()) "" else "^") + time + "#" + customUri + "#" + SessionTypes.REAL
+        updateDataSet()
+        hours!!.setText("")
+        mins!!.setText("")
+        secs!!.setText("")
+    }
 
-
-        private final List<String> values;
-
-        public MyAdapter(Context context, int resource, List<String> items) {
-            super(context, resource, items);
-            this.values = items;
+    private fun updateDataSet() {
+        val advTimeList: List<String>
+        advTimeList = if (advTimeString == "") {
+            ArrayList()
+        } else {
+            val advTime = advTimeString!!.split("\\^").toTypedArray()
+            listOf(*advTime)
         }
+        val adapter = MyAdapter(context, R.layout.adv_list_item, advTimeList)
+        listView!!.adapter = adapter
+        Timber.d("advTimeString: %s", advTimeString)
+        Timber.d("adapter items: %s", adapter.count)
+    }
 
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.adv_list_item, parent, false);
-
-            String[] p = values.get(position).split("#");
-
-            if (p[0].length() > 0) {
-
-                TextView timeView = rowView.findViewById(R.id.time);
-
+    inner class MyAdapter(context: Context?, resource: Int, private val values: List<String>) :
+        ArrayAdapter<String?>(
+            context!!, resource, values
+        ) {
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val inflater = context
+                .getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val rowView = inflater.inflate(R.layout.adv_list_item, parent, false)
+            val p = values[position].split("#").toTypedArray()
+            if (p[0].length > 0) {
+                val timeView = rowView.findViewById<TextView>(R.id.time)
                 if (timeView != null) {
-                    String ts = Time.time2humanStr(context, Integer.parseInt(p[0]));
-                    timeView.setText(ts);
+                    val ts = time2humanStr(context, p[0].toInt())
+                    timeView.text = ts
                 }
             }
-            if (p.length > 2 && p[2].length() > 0) {
-                TextView soundView = rowView.findViewById(R.id.sound);
-
+            if (p.size > 2 && p[2].length > 0) {
+                val soundView = rowView.findViewById<TextView>(R.id.sound)
                 if (soundView != null) {
-                    soundView.setText(descriptionFromUri(p[1]));
+                    soundView.text = descriptionFromUri(p[1])
                 }
             }
-            Button b = rowView.findViewById(R.id.delete);
-            b.setOnClickListener(v -> removeItem(position));
-
-            return rowView;
-
+            val b = rowView.findViewById<Button>(R.id.delete)
+            b.setOnClickListener { v: View? -> removeItem(position) }
+            return rowView
         }
     }
 
-    private String descriptionFromUri(String uri) {
-        if ("sys_def".equals(uri)) {
-            return getString(R.string.sys_def);
-        }// Is it part of our tones?
-        int index = Arrays.asList(customUris).indexOf(uri);
-
-        if (index != -1) {
-            return customSounds[index];
-        }
-
-        return getString(R.string.custom_sound);
+    private fun descriptionFromUri(uri: String): String {
+        if ("sys_def" == uri) {
+            return getString(R.string.sys_def)
+        } // Is it part of our tones?
+        val index = Arrays.asList(*customUris).indexOf(uri)
+        return if (index != -1) {
+            customSounds[index]
+        } else getString(R.string.custom_sound)
     }
 
-    private void removeItem(int p) {
-        String[] times = advTimeString.split("\\^");
-        advTimeString = "";
-        for (int i = 0; i < times.length; i++) {
-            if (i == p)
-                continue;
-            advTimeString = advTimeString.concat((advTimeString.length() == 0 ? "" : "^") + times[i]);
+    private fun removeItem(p: Int) {
+        val times = advTimeString!!.split("\\^").toTypedArray()
+        advTimeString = ""
+        for (i in times.indices) {
+            if (i == p) continue
+            advTimeString =
+                advTimeString + (if (advTimeString!!.isEmpty()) "" else "^") + times[i]
         }
-        updateDataSet();
+        updateDataSet()
     }
 
-
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == Activity.RESULT_OK) {
-            Uri uri;
-
-            switch (requestCode) {
-                case SELECT_RINGTONE:
-                    uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                    if (uri != null) {
-                        customUri = uri.toString();
-                    } else {
-                        customUri = "sys_def";
-                    }
-                    break;
-                case SELECT_FILE:
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (resultCode == RESULT_OK) {
+            val uri: Uri?
+            when (requestCode) {
+                SELECT_RINGTONE -> {
+                    uri = intent!!.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                    customUri = uri?.toString() ?: "sys_def"
+                }
+                SELECT_FILE -> {
                     // Get the Uri of the selected file
-                    uri = intent.getData();
-                    if (uri != null) {
-                        customUri = uri.toString();
-                    } else {
-                        customUri = "sys_def";
-                    }
-                    break;
+                    uri = intent!!.data
+                    customUri = uri?.toString() ?: "sys_def"
+                }
             }
-            mDialog.dismiss();
+            mDialog!!.dismiss()
         }
     }
-
 }

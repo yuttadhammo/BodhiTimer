@@ -14,182 +14,127 @@
     You should have received a copy of the GNU General Public License
     along with Bodhi Timer.  If not, see <http://www.gnu.org/licenses/>.
 */
+package org.yuttadhammo.BodhiTimer
 
-package org.yuttadhammo.BodhiTimer;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
-import android.os.Bundle;
-import androidx.preference.PreferenceManager;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.view.View
+import android.view.View.OnLongClickListener
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.TimePicker
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import org.yuttadhammo.BodhiTimer.Util.Settings
 
 /**
  * Dialog box with an arbitrary number of number pickers
  */
-public class SimpleNumberPicker extends AppCompatActivity implements OnClickListener, OnLongClickListener {
-
-    public interface OnNNumberPickedListener {
-        void onNumbersPicked(int[] number);
+class SimpleNumberPicker : AppCompatActivity(), View.OnClickListener, OnLongClickListener {
+    interface OnNNumberPickedListener {
+        fun onNumbersPicked(number: IntArray?)
     }
 
-    private TimePicker timePicker;
+    private var timePicker: TimePicker? = null
+    private var i1: String? = null
+    private var i2: String? = null
+    private var i3: String? = null
+    private var i4: String? = null
+    private var prefs: SharedPreferences? = null
+    private var context: Context? = null
 
-    private String i1;
-    private String i2;
-    private String i3;
-    private String i4;
-
-    private SharedPreferences prefs;
-
-    private Context context;
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.context = this;
-
-        setContentView(R.layout.n_number_picker_dialog);
-
-        LinearLayout scrollView = findViewById(R.id.container);
-
-        scrollView.setVisibility(View.VISIBLE);
-
-        setupTimePicker();
-
-
-        Button cancel = findViewById(R.id.btnCancel);
-        Button ok = findViewById(R.id.btnOk);
-        cancel.setOnClickListener(this);
-        ok.setOnClickListener(this);
-
-        Button pre1 = findViewById(R.id.btn1);
-        Button pre2 = findViewById(R.id.btn2);
-        Button pre3 = findViewById(R.id.btn3);
-        Button pre4 = findViewById(R.id.btn4);
-        Button adv = findViewById(R.id.btnadv);
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        i1 = prefs.getString("pre1", null);
-        i2 = prefs.getString("pre2", null);
-        i3 = prefs.getString("pre3", null);
-        i4 = prefs.getString("pre4", null);
-
-        if (i1 != null)
-            pre1.setText(i1);
-        if (i2 != null)
-            pre2.setText(i2);
-        if (i3 != null)
-            pre3.setText(i3);
-        if (i4 != null)
-            pre4.setText(i4);
-
-        pre1.setOnClickListener(this);
-        pre2.setOnClickListener(this);
-        pre3.setOnClickListener(this);
-        pre4.setOnClickListener(this);
-        pre1.setOnLongClickListener(this);
-        pre2.setOnLongClickListener(this);
-        pre3.setOnLongClickListener(this);
-        pre4.setOnLongClickListener(this);
-
-        adv.setOnClickListener(this);
-        adv.setOnLongClickListener(this);
-
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context = this
+        setContentView(R.layout.n_number_picker_dialog)
+        val scrollView = findViewById<LinearLayout>(R.id.container)
+        scrollView.visibility = View.VISIBLE
+        setupTimePicker()
+        val cancel = findViewById<Button>(R.id.btnCancel)
+        val ok = findViewById<Button>(R.id.btnOk)
+        cancel.setOnClickListener(this)
+        ok.setOnClickListener(this)
+        val pre1 = findViewById<Button>(R.id.btn1)
+        val pre2 = findViewById<Button>(R.id.btn2)
+        val pre3 = findViewById<Button>(R.id.btn3)
+        val pre4 = findViewById<Button>(R.id.btn4)
+        val adv = findViewById<Button>(R.id.btnadv)
+        i1 = Settings.preset1
+        i2 = Settings.preset2
+        i3 = Settings.preset3
+        i4 = Settings.preset4
+        if (i1 != null) pre1.text = i1
+        if (i2 != null) pre2.text = i2
+        if (i3 != null) pre3.text = i3
+        if (i4 != null) pre4.text = i4
+        pre1.setOnClickListener(this)
+        pre2.setOnClickListener(this)
+        pre3.setOnClickListener(this)
+        pre4.setOnClickListener(this)
+        pre1.setOnLongClickListener(this)
+        pre2.setOnLongClickListener(this)
+        pre3.setOnLongClickListener(this)
+        pre4.setOnLongClickListener(this)
+        adv.setOnClickListener(this)
+        adv.setOnLongClickListener(this)
     }
 
-
-
-    private void setupTimePicker() {
+    private fun setupTimePicker() {
         // Established times
-        int[] times = getIntent().getIntArrayExtra("times");
+        val times = intent.getIntArrayExtra("times")
 
         // Time Picker
-        timePicker = findViewById(R.id.timePicker);
-        timePicker.setIs24HourView(true);
-
-        setHour(times);
-        setMinute(times);
+        timePicker = findViewById(R.id.timePicker)
+        timePicker!!.setIs24HourView(true)
+        setHour(times)
+        setMinute(times)
     }
-
-
 
     /**
      * {@inheritDoc}
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.btnOk:
-
-                int hsel = getHour();
-                int msel = getMinute();
-                int ssel = 0;
-
-                int[] values = {hsel, msel, ssel};
-                returnResults(values);
-                break;
-            case R.id.btnCancel:
-                finish();
-                break;
-            case R.id.btn1:
-                setFromPre(i1);
-                break;
-            case R.id.btn2:
-                setFromPre(i2);
-                break;
-            case R.id.btn3:
-                setFromPre(i3);
-                break;
-            case R.id.btn4:
-                setFromPre(i4);
-                break;
-            case R.id.btnadv:
-                setFromAdv();
-                break;
-
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.btnOk -> {
+                val hsel = hour
+                val msel = minute
+                val ssel = 0
+                val values = intArrayOf(hsel, msel, ssel)
+                returnResults(values)
+            }
+            R.id.btnCancel -> finish()
+            R.id.btn1 -> setFromPre(i1)
+            R.id.btn2 -> setFromPre(i2)
+            R.id.btn3 -> setFromPre(i3)
+            R.id.btn4 -> setFromPre(i4)
+            R.id.btnadv -> setFromAdv()
         }
-
     }
 
-    private void setFromPre(String ts) {
+    private fun setFromPre(ts: String?) {
         if (ts == null) {
-            Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG).show();
-            return;
+            Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
+                .show()
+            return
         }
-
-        int h = Integer.parseInt(ts.substring(0, 2));
-        int m = Integer.parseInt(ts.substring(3, 5));
-        int s = 0;
-
-        if (ts.length() > 5)
-            s = Integer.parseInt(ts.substring(6, 8));
-
+        val h = ts.substring(0, 2).toInt()
+        val m = ts.substring(3, 5).toInt()
+        var s = 0
+        if (ts.length > 5) s = ts.substring(6, 8).toInt()
         if (h != 0 || m != 0 || s != 0) {
-            int[] values = {h, m, s};
-            returnResults(values);
-        } else
-            Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG).show();
+            val values = intArrayOf(h, m, s)
+            returnResults(values)
+        } else Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
+            .show()
     }
 
-    private void setFromAdv() {
-        boolean success = returnAdvanced();
-
+    private fun setFromAdv() {
+        val success = returnAdvanced()
         if (!success) {
-            startAdvancedPicker();
+            startAdvancedPicker()
         }
     }
 
@@ -198,136 +143,117 @@ public class SimpleNumberPicker extends AppCompatActivity implements OnClickList
      *
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public boolean onLongClick(View v) {
-        String h = getHour() + "";
-        String m = getMinute() + "";
+    override fun onLongClick(v: View): Boolean {
+        var h = hour.toString() + ""
+        var m = minute.toString() + ""
+        if (h.length == 1) h = "0$h"
+        if (m.length == 1) m = "0$m"
 
-        if (h.length() == 1)
-            h = "0" + h;
-        if (m.length() == 1)
-            m = "0" + m;
+        val vals = "$h:$m"
 
-        String vals = h + ":" + m;
-        switch (v.getId()) {
-            case R.id.btn1:
-                i1 = vals;
-                setPreset(v, 1, vals);
-                return true;
-            case R.id.btn2:
-                i2 = vals;
-                setPreset(v, 2, vals);
-                return true;
-            case R.id.btn3:
-                i3 = vals;
-                setPreset(v, 3, vals);
-                return true;
-            case R.id.btn4:
-                i4 = vals;
-                setPreset(v, 4, vals);
-                return true;
-            case R.id.btnadv:
-                startAdvancedPicker();
-                return true;
-            default:
-                return false;
+        return when (v.id) {
+            R.id.btn1 -> {
+                i1 = vals
+                setPreset(v, 1, vals)
+                true
+            }
+            R.id.btn2 -> {
+                i2 = vals
+                setPreset(v, 2, vals)
+                true
+            }
+            R.id.btn3 -> {
+                i3 = vals
+                setPreset(v, 3, vals)
+                true
+            }
+            R.id.btn4 -> {
+                i4 = vals
+                setPreset(v, 4, vals)
+                true
+            }
+            R.id.btnadv -> {
+                startAdvancedPicker()
+                true
+            }
+            else -> false
         }
     }
 
-    private void setPreset(View v, int i, String s) {
-        String t = s;
-        if (s.equals("00:00:00")) {
-            s = null;
-            t = context.getString(R.string.pre1);
-            switch (i) {
-                case 2:
-                    t = context.getString(R.string.pre2);
-                case 3:
-                    t = context.getString(R.string.pre3);
-                case 4:
-                    t = context.getString(R.string.pre4);
+    private fun setPreset(v: View, i: Int, s: String) {
+        var s: String? = s
+        var t = s
+        if (s == "00:00:00") {
+            s = null
+            t = context!!.getString(R.string.pre1)
+            when (i) {
+                2 -> {
+                    t = context!!.getString(R.string.pre2)
+                    t = context!!.getString(R.string.pre3)
+                    t = context!!.getString(R.string.pre4)
+                }
+                3 -> {
+                    t = context!!.getString(R.string.pre3)
+                    t = context!!.getString(R.string.pre4)
+                }
+                4 -> t = context!!.getString(R.string.pre4)
             }
         }
-
-        if (s == null && ((TextView) v).getText().equals(t)) {
-            Toast.makeText(context, context.getString(R.string.notset), Toast.LENGTH_LONG).show();
-        } else
-            ((TextView) v).setText(t);
-
-        savePreset(i, s);
+        if (s == null && (v as TextView).text == t) {
+            Toast.makeText(context, context!!.getString(R.string.notset), Toast.LENGTH_LONG).show()
+        } else (v as TextView).text = t
+        savePreset(i, s)
     }
 
-    private void savePreset(int i, String s) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("pre" + i, s);
-        editor.apply();
+    private fun savePreset(i: Int, s: String?) {
+        Settings::class.java.getField("pre$i").set(Settings, s!!)
+//        val editor = prefs!!.edit()
+//        editor.putString("pre$i", s)
+//        editor.apply()
     }
 
-    private boolean returnAdvanced() {
-        if (prefs.getString("advTimeString", "").length() > 0) {
-            int[] values = {-1, -1, -1};
-            returnResults(values);
-            return true;
+    private fun returnAdvanced(): Boolean {
+        return if (Settings.advTimeString.isNotEmpty()) {
+            val values = intArrayOf(-1, -1, -1)
+            returnResults(values)
+            true
         } else {
-            return false;
+            false
         }
     }
 
-    private void returnResults(int[] values) {
-        Intent i = new Intent();
-        i.putExtra("times", values);
-        setResult(AppCompatActivity.RESULT_OK, i);
-        finish();
+    private fun returnResults(values: IntArray) {
+        val i = Intent()
+        i.putExtra("times", values)
+        setResult(RESULT_OK, i)
+        finish()
     }
 
-    private void startAdvancedPicker() {
-        Intent i = new Intent(this, AdvNumberPicker.class);
-        startActivityForResult(i, 0);
+    private fun startAdvancedPicker() {
+        val i = Intent(this, AdvNumberPicker::class.java)
+        startActivityForResult(i, 0)
     }
 
-    @Override
     // This is called when we come back from the advanced time picker
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode < 0) {
-            returnAdvanced();
+            returnAdvanced()
         }
     }
-
 
     // Helper functions
-    private void setMinute(int[] times) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            timePicker.setMinute(times[1]);
-        } else {
-            timePicker.setCurrentMinute(times[1]);
-        }
+    private fun setMinute(times: IntArray?) {
+        timePicker!!.minute = times!![1]
     }
 
-    private void setHour(int[] times) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            timePicker.setHour(times[0]);
-        } else {
-            timePicker.setCurrentHour(times[0]);
-        }
+    private fun setHour(times: IntArray?) {
+        timePicker!!.hour = times!![0]
     }
 
-    @SuppressWarnings("deprecation")
-    private int getMinute() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return timePicker.getMinute();
-        } else {
-            return timePicker.getCurrentMinute();
-        }
-    }
+    private val minute: Int
+        get() =  timePicker!!.minute
 
-    @SuppressWarnings("deprecation")
-    private int getHour() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return timePicker.getHour();
-        } else {
-            return timePicker.getCurrentHour();
-        }
-    }
+    private val hour: Int
+        get() =  timePicker!!.hour
 }
