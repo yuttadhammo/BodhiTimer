@@ -10,7 +10,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
@@ -32,11 +31,9 @@ import org.yuttadhammo.BodhiTimer.Const.SessionTypes
 import org.yuttadhammo.BodhiTimer.Util.Settings
 import org.yuttadhammo.BodhiTimer.Util.Time.time2humanStr
 import timber.log.Timber
-import java.util.Arrays
 
 class AdvNumberPicker : AppCompatActivity() {
     private var context: AppCompatActivity? = null
-    private var prefs: SharedPreferences? = null
     private var advTimeString: String? = null
     private var hours: EditText? = null
     private var mins: EditText? = null
@@ -49,6 +46,7 @@ class AdvNumberPicker : AppCompatActivity() {
     private var mDialog: DialogInterface? = null
     private val SELECT_RINGTONE = 0
     private val SELECT_FILE = 1
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this
@@ -97,7 +95,7 @@ class AdvNumberPicker : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
 
-        uriText!!.setOnClickListener { view: View? ->
+        uriText!!.setOnClickListener {
             val builderSingle = AlertDialog.Builder(
                 context!!
             )
@@ -110,7 +108,7 @@ class AdvNumberPicker : AppCompatActivity() {
             }
             builderSingle.setNegativeButton(
                 getString(R.string.cancel)
-            ) { dialog: DialogInterface, which: Int -> dialog.dismiss() }
+            ) { dialog: DialogInterface, _: Int -> dialog.dismiss() }
             builderSingle.setAdapter(
                 arrayAdapter
             ) { dialog: DialogInterface, which: Int ->
@@ -153,14 +151,14 @@ class AdvNumberPicker : AppCompatActivity() {
         listView = findViewById(R.id.timesList)
         val emptyText = findViewById<TextView>(android.R.id.empty)
         listView!!.emptyView = emptyText
-        clear.setOnClickListener { v: View? ->
+        clear.setOnClickListener {
             hours!!.setText("")
             mins!!.setText("")
             secs!!.setText("")
         }
-        add.setOnClickListener { v: View? -> addTimeToList() }
-        cancel.setOnClickListener { v: View? -> finish() }
-        save.setOnClickListener { v: View? ->
+        add.setOnClickListener { addTimeToList() }
+        cancel.setOnClickListener { finish() }
+        save.setOnClickListener {
             Settings.advTimeString = advTimeString!!
             val i = Intent()
             setResult(RESULT_OK, i)
@@ -173,9 +171,9 @@ class AdvNumberPicker : AppCompatActivity() {
         val hs = hours!!.text.toString()
         val ms = mins!!.text.toString()
         val ss = secs!!.text.toString()
-        val h = if (hs.length > 0) hs.toInt() else 0
-        val m = if (ms.length > 0) ms.toInt() else 0
-        val s = if (ss.length > 0) ss.toInt() else 0
+        val h = if (hs.isNotEmpty()) hs.toInt() else 0
+        val m = if (ms.isNotEmpty()) ms.toInt() else 0
+        val s = if (ss.isNotEmpty()) ss.toInt() else 0
         val time = h * 60 * 60 * 1000 + m * 60 * 1000 + s * 1000
         advTimeString += (if (advTimeString!!.isEmpty()) "" else "^") + time + "#" + customUri + "#" + SessionTypes.REAL
         updateDataSet()
@@ -185,8 +183,7 @@ class AdvNumberPicker : AppCompatActivity() {
     }
 
     private fun updateDataSet() {
-        val advTimeList: List<String>
-        advTimeList = if (advTimeString == "") {
+        val advTimeList: List<String> = if (advTimeString == "") {
             ArrayList()
         } else {
             val advTime = advTimeString!!.split("\\^").toTypedArray()
@@ -207,21 +204,21 @@ class AdvNumberPicker : AppCompatActivity() {
                 .getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val rowView = inflater.inflate(R.layout.adv_list_item, parent, false)
             val p = values[position].split("#").toTypedArray()
-            if (p[0].length > 0) {
+            if (p[0].isNotEmpty()) {
                 val timeView = rowView.findViewById<TextView>(R.id.time)
                 if (timeView != null) {
                     val ts = time2humanStr(context, p[0].toInt())
                     timeView.text = ts
                 }
             }
-            if (p.size > 2 && p[2].length > 0) {
+            if (p.size > 2 && p[2].isNotEmpty()) {
                 val soundView = rowView.findViewById<TextView>(R.id.sound)
                 if (soundView != null) {
                     soundView.text = descriptionFromUri(p[1])
                 }
             }
             val b = rowView.findViewById<Button>(R.id.delete)
-            b.setOnClickListener { v: View? -> removeItem(position) }
+            b.setOnClickListener { removeItem(position) }
             return rowView
         }
     }
@@ -230,7 +227,7 @@ class AdvNumberPicker : AppCompatActivity() {
         if ("sys_def" == uri) {
             return getString(R.string.sys_def)
         } // Is it part of our tones?
-        val index = Arrays.asList(*customUris).indexOf(uri)
+        val index = listOf(*customUris).indexOf(uri)
         return if (index != -1) {
             customSounds[index]
         } else getString(R.string.custom_sound)

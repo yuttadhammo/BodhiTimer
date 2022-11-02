@@ -18,7 +18,6 @@ package org.yuttadhammo.BodhiTimer
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnLongClickListener
@@ -43,7 +42,6 @@ class SimpleNumberPicker : AppCompatActivity(), View.OnClickListener, OnLongClic
     private var i2: String? = null
     private var i3: String? = null
     private var i4: String? = null
-    private var prefs: SharedPreferences? = null
     private var context: Context? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -149,27 +147,27 @@ class SimpleNumberPicker : AppCompatActivity(), View.OnClickListener, OnLongClic
         if (h.length == 1) h = "0$h"
         if (m.length == 1) m = "0$m"
 
-        val vals = "$h:$m"
+        val str = "$h:$m"
 
         return when (v.id) {
             R.id.btn1 -> {
-                i1 = vals
-                setPreset(v, 1, vals)
+                i1 = str
+                setPreset(v, 1, str)
                 true
             }
             R.id.btn2 -> {
-                i2 = vals
-                setPreset(v, 2, vals)
+                i2 = str
+                setPreset(v, 2, str)
                 true
             }
             R.id.btn3 -> {
-                i3 = vals
-                setPreset(v, 3, vals)
+                i3 = str
+                setPreset(v, 3, str)
                 true
             }
             R.id.btn4 -> {
-                i4 = vals
-                setPreset(v, 4, vals)
+                i4 = str
+                setPreset(v, 4, str)
                 true
             }
             R.id.btnadv -> {
@@ -185,23 +183,18 @@ class SimpleNumberPicker : AppCompatActivity(), View.OnClickListener, OnLongClic
         var t = s
         if (s == "00:00:00") {
             s = null
-            t = context!!.getString(R.string.pre1)
-            when (i) {
-                2 -> {
-                    t = context!!.getString(R.string.pre2)
-                    t = context!!.getString(R.string.pre3)
-                    t = context!!.getString(R.string.pre4)
-                }
-                3 -> {
-                    t = context!!.getString(R.string.pre3)
-                    t = context!!.getString(R.string.pre4)
-                }
-                4 -> t = context!!.getString(R.string.pre4)
+            t = when (i) {
+                1 -> context!!.getString(R.string.pre1)
+                2 -> context!!.getString(R.string.pre2)
+                3 -> context!!.getString(R.string.pre3)
+                else -> context!!.getString(R.string.pre4)
             }
         }
         if (s == null && (v as TextView).text == t) {
             Toast.makeText(context, context!!.getString(R.string.notset), Toast.LENGTH_LONG).show()
-        } else (v as TextView).text = t
+        } else {
+            (v as TextView).text = t
+        }
         savePreset(i, s)
     }
 
