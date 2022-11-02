@@ -14,227 +14,169 @@
     You should have received a copy of the GNU General Public License
     along with Bodhi Timer.  If not, see <http://www.gnu.org/licenses/>.
 */
+package org.yuttadhammo.BodhiTimer
 
-package org.yuttadhammo.BodhiTimer;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import androidx.preference.PreferenceManager;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Gallery;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.view.View
+import android.view.View.OnLongClickListener
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.TranslateAnimation
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Gallery
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.preference.PreferenceManager
+import org.yuttadhammo.BodhiTimer.Util.Settings
 
 /**
  * Dialog box with an arbitrary number of number pickers
  */
-public class NNumberPicker extends Activity implements OnClickListener, OnLongClickListener {
-
-    public interface OnNNumberPickedListener {
-        void onNumbersPicked(int[] number);
+class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener {
+    interface OnNNumberPickedListener {
+        fun onNumbersPicked(number: IntArray?)
     }
 
+    private var hour: Gallery? = null
+    private var min: Gallery? = null
+    private var sec: Gallery? = null
+    private var i1: String? = null
+    private var i2: String? = null
+    private var i3: String? = null
+    private var i4: String? = null
+    private var prefs: SharedPreferences? = null
+    private var context: Context? = null
 
-    private Gallery hour;
-    private Gallery min;
-    private Gallery sec;
-
-    private String i1;
-
-    private String i2;
-
-    private String i3;
-
-    private String i4;
-
-    private SharedPreferences prefs;
-
-    private Context context;
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.context = this;
-
-        setContentView(R.layout.n_number_picker_dialog);
-
-        LinearLayout scrollView = findViewById(R.id.container);
-
-        Animation slideDown = slideDown();
-        scrollView.startAnimation(slideDown);
-        scrollView.setVisibility(View.VISIBLE);
-
-
-        String[] numbers = new String[61];
-        for (int i = 0; i < 61; i++) {
-            numbers[i] = Integer.toString(i);
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context = this
+        setContentView(R.layout.n_number_picker_dialog)
+        val scrollView = findViewById<LinearLayout>(R.id.container)
+        val slideDown = slideDown()
+        scrollView.startAnimation(slideDown)
+        scrollView.visibility = View.VISIBLE
+        val numbers = arrayOfNulls<String>(61)
+        for (i in 0..60) {
+            numbers[i] = Integer.toString(i)
         }
-        hour = findViewById(R.id.gallery_hour);
-        min = findViewById(R.id.gallery_min);
-        sec = findViewById(R.id.gallery_sec);
-
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(context, R.layout.gallery_item, numbers);
-
-        hour.setAdapter(adapter1);
-        min.setAdapter(adapter1);
-        sec.setAdapter(adapter1);
-
-        int[] times = getIntent().getIntArrayExtra("times");
-
-        hour.setSelection(times[0]);
-        min.setSelection(times[1]);
-        sec.setSelection(times[2]);
-
-        Button cancel = findViewById(R.id.btnCancel);
-        Button ok = findViewById(R.id.btnOk);
-        cancel.setOnClickListener(this);
-        ok.setOnClickListener(this);
-
-        Button pre1 = findViewById(R.id.btn1);
-        Button pre2 = findViewById(R.id.btn2);
-        Button pre3 = findViewById(R.id.btn3);
-        Button pre4 = findViewById(R.id.btn4);
-        Button adv = findViewById(R.id.btnadv);
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        i1 = prefs.getString("pre1", null);
-        i2 = prefs.getString("pre2", null);
-        i3 = prefs.getString("pre3", null);
-        i4 = prefs.getString("pre4", null);
-
-        if (i1 != null)
-            pre1.setText(i1);
-        if (i2 != null)
-            pre2.setText(i2);
-        if (i3 != null)
-            pre3.setText(i3);
-        if (i4 != null)
-            pre4.setText(i4);
-
-        pre1.setOnClickListener(this);
-        pre2.setOnClickListener(this);
-        pre3.setOnClickListener(this);
-        pre4.setOnClickListener(this);
-        pre1.setOnLongClickListener(this);
-        pre2.setOnLongClickListener(this);
-        pre3.setOnLongClickListener(this);
-        pre4.setOnLongClickListener(this);
-
-        adv.setOnClickListener(this);
-        adv.setOnLongClickListener(this);
-
-
-        TextView htext = findViewById(R.id.text_hour);
-        TextView mtext = findViewById(R.id.text_min);
-        TextView stext = findViewById(R.id.text_sec);
-
-        htext.setOnClickListener(this);
-        mtext.setOnClickListener(this);
-        stext.setOnClickListener(this);
-
+        hour = findViewById(R.id.gallery_hour)
+        min = findViewById(R.id.gallery_min)
+        sec = findViewById(R.id.gallery_sec)
+        val adapter1 = ArrayAdapter(context, R.layout.gallery_item, numbers)
+        hour.setAdapter(adapter1)
+        min.setAdapter(adapter1)
+        sec.setAdapter(adapter1)
+        val times = intent.getIntArrayExtra("times")
+        hour.setSelection(times!![0])
+        min.setSelection(times[1])
+        sec.setSelection(times[2])
+        val cancel = findViewById<Button>(R.id.btnCancel)
+        val ok = findViewById<Button>(R.id.btnOk)
+        cancel.setOnClickListener(this)
+        ok.setOnClickListener(this)
+        val pre1 = findViewById<Button>(R.id.btn1)
+        val pre2 = findViewById<Button>(R.id.btn2)
+        val pre3 = findViewById<Button>(R.id.btn3)
+        val pre4 = findViewById<Button>(R.id.btn4)
+        val adv = findViewById<Button>(R.id.btnadv)
+        prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        i1 = Settings.preset1
+        i2 = Settings.preset2
+        i3 = Settings.preset3
+        i4 = Settings.preset4
+        if (i1 != null) pre1.text = i1
+        if (i2 != null) pre2.text = i2
+        if (i3 != null) pre3.text = i3
+        if (i4 != null) pre4.text = i4
+        pre1.setOnClickListener(this)
+        pre2.setOnClickListener(this)
+        pre3.setOnClickListener(this)
+        pre4.setOnClickListener(this)
+        pre1.setOnLongClickListener(this)
+        pre2.setOnLongClickListener(this)
+        pre3.setOnLongClickListener(this)
+        pre4.setOnLongClickListener(this)
+        adv.setOnClickListener(this)
+        adv.setOnLongClickListener(this)
+        val htext = findViewById<TextView>(R.id.text_hour)
+        val mtext = findViewById<TextView>(R.id.text_min)
+        val stext = findViewById<TextView>(R.id.text_sec)
+        htext.setOnClickListener(this)
+        mtext.setOnClickListener(this)
+        stext.setOnClickListener(this)
     }
 
     /**
      * {@inheritDoc}
      */
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.btnOk:
-
-                int hsel = hour.getSelectedItemPosition();
-                int msel = min.getSelectedItemPosition();
-                int ssel = sec.getSelectedItemPosition();
-
-                int[] values = {hsel, msel, ssel};
-                Intent i = new Intent();
-                i.putExtra("times", values);
-                setResult(Activity.RESULT_OK, i);
-                finish();
-                break;
-
-            case R.id.btnCancel:
-                finish();
-                break;
-            case R.id.btn1:
-                setFromPre(i1);
-                break;
-            case R.id.btn2:
-                setFromPre(i2);
-                break;
-            case R.id.btn3:
-                setFromPre(i3);
-                break;
-            case R.id.btn4:
-                setFromPre(i4);
-                break;
-            case R.id.btnadv:
-                setFromAdv();
-                break;
-            case R.id.text_hour:
-                hour.setSelection(0);
-                break;
-            case R.id.text_min:
-                min.setSelection(0);
-                break;
-            case R.id.text_sec:
-                sec.setSelection(0);
-                break;
-
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.btnOk -> {
+                val hsel = hour!!.selectedItemPosition
+                val msel = min!!.selectedItemPosition
+                val ssel = sec!!.selectedItemPosition
+                val values = intArrayOf(hsel, msel, ssel)
+                val i = Intent()
+                i.putExtra("times", values)
+                setResult(RESULT_OK, i)
+                finish()
+            }
+            R.id.btnCancel -> finish()
+            R.id.btn1 -> setFromPre(i1)
+            R.id.btn2 -> setFromPre(i2)
+            R.id.btn3 -> setFromPre(i3)
+            R.id.btn4 -> setFromPre(i4)
+            R.id.btnadv -> setFromAdv()
+            R.id.text_hour -> hour!!.setSelection(0)
+            R.id.text_min -> min!!.setSelection(0)
+            R.id.text_sec -> sec!!.setSelection(0)
         }
-
     }
 
-    private void setFromPre(String ts) {
+    private fun setFromPre(ts: String?) {
         if (ts == null) {
-            Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG).show();
-            return;
+            Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
+                .show()
+            return
         }
-
-        int h = 0;
-        int m = 0;
-        int s = 0;
-
+        var h = 0
+        var m = 0
+        var s = 0
         try {
-            h = Integer.parseInt(ts.substring(0, 2));
-            m = Integer.parseInt(ts.substring(3, 5));
-            s = Integer.parseInt(ts.substring(6, 8));
-        } catch (Exception e) {
-            e.printStackTrace();
+            h = ts.substring(0, 2).toInt()
+            m = ts.substring(3, 5).toInt()
+            s = ts.substring(6, 8).toInt()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
         if (h != 0 || m != 0 || s != 0) {
-            int[] values = {h, m, s};
-            Intent i = new Intent();
-            i.putExtra("times", values);
-            setResult(Activity.RESULT_OK, i);
-            finish();
+            val values = intArrayOf(h, m, s)
+            val i = Intent()
+            i.putExtra("times", values)
+            setResult(RESULT_OK, i)
+            finish()
         } else {
-            Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
+                .show()
         }
     }
 
-    private void setFromAdv() {
-        if (prefs.getString("advTimeString", "").length() > 0) {
-            int[] values = {-1, -1, -1};
-            Intent i = new Intent();
-            i.putExtra("times", values);
-            setResult(Activity.RESULT_OK, i);
-            finish();
+    private fun setFromAdv() {
+        if (prefs!!.getString("advTimeString", "")!!.length > 0) {
+            val values = intArrayOf(-1, -1, -1)
+            val i = Intent()
+            i.putExtra("times", values)
+            setResult(RESULT_OK, i)
+            finish()
         } else {
-            Intent i = new Intent(this, AdvNumberPicker.class);
-            startActivity(i);
+            val i = Intent(this, AdvNumberPicker::class.java)
+            startActivity(i)
         }
     }
 
@@ -243,107 +185,102 @@ public class NNumberPicker extends Activity implements OnClickListener, OnLongCl
      *
      * @return
      */
-    public boolean onLongClick(View v) {
-        String h = hour.getSelectedItemPosition() + "";
-        if (h.length() == 1)
-            h = "0" + h;
-        String m = min.getSelectedItemPosition() + "";
-        if (m.length() == 1)
-            m = "0" + m;
-        String s = sec.getSelectedItemPosition() + "";
-        if (s.length() == 1)
-            s = "0" + s;
-
-        String vals = h + ":" + m + ":" + s;
-        switch (v.getId()) {
-            case R.id.btn1:
-                i1 = vals;
-                setPre(v, 1, vals);
-                return true;
-            case R.id.btn2:
-                i2 = vals;
-                setPre(v, 2, vals);
-                return true;
-            case R.id.btn3:
-                i3 = vals;
-                setPre(v, 3, vals);
-                return true;
-            case R.id.btn4:
-                i4 = vals;
-                setPre(v, 4, vals);
-                return true;
-            case R.id.btnadv:
-                Intent i = new Intent(this, AdvNumberPicker.class);
-                startActivity(i);
-                return true;
-            default:
-                return false;
+    override fun onLongClick(v: View): Boolean {
+        var h = hour!!.selectedItemPosition.toString() + ""
+        if (h.length == 1) h = "0$h"
+        var m = min!!.selectedItemPosition.toString() + ""
+        if (m.length == 1) m = "0$m"
+        var s = sec!!.selectedItemPosition.toString() + ""
+        if (s.length == 1) s = "0$s"
+        val vals = "$h:$m:$s"
+        return when (v.id) {
+            R.id.btn1 -> {
+                i1 = vals
+                setPre(v, 1, vals)
+                true
+            }
+            R.id.btn2 -> {
+                i2 = vals
+                setPre(v, 2, vals)
+                true
+            }
+            R.id.btn3 -> {
+                i3 = vals
+                setPre(v, 3, vals)
+                true
+            }
+            R.id.btn4 -> {
+                i4 = vals
+                setPre(v, 4, vals)
+                true
+            }
+            R.id.btnadv -> {
+                val i = Intent(this, AdvNumberPicker::class.java)
+                startActivity(i)
+                true
+            }
+            else -> false
         }
     }
 
-    private void setPre(View v, int i, String s) {
-        String t = s;
-        if (s.equals("00:00:00")) {
-            s = null;
-            t = context.getString(R.string.pre1);
-            switch (i) {
-                case 2:
-                    t = context.getString(R.string.pre2);
-                case 3:
-                    t = context.getString(R.string.pre3);
-                case 4:
-                    t = context.getString(R.string.pre4);
+    private fun setPre(v: View, i: Int, s: String) {
+        var s: String? = s
+        var t = s
+        if (s == "00:00:00") {
+            s = null
+            t = context!!.getString(R.string.pre1)
+            when (i) {
+                2 -> {
+                    t = context!!.getString(R.string.pre2)
+                    t = context!!.getString(R.string.pre3)
+                    t = context!!.getString(R.string.pre4)
+                }
+                3 -> {
+                    t = context!!.getString(R.string.pre3)
+                    t = context!!.getString(R.string.pre4)
+                }
+                4 -> t = context!!.getString(R.string.pre4)
             }
         }
-        if (s == null && ((TextView) v).getText().equals(t)) {
-            Toast.makeText(context, context.getString(R.string.notset), Toast.LENGTH_LONG).show();
-        } else
-            ((TextView) v).setText(t);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("pre" + i, s);
-        editor.commit();
+        if (s == null && (v as TextView).text == t) {
+            Toast.makeText(context, context!!.getString(R.string.notset), Toast.LENGTH_LONG).show()
+        } else (v as TextView).text = t
+        val editor = prefs!!.edit()
+        editor.putString("pre$i", s)
+        editor.commit()
     }
 
-    public void setTimes(int[] _times) {
-        hour.setSelection(_times[0]);
-        min.setSelection(_times[1]);
-        sec.setSelection(_times[2]);
+    fun setTimes(_times: IntArray) {
+        hour!!.setSelection(_times[0])
+        min!!.setSelection(_times[1])
+        sec!!.setSelection(_times[2])
     }
 
-
-    public static Animation slideDown() {
-
-        AnimationSet set = new AnimationSet(true);
-
-        Animation animation = new TranslateAnimation(
+    companion object {
+        fun slideDown(): Animation {
+            val set = AnimationSet(true)
+            val animation: Animation = TranslateAnimation(
                 Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
                 0.0f, Animation.RELATIVE_TO_SELF, -1.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f);
-        animation.setDuration(200);
-        animation.setAnimationListener(new AnimationListener() {
+                Animation.RELATIVE_TO_SELF, 0.0f
+            )
+            animation.duration = 200
+            animation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+                    // TODO Auto-generated method stub
+                }
 
-            @Override
-            public void onAnimationStart(Animation animation) {
-                // TODO Auto-generated method stub
+                override fun onAnimationRepeat(animation: Animation) {
+                    // TODO Auto-generated method stub
+                }
 
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                // TODO Auto-generated method stub
-                //Log.d(TAG,"sliding down ended");
-
-            }
-        });
-        set.addAnimation(animation);
-
-        return animation;
+                override fun onAnimationEnd(animation: Animation) {
+                    // TODO Auto-generated method stub
+                    //Log.d(TAG,"sliding down ended");
+                }
+            })
+            set.addAnimation(animation)
+            return animation
+        }
     }
-
 }
