@@ -143,40 +143,46 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
                 .show()
             return
         }
-        var h = 0
-        var m = 0
+        val h = ts.substring(0, 2).toInt()
+        val m = ts.substring(3, 5).toInt()
         var s = 0
-        try {
-            h = ts.substring(0, 2).toInt()
-            m = ts.substring(3, 5).toInt()
-            s = ts.substring(6, 8).toInt()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        if (ts.length > 5) s = ts.substring(6, 8).toInt()
         if (h != 0 || m != 0 || s != 0) {
             val values = intArrayOf(h, m, s)
-            val i = Intent()
-            i.putExtra("times", values)
-            setResult(RESULT_OK, i)
-            finish()
+            returnResults(values)
+        } else Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
+            .show()
+    }
+
+    internal fun returnResults(values: IntArray) {
+        val i = Intent()
+        i.putExtra("times", values)
+        setResult(RESULT_OK, i)
+        finish()
+    }
+
+    internal fun returnAdvanced(): Boolean {
+        return if (Settings.advTimeString.isNotEmpty()) {
+            val values = intArrayOf(-1, -1, -1)
+            returnResults(values)
+            true
         } else {
-            Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
-                .show()
+            false
         }
     }
 
     private fun setFromAdv() {
-        if (Settings.advTimeString.isNotEmpty()) {
-            val values = intArrayOf(-1, -1, -1)
-            val i = Intent()
-            i.putExtra("times", values)
-            setResult(RESULT_OK, i)
-            finish()
-        } else {
-            val i = Intent(this, AdvNumberPicker::class.java)
-            startActivity(i)
+        val success = returnAdvanced()
+        if (!success) {
+            startAdvancedPicker()
         }
     }
+
+    internal fun startAdvancedPicker() {
+        val i = Intent(this, AdvNumberPicker::class.java)
+        startActivityForResult(i, 0)
+    }
+
 
     /**
      * {@inheritDoc}
@@ -194,22 +200,22 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
         return when (v.id) {
             R.id.btn1 -> {
                 i1 = vals
-                setPre(v, 1, vals)
+                setPreset(v, 1, vals)
                 true
             }
             R.id.btn2 -> {
                 i2 = vals
-                setPre(v, 2, vals)
+                setPreset(v, 2, vals)
                 true
             }
             R.id.btn3 -> {
                 i3 = vals
-                setPre(v, 3, vals)
+                setPreset(v, 3, vals)
                 true
             }
             R.id.btn4 -> {
                 i4 = vals
-                setPre(v, 4, vals)
+                setPreset(v, 4, vals)
                 true
             }
             R.id.btnadv -> {

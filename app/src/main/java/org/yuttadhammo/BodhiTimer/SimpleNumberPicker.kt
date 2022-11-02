@@ -111,22 +111,6 @@ class SimpleNumberPicker : NNumberPicker() {
         }
     }
 
-    private fun setFromPre(ts: String?) {
-        if (ts == null) {
-            Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
-                .show()
-            return
-        }
-        val h = ts.substring(0, 2).toInt()
-        val m = ts.substring(3, 5).toInt()
-        var s = 0
-        if (ts.length > 5) s = ts.substring(6, 8).toInt()
-        if (h != 0 || m != 0 || s != 0) {
-            val values = intArrayOf(h, m, s)
-            returnResults(values)
-        } else Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
-            .show()
-    }
 
     private fun setFromAdv() {
         val success = returnAdvanced()
@@ -178,30 +162,6 @@ class SimpleNumberPicker : NNumberPicker() {
     }
 
 
-
-
-
-    private fun returnAdvanced(): Boolean {
-        return if (Settings.advTimeString.isNotEmpty()) {
-            val values = intArrayOf(-1, -1, -1)
-            returnResults(values)
-            true
-        } else {
-            false
-        }
-    }
-
-    private fun returnResults(values: IntArray) {
-        val i = Intent()
-        i.putExtra("times", values)
-        setResult(RESULT_OK, i)
-        finish()
-    }
-
-    private fun startAdvancedPicker() {
-        val i = Intent(this, AdvNumberPicker::class.java)
-        startActivityForResult(i, 0)
-    }
 
     // This is called when we come back from the advanced time picker
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
