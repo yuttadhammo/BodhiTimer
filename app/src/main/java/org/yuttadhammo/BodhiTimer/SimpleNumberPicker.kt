@@ -125,12 +125,7 @@ class SimpleNumberPicker : NNumberPicker() {
      * @return
      */
     override fun onLongClick(v: View): Boolean {
-        var h = hour.toString() + ""
-        var m = minute.toString() + ""
-        if (h.length == 1) h = "0$h"
-        if (m.length == 1) m = "0$m"
-
-        val str = "$h:$m"
+        val str = getStringFromUI()
 
         return when (v.id) {
             R.id.btn1 -> {
@@ -161,6 +156,15 @@ class SimpleNumberPicker : NNumberPicker() {
         }
     }
 
+    private fun getStringFromUI(): String {
+        var h = hour.toString() + ""
+        var m = minute.toString() + ""
+        if (h.length == 1) h = "0$h"
+        if (m.length == 1) m = "0$m"
+
+        val str = "$h:$m"
+        return str
+    }
 
 
     // This is called when we come back from the advanced time picker

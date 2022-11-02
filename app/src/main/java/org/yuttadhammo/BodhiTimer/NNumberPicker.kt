@@ -190,32 +190,26 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
      * @return
      */
     override fun onLongClick(v: View): Boolean {
-        var h = hour!!.selectedItemPosition.toString() + ""
-        if (h.length == 1) h = "0$h"
-        var m = min!!.selectedItemPosition.toString() + ""
-        if (m.length == 1) m = "0$m"
-        var s = sec!!.selectedItemPosition.toString() + ""
-        if (s.length == 1) s = "0$s"
-        val vals = "$h:$m:$s"
+        val str = getStringFromUI()
         return when (v.id) {
             R.id.btn1 -> {
-                i1 = vals
-                setPreset(v, 1, vals)
+                i1 = str
+                setPreset(v, 1, str)
                 true
             }
             R.id.btn2 -> {
-                i2 = vals
-                setPreset(v, 2, vals)
+                i2 = str
+                setPreset(v, 2, str)
                 true
             }
             R.id.btn3 -> {
-                i3 = vals
-                setPreset(v, 3, vals)
+                i3 = str
+                setPreset(v, 3, str)
                 true
             }
             R.id.btn4 -> {
-                i4 = vals
-                setPreset(v, 4, vals)
+                i4 = str
+                setPreset(v, 4, str)
                 true
             }
             R.id.btnadv -> {
@@ -225,6 +219,17 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
             }
             else -> false
         }
+    }
+
+    private fun getStringFromUI(): String {
+        var h = hour!!.selectedItemPosition.toString() + ""
+        if (h.length == 1) h = "0$h"
+        var m = min!!.selectedItemPosition.toString() + ""
+        if (m.length == 1) m = "0$m"
+        var s = sec!!.selectedItemPosition.toString() + ""
+        if (s.length == 1) s = "0$s"
+        val vals = "$h:$m:$s"
+        return vals
     }
 
     internal fun setPreset(v: View, i: Int, s: String) {
