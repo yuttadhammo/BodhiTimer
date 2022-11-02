@@ -126,10 +126,10 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
                 finish()
             }
             R.id.btnCancel -> finish()
-            R.id.btn1 -> setFromPre(i1)
-            R.id.btn2 -> setFromPre(i2)
-            R.id.btn3 -> setFromPre(i3)
-            R.id.btn4 -> setFromPre(i4)
+            R.id.btn1 -> setFromPreset(i1)
+            R.id.btn2 -> setFromPreset(i2)
+            R.id.btn3 -> setFromPreset(i3)
+            R.id.btn4 -> setFromPreset(i4)
             R.id.btnadv -> setFromAdv()
             R.id.text_hour -> hour!!.setSelection(0)
             R.id.text_min -> min!!.setSelection(0)
@@ -137,7 +137,7 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
         }
     }
 
-    private fun setFromPre(ts: String?) {
+    internal fun setFromPreset(ts: String?) {
         if (ts == null) {
             Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
                 .show()
@@ -171,7 +171,7 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
         }
     }
 
-    private fun setFromAdv() {
+    internal fun setFromAdv() {
         val success = returnAdvanced()
         if (!success) {
             startAdvancedPicker()
@@ -191,6 +191,7 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
      */
     override fun onLongClick(v: View): Boolean {
         val str = getStringFromUI()
+
         return when (v.id) {
             R.id.btn1 -> {
                 i1 = str
@@ -213,23 +214,21 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
                 true
             }
             R.id.btnadv -> {
-                val i = Intent(this, AdvNumberPicker::class.java)
-                startActivity(i)
+                startAdvancedPicker()
                 true
             }
             else -> false
         }
     }
 
-    private fun getStringFromUI(): String {
+    open fun getStringFromUI(): String {
         var h = hour!!.selectedItemPosition.toString() + ""
         if (h.length == 1) h = "0$h"
         var m = min!!.selectedItemPosition.toString() + ""
         if (m.length == 1) m = "0$m"
         var s = sec!!.selectedItemPosition.toString() + ""
         if (s.length == 1) s = "0$s"
-        val vals = "$h:$m:$s"
-        return vals
+        return "$h:$m:$s"
     }
 
     internal fun setPreset(v: View, i: Int, s: String) {

@@ -23,7 +23,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TimePicker
-import android.widget.Toast
 import org.yuttadhammo.BodhiTimer.Util.Settings
 
 /**
@@ -103,67 +102,22 @@ class SimpleNumberPicker : NNumberPicker() {
                 returnResults(values)
             }
             R.id.btnCancel -> finish()
-            R.id.btn1 -> setFromPre(i1)
-            R.id.btn2 -> setFromPre(i2)
-            R.id.btn3 -> setFromPre(i3)
-            R.id.btn4 -> setFromPre(i4)
+            R.id.btn1 -> setFromPreset(i1)
+            R.id.btn2 -> setFromPreset(i2)
+            R.id.btn3 -> setFromPreset(i3)
+            R.id.btn4 -> setFromPreset(i4)
             R.id.btnadv -> setFromAdv()
         }
     }
 
 
-    private fun setFromAdv() {
-        val success = returnAdvanced()
-        if (!success) {
-            startAdvancedPicker()
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return
-     */
-    override fun onLongClick(v: View): Boolean {
-        val str = getStringFromUI()
-
-        return when (v.id) {
-            R.id.btn1 -> {
-                i1 = str
-                setPreset(v, 1, str)
-                true
-            }
-            R.id.btn2 -> {
-                i2 = str
-                setPreset(v, 2, str)
-                true
-            }
-            R.id.btn3 -> {
-                i3 = str
-                setPreset(v, 3, str)
-                true
-            }
-            R.id.btn4 -> {
-                i4 = str
-                setPreset(v, 4, str)
-                true
-            }
-            R.id.btnadv -> {
-                startAdvancedPicker()
-                true
-            }
-            else -> false
-        }
-    }
-
-    private fun getStringFromUI(): String {
+    override fun getStringFromUI(): String {
         var h = hour.toString() + ""
         var m = minute.toString() + ""
         if (h.length == 1) h = "0$h"
         if (m.length == 1) m = "0$m"
 
-        val str = "$h:$m"
-        return str
+        return "$h:$m"
     }
 
 
