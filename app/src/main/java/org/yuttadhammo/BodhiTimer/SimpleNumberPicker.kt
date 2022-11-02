@@ -20,19 +20,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.View.OnLongClickListener
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import org.yuttadhammo.BodhiTimer.Util.Settings
 
 /**
  * Dialog box with an arbitrary number of number pickers
+ *
+ * THIS IS AN UNUSED EXPERIMENT!
  */
-class SimpleNumberPicker : AppCompatActivity(), View.OnClickListener, OnLongClickListener {
+class SimpleNumberPicker : NNumberPicker() {
     interface OnNNumberPickedListener {
         fun onNumbersPicked(number: IntArray?)
     }
@@ -44,7 +43,7 @@ class SimpleNumberPicker : AppCompatActivity(), View.OnClickListener, OnLongClic
     private var i4: String? = null
     private var context: Context? = null
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this
         setContentView(R.layout.n_number_picker_dialog)
@@ -178,32 +177,9 @@ class SimpleNumberPicker : AppCompatActivity(), View.OnClickListener, OnLongClic
         }
     }
 
-    private fun setPreset(v: View, i: Int, s: String) {
-        var s: String? = s
-        var t = s
-        if (s == "00:00:00") {
-            s = null
-            t = when (i) {
-                1 -> context!!.getString(R.string.pre1)
-                2 -> context!!.getString(R.string.pre2)
-                3 -> context!!.getString(R.string.pre3)
-                else -> context!!.getString(R.string.pre4)
-            }
-        }
-        if (s == null && (v as TextView).text == t) {
-            Toast.makeText(context, context!!.getString(R.string.notset), Toast.LENGTH_LONG).show()
-        } else {
-            (v as TextView).text = t
-        }
-        savePreset(i, s)
-    }
 
-    private fun savePreset(i: Int, s: String?) {
-        Settings::class.java.getField("pre$i").set(Settings, s!!)
-//        val editor = prefs!!.edit()
-//        editor.putString("pre$i", s)
-//        editor.apply()
-    }
+
+
 
     private fun returnAdvanced(): Boolean {
         return if (Settings.advTimeString.isNotEmpty()) {

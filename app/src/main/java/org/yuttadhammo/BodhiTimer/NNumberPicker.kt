@@ -32,13 +32,12 @@ import android.widget.Gallery
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.Util.Settings
 
 /**
  * Dialog box with an arbitrary number of number pickers
  */
-class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener {
+open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener {
     interface OnNNumberPickedListener {
         fun onNumbersPicked(number: IntArray?)
     }
@@ -63,19 +62,19 @@ class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener {
         scrollView.visibility = View.VISIBLE
         val numbers = arrayOfNulls<String>(61)
         for (i in 0..60) {
-            numbers[i] = Integer.toString(i)
+            numbers[i] = i.toString()
         }
         hour = findViewById(R.id.gallery_hour)
         min = findViewById(R.id.gallery_min)
         sec = findViewById(R.id.gallery_sec)
-        val adapter1 = ArrayAdapter(context, R.layout.gallery_item, numbers)
-        hour.setAdapter(adapter1)
-        min.setAdapter(adapter1)
-        sec.setAdapter(adapter1)
+        val adapter1 = ArrayAdapter(this, R.layout.gallery_item, numbers)
+        hour!!.adapter = adapter1
+        min!!.adapter = adapter1
+        sec!!.adapter = adapter1
         val times = intent.getIntArrayExtra("times")
-        hour.setSelection(times!![0])
-        min.setSelection(times[1])
-        sec.setSelection(times[2])
+        hour!!.setSelection(times!![0])
+        min!!.setSelection(times[1])
+        sec!!.setSelection(times[2])
         val cancel = findViewById<Button>(R.id.btnCancel)
         val ok = findViewById<Button>(R.id.btnOk)
         cancel.setOnClickListener(this)
@@ -85,7 +84,6 @@ class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener {
         val pre3 = findViewById<Button>(R.id.btn3)
         val pre4 = findViewById<Button>(R.id.btn4)
         val adv = findViewById<Button>(R.id.btnadv)
-        prefs = PreferenceManager.getDefaultSharedPreferences(context)
         i1 = Settings.preset1
         i2 = Settings.preset2
         i3 = Settings.preset3
@@ -168,7 +166,7 @@ class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener {
     }
 
     private fun setFromAdv() {
-        if (prefs!!.getString("advTimeString", "")!!.length > 0) {
+        if (Settings.advTimeString.isNotEmpty()) {
             val values = intArrayOf(-1, -1, -1)
             val i = Intent()
             i.putExtra("times", values)
@@ -223,31 +221,31 @@ class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener {
         }
     }
 
-    private fun setPre(v: View, i: Int, s: String) {
+    internal fun setPreset(v: View, i: Int, s: String) {
         var s: String? = s
         var t = s
         if (s == "00:00:00") {
             s = null
-            t = context!!.getString(R.string.pre1)
-            when (i) {
-                2 -> {
-                    t = context!!.getString(R.string.pre2)
-                    t = context!!.getString(R.string.pre3)
-                    t = context!!.getString(R.string.pre4)
-                }
-                3 -> {
-                    t = context!!.getString(R.string.pre3)
-                    t = context!!.getString(R.string.pre4)
-                }
-                4 -> t = context!!.getString(R.string.pre4)
+            t = when (i) {
+                1 -> context!!.getString(R.string.pre1)
+                2 -> context!!.getString(R.string.pre2)
+                3 -> context!!.getString(R.string.pre3)
+                else -> context!!.getString(R.string.pre4)
             }
         }
         if (s == null && (v as TextView).text == t) {
             Toast.makeText(context, context!!.getString(R.string.notset), Toast.LENGTH_LONG).show()
-        } else (v as TextView).text = t
+        } else {
+            (v as TextView).text = t
+        }
+        savePreset(i, s)
+    }
+
+    private fun savePreset(i: Int, s: String?) {
+//        Settings::class.java.getField("pre$i").set(Settings, s!!)
         val editor = prefs!!.edit()
         editor.putString("pre$i", s)
-        editor.commit()
+        editor.apply()
     }
 
     fun setTimes(_times: IntArray) {
