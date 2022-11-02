@@ -120,10 +120,7 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
                 val msel = min!!.selectedItemPosition
                 val ssel = sec!!.selectedItemPosition
                 val values = intArrayOf(hsel, msel, ssel)
-                val i = Intent()
-                i.putExtra("times", values)
-                setResult(RESULT_OK, i)
-                finish()
+                returnResults(values)
             }
             R.id.btnCancel -> finish()
             R.id.btn1 -> setFromPreset(i1)
@@ -284,7 +281,6 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
 
                 override fun onAnimationEnd(animation: Animation) {
                     // TODO Auto-generated method stub
-                    //Log.d(TAG,"sliding down ended");
                 }
             })
             set.addAnimation(animation)
