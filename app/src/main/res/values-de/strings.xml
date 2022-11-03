@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">Bodhi Timer</string>
     <string name="Start">Timer setzen</string>
     <string name="Stop">Zurücksetzen</string>
@@ -14,7 +14,9 @@
     <string name="prefs">Einstellungen</string>
 
     <!-- Preferences -->
-    <string name="notification">Benachrichtigung</string>
+
+    <string name="preferences">Einstellungen</string>
+    <string name="sound">Töne</string>
     <string name="notification_sound">Timer-Ton</string>
     <string name="notification_sound_desc">Ton der bei Ablauf des Timers gepielt wird.</string>
 
@@ -24,6 +26,20 @@
     <string name="playing_sound">Ton stoppen</string>
     <string name="playing_sound_desc">Klicken um den aktuellen Ton zu stoppen.</string>
 
+    <string name="pre_sound">Start-Ton</string>
+    <string name="pre_sound_desc">Optionaler Ton, der zu Beginn des Timers gespielt wird.</string>
+
+    <string name="preparation_time">Vorbereitungszeit</string>
+    <string name="preparation_time_desc">Eine Verzögerung einstellen, bevor der Timer beginnt.</string>
+
+    <string name="play_pre_sound">Start-Ton testen</string>
+    <string name="play_pre_sound_desc">Spielt den aktuellen Start-Ton ab.</string>
+
+    <string name="volume">Lautstärke</string>
+    <string name="volume_desc">in Prozent der Medienlautstärke</string>
+
+
+    <string name="notification">Benachrichtigung</string>
     <string name="notification_vibrate">Vibration bei Benachrichtigung</string>
     <string name="notification_vibrate_desc">Vibriere bei Ablauf des Timers.</string>
 
@@ -32,10 +48,18 @@
 
     <string name="auto_clear">Automatisch löschen</string>
     <string name="auto_clear_desc">Benachrichtigung nach ein paar Sekunden automatisch löschen.</string>
+    <string name="auto_restart">Timer automatisch neustarten</string>
+    <string name="auto_restart_desc">Nach dem Ende eines Timers direkt einen neuen starten.</string>
 
     <string name="visual">Erscheinungsbild</string>
 
+    <string name="is_bitmap">Einblend-Animation</string>
+    <string name="is_circle">Kreis-Animation</string>
+    <string name="bmp_or_circle">Stil der Animation</string>
+
     <string name="custom_bmp">Individuelles Bild benutzen</string>
+
+    <string name="invert_colors">Farben invertieren</string>
 
     <string name="circle_theme">Kreis Theme</string>
     <string name="circle_theme_desc">Den Stil der Kreisanimation wählen.</string>
@@ -57,14 +81,13 @@
     <string name="stay_awake">Wach bleiben</string>
     <string name="stay_awake_desc">Das Telefon nicht einschlafen lassen.</string>
 
-
     <string name="about_desc">Über Bodhi Timer</string>
+
 
     <!-- About -->
     <string name="close">Schließen</string>
     <string name="about">Info</string>
     <string name="about_title">Über Bodhi Timer</string>
-
     <string name="zero">00</string>
     <string name="set">Setzen</string>
     <string name="pause">Pause</string>
@@ -72,25 +95,10 @@
     <string name="H">Std</string>
     <string name="M">Min</string>
     <string name="S">Sek</string>
-    <string name="preferences">Einstellungen</string>
-    <string name="pre_sound">Start-Ton</string>
-    <string name="volume">Lautstärke</string>
-    <string name="play_pre_sound">Start-Ton testen</string>
-    <string name="play_pre_sound_desc">Spielt den aktuellen Start-Ton ab.</string>
-    <string name="is_circle">Kreis-Animation</string>
-    <string name="invert_colors">Farben invertieren</string>
-    <string name="sound">Töne</string>
-    <string name="preparation_time">Vorbereitungszeit</string>
-    <string name="preparation_time_desc">Eine Verzögerung einstellen, bevor der Timer beginnt.</string>
-    <string name="bmp_or_circle">Stil der Animation</string>
-    <string name="volume_desc">in Prozent der Medienlautstärke</string>
-    <string name="pre_sound_desc">Optionaler Ton, der zu Beginn des Timers gespielt wird.</string>
-    <string name="auto_restart">Timer automatisch neustarten</string>
-    <string name="auto_restart_desc">Nach dem Ende eines Timers direkt einen neuen starten.</string>
-    <string name="is_bitmap">Einblend-Animation</string>
+
     <string name="NoVoiceRecognitionInstalled">Bitte installieren Sie eine Spracherkennungs-App!</string>
     <string name="general">General</string>
 
-</resources>
+    </resources>
 
 

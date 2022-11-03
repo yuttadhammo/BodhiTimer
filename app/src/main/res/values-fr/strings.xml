@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">Bodhi Timer</string>
     <string name="Start">Démarrer</string>
     <string name="Stop">Effacer</string>
@@ -12,11 +12,10 @@
 
     <string name="prefs">Préférences</string>
 
-    <!-- Preferences -->
-    <string name="notification">Notification</string>
     <string name="notification_sound">Avertissement sonore</string>
     <string name="notification_sound_desc">Effet sonore de la notification.</string>
 
+    <string name="notification">Notification</string>
     <string name="notification_vibrate">Notification vibrante</string>
     <string name="notification_vibrate_desc">Faire vibrer le téléphone pour la notification.</string>
 
@@ -41,4 +40,6 @@
     <string name="about">À propos</string>
     <string name="about_title">À propos de Bodhi Timer</string>
     <string name="NoVoiceRecognitionInstalled">Veuillez installer une application de reconnaissance vocale !</string>
-</resources>
+    </resources>
+
+
