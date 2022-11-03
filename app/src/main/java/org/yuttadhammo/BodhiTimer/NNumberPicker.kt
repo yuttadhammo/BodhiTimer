@@ -60,21 +60,7 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
         val slideDown = slideDown()
         scrollView.startAnimation(slideDown)
         scrollView.visibility = View.VISIBLE
-        val numbers = arrayOfNulls<String>(61)
-        for (i in 0..60) {
-            numbers[i] = i.toString()
-        }
-        hour = findViewById(R.id.gallery_hour)
-        min = findViewById(R.id.gallery_min)
-        sec = findViewById(R.id.gallery_sec)
-        val adapter1 = ArrayAdapter(this, R.layout.gallery_item, numbers)
-        hour!!.adapter = adapter1
-        min!!.adapter = adapter1
-        sec!!.adapter = adapter1
-        val times = intent.getIntArrayExtra("times")
-        hour!!.setSelection(times!![0])
-        min!!.setSelection(times[1])
-        sec!!.setSelection(times[2])
+        setupTimePicker()
         val cancel = findViewById<Button>(R.id.btnCancel)
         val ok = findViewById<Button>(R.id.btnOk)
         cancel.setOnClickListener(this)
@@ -108,6 +94,24 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
         htext.setOnClickListener(this)
         mtext.setOnClickListener(this)
         stext.setOnClickListener(this)
+    }
+
+    private fun setupTimePicker() {
+        val numbers = arrayOfNulls<String>(61)
+        for (i in 0..60) {
+            numbers[i] = i.toString()
+        }
+        hour = findViewById(R.id.gallery_hour)
+        min = findViewById(R.id.gallery_min)
+        sec = findViewById(R.id.gallery_sec)
+        val adapter1 = ArrayAdapter(this, R.layout.gallery_item, numbers)
+        hour!!.adapter = adapter1
+        min!!.adapter = adapter1
+        sec!!.adapter = adapter1
+        val times = intent.getIntArrayExtra("times")
+        hour!!.setSelection(times!![0])
+        min!!.setSelection(times[1])
+        sec!!.setSelection(times[2])
     }
 
     /**
