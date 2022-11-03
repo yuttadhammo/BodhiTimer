@@ -16,22 +16,19 @@
 */
 package org.yuttadhammo.BodhiTimer.Animation
 
-import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation.TimerDrawing
-import android.graphics.Bitmap
-import android.graphics.PorterDuffXfermode
-import android.graphics.PorterDuff
-import android.content.SharedPreferences
-import android.graphics.BitmapFactory
-import org.yuttadhammo.BodhiTimer.R
-import android.content.ContentResolver
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.net.Uri
-import android.os.ParcelFileDescriptor
 import androidx.preference.PreferenceManager
+import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation.TimerDrawing
+import org.yuttadhammo.BodhiTimer.R
 import java.io.IOException
 
 internal class BodhiLeaf(context: Context) : TimerDrawing {
@@ -97,7 +94,7 @@ internal class BodhiLeaf(context: Context) : TimerDrawing {
             rd = Rect(0, shift, w, nHeight + shift)
         }
         canvas.drawBitmap(mCupBitmap!!, rs, rd, null)
-        val p: Float = if (max != 0) time / max.toFloat() else 0
+        val p: Float = if (max != 0) time / max.toFloat() else 0F
         mProgressPaint.alpha = (255 - 255 * p).toInt()
         canvas.restore()
     }

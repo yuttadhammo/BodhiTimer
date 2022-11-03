@@ -45,20 +45,19 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
     private var hour: Gallery? = null
     private var min: Gallery? = null
     private var sec: Gallery? = null
-    private var i1: String? = null
-    private var i2: String? = null
-    private var i3: String? = null
-    private var i4: String? = null
+    internal var i1: String? = null
+    internal var i2: String? = null
+    internal var i3: String? = null
+    internal var i4: String? = null
     private var prefs: SharedPreferences? = null
     private var context: Context? = null
+    internal open val layout: Int = R.layout.n_number_picker_dialog
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this
-        setContentView(R.layout.n_number_picker_dialog)
+        setContentView(layout)
         val scrollView = findViewById<LinearLayout>(R.id.container)
-        val slideDown = slideDown()
-        scrollView.startAnimation(slideDown)
         scrollView.visibility = View.VISIBLE
         setupTimePicker()
         val cancel = findViewById<Button>(R.id.btnCancel)
@@ -88,15 +87,9 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
         pre4.setOnLongClickListener(this)
         adv.setOnClickListener(this)
         adv.setOnLongClickListener(this)
-        val htext = findViewById<TextView>(R.id.text_hour)
-        val mtext = findViewById<TextView>(R.id.text_min)
-        val stext = findViewById<TextView>(R.id.text_sec)
-        htext.setOnClickListener(this)
-        mtext.setOnClickListener(this)
-        stext.setOnClickListener(this)
     }
 
-    private fun setupTimePicker() {
+    internal open fun setupTimePicker() {
         val numbers = arrayOfNulls<String>(61)
         for (i in 0..60) {
             numbers[i] = i.toString()
@@ -112,6 +105,12 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
         hour!!.setSelection(times!![0])
         min!!.setSelection(times[1])
         sec!!.setSelection(times[2])
+        val htext = findViewById<TextView>(R.id.text_hour)
+        val mtext = findViewById<TextView>(R.id.text_min)
+        val stext = findViewById<TextView>(R.id.text_sec)
+        htext.setOnClickListener(this)
+        mtext.setOnClickListener(this)
+        stext.setOnClickListener(this)
     }
 
     /**

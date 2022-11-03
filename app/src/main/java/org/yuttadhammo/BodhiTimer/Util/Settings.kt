@@ -20,7 +20,43 @@ import org.yuttadhammo.BodhiTimer.StringSetting
 /**
  * Contains convenience functions for reading and writing preferences
  */
+const val DEFAULT_DURATION = 120000
+const val DEFAULT_TIME_STRING = "$DEFAULT_DURATION#sys_def"
+
 object Settings {
+
+    val hideTime by BooleanSetting("hideTime", false)
+    val switchTimeMode by BooleanSetting(
+    "SwitchTimeMode",
+    false
+    )
+    val preFileUri by StringSetting("PreFileUri", "")
+    val preSystemUri by StringSetting("PreSystemUri", "")
+    val preparationTime by IntSetting("preparationTime", 0)
+    val preSoundUri by StringSetting(
+    "PreSoundUri", ""
+    )
+    val notificationUri by StringSetting(
+    "NotificationUri", Sounds.DEFAULT_SOUND
+    )
+    val systemUri by StringSetting(
+        "SystemUri", Sounds.DEFAULT_SOUND
+    )
+    val fileUri by StringSetting(
+        "FileUri", Sounds.DEFAULT_SOUND
+    )
+    val speakTime by BooleanSetting(
+   "SpeakTime", false
+    )
+    val wakeLock by BooleanSetting(
+            "WakeLock",
+            false
+    )
+
+    var lastSimpleTime by IntSetting(
+        "LastSimpleTime",
+        DEFAULT_DURATION
+    )
 
     @JvmStatic
     val preferences: SharedPreferences
@@ -76,7 +112,18 @@ object Settings {
     )
 
     var advTimeString by StringSetting(
-        "advTimeString"
+        "advTimeString",
+        DEFAULT_TIME_STRING
+    )
+
+    var timeString by StringSetting(
+        "timeString",
+        ""
+    )
+
+    var lastWasSimple by BooleanSetting(
+        "LastWasSimple",
+        true
     )
 
     private val appContext: Context

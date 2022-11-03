@@ -45,7 +45,6 @@ import org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager
 import org.yuttadhammo.BodhiTimer.Models.TimerList
 import org.yuttadhammo.BodhiTimer.Util.Notifications.createNotificationChannel
 import org.yuttadhammo.BodhiTimer.Util.Settings
-import org.yuttadhammo.BodhiTimer.Util.Sounds
 import org.yuttadhammo.BodhiTimer.Util.Time
 import org.yuttadhammo.BodhiTimer.Util.Time.msFromArray
 import org.yuttadhammo.BodhiTimer.Util.Time.str2complexTimeString
@@ -79,10 +78,10 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     private var mPauseBitmap: Bitmap? = null
     var mAlarmTaskManager: AlarmTaskManager? = null
 
-    private lateinit var prefs: SharedPreferences
     private var widget = false
     private var context: TimerActivity? = null
     private var animationIndex = 0
+
     //private var blackView: ImageView? = null
     private var invertColors = false
     private var tts: TextToSpeech? = null
@@ -97,7 +96,8 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         super.onCreate(savedInstanceState)
         context = this
         mAlarmTaskManager = ViewModelProvider(this).get(AlarmTaskManager::class.java)
-        prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
+
+        var prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(baseContext)
         prefs.registerOnSharedPreferenceChangeListener(this)
         setupObservers()
         prepareUI()
@@ -120,11 +120,11 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         if (paramNames.contains("times")) {
             val tL = TimerList()
 
-            var notificationUri = prefs.getString("NotificationUri", Sounds.DEFAULT_SOUND)
+            var notificationUri = Settings.notificationUri
 
             when (notificationUri) {
-                "system" -> notificationUri = prefs.getString("SystemUri", "")
-                "file" -> notificationUri = prefs.getString("FileUri", "")
+                "system" -> notificationUri = Settings.systemUri
+                "file" -> notificationUri = Settings.fileUri
             }
 
             for (timeStr in data.getQueryParameter("times")!!.split(",").toTypedArray()) {
@@ -153,11 +153,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         mSetButton = findViewById(R.id.setButton)
         mSetButton.setOnClickListener(this)
         mSetButton.setOnLongClickListener {
-            if (prefs.getBoolean(
-                    "SwitchTimeMode",
-                    false
-                )
-            ) showNumberPicker() else startVoiceRecognitionActivity()
+            if (Settings.switchTimeMode) showNumberPicker() else startVoiceRecognitionActivity()
             false
         }
         mPauseButton = findViewById(R.id.pauseButton)
@@ -219,15 +215,11 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             widget = true
             intent.removeExtra("set")
         }
-        prefs = PreferenceManager.getDefaultSharedPreferences(this)
         animationIndex = Settings.drawingIndex
         setupUI()
         if (mAlarmTaskManager!!.currentState.value == STOPPED) {
             if (widget) {
-                if (prefs.getBoolean(
-                        "SwitchTimeMode",
-                        false
-                    )
+                if (Settings.switchTimeMode
                 ) startVoiceRecognitionActivity() else showNumberPicker()
                 return
             }
@@ -270,14 +262,14 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         }
-        if (prefs.getBoolean("hideTime", false)) mTimerLabel.visibility =
+        if (Settings.hideTime) mTimerLabel.visibility =
             View.INVISIBLE else mTimerLabel.visibility = View.VISIBLE
 
 
         Timber.i("Configuring animation")
         mTimerAnimation.configure()
 
-        val dayNightMode = resources.getConfiguration().uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val dayNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
 
         if (Settings.drawingIndex == 0) {
             findViewById<TextView>(R.id.text_top).setTextColor(Color.WHITE)
@@ -285,15 +277,9 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         }
 
         setLowProfile()
-        if (prefs.getBoolean(
-                "WakeLock",
-                false
-            )
+        if (Settings.wakeLock
         ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (prefs.getBoolean(
-                "FULLSCREEN",
-                false
-            )
+        if (Settings.fullscreen
         ) window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -307,15 +293,12 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         setLowProfile()
         when (v.id) {
             R.id.setButton -> {
-                Log.i("Timer", "set button clicked")
-                if (prefs.getBoolean(
-                        "SwitchTimeMode",
-                        false
-                    )
+                Timber.i("Timer", "set button clicked")
+                if (Settings.switchTimeMode
                 ) startVoiceRecognitionActivity() else showNumberPicker()
             }
             R.id.prefButton -> {
-                Log.i("Timer", "pref button clicked")
+                Timber.i("Timer", "pref button clicked")
                 widget = false
                 startActivity(Intent(this, SettingsActivity::class.java))
             }
@@ -347,7 +330,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
 
     private fun showNumberPicker() {
         val i = Intent(this, NNumberPicker::class.java)
-        val lastTimePicked = prefs.getInt("LastSimpleTime", 0)
+        val lastTimePicked = Settings.lastSimpleTime
         i.putExtra("times", time2Array(lastTimePicked))
         startActivityForResult(i, NUMBER_PICK_REQUEST_CODE)
     }
@@ -398,24 +381,24 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     }
 
     private fun createSimpleTimerList(time: Int): TimerList {
-        val prepTime = prefs.getInt("preparationTime", 0) * 1000
-        var preUriString = prefs.getString("PreSoundUri", "")
+        val prepTime = Settings.preparationTime * 1000
+        var preUriString = Settings.preSoundUri
         val tL = TimerList()
 
         // Add a preparatory timer if the user picked a tone
         if (preUriString != "") {
             when (preUriString) {
-                "system" -> preUriString = prefs.getString("PreSystemUri", "")
-                "file" -> preUriString = prefs.getString("PreFileUri", "")
+                "system" -> preUriString = Settings.preSystemUri
+                "file" -> preUriString = Settings.preFileUri
             }
             tL.timers.add(TimerList.Timer(prepTime, preUriString, SessionTypes.PREPARATION))
         }
 
-        var notificationUri = prefs.getString("NotificationUri", Sounds.DEFAULT_SOUND)
+        var notificationUri = Settings.notificationUri
 
         when (notificationUri) {
-            "system" -> notificationUri = prefs.getString("SystemUri", "")
-            "file" -> notificationUri = prefs.getString("FileUri", "")
+            "system" -> notificationUri = Settings.systemUri
+            "file" -> notificationUri = Settings.fileUri
         }
 
         // Add main timer
@@ -441,28 +424,25 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         }
 
         mAlarmTaskManager!!.stopAlarmsAndTicker()
-        val editor = prefs.edit()
 
         // advanced timer - 0 will be -1
         if (numbers[0] == -1) {
-            val advTimeString =
-                prefs.getString("advTimeString", AlarmTaskManager.DEFAULT_TIME_STRING)
+            val advTimeString = Settings.advTimeString
 
             // Overwrite the current timeString
-            editor.putString("timeString", advTimeString)
-            if (advTimeString == null || advTimeString.isEmpty()) {
+            Settings.timeString = advTimeString
+            if (advTimeString.isEmpty()) {
                 widget = false
                 return
             }
-            editor.putBoolean("LastWasSimple", false)
+            Settings.lastWasSimple = true
             startAdvancedAlarm(advTimeString)
         } else {
             Timber.v("Saving simple time: " + msFromArray(numbers))
-            editor.putInt("LastSimpleTime", msFromArray(numbers))
-            editor.putBoolean("LastWasSimple", true)
+            Settings.lastSimpleTime = msFromArray(numbers)
+            Settings.lastWasSimple = true
             startSimpleAlarm(numbers, true)
         }
-        editor.commit()
     }
 
     private fun hasEnteredState(newState: Int) {
@@ -503,28 +483,19 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         // Case PreSystemUri
         when (key) {
             "WakeLock" -> {
-                if (prefs.getBoolean(
-                        "WakeLock",
-                        false
-                    )
-                ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) else window.clearFlags(
+                if (Settings.wakeLock)
+                    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) else window.clearFlags(
                     WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 )
-                val lastTime = prefs.getInt("LastSimpleTime", AlarmTaskManager.DEFAULT_DURATION)
-                if (mAlarmTaskManager!!.currentState.value == STOPPED && prefs.getBoolean(
-                        "LastWasSimple",
-                        true
-                    )
+                val lastTime = Settings.lastSimpleTime
+                if (mAlarmTaskManager!!.currentState.value == STOPPED && Settings.lastWasSimple
                 ) {
                     startSimpleAlarm(lastTime, false)
                 }
             }
             "PreSoundUri", "PreSystemUri", "SoundUri", "NotificationUri", "preparationTime" -> {
-                val lastTime = prefs.getInt("LastSimpleTime", AlarmTaskManager.DEFAULT_DURATION)
-                if (mAlarmTaskManager!!.currentState.value == STOPPED && prefs.getBoolean(
-                        "LastWasSimple",
-                        true
-                    )
+                val lastTime = Settings.lastSimpleTime
+                if (mAlarmTaskManager!!.currentState.value == STOPPED && Settings.lastWasSimple
                 ) {
                     startSimpleAlarm(lastTime, false)
                 }
@@ -598,10 +569,8 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             if (match.contains(Time.TIME_SEPARATOR)) {
                 val complexTime = str2complexTimeString(this, match)
                 if (complexTime.isNotEmpty()) {
-                    val editor = prefs.edit()
-                    editor.putString("timeString", complexTime)
-                    editor.apply()
-                    if (prefs.getBoolean("SpeakTime", false)) {
+                    Settings.timeString = complexTime
+                    if (Settings.speakTime) {
                         tts = TextToSpeech(this) { status: Int ->
                             if (status == TextToSpeech.SUCCESS) {
                                 tts!!.speak(
@@ -633,7 +602,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
                         ),
                         Toast.LENGTH_SHORT
                     ).show()
-                    if (prefs.getBoolean("SpeakTime", false)) {
+                    if (Settings.speakTime) {
                         Timber.d("Speaking time")
                         tts!!.speak(
                             String.format(

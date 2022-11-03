@@ -43,7 +43,7 @@
                     android:id="@+id/gallery_hour"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
+                    android:paddingEnd="5dp"
                     android:spacing="6dp" />
             </LinearLayout>
 
@@ -68,7 +68,7 @@
                     android:id="@+id/gallery_min"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
+                    android:paddingEnd="5dp"
                     android:spacing="6dp"
                     android:textColor="?attr/colorPrimary" />
             </LinearLayout>
@@ -94,7 +94,7 @@
                     android:id="@+id/gallery_sec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
+                    android:paddingEnd="5dp"
                     android:spacing="6dp"
                     android:textColor="?attr/colorOnSurfaceVariant" />
             </LinearLayout>
