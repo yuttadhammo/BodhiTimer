@@ -67,7 +67,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
      * To save having to traverse the view tree
      */
     private lateinit var mPauseButton: ImageButton
-    private lateinit var mCancelButton: ImageButton
+    private lateinit var mStopButton: ImageButton
     private lateinit var mSetButton: ImageButton
     private lateinit var mPrefButton: ImageButton
     private lateinit var mTimerAnimation: TimerAnimation
@@ -148,8 +148,8 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
 
     private fun prepareUI() {
         setContentView(R.layout.main)
-        mCancelButton = findViewById(R.id.cancelButton)
-        mCancelButton.setOnClickListener(this)
+        mStopButton = findViewById(R.id.stopButton)
+        mStopButton.setOnClickListener(this)
         mSetButton = findViewById(R.id.setButton)
         mSetButton.setOnClickListener(this)
         mSetButton.setOnLongClickListener {
@@ -308,7 +308,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
                 STOPPED ->                         // We are stopped and want to restore the last used timers.
                     mAlarmTaskManager!!.startAlarms(mAlarmTaskManager!!.retrieveTimerList())
             }
-            R.id.cancelButton -> {
+            R.id.stopButton -> {
                 mAlarmTaskManager!!.stopAlarmsAndTicker()
                 mAlarmTaskManager!!.loadLastTimers()
             }
@@ -449,21 +449,21 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         when (newState) {
             RUNNING -> {
                 mSetButton.visibility = View.GONE
-                mCancelButton.visibility = View.VISIBLE
+                mStopButton.visibility = View.VISIBLE
                 mPauseButton.visibility = View.VISIBLE
                 mPauseButton.setImageBitmap(mPauseBitmap)
                 setButtonAlpha(127)
             }
             STOPPED -> {
                 mPauseButton.setImageBitmap(mPlayBitmap)
-                mCancelButton.visibility = View.GONE
+                mStopButton.visibility = View.GONE
                 mSetButton.visibility = View.VISIBLE
                 setButtonAlpha(255)
             }
             PAUSED -> {
                 mSetButton.visibility = View.GONE
                 mPauseButton.visibility = View.VISIBLE
-                mCancelButton.visibility = View.VISIBLE
+                mStopButton.visibility = View.VISIBLE
                 mPauseButton.setImageBitmap(mPlayBitmap)
                 setButtonAlpha(255)
             }
@@ -472,7 +472,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
 
     private fun setButtonAlpha(i: Int) {
         mPauseButton.imageAlpha = i
-        mCancelButton.imageAlpha = i
+        mStopButton.imageAlpha = i
         mPrefButton.imageAlpha = i
     }
 

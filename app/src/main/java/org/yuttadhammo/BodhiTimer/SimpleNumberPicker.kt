@@ -35,13 +35,6 @@ class SimpleNumberPicker : NNumberPicker() {
 
     private var timePicker: TimePicker? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // if it doesnt work, suppress animation:
-//        val slideDown = slideDown()
-//        scrollView.startAnimation(slideDown)
-    }
-
     override fun setupTimePicker() {
         // Established times
         val times = intent.getIntArrayExtra("times")
@@ -103,8 +96,8 @@ class SimpleNumberPicker : NNumberPicker() {
     }
 
     private val minute: Int
-        get() =  timePicker!!.minute
+        get() = timePicker!!.minute
 
     private val hour: Int
-        get() =  timePicker!!.hour
+        get() = timePicker!!.hour
 }

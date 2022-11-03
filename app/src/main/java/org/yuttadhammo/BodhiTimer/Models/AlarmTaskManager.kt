@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -22,6 +21,7 @@ import org.yuttadhammo.BodhiTimer.Const.TimerState.RUNNING
 import org.yuttadhammo.BodhiTimer.Const.TimerState.STOPPED
 import org.yuttadhammo.BodhiTimer.Const.TimerState.getText
 import org.yuttadhammo.BodhiTimer.Service.SoundService
+import org.yuttadhammo.BodhiTimer.Util.Settings
 import org.yuttadhammo.BodhiTimer.Util.Time
 import timber.log.Timber
 import java.util.Date
@@ -252,7 +252,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         mTimer.schedule(
             object : TimerTask() {
                 override fun run() {
-                    mHandler?.sendEmptyMessage(0)
+                    mHandler.sendEmptyMessage(0)
                 }
             },
             TIMER_TIC.toLong(),
@@ -363,15 +363,15 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
     private val timeString: String
         get() {
-            var prefString = prefs.getString("timeString", "")
-            if (prefString == "") prefString = prefs.getString("advTimeString", DEFAULT_TIME_STRING)
-            return prefString ?: DEFAULT_TIME_STRING
+            var prefString = Settings.timeString
+            if (prefString == "") prefString = Settings.advTimeString
+            return prefString
         }
 
     fun retrieveTimerList(): TimerList {
         val prefString = timeString
-        val tL = TimerList(prefString)
         Timber.v("Got timer string: $prefString from Settings")
+        val tL = TimerList(prefString)
         return tL
     }
 
@@ -401,7 +401,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
             // Internal thread to properly update the GUI
             mTimer.schedule(object : TimerTask() {
                 override fun run() {
-                    mHandler?.sendEmptyMessage(0)
+                    mHandler.sendEmptyMessage(0)
                 }
             }, TIMER_TIC.toLong())
         }
@@ -522,10 +522,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     }
 
     private fun startDND() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean(
-                "doNotDisturb",
-                false
-            )
+        if (Settings.doNotDisturb
         ) {
             try {
                 val mNotificationManager =
@@ -539,14 +536,11 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     }
 
     private fun stopDND() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean(
-                "doNotDisturb",
-                false
-            )
+        if (Settings.doNotDisturb
         ) {
             try {
-                val newFilter =
-                    if (previousInterruptionFilter != 0) previousInterruptionFilter else NotificationManager.INTERRUPTION_FILTER_ALL
+                val newFilter =   if (previousInterruptionFilter != 0)
+                    previousInterruptionFilter else NotificationManager.INTERRUPTION_FILTER_ALL
                 val mNotificationManager =
                     mApp.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 mNotificationManager.setInterruptionFilter(newFilter)
@@ -635,9 +629,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     companion object {
         // Update rate of the internal timer
         const val TIMER_TIC = 100
-        private const val TAG = "AlarmTaskManager"
 
         const val DEFAULT_DURATION = 120000
-        const val DEFAULT_TIME_STRING = "$DEFAULT_DURATION#sys_def"
     }
 }

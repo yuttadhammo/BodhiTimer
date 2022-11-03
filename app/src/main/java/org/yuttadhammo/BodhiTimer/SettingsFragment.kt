@@ -34,7 +34,8 @@ import timber.log.Timber
 import java.io.IOException
 import kotlin.math.ln
 
-class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsFragment : PreferenceFragmentCompat(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
     private var prefs: SharedPreferences? = null
     private var mContext: Context? = null
     private var player: MediaPlayer? = null

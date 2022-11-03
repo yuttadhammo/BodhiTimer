@@ -18,7 +18,6 @@ import java.lang.ref.WeakReference
 class SoundService : Service() {
 
 
-
     private var stop: Boolean = false
     private var lastStamp: Long = 0L
     private var active: Int = 0
@@ -63,13 +62,13 @@ class SoundService : Service() {
     fun playIntent(intent: Intent) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val stamp = intent.getLongExtra("stamp", 0L)
-        val volume =  prefs.getInt("tone_volume", 90);
+        val volume = prefs.getInt("tone_volume", 90)
         val uri = intent.getStringExtra("uri")
 
 
         if (uri != null && stamp != lastStamp) {
             lastStamp = stamp
-            active++;
+            active++
 
             var mediaPlayer = soundManager.play(uri, volume)
 
@@ -77,7 +76,7 @@ class SoundService : Service() {
                 Timber.v("Resetting media player...")
                 mp.reset()
                 mp.release()
-                active--;
+                active--
 
                 if (stop && active < 1) {
                     Timber.v("Stopping service")
@@ -92,7 +91,7 @@ class SoundService : Service() {
 
 
     override fun onBind(intent: Intent): IBinder {
-        binder.onBind(this);
+        binder.onBind(this)
         return binder
     }
 
@@ -116,7 +115,7 @@ class SoundService : Service() {
 
             if (active == 0) {
                 Timber.v("Stopping service")
-                stopSelf();
+                stopSelf()
             }
             stop = true
         }
@@ -136,7 +135,7 @@ class SoundService : Service() {
     }
 
     companion object {
-        private  const val TAG: String = "SoundService"
+        private const val TAG: String = "SoundService"
     }
 
 }

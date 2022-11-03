@@ -25,19 +25,21 @@ const val DEFAULT_TIME_STRING = "$DEFAULT_DURATION#sys_def"
 
 object Settings {
 
+    val doNotDisturb by BooleanSetting(              "doNotDisturb",                false
+    )
     val hideTime by BooleanSetting("hideTime", false)
     val switchTimeMode by BooleanSetting(
-    "SwitchTimeMode",
-    false
+        "SwitchTimeMode",
+        false
     )
     val preFileUri by StringSetting("PreFileUri", "")
     val preSystemUri by StringSetting("PreSystemUri", "")
     val preparationTime by IntSetting("preparationTime", 0)
     val preSoundUri by StringSetting(
-    "PreSoundUri", ""
+        "PreSoundUri", ""
     )
     val notificationUri by StringSetting(
-    "NotificationUri", Sounds.DEFAULT_SOUND
+        "NotificationUri", Sounds.DEFAULT_SOUND
     )
     val systemUri by StringSetting(
         "SystemUri", Sounds.DEFAULT_SOUND
@@ -46,11 +48,11 @@ object Settings {
         "FileUri", Sounds.DEFAULT_SOUND
     )
     val speakTime by BooleanSetting(
-   "SpeakTime", false
+        "SpeakTime", false
     )
     val wakeLock by BooleanSetting(
-            "WakeLock",
-            false
+        "WakeLock",
+        false
     )
 
     var lastSimpleTime by IntSetting(
@@ -94,7 +96,7 @@ object Settings {
     }
 
     var preset1 by StringSetting(
-    "pre1"
+        "pre1"
     )
     var preset2 by StringSetting(
         "pre2"

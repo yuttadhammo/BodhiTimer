@@ -81,7 +81,7 @@ class Sounds(private val mContext: Context) {
 
         fun resolveUri(mUri: String, mContext: Context): String {
             val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
-            var result = "";
+            var result = ""
 
             result = mUri
 

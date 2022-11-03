@@ -15,7 +15,8 @@ data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
 
 
     // The android system alarm manager
-    private var mAlarmMgr: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private var mAlarmMgr: AlarmManager =
+        context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private var mPendingIntent: PendingIntent? = null
 
     var sessionType: SessionTypes = SessionTypes.INVALID
@@ -33,7 +34,12 @@ data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
         val time = duration + offset
         Timber.i("Running new alarm task " + id + ", uri " + uri + " type: " + sessionType + " due in " + time / 1000 + " duration " + duration)
 
-        mPendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        mPendingIntent = PendingIntent.getBroadcast(
+            context,
+            id,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val alarmInfoIntent = Intent(context, TimerReceiver::class.java)
         val pendingAlarmInfo = PendingIntent.getBroadcast(context, id + 1000, alarmInfoIntent, 0)

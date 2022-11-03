@@ -16,23 +16,18 @@
 */
 package org.yuttadhammo.BodhiTimer.Widget
 
-import android.appwidget.AppWidgetProvider
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import timber.log.Timber
-import android.content.IntentFilter
+import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
-import org.yuttadhammo.BodhiTimer.Widget.BodhiAppWidgetProvider
-import android.content.SharedPreferences
+import android.content.IntentFilter
+import android.graphics.BitmapFactory
 import android.widget.RemoteViews
 import org.yuttadhammo.BodhiTimer.R
 import org.yuttadhammo.BodhiTimer.TimerActivity
-import android.app.PendingIntent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.content.ComponentName
-import android.content.Context
-import androidx.preference.PreferenceManager
-import java.util.HashMap
+import timber.log.Timber
 
 class BodhiAppWidgetProvider : AppWidgetProvider() {
     private var isRegistered = false
@@ -89,7 +84,6 @@ class BodhiAppWidgetProvider : AppWidgetProvider() {
 
     private fun doUpdate(context: Context) {
         Timber.i("updating")
-        val mSettings = PreferenceManager.getDefaultSharedPreferences(context)
         if (views == null) views = RemoteViews(context.packageName, R.layout.appwidget)
         val intent = Intent(context, TimerActivity::class.java)
         intent.putExtra("set", "true")
@@ -108,7 +102,7 @@ class BodhiAppWidgetProvider : AppWidgetProvider() {
             context.packageName,
             "org.yuttadhammo.BodhiTimer.widget.BodhiAppWidgetProvider"
         )
-        val widgetIds = appWidgetManager.getAppWidgetIds(appWidgets)
+        val widgetIds = appWidgetManager!!.getAppWidgetIds(appWidgets)
         val backgrounds = HashMap<Int, Int>()
         if (widgetIds.isNotEmpty()) {
             for (widgetId in widgetIds) {
@@ -120,7 +114,7 @@ class BodhiAppWidgetProvider : AppWidgetProvider() {
                 // set background
                 views!!.setImageViewResource(R.id.backImage, themeId)
                 backgrounds[widgetId] = themeId
-                appWidgetManager.updateAppWidget(widgetId, views)
+                appWidgetManager?.updateAppWidget(widgetId, views)
             }
         }
     }

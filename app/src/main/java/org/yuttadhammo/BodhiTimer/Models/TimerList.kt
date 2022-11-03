@@ -1,10 +1,7 @@
 package org.yuttadhammo.BodhiTimer.Models
 
-import org.yuttadhammo.BodhiTimer.Const.SessionTypes
-import org.yuttadhammo.BodhiTimer.Models.TimerList
 import android.text.TextUtils
-import java.lang.Exception
-import java.util.ArrayList
+import org.yuttadhammo.BodhiTimer.Const.SessionTypes
 
 class TimerList {
     class Timer {
@@ -41,7 +38,7 @@ class TimerList {
     companion object {
         fun timeStringToList(advTimeString: String): ArrayList<Timer> {
             val list = ArrayList<Timer>()
-            val advTime = advTimeString.split("\\^").toTypedArray()
+            val advTime = advTimeString.split("^").toTypedArray()
             for (s in advTime) {
                 //  advTime[n] will be of format timeInMs#pathToSound
                 val thisAdvTime = s.split("#").toTypedArray()
