@@ -40,6 +40,7 @@
         android:textAppearance="@style/TextAppearance.Material3.DisplayLarge"
         android:textSize="64sp"
         android:fontFamily="@font/sourcesanspro_regular"
+        android:fontFeatureSettings="'ss05'"
         app:layout_constraintBottom_toTopOf="@+id/text_preview"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -47,7 +48,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         app:lineHeight="10sp"
-        tools:targetApi="p"
         tools:text="30:00" />
 
     <TextView
@@ -63,6 +63,7 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
         android:fontFamily="@font/sourcesanspro_regular"
+        android:fontFeatureSettings="'ss05'"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"

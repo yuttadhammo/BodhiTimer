@@ -5,7 +5,8 @@
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/sourcecodepro_regular"
+        android:font="@font/sourcesanspro_regular"
+        android:fontFeatureSettings="'ss05'"
         />
     <font
         android:fontStyle="normal"
