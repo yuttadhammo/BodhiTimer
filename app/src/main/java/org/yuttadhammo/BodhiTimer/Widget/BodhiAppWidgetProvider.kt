@@ -36,7 +36,6 @@ import java.util.HashMap
 
 class BodhiAppWidgetProvider : AppWidgetProvider() {
     private var isRegistered = false
-    private var widgetIds: IntArray
 
     //private boolean stopTicking;
     override fun onUpdate(
@@ -109,9 +108,9 @@ class BodhiAppWidgetProvider : AppWidgetProvider() {
             context.packageName,
             "org.yuttadhammo.BodhiTimer.widget.BodhiAppWidgetProvider"
         )
-        widgetIds = appWidgetManager.getAppWidgetIds(appWidgets)
+        val widgetIds = appWidgetManager.getAppWidgetIds(appWidgets)
         val backgrounds = HashMap<Int, Int>()
-        if (widgetIds.size > 0) {
+        if (widgetIds.isNotEmpty()) {
             for (widgetId in widgetIds) {
 
                 // Get the layout for the App Widget and attach an on-click listener
