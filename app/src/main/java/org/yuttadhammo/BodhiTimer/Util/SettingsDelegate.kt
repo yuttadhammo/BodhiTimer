@@ -1,8 +1,9 @@
-package org.yuttadhammo.BodhiTimer
+package org.yuttadhammo.BodhiTimer.Util
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import org.yuttadhammo.BodhiTimer.BodhiApp
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 

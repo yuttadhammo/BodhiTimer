@@ -585,7 +585,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
                                     TextToSpeech.QUEUE_ADD,
                                     null
                                 )
-                            } else Log.e("error", "Initialization failed!")
+                            } else Timber.tag("error").e("Initialization failed!")
                         }
                     }
                     Toast.makeText(

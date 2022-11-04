@@ -70,7 +70,7 @@ class SoundService : Service() {
             lastStamp = stamp
             active++
 
-            var mediaPlayer = soundManager.play(uri, volume)
+            val mediaPlayer = soundManager.play(uri, volume)
 
             mediaPlayer?.setOnCompletionListener { mp ->
                 Timber.v("Resetting media player...")
@@ -135,7 +135,6 @@ class SoundService : Service() {
     }
 
     companion object {
-        private const val TAG: String = "SoundService"
     }
 
 }

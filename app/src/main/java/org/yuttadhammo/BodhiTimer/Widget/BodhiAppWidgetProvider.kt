@@ -140,7 +140,6 @@ class BodhiAppWidgetProvider : AppWidgetProvider() {
 
     companion object {
         private var appWidgetManager: AppWidgetManager? = null
-        private const val TAG = "BodhiAppWidgetProvider"
         const val ACTION_CLOCK_UPDATE = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_UPDATE"
         private var views: RemoteViews? = null
         private const val themeId = R.drawable.widget_background_black

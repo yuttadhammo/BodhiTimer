@@ -34,17 +34,17 @@ class TTSService : Service(), OnInitListener {
     }
 
     override fun onInit(status: Int) {
-        Log.e("TTSService", "initializing TTSService")
+        Timber.tag("TTSService").e("initializing TTSService")
         if (status == TextToSpeech.SUCCESS) {
             val hashAudio = HashMap<String, String>()
             hashAudio[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = "english"
-            Log.e("TTSService", "speaking: $spokenText")
+            Timber.tag("TTSService").e("speaking: " + spokenText)
             mTts!!.setOnUtteranceCompletedListener { s: String? ->
-                Log.d("TTSService", "utterance completed")
+                Timber.tag("TTSService").d("utterance completed")
                 stopSelf()
             }
             mTts!!.speak(spokenText, TextToSpeech.QUEUE_FLUSH, hashAudio)
-        } else Log.e("TTSService", "error initializing TTSService")
+        } else Timber.tag("TTSService").e("error initializing TTSService")
     }
 
     override fun onDestroy() {
@@ -61,7 +61,7 @@ class TTSService : Service(), OnInitListener {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         spokenText = intent.getStringExtra("spoken_text")
-        Log.d("TTSService", spokenText!!)
+        Timber.tag("TTSService").d(spokenText!!)
         return START_STICKY
     }
 }

@@ -52,6 +52,5 @@ data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
     }
 
     companion object {
-        const val TAG = "AlarmTask"
     }
 }

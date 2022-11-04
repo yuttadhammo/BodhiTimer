@@ -12,14 +12,13 @@ import kotlin.math.ln
 
 
 class Sounds(private val mContext: Context) {
-    private val TAG: String = "Sound Util"
 
     private val flags: Int = PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP
 
     private fun play(mUri: Uri, volume: Int): MediaPlayer? {
 
         try {
-            var mediaPlayer = MediaPlayer()
+            val mediaPlayer = MediaPlayer()
 
             mediaPlayer.setDataSource(mContext, mUri)
             mediaPlayer.prepare()
@@ -41,12 +40,12 @@ class Sounds(private val mContext: Context) {
             }
 
             mediaPlayer.setOnErrorListener { _, what, extra ->
-                Log.e("Player error", "what:$what extra:$extra")
+                Timber.e("what:" + what + " extra:" + extra)
                 true
             }
 
             mediaPlayer.setOnInfoListener { _, what, extra ->
-                Log.e("Player info", "what:$what extra:$extra")
+                Timber.e("what:" + what + " extra:" + extra)
                 true
             }
 
@@ -67,7 +66,7 @@ class Sounds(private val mContext: Context) {
 
 
     fun play(mUri: String, volume: Int): MediaPlayer? {
-        var uri = resolveUri(mUri, mContext)
+        val uri = resolveUri(mUri, mContext)
 
         if (uri != "") {
             return play(Uri.parse(uri), volume)

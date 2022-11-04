@@ -15,7 +15,6 @@ import timber.log.Timber
 import java.util.regex.Pattern
 
 object Time {
-    private const val TAG = "Time"
     const val TIME_SEPARATOR = " again "
 
     private fun msFromNumbers(hour: Int, minutes: Int, seconds: Int): Int {

@@ -67,7 +67,7 @@ class TimerReceiver : BroadcastReceiver() {
         if (notificationUri == null) return
 
         if (!prefs.getBoolean("useOldNotification", false)) {
-            var playIntent = getServiceIntent(mContext)
+            val playIntent = getServiceIntent(mContext)
 
             try {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -95,6 +95,5 @@ class TimerReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        private const val TAG = "TimerReceiver"
     }
 }

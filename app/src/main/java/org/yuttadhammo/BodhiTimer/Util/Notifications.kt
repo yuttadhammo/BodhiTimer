@@ -17,7 +17,6 @@ import timber.log.Timber
 
 object Notifications {
 
-    const val TAG = "NOTIFY"
     private const val ALARM_CHANNEL_ID = "ALARMS"
     private const val SERVICE_CHANNEL_ID = "SERVICE"
 

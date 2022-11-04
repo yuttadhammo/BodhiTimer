@@ -38,6 +38,7 @@ import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation.TimerDrawing
 import org.yuttadhammo.BodhiTimer.R
 import org.yuttadhammo.BodhiTimer.Util.Settings
 import org.yuttadhammo.BodhiTimer.Util.Time.time2Array
+import kotlin.math.min
 
 internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
     private var mRadius = MAX_SIZE * 0.75f
@@ -198,7 +199,7 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
     fun sizeChange(w: Int, h: Int) {
         mWidth = w
         mHeight = h
-        mMsRadius = Math.min(w / 2.0f, h / 2.0f).coerceAtMost(MAX_SIZE * scale)
+        mMsRadius = min(w / 2.0f, h / 2.0f).coerceAtMost(MAX_SIZE * scale)
         mMsGap = mMsRadius * .95f
         mSecondRadius = mMsRadius * .97f
         mSecondGap = mMsRadius * .93f
@@ -278,7 +279,7 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
         var ucAngle = START_ANGLE + timeAngle
 //        val mArcPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 //        mArcPaint!!.color = MaterialColors.getColor(mContext, R.attr.colorPrimary, 0)
-        if (ucAngle > 360) ucAngle = ucAngle - 360
+        if (ucAngle > 360) ucAngle -= 360
         canvas.drawArc(mArcRect, ucAngle, 360 - 360 * (1 - progress), true, mArcPaint!!)
     }
 
@@ -331,8 +332,7 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
         }
 
         fun getBitmapFromVector(context: Context?, @DrawableRes drawableResId: Int): Bitmap {
-            val drawable = ContextCompat.getDrawable(context!!, drawableResId)
-            return when (drawable) {
+            return when (val drawable = ContextCompat.getDrawable(context!!, drawableResId)) {
                 is BitmapDrawable -> {
                     drawable.bitmap
                 }

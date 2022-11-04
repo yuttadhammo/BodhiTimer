@@ -371,8 +371,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     fun retrieveTimerList(): TimerList {
         val prefString = timeString
         Timber.v("Got timer string: $prefString from Settings")
-        val tL = TimerList(prefString)
-        return tL
+        return TimerList(prefString)
     }
 
     /**
