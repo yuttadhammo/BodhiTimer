@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">Bodhi Timer</string>
-    <string name="Start">Set Timer</string>
     <string name="Stop">Clear</string>
 
     <string name="Notification">Bodhi Timer Finished</string>
-    <string name="InputTitle">Hour:Min:Sec</string>
-
-    <string name="warning_text">The phone is in silent mode! Notification vibration and sound will be suppressed.</string>
-    <string name="warning_title">Warning</string>
-    <string name="warning_button">OK</string>
 
     <string name="timer_for_x">Timer for %s</string>
 
@@ -39,9 +33,6 @@
 
     <!-- Widget -->
 
-    <string name="choose_widget">Choose Widget Theme:</string>
-    <string name="theme">widget theme</string>
-
     <!-- Preferences -->
 
     <string name="preferences">Preferences</string>
@@ -69,14 +60,7 @@
 
 
     <string name="notification">Notification</string>
-    <string name="notification_vibrate">Enable Vibration</string>
-    <string name="notification_vibrate_desc">Cause the timer to trigger vibration.</string>
 
-    <string name="led_notification">Enable LED Blinking</string>
-    <string name="led_notification_desc">Blink LED light during notification.</string>
-
-    <string name="auto_clear">Auto-Clear Notification</string>
-    <string name="auto_clear_desc">Clear notification automatically after a few seconds.</string>
     <string name="auto_restart">Auto-Restart Timer</string>
     <string name="auto_restart_desc">Restart timer automatically when finished.</string>
 
@@ -87,11 +71,6 @@
     <string name="bmp_or_circle">Animation Type</string>
 
     <string name="custom_bmp">Use Custom Image</string>
-
-    <string name="invert_colors">Invert UI Colors</string>
-
-    <string name="circle_theme">Circle Animation</string>
-    <string name="circle_theme_desc">Choose the style of circle animation to use</string>
 
     <string name="fullscreen">Full Screen</string>
     <string name="fullscreen_desc">Hide the status bar when timer is running.</string>
@@ -104,14 +83,7 @@
     <string name="settings.theme_day_night">Day &amp; Night</string>
     <string name="settings.theme_light">Light</string>
     <string name="settings.theme_dark">Dark</string>
-    <string name="settings.theme_black">Black</string>
     <string name="settings.theme_title">Color theme</string>
-
-    <string name="nag_dialog">Popup When Silent</string>
-    <string name="nag_dialog_desc">When the phone is set to silent show a popup dialog.</string>
-
-    <string name="repeat_timer">Repeat Timer</string>
-    <string name="repeat_timer_desc">Restart timer automatically on finish.</string>
 
     <string name="stay_awake">Stay Awake</string>
     <string name="stay_awake_desc">Don\'t allow the phone to go to sleep.</string>
@@ -157,7 +129,6 @@
     <string name="longclick">Press and hold on button to set preset</string>
     <string name="notset">Select time before setting preset</string>
 
-    <string name="zero">00</string>
     <string name="set">Set</string>
     <string name="pause">Pause</string>
 
@@ -179,15 +150,9 @@
 
     <string name="sys_def">System Default</string>
     <string name="get_file_man">Please install a File Manager.</string>
-    <string name="sys_tone">System Tone</string>
-    <string name="sound_file">Sound File</string>
     <string name="speak_time_desc">Audible playback when recognizing speech</string>
     <string name="speak_time">Speak Recognized Time</string>
-    <string name="timer_done">timer finished</string>
-    <string name="input_text">Text To Speech</string>
-    <string name="input_text_desc">Input text to be spoken</string>
     <string name="NoVoiceRecognitionInstalled">Please install a voice recognition app!</string>
-    <string name="general">General</string>
 
     <string name="alarm_channel_name">Alarms</string>
     <string name="alarm_channel_description">The timers that are the main purpose of the app.</string>

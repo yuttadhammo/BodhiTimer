@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">Bodhi Timer</string>
-    <string name="Start">Timer setzen</string>
     <string name="Stop">Zurücksetzen</string>
 
     <string name="Notification">Timer abgelaufen!</string>
-    <string name="InputTitle">Stunde:Min:Sek</string>
-
-    <string name="warning_text">Das Telefon ist im lautlosen Modus! Vibration und Töne werden unterdrückt!</string>
-    <string name="warning_title">Warnung</string>
-    <string name="warning_button">OK</string>
 
     <string name="prefs">Einstellungen</string>
 
@@ -40,14 +34,7 @@
 
 
     <string name="notification">Benachrichtigung</string>
-    <string name="notification_vibrate">Vibration bei Benachrichtigung</string>
-    <string name="notification_vibrate_desc">Vibriere bei Ablauf des Timers.</string>
 
-    <string name="led_notification">LED Benachrichtigung</string>
-    <string name="led_notification_desc">Lässt die LED während der Benachrichtigung blinken.</string>
-
-    <string name="auto_clear">Automatisch löschen</string>
-    <string name="auto_clear_desc">Benachrichtigung nach ein paar Sekunden automatisch löschen.</string>
     <string name="auto_restart">Timer automatisch neustarten</string>
     <string name="auto_restart_desc">Nach dem Ende eines Timers direkt einen neuen starten.</string>
 
@@ -59,11 +46,6 @@
 
     <string name="custom_bmp">Individuelles Bild benutzen</string>
 
-    <string name="invert_colors">Farben invertieren</string>
-
-    <string name="circle_theme">Kreis Theme</string>
-    <string name="circle_theme_desc">Den Stil der Kreisanimation wählen.</string>
-
     <string name="fullscreen">Vollbild</string>
     <string name="fullscreen_desc">Verstecke die Statusanzeige während das Programm läuft.</string>
 
@@ -71,12 +53,6 @@
     <string name="hide_time_desc">Nicht die verbleibende Zeit anzeigen.</string>
 
     <string name="misc">Sonstiges</string>
-
-    <string name="nag_dialog">Popup-Fenster</string>
-    <string name="nag_dialog_desc">Zeige ein Popup-Fenster, wenn das Telefon auf lautlos gestellt ist.</string>
-
-    <string name="repeat_timer">Wiederhole Timer</string>
-    <string name="repeat_timer_desc">Setze Timer nach Ablauf automatisch zurück.</string>
 
     <string name="stay_awake">Wach bleiben</string>
     <string name="stay_awake_desc">Das Telefon nicht einschlafen lassen.</string>
@@ -88,7 +64,6 @@
     <string name="close">Schließen</string>
     <string name="about">Info</string>
     <string name="about_title">Über Bodhi Timer</string>
-    <string name="zero">00</string>
     <string name="set">Setzen</string>
     <string name="pause">Pause</string>
 
@@ -97,7 +72,6 @@
     <string name="S">Sek</string>
 
     <string name="NoVoiceRecognitionInstalled">Bitte installieren Sie eine Spracherkennungs-App!</string>
-    <string name="general">General</string>
 
 </resources>
 

@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="shade">#33000000</color>
-
-    <color name="green">#43A047</color>
-    <color name="orange">#FF5722</color>
-    <color name="red">#B71C1C</color>
 
     <!-- Original Theme -->
     <color name="themeA1">#3C3C3C</color>
@@ -29,18 +24,8 @@
 
 
     <!-- Enso -->
-    <color name="themeD1">#000000</color>
-    <color name="themeD2">#010101</color>
-    <color name="themeD3">#000000</color>
-    <color name="themeD4">#DDDDDD</color>
-    <color name="themeD5">#010101</color>
 
     <!-- Enso Black -->
-    <color name="themeE1">#FFFFFF</color>
-    <color name="themeE2">#010101</color>
-    <color name="themeE3">#FFFFFF</color>
-    <color name="themeE4">#DDDDDD</color>
-    <color name="themeE5">#010101</color>
 
 
 </resources>
