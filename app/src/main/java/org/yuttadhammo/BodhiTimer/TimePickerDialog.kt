@@ -16,8 +16,7 @@
 */
 package org.yuttadhammo.BodhiTimer
 
-import android.content.Intent
-import android.os.Bundle
+import android.content.Context
 import android.view.View
 import android.widget.TimePicker
 
@@ -26,24 +25,17 @@ import android.widget.TimePicker
  *
  * THIS IS AN UNUSED EXPERIMENT!
  */
-class SimpleNumberPicker : NNumberPicker() {
-    override val layout: Int = R.layout.simple_numberpicker_dialog
-
-    interface OnNNumberPickedListener {
-        fun onNumbersPicked(number: IntArray?)
-    }
+class TimePickerDialog(context: Context) : SlidingPickerDialog(context) {
+    override val layout: Int = R.layout.timepicker_dialog
 
     private var timePicker: TimePicker? = null
 
     override fun setupTimePicker() {
-        // Established times
-        val times = intent.getIntArrayExtra("times")
-
         // Time Picker
         timePicker = findViewById(R.id.timePicker)
         timePicker!!.setIs24HourView(true)
-        setHour(times)
-        setMinute(times)
+        setHour(mTimes)
+        setMinute(mTimes)
     }
 
     /**
@@ -58,7 +50,7 @@ class SimpleNumberPicker : NNumberPicker() {
                 val values = intArrayOf(hsel, msel, ssel)
                 returnResults(values)
             }
-            R.id.btnCancel -> finish()
+            R.id.btnCancel -> dismiss()
             R.id.btn1 -> setFromPreset(i1)
             R.id.btn2 -> setFromPreset(i2)
             R.id.btn3 -> setFromPreset(i3)
@@ -77,14 +69,6 @@ class SimpleNumberPicker : NNumberPicker() {
         return "$h:$m"
     }
 
-
-    // This is called when we come back from the advanced time picker
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode < 0) {
-            returnAdvanced()
-        }
-    }
 
     // Helper functions
     private fun setMinute(times: IntArray?) {

@@ -23,7 +23,6 @@
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/BodhiTheme.DayNight"
         android:name=".BodhiApp">
         <service
             android:name=".Service.SoundService"
@@ -39,7 +38,6 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/preferences"
-            android:theme="@style/BodhiTheme.Base"
             />
         <activity
             android:name=".TimerActivity"
@@ -57,11 +55,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NNumberPicker"
-            android:theme="@style/Theme.Transparent" />
+            android:name=".NNumberPicker" />
         <activity
             android:name=".AdvNumberPicker"
             android:label="@string/advanced"
+            android:theme="@style/BodhiTheme.DayNight"
             android:windowSoftInputMode="adjustResize" />
 
         <receiver android:name=".Widget.BodhiAppWidgetProvider"

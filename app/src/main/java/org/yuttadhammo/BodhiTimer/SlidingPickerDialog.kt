@@ -1,47 +1,31 @@
 /*
-    This file is part of Bodhi Timer.
+ * SlidingPickerView.kt
+ * Copyright (C) 2014-2022 BodhiTimer developers
+ *
+ * Distributed under terms of the GNU GPLv3 license.
+ */
 
-    Bodhi Timer is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Bodhi Timer is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Bodhi Timer.  If not, see <http://www.gnu.org/licenses/>.
-*/
 package org.yuttadhammo.BodhiTimer
 
-import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import android.view.View.OnLongClickListener
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.TranslateAnimation
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Gallery
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat.startActivity
 import org.yuttadhammo.BodhiTimer.Util.Settings
 
-/**
- * Dialog box with an arbitrary number of number pickers
- */
-open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener {
-    interface OnNNumberPickedListener {
-        fun onNumbersPicked(number: IntArray?)
-    }
 
+open class SlidingPickerDialog(context: Context) : Dialog(context), View.OnClickListener,
+    View.OnLongClickListener {
+
+    private var onConfirm: ((IntArray) -> Unit)? = null
     private var hour: Gallery? = null
     private var min: Gallery? = null
     private var sec: Gallery? = null
@@ -49,14 +33,15 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
     internal var i2: String? = null
     internal var i3: String? = null
     internal var i4: String? = null
-    private var prefs: SharedPreferences? = null
-    private var context: Context? = null
-    internal open val layout: Int = R.layout.n_number_picker_dialog
+
+    var mTimes: IntArray = IntArray(0)
+
+    internal open val layout: Int = R.layout.sliding_picker_dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        context = this
         setContentView(layout)
+        setCancelable(true)
         val scrollView = findViewById<LinearLayout>(R.id.container)
         scrollView.visibility = View.VISIBLE
         setupTimePicker()
@@ -97,14 +82,14 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
         hour = findViewById(R.id.gallery_hour)
         min = findViewById(R.id.gallery_min)
         sec = findViewById(R.id.gallery_sec)
-        val adapter1 = ArrayAdapter(this, R.layout.gallery_item, numbers)
+        val adapter1 = ArrayAdapter(context, R.layout.gallery_item, numbers)
         hour!!.adapter = adapter1
         min!!.adapter = adapter1
         sec!!.adapter = adapter1
-        val times = intent.getIntArrayExtra("times")
-        hour!!.setSelection(times!![0])
-        min!!.setSelection(times[1])
-        sec!!.setSelection(times[2])
+
+        hour!!.setSelection(mTimes[0])
+        min!!.setSelection(mTimes[1])
+        sec!!.setSelection(mTimes[2])
         val htext = findViewById<TextView>(R.id.text_hour)
         val mtext = findViewById<TextView>(R.id.text_min)
         val stext = findViewById<TextView>(R.id.text_sec)
@@ -125,7 +110,7 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
                 val values = intArrayOf(hsel, msel, ssel)
                 returnResults(values)
             }
-            R.id.btnCancel -> finish()
+            R.id.btnCancel -> cancel()
             R.id.btn1 -> setFromPreset(i1)
             R.id.btn2 -> setFromPreset(i2)
             R.id.btn3 -> setFromPreset(i3)
@@ -139,7 +124,7 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
 
     internal fun setFromPreset(ts: String?) {
         if (ts == null) {
-            Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
+            Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG)
                 .show()
             return
         }
@@ -155,13 +140,11 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
     }
 
     internal fun returnResults(values: IntArray) {
-        val i = Intent()
-        i.putExtra("times", values)
-        setResult(RESULT_OK, i)
-        finish()
+        onConfirm?.invoke(values)
+        dismiss()
     }
 
-    internal fun returnAdvanced(): Boolean {
+    private fun returnAdvanced(): Boolean {
         return if (Settings.advTimeString.isNotEmpty()) {
             val values = intArrayOf(-1, -1, -1)
             returnResults(values)
@@ -178,9 +161,9 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
         }
     }
 
-    internal fun startAdvancedPicker() {
-        val i = Intent(this, AdvNumberPicker::class.java)
-        startActivityForResult(i, 0)
+    private fun startAdvancedPicker() {
+        val i = Intent(context, AdvNumberPicker::class.java)
+        startActivity(context, i, null)
     }
 
 
@@ -231,20 +214,20 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
         return "$h:$m:$s"
     }
 
-    internal fun setPreset(v: View, i: Int, s: String) {
+    private fun setPreset(v: View, i: Int, s: String) {
         var s: String? = s
         var t = s
         if (s == "00:00:00") {
             s = null
             t = when (i) {
-                1 -> context!!.getString(R.string.pre1)
-                2 -> context!!.getString(R.string.pre2)
-                3 -> context!!.getString(R.string.pre3)
-                else -> context!!.getString(R.string.pre4)
+                1 -> context.getString(R.string.pre1)
+                2 -> context.getString(R.string.pre2)
+                3 -> context.getString(R.string.pre3)
+                else -> context.getString(R.string.pre4)
             }
         }
         if (s == null && (v as TextView).text == t) {
-            Toast.makeText(context, context!!.getString(R.string.notset), Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.getString(R.string.notset), Toast.LENGTH_LONG).show()
         } else {
             (v as TextView).text = t
         }
@@ -262,35 +245,14 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
     }
 
     fun setTimes(_times: IntArray) {
+        mTimes = _times
         hour!!.setSelection(_times[0])
         min!!.setSelection(_times[1])
         sec!!.setSelection(_times[2])
     }
 
-    companion object {
-        fun slideDown(): Animation {
-            val set = AnimationSet(true)
-            val animation: Animation = TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                0.0f, Animation.RELATIVE_TO_SELF, -1.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f
-            )
-            animation.duration = 200
-            animation.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation) {
-                    // TODO Auto-generated method stub
-                }
-
-                override fun onAnimationRepeat(animation: Animation) {
-                    // TODO Auto-generated method stub
-                }
-
-                override fun onAnimationEnd(animation: Animation) {
-                    // TODO Auto-generated method stub
-                }
-            })
-            set.addAnimation(animation)
-            return animation
-        }
+    fun setOnConfirm(function: (IntArray) -> Unit) {
+        onConfirm = function
     }
+
 }

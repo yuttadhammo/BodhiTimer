@@ -332,10 +332,14 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     }
 
     private fun showNumberPicker() {
-        val i = Intent(this, NNumberPicker::class.java)
+
+        val view = SlidingPickerDialog(context!!)
         val lastTimePicked = Settings.lastSimpleTime
-        i.putExtra("times", time2Array(lastTimePicked))
-        startActivityForResult(i, NUMBER_PICK_REQUEST_CODE)
+        view.mTimes = time2Array(lastTimePicked)
+        view.setOnConfirm  {
+            onNumbersPicked(it)
+        }
+        view.show()
     }
 
     /**

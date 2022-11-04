@@ -33,17 +33,17 @@
     </style>
 
 
-    <style name="NoTitleBar" parent="BodhiTheme.Base">
-        <item name="android:windowNoTitle">true</item>
-    </style>
+<!--    <style name="NoTitleBar" parent="BodhiTheme.Base">-->
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--    </style>-->
 
-    <style name="Theme.Transparent" parent="BodhiTheme.Base">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-    </style>
+<!--    <style name="Theme.Transparent" parent="BodhiTheme.Base">-->
+<!--        <item name="android:windowIsTranslucent">true</item>-->
+<!--        <item name="android:windowBackground">@android:color/transparent</item>-->
+<!--        <item name="android:windowContentOverlay">@null</item>-->
+<!--        <item name="windowNoTitle">true</item>-->
+<!--        <item name="android:windowIsFloating">true</item>-->
+<!--    </style>-->
 
     <style name="themeOverlay_timePicker" parent="ThemeOverlay.AppCompat">
         <item name="colorControlActivated">?attr/colorPrimary</item>

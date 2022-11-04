@@ -29,6 +29,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import org.yuttadhammo.BodhiTimer.Const.SessionTypes
 import org.yuttadhammo.BodhiTimer.Util.Settings
+import org.yuttadhammo.BodhiTimer.Util.Themes
 import org.yuttadhammo.BodhiTimer.Util.Time.time2humanStr
 import timber.log.Timber
 
@@ -49,6 +50,7 @@ class AdvNumberPicker : AppCompatActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Themes.applyTheme(this)
         context = this
         if (Settings.fullscreen) {
             window.setFlags(
@@ -186,7 +188,7 @@ class AdvNumberPicker : AppCompatActivity() {
         val advTimeList: List<String> = if (advTimeString == "") {
             ArrayList()
         } else {
-            val advTime = advTimeString!!.split("\\^").toTypedArray()
+            val advTime = advTimeString!!.split("^").toTypedArray()
             listOf(*advTime)
         }
         val adapter = MyAdapter(context, R.layout.adv_list_item, advTimeList)
