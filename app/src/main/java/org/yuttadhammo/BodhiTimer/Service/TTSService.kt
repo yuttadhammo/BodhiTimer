@@ -21,7 +21,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
-import android.util.Log
+import timber.log.Timber
 
 /**
  * Created by noah on 10/6/14.
@@ -34,17 +34,17 @@ class TTSService : Service(), OnInitListener {
     }
 
     override fun onInit(status: Int) {
-        Timber.tag("TTSService").e("initializing TTSService")
+        Timber.i("initializing TTSService")
         if (status == TextToSpeech.SUCCESS) {
             val hashAudio = HashMap<String, String>()
             hashAudio[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = "english"
-            Timber.tag("TTSService").e("speaking: " + spokenText)
+            Timber.i("speaking: $spokenText")
             mTts!!.setOnUtteranceCompletedListener { s: String? ->
-                Timber.tag("TTSService").d("utterance completed")
+                Timber.d("utterance completed")
                 stopSelf()
             }
             mTts!!.speak(spokenText, TextToSpeech.QUEUE_FLUSH, hashAudio)
-        } else Timber.tag("TTSService").e("error initializing TTSService")
+        } else Timber.e("error initializing TTSService")
     }
 
     override fun onDestroy() {
@@ -61,7 +61,7 @@ class TTSService : Service(), OnInitListener {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         spokenText = intent.getStringExtra("spoken_text")
-        Timber.tag("TTSService").d(spokenText!!)
+        Timber.d(spokenText!!)
         return START_STICKY
     }
 }
