@@ -98,6 +98,12 @@
 
     <string name="misc">杂项</string>
 
+    <string name="settings.theme_day_night">白天 &amp; 晚上</string>
+    <string name="settings.theme_light">亮色</string>
+    <string name="settings.theme_dark">暗色</string>
+    <string name="settings.theme_black">黑色</string>
+    <string name="settings.theme_title">颜色主题</string>
+
     <string name="nag_dialog">静音弹框</string>
     <string name="nag_dialog_desc">当手机设置为静音时，会显示一个弹出对话框。</string>
 
@@ -192,8 +198,10 @@
     <string name="do_not_disturb_desc">冥想时进入“请勿打扰”模式。</string>
     <string name="open_timer">打开菩提计时器</string>
     <string name="service_channel_name">服务</string>
-    <string name="service_channel_description"> 菩提计时器正在运行的通知</string>
-    <string name="service_text">计时器正在运行</string>
+    <string name="service_channel_description">菩提计时器正在运行的通知</string>
+    <string name="service_text">菩提只向心觅，何劳向外求玄？</string>
+    <string name="use_old_notification">使用旧的通知方法</string>
+    <string name="use_old_notification_desc">如果您遇到崩溃或不可靠的警报，请尝试检查此项。</string>
 
 </resources>
 
