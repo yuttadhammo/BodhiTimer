@@ -2,23 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:id="@+id/ScrollView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
+        app:shapeAppearanceOverlay="?attr/shapeAppearanceMediumComponent"
         android:layout_centerInParent="true">
 
         <LinearLayout
             android:id="@+id/container"
+            app:shapeAppearanceOverlay="?attr/shapeAppearanceMediumComponent"
             android:layout_width="300dp"
             android:layout_height="250dp"
             android:background="?attr/colorSurface"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="5dp"
+            android:padding="16dp"
             android:visibility="invisible"
             tools:visibility="visible">
 
@@ -36,7 +39,7 @@
                     android:gravity="center"
                     android:padding="10dp"
                     android:text="@string/H"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="?attr/colorSurfaceInverse"
                     android:textSize="17sp" />
 
                 <Gallery
@@ -44,7 +47,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingEnd="5dp"
-                    android:spacing="6dp" />
+                    android:spacing="6dp"
+                     />
             </LinearLayout>
 
             <LinearLayout
@@ -61,7 +65,7 @@
                     android:gravity="center"
                     android:padding="10dp"
                     android:text="@string/M"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="?attr/colorSurfaceInverse"
                     android:textSize="17sp" />
 
                 <Gallery
@@ -87,7 +91,7 @@
                     android:gravity="center"
                     android:padding="10dp"
                     android:text="@string/S"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="?attr/colorSurfaceInverse"
                     android:textSize="17sp" />
 
                 <Gallery
@@ -119,7 +123,7 @@
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:text="@string/pre1"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorSurfaceInverse" />
 
                 <ImageView
                     android:layout_width="1dp"
@@ -135,7 +139,7 @@
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:text="@string/pre2"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorSurfaceInverse" />
 
                 <ImageView
                     android:layout_width="1dp"
@@ -151,7 +155,7 @@
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:text="@string/pre3"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorSurfaceInverse" />
 
                 <ImageView
                     android:layout_width="1dp"
@@ -168,7 +172,7 @@
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:text="@string/pre4"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="?attr/colorSurfaceInverse"
                     android:visibility="gone" />
 
                 <ImageView
@@ -185,7 +189,7 @@
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:text="@string/adv"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorSurfaceInverse" />
             </LinearLayout>
 
             <ImageView
@@ -208,7 +212,7 @@
                     android:layout_weight="0.5"
                     android:background="#00000000"
                     android:text="@android:string/cancel"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorSurfaceInverse" />
 
                 <ImageView
                     android:layout_width="1dp"
@@ -224,7 +228,7 @@
                     android:layout_weight="0.5"
                     android:background="#00000000"
                     android:text="@android:string/ok"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorSurfaceInverse" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

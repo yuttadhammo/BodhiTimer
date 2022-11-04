@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--suppress CheckTagEmptyBody -->
+<?xml version="1.0" encoding="utf-8"?><!--suppress CheckTagEmptyBody -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <array name="themes">
         <item>Zen Enso</item>
@@ -112,15 +111,13 @@
     </string-array>
 
     <string-array name="themeNames" translatable="false">
-    <item>@string/settings.theme_day_night</item>
-    <item>@string/settings.theme_light</item>
-    <item>@string/settings.theme_dark</item>
-    <item>@string/settings.theme_black</item>
+        <item>@string/settings.theme_day_night</item>
+        <item>@string/settings.theme_light</item>
+        <item>@string/settings.theme_dark</item>
     </string-array>
     <string-array name="themeValues" translatable="false">
-    <item>@string/setting_key.theme_day_night</item>
-    <item>@string/setting_key.theme_light</item>
-    <item>@string/setting_key.theme_dark</item>
-    <item>@string/setting_key.theme_black</item>
+        <item>@string/setting_key.theme_day_night</item>
+        <item>@string/setting_key.theme_light</item>
+        <item>@string/setting_key.theme_dark</item>
     </string-array>
 </resources>

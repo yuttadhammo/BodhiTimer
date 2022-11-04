@@ -26,48 +26,47 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.net.Uri
-import androidx.preference.PreferenceManager
+import android.os.ParcelFileDescriptor
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation.TimerDrawing
 import org.yuttadhammo.BodhiTimer.R
+import org.yuttadhammo.BodhiTimer.Util.Settings
 import java.io.IOException
 
 internal class BodhiLeaf(context: Context) : TimerDrawing {
-    private var mCupBitmap: Bitmap? = null
+    private var mBitmap: Bitmap? = null
     private val mWidth: Int
     private val mHeight: Int
-    private val mProgressPaint: Paint
+    private val mProgressPaint: Paint = Paint()
+    private var isCustom: Boolean = false
 
     init {
-        mProgressPaint = Paint()
         mProgressPaint.color = Color.BLACK
         mProgressPaint.alpha = 255
         mProgressPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
 
-        // get custom bitmap
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        mCupBitmap = if (!prefs.getBoolean("custom_bmp", false) || prefs.getString(
-                "bmp_url",
-                ""
-            )!!.length == 0
-        ) {
+        // Get custom bitmap
+        mBitmap = if (!Settings.customBmp  || Settings.bmpUri.isEmpty()) {
+            isCustom = false
             BitmapFactory.decodeResource(context.resources, R.drawable.leaf)
         } else {
-            val bmpUrl = prefs.getString("bmp_url", "")
+            isCustom = true
+            val bmpUrl = Settings.bmpUri
             val selectedImage = Uri.parse(bmpUrl)
             val resolver = context.contentResolver
             val readOnlyMode = "r"
+            var file: ParcelFileDescriptor? = null
             try {
-                val pfile = resolver.openFileDescriptor(selectedImage, readOnlyMode)
-                val file = pfile!!.fileDescriptor
-                //InputStream imageStream = resolver.openInputStream(selectedImage);
-                BitmapFactory.decodeFileDescriptor(file)
+                file = resolver.openFileDescriptor(selectedImage, readOnlyMode)
+                BitmapFactory.decodeFileDescriptor(file?.fileDescriptor)
             } catch (e: IOException) {
                 e.printStackTrace()
                 BitmapFactory.decodeResource(context.resources, R.drawable.leaf)
+            } finally {
+                file?.close()
             }
         }
-        mHeight = mCupBitmap!!.height
-        mWidth = mCupBitmap!!.width
+        mHeight = mBitmap!!.height
+        mWidth = mBitmap!!.width
     }
 
     /**
@@ -82,18 +81,18 @@ internal class BodhiLeaf(context: Context) : TimerDrawing {
         val h = canvas.clipBounds.height()
         val rs = Rect(0, 0, mWidth, mHeight)
         val rd: Rect
-        var nWidth = mWidth
-        var nHeight = mHeight
         if (mHeight / mWidth > h / w) { // image skinnier than canvas
-            nWidth = (mWidth * (h.toFloat() / mHeight.toFloat())).toInt()
+            val nWidth = (mWidth * (h.toFloat() / mHeight.toFloat())).toInt()
             val shift = (w - nWidth) / 2
             rd = Rect(shift, 0, nWidth + shift, h)
         } else { // image fatter than or equal to canvas
-            nHeight = (mHeight * (w.toFloat() / mWidth.toFloat())).toInt()
-            val shift = (h - nHeight) / 2
+            val nHeight = (mHeight * (w.toFloat() / mWidth.toFloat())).toInt()
+            var shift = (h - nHeight) / 2
+            // Special tweak to visually center the leaf image:
+            if (!isCustom) shift -= 90
             rd = Rect(0, shift, w, nHeight + shift)
         }
-        canvas.drawBitmap(mCupBitmap!!, rs, rd, null)
+        canvas.drawBitmap(mBitmap!!, rs, rd, null)
         val p: Float = if (max != 0) time / max.toFloat() else 0F
         mProgressPaint.alpha = (255 - 255 * p).toInt()
         canvas.restore()

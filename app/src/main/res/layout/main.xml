@@ -28,7 +28,7 @@
     <TextView
         android:id="@+id/text_top"
         android:layout_width="wrap_content"
-        android:layout_height="65sp"
+        android:layout_height="70sp"
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
@@ -38,9 +38,10 @@
         android:text=""
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.Material3.DisplayLarge"
+        android:textColor="?attr/colorSurfaceInverse"
         android:textSize="64sp"
         android:fontFamily="@font/sourcesanspro_regular"
-        android:fontFeatureSettings="'ss05'"
+        android:fontFeatureSettings="'onum'"
         app:layout_constraintBottom_toTopOf="@+id/text_preview"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -63,7 +64,7 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
         android:fontFamily="@font/sourcesanspro_regular"
-        android:fontFeatureSettings="'ss05'"
+        android:fontFeatureSettings="'onum'"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -82,7 +83,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/set"
-        app:tint="?attr/colorOnSurface" />
+        app:tint="?attr/colorSurfaceInverse" />
 
     <ImageButton
         android:id="@+id/prefButton"
@@ -95,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/preferences"
-        app:tint="?attr/colorOnSurface" />
+        app:tint="?attr/colorSurfaceInverse" />
 
     <ImageButton
         android:id="@+id/pauseButton"
@@ -108,7 +109,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/pause"
-        app:tint="?attr/colorOnSurface" />
+        app:tint="?attr/colorSurfaceInverse" />
 
     <ImageButton
         android:id="@+id/stopButton"
@@ -121,6 +122,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/stop"
-        app:tint="?attr/colorOnSurface" />
+        app:tint="?attr/colorSurfaceInverse" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -25,26 +25,48 @@ const val DEFAULT_TIME_STRING = "$DEFAULT_DURATION#sys_def"
 
 object Settings {
 
-    val doNotDisturb by BooleanSetting(              "doNotDisturb",                false
+    val customBmp by BooleanSetting(
+        "custom_bmp",
+        false
     )
-    val hideTime by BooleanSetting("hideTime", false)
+    var bmpUri by StringSetting(
+        "bmp_url"
+    )
+    val doNotDisturb by BooleanSetting(
+        "doNotDisturb",
+        false
+    )
+    val hideTime by BooleanSetting(
+        "hideTime",
+        false
+    )
     val switchTimeMode by BooleanSetting(
         "SwitchTimeMode",
         false
     )
-    val preFileUri by StringSetting("PreFileUri", "")
-    val preSystemUri by StringSetting("PreSystemUri", "")
-    val preparationTime by IntSetting("preparationTime", 0)
+    var preFileUri by StringSetting(
+        "PreFileUri",
+        ""
+    )
+    var preSystemUri by StringSetting(
+        "PreSystemUri",
+        ""
+    )
+    val preparationTime by IntSetting(
+        "preparationTime",
+        0
+    )
+
     val preSoundUri by StringSetting(
         "PreSoundUri", ""
     )
     val notificationUri by StringSetting(
         "NotificationUri", Sounds.DEFAULT_SOUND
     )
-    val systemUri by StringSetting(
+    var systemUri by StringSetting(
         "SystemUri", Sounds.DEFAULT_SOUND
     )
-    val fileUri by StringSetting(
+    var fileUri by StringSetting(
         "FileUri", Sounds.DEFAULT_SOUND
     )
     val speakTime by BooleanSetting(
@@ -81,20 +103,6 @@ object Settings {
         1
     )
 
-
-    fun hasKey(key: String): Boolean {
-        return preferences.contains(key)
-    }
-
-    private fun getKey(key: Int): String {
-        return appContext.getString(key)
-    }
-
-    fun getAllKeys(): List<String> {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(BodhiApp.applicationContext())
-        return prefs.all.keys.toList()
-    }
-
     var preset1 by StringSetting(
         "pre1"
     )
@@ -127,6 +135,19 @@ object Settings {
         "LastWasSimple",
         true
     )
+
+    fun hasKey(key: String): Boolean {
+        return preferences.contains(key)
+    }
+
+    private fun getKey(key: Int): String {
+        return appContext.getString(key)
+    }
+
+    fun getAllKeys(): List<String> {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(BodhiApp.applicationContext())
+        return prefs.all.keys.toList()
+    }
 
     private val appContext: Context
         get() = BodhiApp.applicationContext()

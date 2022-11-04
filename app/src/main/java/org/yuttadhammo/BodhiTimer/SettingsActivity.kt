@@ -9,6 +9,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.preference.PreferenceManager
+import org.yuttadhammo.BodhiTimer.Util.Settings
+import org.yuttadhammo.BodhiTimer.Util.Themes
 import timber.log.Timber
 
 class SettingsActivity : AppCompatActivity() {
@@ -16,6 +18,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Themes.applyTheme(this)
         setContentView(R.layout.settings_activity)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -38,40 +41,38 @@ class SettingsActivity : AppCompatActivity() {
         if (resultCode == RESULT_OK) {
             var uri = intent!!.data
             val uriString = intent.dataString
-            val settings = prefs!!.edit()
             when (requestCode) {
                 SELECT_RINGTONE -> {
                     uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                     if (uri != null) {
                         Timber.i("Got ringtone $uri")
-                        settings.putString("SystemUri", uri.toString())
+                        Settings.systemUri = uri.toString()
                     }
                 }
                 SELECT_PRE_RINGTONE -> {
                     uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                     if (uri != null) {
                         Timber.i("Got ringtone $uri")
-                        settings.putString("PreSystemUri", uri.toString())
+                        Settings.preSystemUri = uri.toString()
                     }
                 }
                 SELECT_FILE ->                     // Get the Uri of the selected file
                     if (uriString != null) {
                         getPersistablePermission(uri)
                         Timber.i("File Path: " + uri.toString())
-                        settings.putString("FileUri", uri.toString())
+                        Settings.fileUri = uri.toString()
                     }
                 SELECT_PRE_FILE ->                     // Get the Uri of the selected file
                     if (uriString != null) {
                         getPersistablePermission(uri)
                         Timber.i("File Path: " + uri.toString())
-                        settings.putString("PreFileUri", uri.toString())
+                        Settings.preFileUri = uri.toString()
                     }
                 SELECT_PHOTO -> if (uri != null) {
                     getPersistablePermission(uri)
-                    settings.putString("bmp_url", uri.toString())
+                    Settings.bmpUri = uri.toString()
                 }
             }
-            settings.commit()
         }
     }
 

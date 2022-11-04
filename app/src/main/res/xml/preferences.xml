@@ -10,49 +10,49 @@
 
     <ListPreference
         a:key="NotificationUri"
-        a:title="@string/notification_sound"
         a:summary="@string/notification_sound_desc"
+        a:title="@string/notification_sound"
         app:iconSpaceReserved="false" />
     <Preference
-        a:title="@string/play_sound"
-        a:summary="@string/play_sound_desc"
         a:key="playSound"
+        a:summary="@string/play_sound_desc"
+        a:title="@string/play_sound"
         app:iconSpaceReserved="false" />
 
 
     <ListPreference
         a:key="PreSoundUri"
-        a:title="@string/pre_sound"
         a:summary="@string/pre_sound_desc"
+        a:title="@string/pre_sound"
         app:iconSpaceReserved="false" />
     <Preference
-        a:title="@string/play_pre_sound"
-        a:summary="@string/play_pre_sound_desc"
         a:key="playPreSound"
+        a:summary="@string/play_pre_sound_desc"
+        a:title="@string/play_pre_sound"
         app:iconSpaceReserved="false" />
 
     <SeekBarPreference
-        a:key="tone_volume"
-        a:title="@string/volume"
-        a:summary="@string/volume_desc"
-        a:max="100"
         a:defaultValue="90"
+        a:key="tone_volume"
+        a:max="100"
+        a:summary="@string/volume_desc"
+        a:title="@string/volume"
         app:iconSpaceReserved="false"
         app:showSeekBarValue="true" />
 
     <SeekBarPreference
         a:key="preparationTime"
-        a:title="@string/preparation_time"
+        a:max="120"
         a:summary="@string/preparation_time_desc"
+        a:title="@string/preparation_time"
         app:iconSpaceReserved="false"
-        app:showSeekBarValue="true"
-        a:max="120" />
+        app:showSeekBarValue="true" />
 
     <CheckBoxPreference
-        a:key="doNotDisturb"
-        a:title="@string/do_not_disturb"
-        a:summary="@string/do_not_disturb_desc"
         a:defaultValue="false"
+        a:key="doNotDisturb"
+        a:summary="@string/do_not_disturb_desc"
+        a:title="@string/do_not_disturb"
         app:iconSpaceReserved="false" />
 
 
@@ -61,25 +61,24 @@
         app:iconSpaceReserved="false" />
 
     <CheckBoxPreference
-        a:key="showAlwaysNotifications"
-        a:title="@string/notification_always"
-        a:summary="@string/notification_always_desc"
         a:defaultValue="false"
+        a:key="showAlwaysNotifications"
+        a:summary="@string/notification_always_desc"
+        a:title="@string/notification_always"
         app:iconSpaceReserved="false" />
 
 
-
     <CheckBoxPreference
-        a:key="useOldNotification"
-        a:title="@string/use_old_notification"
-        a:summary="@string/use_old_notification_desc"
         a:defaultValue="False"
+        a:key="useOldNotification"
+        a:summary="@string/use_old_notification_desc"
+        a:title="@string/use_old_notification"
         app:iconSpaceReserved="false" />
 
     <Preference
         a:key="showSystemSettings"
-        a:title="@string/show_system_settings"
         a:summary="@string/show_system_settings_desc"
+        a:title="@string/show_system_settings"
         app:iconSpaceReserved="false" />
 
     <PreferenceCategory
@@ -92,60 +91,60 @@
         a:entryValues="@array/themeValues"
         a:key="@string/setting_key.theme"
         a:title="@string/settings.theme_title"
-        app:iconSpaceReserved="false"/>
+        app:iconSpaceReserved="false" />
     <Preference
-        a:title="@string/bmp_or_circle"
-        a:key="DrawingIndex"
         a:defaultValue="1"
+        a:key="DrawingIndex"
+        a:title="@string/bmp_or_circle"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        a:title="@string/custom_bmp"
+        a:enabled="false"
         a:key="custom_bmp"
-        app:iconSpaceReserved="false"
-        a:enabled="false" />
-    <CheckBoxPreference
-        a:key="FULLSCREEN"
-        a:title="@string/fullscreen"
-        a:summary="@string/fullscreen_desc"
-        a:defaultValue="False"
+        a:title="@string/custom_bmp"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        a:key="hideTime"
-        a:title="@string/hide_time"
-        a:summary="@string/hide_time_desc"
         a:defaultValue="False"
+        a:key="FULLSCREEN"
+        a:summary="@string/fullscreen_desc"
+        a:title="@string/fullscreen"
+        app:iconSpaceReserved="false" />
+    <CheckBoxPreference
+        a:defaultValue="False"
+        a:key="hideTime"
+        a:summary="@string/hide_time_desc"
+        a:title="@string/hide_time"
         app:iconSpaceReserved="false" />
     <PreferenceCategory
         a:title="@string/misc"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
+        a:defaultValue="False"
         a:key="AutoRestart"
-        a:title="@string/auto_restart"
         a:summary="@string/auto_restart_desc"
-        a:defaultValue="False"
+        a:title="@string/auto_restart"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
+        a:defaultValue="False"
         a:key="SwitchTimeMode"
-        a:title="@string/switch_time"
         a:summary="@string/switch_time_desc"
-        a:defaultValue="False"
+        a:title="@string/switch_time"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
+        a:defaultValue="False"
         a:key="SpeakTime"
-        a:title="@string/speak_time"
         a:summary="@string/speak_time_desc"
-        a:defaultValue="False"
+        a:title="@string/speak_time"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        a:key="WakeLock"
-        a:title="@string/stay_awake"
-        a:summary="@string/stay_awake_desc"
         a:defaultValue="False"
+        a:key="WakeLock"
+        a:summary="@string/stay_awake_desc"
+        a:title="@string/stay_awake"
         app:iconSpaceReserved="false" />
     <Preference
-        a:title="@string/about"
-        a:summary="@string/about_desc"
         a:key="aboutPref"
+        a:summary="@string/about_desc"
+        a:title="@string/about"
         app:iconSpaceReserved="false" />
 
 </androidx.preference.PreferenceScreen>

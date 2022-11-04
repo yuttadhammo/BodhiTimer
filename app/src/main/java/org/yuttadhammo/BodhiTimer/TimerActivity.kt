@@ -45,6 +45,7 @@ import org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager
 import org.yuttadhammo.BodhiTimer.Models.TimerList
 import org.yuttadhammo.BodhiTimer.Util.Notifications.createNotificationChannel
 import org.yuttadhammo.BodhiTimer.Util.Settings
+import org.yuttadhammo.BodhiTimer.Util.Themes
 import org.yuttadhammo.BodhiTimer.Util.Time
 import org.yuttadhammo.BodhiTimer.Util.Time.msFromArray
 import org.yuttadhammo.BodhiTimer.Util.Time.str2complexTimeString
@@ -95,9 +96,11 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         Timber.i("CREATE")
         super.onCreate(savedInstanceState)
         context = this
-        mAlarmTaskManager = ViewModelProvider(this).get(AlarmTaskManager::class.java)
+        mAlarmTaskManager = ViewModelProvider(this)[AlarmTaskManager::class.java]
 
-        var prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(baseContext)
+        Themes.applyTheme(this)
+
+        val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(baseContext)
         prefs.registerOnSharedPreferenceChangeListener(this)
         setupObservers()
         prepareUI()

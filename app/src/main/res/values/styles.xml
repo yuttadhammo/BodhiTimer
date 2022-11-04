@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Base application theme. -->
-    <style name="AppCompatTheme" parent="Theme.Material3.DynamicColors.DayNight">
+    <!-- Here we define some basic attributes that are the same for each theme -->
+    <style name="BodhiTheme.Base" parent="">
         <item name="android:fontFamily">@font/source_sans</item>
         <item name="fontFamily">@font/source_sans</item> <!-- target android sdk versions < 26 and > 14 if theme other than AppCompat -->
         <item name="fontWeight">300</item>
@@ -15,11 +15,29 @@
     </style>
 
 
-    <style name="NoTitleBar" parent="AppCompatTheme">
+    <!-- The day & night theme. There is a night specific override in the values-night folder -->
+    <style name="BodhiTheme.DayNight" parent="Theme.Material3.DynamicColors.DayNight">
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
+        <item name="colorControlHighlight">?attr/colorSecondary</item>
+    </style>
+
+    <style name="BodhiTheme.Dark" parent="Theme.Material3.DynamicColors.Dark">
+        <item name="colorPrimaryDark">?attr/colorSurface</item>
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
+        <item name="colorControlHighlight">?attr/colorSecondary</item>
+    </style>
+
+    <style name="BodhiTheme.Light" parent="Theme.Material3.DynamicColors.Light">
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
+        <item name="colorControlHighlight">?attr/colorSecondary</item>
+    </style>
+
+
+    <style name="NoTitleBar" parent="BodhiTheme.Base">
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Transparent" parent="AppCompatTheme">
+    <style name="Theme.Transparent" parent="BodhiTheme.Base">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>

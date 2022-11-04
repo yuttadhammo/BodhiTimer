@@ -252,10 +252,13 @@ open class NNumberPicker : Activity(), View.OnClickListener, OnLongClickListener
     }
 
     private fun savePreset(i: Int, s: String?) {
-//        Settings::class.java.getField("pre$i").set(Settings, s!!)
-        val editor = prefs!!.edit()
-        editor.putString("pre$i", s)
-        editor.apply()
+        if (s == null) return
+        when (i) {
+            1 -> Settings.preset1 = s
+            2 -> Settings.preset2 = s
+            3 -> Settings.preset3 = s
+            4 -> Settings.preset4 = s
+        }
     }
 
     fun setTimes(_times: IntArray) {
