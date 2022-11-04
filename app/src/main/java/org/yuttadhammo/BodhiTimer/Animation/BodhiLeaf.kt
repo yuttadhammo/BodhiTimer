@@ -45,7 +45,7 @@ internal class BodhiLeaf(context: Context) : TimerDrawing {
         mProgressPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
 
         // Get custom bitmap
-        mBitmap = if (!Settings.customBmp  || Settings.bmpUri.isEmpty()) {
+        mBitmap = if (!Settings.customBmp || Settings.bmpUri.isEmpty()) {
             isCustom = false
             BitmapFactory.decodeResource(context.resources, R.drawable.leaf)
         } else {

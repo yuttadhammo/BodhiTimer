@@ -3,8 +3,8 @@
     android:id="@android:id/text1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:textSize="50sp"
-    android:maxLines="1"
     android:fontFeatureSettings="'onum'"
-    android:textColor="@color/gallery_item_color" />
+    android:maxLines="1"
+    android:padding="10dp"
+    android:textColor="@color/gallery_item_color"
+    android:textSize="50sp" />

@@ -336,7 +336,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         val view = SlidingPickerDialog(context!!)
         val lastTimePicked = Settings.lastSimpleTime
         view.mTimes = time2Array(lastTimePicked)
-        view.setOnConfirm  {
+        view.setOnConfirm {
             onNumbersPicked(it)
         }
         view.show()

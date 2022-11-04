@@ -102,8 +102,8 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="#00000000"
-            android:text="@string/pre1"
             android:padding="0dp"
+            android:text="@string/pre1"
             android:textColor="?attr/colorSurfaceInverse" />
 
         <ImageView
@@ -119,8 +119,8 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="#00000000"
-            android:text="@string/pre2"
             android:padding="0dp"
+            android:text="@string/pre2"
             android:textColor="?attr/colorSurfaceInverse" />
 
         <ImageView
@@ -136,8 +136,8 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="#00000000"
-            android:text="@string/pre3"
             android:padding="0dp"
+            android:text="@string/pre3"
             android:textColor="?attr/colorSurfaceInverse" />
 
         <ImageView
@@ -145,8 +145,7 @@
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:background="#DDDDDD"
-            android:contentDescription="@null"
-            />
+            android:contentDescription="@null" />
 
         <Button
             android:id="@+id/btn4"
@@ -154,10 +153,9 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="#00000000"
-            android:text="@string/pre4"
             android:padding="0dp"
-            android:textColor="?attr/colorSurfaceInverse"
-             />
+            android:text="@string/pre4"
+            android:textColor="?attr/colorSurfaceInverse" />
 
         <ImageView
             android:layout_width="1dp"
@@ -170,10 +168,10 @@
         <Button
             android:id="@+id/btnadv"
             android:layout_width="0dp"
-            android:padding="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="#00000000"
+            android:padding="0dp"
             android:text="@string/adv"
             android:textColor="?attr/colorSurfaceInverse" />
     </LinearLayout>

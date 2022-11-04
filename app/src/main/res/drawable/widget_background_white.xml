@@ -7,9 +7,9 @@
         android:color="#44ffffff" />
 
     <padding
+        android:bottom="1dp"
         android:left="1dp"
-        android:top="1dp"
         android:right="1dp"
-        android:bottom="1dp" />
+        android:top="1dp" />
     <corners android:radius="16dp" />
 </shape>

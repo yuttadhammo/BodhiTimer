@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="40dp">
+    android:layout_height="40dp"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/time"
-        android:paddingLeft="4dp"
         android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:layout_height="match_parent" />
+        android:paddingLeft="4dp"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/sound"
-        android:text="@string/sys_def"
-        android:paddingLeft="4dp"
         android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textSize="16sp"
         android:gravity="center_vertical"
-        android:layout_height="match_parent" />
+        android:paddingLeft="4dp"
+        android:text="@string/sys_def"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/delete"
-        android:text="x"
-        android:textSize="16sp"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:text="x"
+        android:textSize="16sp" />
 </LinearLayout>

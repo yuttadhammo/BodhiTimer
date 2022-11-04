@@ -5,12 +5,12 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
+        android:id="@+id/controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/controls"
-        android:padding="15dp"
-        android:orientation="vertical">
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:padding="15dp">
 
         <ImageView
             android:layout_width="match_parent"
@@ -24,30 +24,30 @@
 
             <EditText
                 android:id="@+id/hours"
-                android:hint="hh"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:inputType="number"
                 android:layout_height="40dp"
-                android:importantForAutofill="no" />
+                android:layout_weight="1"
+                android:hint="hh"
+                android:importantForAutofill="no"
+                android:inputType="number" />
 
             <EditText
-                android:hint="mm"
                 android:id="@+id/mins"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:inputType="number"
                 android:layout_height="40dp"
-                android:importantForAutofill="no" />
+                android:layout_weight="1"
+                android:hint="mm"
+                android:importantForAutofill="no"
+                android:inputType="number" />
 
             <EditText
-                android:hint="ss"
                 android:id="@+id/secs"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:inputType="number"
                 android:layout_height="40dp"
-                android:importantForAutofill="no" />
+                android:layout_weight="1"
+                android:hint="ss"
+                android:importantForAutofill="no"
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/add"
@@ -69,17 +69,17 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:padding="4dp"
                 android:layout_height="match_parent"
-                android:text="@string/sound"
                 android:gravity="center"
+                android:padding="4dp"
+                android:text="@string/sound"
                 android:textSize="16sp" />
 
             <Button
                 android:id="@+id/uri"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="40dp"
+                android:layout_weight="1"
                 android:text="@string/sys_def" />
         </LinearLayout>
 
@@ -91,34 +91,34 @@
             <Button
                 android:id="@+id/cancel"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="40dp"
                 android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 android:text="@string/cancel" />
 
             <Button
                 android:id="@+id/save"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="40dp"
+                android:layout_weight="1"
                 android:text="@string/save" />
 
         </LinearLayout>
     </LinearLayout>
 
     <ListView
+        android:id="@+id/timesList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/controls"
-        android:padding="15dp"
-        android:id="@+id/timesList" />
+        android:padding="15dp" />
 
     <TextView
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_above="@id/controls"
+        android:gravity="center"
 
         android:text="@string/empty_list" />
 </RelativeLayout>

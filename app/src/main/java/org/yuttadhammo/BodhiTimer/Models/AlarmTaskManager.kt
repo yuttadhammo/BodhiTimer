@@ -539,7 +539,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         if (Settings.doNotDisturb
         ) {
             try {
-                val newFilter =   if (previousInterruptionFilter != 0)
+                val newFilter = if (previousInterruptionFilter != 0)
                     previousInterruptionFilter else NotificationManager.INTERRUPTION_FILTER_ALL
                 val mNotificationManager =
                     mApp.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

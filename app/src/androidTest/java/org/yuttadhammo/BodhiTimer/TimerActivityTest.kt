@@ -32,39 +32,61 @@ class TimerActivityTest {
     fun timerActivityTest() {
         Screengrab.screenshot("main")
         val appCompatImageButton = onView(
-                allOf(withId(R.id.setButton), withContentDescription("Set"),
+            allOf(
+                withId(R.id.setButton), withContentDescription("Set"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.mainLayout),
                         childAtPosition(
-                                allOf(withId(R.id.mainLayout),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                4),
-                        isDisplayed()))
+                            withId(android.R.id.content),
+                            0
+                        )
+                    ),
+                    4
+                ),
+                isDisplayed()
+            )
+        )
         appCompatImageButton.perform(click())
 
         //val gallery = onView()
 
         val button = onView(
-                allOf(withId(R.id.btnOk), withText("OK"),
+            allOf(
+                withId(R.id.btnOk), withText("OK"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.button_cont),
                         childAtPosition(
-                                allOf(withId(R.id.button_cont),
-                                        childAtPosition(
-                                                withId(R.id.container),
-                                                6)),
-                                2)))
+                            withId(R.id.container),
+                            6
+                        )
+                    ),
+                    2
+                )
+            )
+        )
         button.perform(scrollTo(), click())
 
         val textView = onView(
-                allOf(withId(R.id.text_top),
-                        withParent(allOf(withId(R.id.mainLayout),
-                                withParent(withId(android.R.id.content)))),
-                        isDisplayed()))
+            allOf(
+                withId(R.id.text_top),
+                withParent(
+                    allOf(
+                        withId(R.id.mainLayout),
+                        withParent(withId(android.R.id.content))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
         textView.check(matches(withText("0")))
 
     }
 
     private fun childAtPosition(
-            parentMatcher: Matcher<View>, position: Int): Matcher<View> {
+        parentMatcher: Matcher<View>, position: Int
+    ): Matcher<View> {
 
         return object : TypeSafeMatcher<View>() {
             override fun describeTo(description: Description) {

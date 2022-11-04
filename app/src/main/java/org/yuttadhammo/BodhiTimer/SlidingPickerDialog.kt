@@ -135,7 +135,7 @@ open class SlidingPickerDialog(context: Context) : Dialog(context), View.OnClick
         if (h != 0 || m != 0 || s != 0) {
             val values = intArrayOf(h, m, s)
             returnResults(values)
-        } else Toast.makeText(context, context!!.getString(R.string.longclick), Toast.LENGTH_LONG)
+        } else Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG)
             .show()
     }
 
