@@ -55,8 +55,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NNumberPicker" />
-        <activity
             android:name=".AdvNumberPicker"
             android:label="@string/advanced"
             android:theme="@style/BodhiTheme.DayNight"
