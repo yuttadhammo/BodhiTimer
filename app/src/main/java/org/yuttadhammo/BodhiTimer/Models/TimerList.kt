@@ -2,6 +2,7 @@ package org.yuttadhammo.BodhiTimer.Models
 
 import android.text.TextUtils
 import org.yuttadhammo.BodhiTimer.Const.SessionTypes
+import timber.log.Timber
 
 class TimerList {
     class Timer {
@@ -42,13 +43,13 @@ class TimerList {
             for (s in advTime) {
                 //  advTime[n] will be of format timeInMs#pathToSound
                 val thisAdvTime = s.split("#").toTypedArray()
-                var duration = 0
+                var duration: Int
                 try {
                     duration = thisAdvTime[0].toInt()
                     val timer = Timer(duration, thisAdvTime[1])
                     list.add(timer)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Timber.e(e)
                 }
             }
             return list
