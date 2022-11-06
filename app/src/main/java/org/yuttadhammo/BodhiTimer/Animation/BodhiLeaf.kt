@@ -30,7 +30,9 @@ import android.os.ParcelFileDescriptor
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation.TimerDrawing
 import org.yuttadhammo.BodhiTimer.R
 import org.yuttadhammo.BodhiTimer.Util.Settings
+import timber.log.Timber
 import java.io.IOException
+
 
 internal class BodhiLeaf(context: Context) : TimerDrawing {
     private var mBitmap: Bitmap? = null
@@ -59,7 +61,7 @@ internal class BodhiLeaf(context: Context) : TimerDrawing {
                 file = resolver.openFileDescriptor(selectedImage, readOnlyMode)
                 BitmapFactory.decodeFileDescriptor(file?.fileDescriptor)
             } catch (e: IOException) {
-                e.printStackTrace()
+                Timber.e(e)
                 BitmapFactory.decodeResource(context.resources, R.drawable.leaf)
             } finally {
                 file?.close()
@@ -92,9 +94,12 @@ internal class BodhiLeaf(context: Context) : TimerDrawing {
             if (!isCustom) shift -= 90
             rd = Rect(0, shift, w, nHeight + shift)
         }
-        canvas.drawBitmap(mBitmap!!, rs, rd, null)
-        val p: Float = if (max != 0) time / max.toFloat() else 0F
-        mProgressPaint.alpha = (255 - 255 * p).toInt()
+
+        val p = if (max != 0) (time / max.toFloat()) else 0F
+        val alpha = (255 - 255 * p).toInt()
+        val color = Paint()
+        color.alpha = alpha
+        canvas.drawBitmap(mBitmap!!, rs, rd, color)
         canvas.restore()
     }
 

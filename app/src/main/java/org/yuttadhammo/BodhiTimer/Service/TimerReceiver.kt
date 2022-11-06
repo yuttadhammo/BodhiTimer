@@ -94,6 +94,4 @@ class TimerReceiver : BroadcastReceiver() {
         return playIntent
     }
 
-    companion object {
-    }
 }

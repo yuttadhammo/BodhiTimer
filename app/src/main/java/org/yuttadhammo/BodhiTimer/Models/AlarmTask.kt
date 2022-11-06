@@ -51,6 +51,4 @@ data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
         if (mPendingIntent != null) mAlarmMgr.cancel(mPendingIntent)
     }
 
-    companion object {
-    }
 }

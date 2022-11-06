@@ -34,7 +34,6 @@ import org.yuttadhammo.BodhiTimer.Util.Time.time2humanStr
 import timber.log.Timber
 
 class AdvNumberPicker : AppCompatActivity() {
-    private var context: AppCompatActivity? = null
     private var advTimeString: String? = null
     private var hours: EditText? = null
     private var mins: EditText? = null
@@ -51,15 +50,8 @@ class AdvNumberPicker : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Themes.applyTheme(this)
-        context = this
-        if (Settings.fullscreen) {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        } else {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        }
+
+
         customUris = resources.getStringArray(R.array.sound_uris)
         customSounds = resources.getStringArray(R.array.sound_names)
         advTimeString = Settings.advTimeString
@@ -99,11 +91,11 @@ class AdvNumberPicker : AppCompatActivity() {
 
         uriText!!.setOnClickListener {
             val builderSingle = AlertDialog.Builder(
-                context!!
+                this
             )
             builderSingle.setIcon(R.mipmap.ic_launcher)
             val arrayAdapter =
-                ArrayAdapter<String>(context!!, android.R.layout.select_dialog_singlechoice)
+                ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice)
             arrayAdapter.add(getString(R.string.sys_def))
             for (s in customSounds) {
                 arrayAdapter.add(s)
@@ -125,14 +117,14 @@ class AdvNumberPicker : AppCompatActivity() {
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone")
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, null as Uri?)
-                    context!!.startActivityForResult(intent, SELECT_RINGTONE)
+                    this.startActivityForResult(intent, SELECT_RINGTONE)
                 } else if (customUri == "file") {
                     mDialog = dialog
                     val intent = Intent(Intent.ACTION_GET_CONTENT)
                     intent.type = "audio/*"
                     intent.addCategory(Intent.CATEGORY_OPENABLE)
                     try {
-                        context!!.startActivityForResult(
+                        this.startActivityForResult(
                             Intent.createChooser(
                                 intent,
                                 "Select Sound File"
@@ -140,7 +132,7 @@ class AdvNumberPicker : AppCompatActivity() {
                         )
                     } catch (ex: ActivityNotFoundException) {
                         Toast.makeText(
-                            context, getString(R.string.get_file_man),
+                            this, getString(R.string.get_file_man),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -150,6 +142,7 @@ class AdvNumberPicker : AppCompatActivity() {
             }
             builderSingle.show()
         }
+
         listView = findViewById(R.id.timesList)
         val emptyText = findViewById<TextView>(android.R.id.empty)
         listView!!.emptyView = emptyText
@@ -191,13 +184,17 @@ class AdvNumberPicker : AppCompatActivity() {
             val advTime = advTimeString!!.split("^").toTypedArray()
             listOf(*advTime)
         }
-        val adapter = MyAdapter(context, R.layout.adv_list_item, advTimeList)
+        val adapter = TimesListAdapter(this, R.layout.adv_list_item, advTimeList)
         listView!!.adapter = adapter
         Timber.d("advTimeString: %s", advTimeString)
         Timber.d("adapter items: %s", adapter.count)
     }
 
-    inner class MyAdapter(context: Context?, resource: Int, private val values: List<String>) :
+    inner class TimesListAdapter(
+        context: Context?,
+        resource: Int,
+        private val values: List<String>
+    ) :
         ArrayAdapter<String?>(
             context!!, resource, values
         ) {
@@ -236,7 +233,7 @@ class AdvNumberPicker : AppCompatActivity() {
     }
 
     private fun removeItem(p: Int) {
-        val times = advTimeString!!.split("\\^").toTypedArray()
+        val times = advTimeString!!.split("^").toTypedArray()
         advTimeString = ""
         for (i in times.indices) {
             if (i == p) continue

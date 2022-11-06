@@ -103,7 +103,7 @@
         a:title="@string/custom_bmp"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
-        a:defaultValue="False"
+        a:defaultValue="true"
         a:key="FULLSCREEN"
         a:summary="@string/fullscreen_desc"
         a:title="@string/fullscreen"

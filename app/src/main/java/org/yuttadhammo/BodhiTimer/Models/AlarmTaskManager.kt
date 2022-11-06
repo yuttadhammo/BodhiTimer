@@ -464,8 +464,6 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
         // Update labels
         if (alarms.empty()) {
-
-
             stopDND()
             stopService()
             stopAlarmsAndTicker()
@@ -521,22 +519,20 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     }
 
     private fun startDND() {
-        if (Settings.doNotDisturb
-        ) {
+        if (Settings.doNotDisturb) {
             try {
                 val mNotificationManager =
                     mApp.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 previousInterruptionFilter = mNotificationManager.currentInterruptionFilter
                 mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
             } catch (e: Exception) {
-                Timber.e(e.toString())
+                Timber.e(e)
             }
         }
     }
 
     private fun stopDND() {
-        if (Settings.doNotDisturb
-        ) {
+        if (Settings.doNotDisturb) {
             try {
                 val newFilter = if (previousInterruptionFilter != 0)
                     previousInterruptionFilter else NotificationManager.INTERRUPTION_FILTER_ALL
@@ -544,7 +540,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
                     mApp.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 mNotificationManager.setInterruptionFilter(newFilter)
             } catch (e: Exception) {
-                Timber.e(e.toString())
+                Timber.e(e)
             }
         }
     }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.PowerManager
-import android.util.Log
 import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.R
 import timber.log.Timber

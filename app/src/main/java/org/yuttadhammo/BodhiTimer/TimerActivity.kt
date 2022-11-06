@@ -23,7 +23,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -55,14 +54,14 @@ import org.yuttadhammo.BodhiTimer.Util.Time.time2humanStr
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.util.Locale
-import kotlin.math.max
-import kotlin.math.roundToInt
 
 
 /**
  * The main activity which shows the timer and allows the user to set the time
  */
 class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPreferenceChangeListener {
+
+    private var lastColor: Int = -4
 
     /**
      * To save having to traverse the view tree
@@ -82,9 +81,6 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     private var widget = false
     private var context: TimerActivity? = null
     private var animationIndex = 0
-
-    //private var blackView: ImageView? = null
-    private var invertColors = false
     private var tts: TextToSpeech? = null
     private var lastp = 0f
 
@@ -173,7 +169,6 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         mPreviewLabel = findViewById(R.id.text_preview)
         mTimerAnimation = findViewById(R.id.mainImage)
         mTimerAnimation.setOnClickListener(this)
-        //blackView = findViewById(R.id.black)
         animationIndex = Settings.drawingIndex
     }
 
@@ -272,21 +267,21 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         Timber.i("Configuring animation")
         mTimerAnimation.configure()
 
-        val dayNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
 
-        if (Settings.drawingIndex == 0) {
-            findViewById<TextView>(R.id.text_top).setTextColor(Color.WHITE)
-            findViewById<TextView>(R.id.text_preview).setTextColor(Color.WHITE)
-        }
+        updateFontColor(0F)
 
         setLowProfile()
-        if (Settings.wakeLock
-        ) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (Settings.fullscreen
-        ) window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        ) else window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        if (Settings.wakeLock) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        if (Settings.fullscreen) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        }
     }
 
     /**
@@ -361,16 +356,31 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             return
         }
         lastp = p
-        if (animationIndex != 0) {
-            //blackView!!.visibility = View.GONE
-            mTimerAnimation.updateImage(elapsed, duration)
-        } else {
-            var alpha = (255 * p).roundToInt()
-            alpha = max(0, alpha).coerceAtMost(255)
-            val `val` = if (invertColors) 255 else 0
-            val color = Color.argb(alpha, `val`, `val`, `val`)
-            //blackView!!.setBackgroundColor(color)
-            //blackView!!.visibility = View.VISIBLE
+
+        mTimerAnimation.updateImage(elapsed, duration)
+        updateFontColor(p)
+    }
+
+    /**
+     * Manually handle the font color when using the Fade-In animation
+     */
+    private fun updateFontColor(p: Float) {
+        if (Settings.drawingIndex == 0) {
+            val dayNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val isLightTheme = (dayNightMode == Configuration.UI_MODE_NIGHT_NO)
+            val textColor = when {
+                isLightTheme && p < 0.5 -> {
+                    Color.WHITE
+                }
+                isLightTheme && p >= 0.5 -> {
+                    Color.BLACK
+                }
+                else -> Color.WHITE
+            }
+            if (lastColor == textColor) return
+            findViewById<TextView>(R.id.text_top).setTextColor(textColor)
+            findViewById<TextView>(R.id.text_preview).setTextColor(textColor)
+            lastColor = textColor
         }
     }
 
@@ -551,7 +561,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
      */
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (LOG) Timber.v("Got result")
+        Timber.v("Got result")
         if (requestCode == NUMBER_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
             val values = data!!.getIntArrayExtra("times")
             onNumbersPicked(values)
@@ -638,12 +648,5 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             Timber.d("id " + intent.getIntExtra("id", -1))
             mAlarmTaskManager!!.onAlarmEnd(intent.getIntExtra("id", -1))
         }
-    }
-
-    companion object {
-        /**
-         * Should the logs be shown
-         */
-        private const val LOG = true
     }
 }

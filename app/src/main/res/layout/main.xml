@@ -49,8 +49,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         app:lineHeight="10sp"
-        tools:text="30:00"
-        tools:targetApi="p" />
+        tools:targetApi="p"
+        tools:text="30:00" />
 
     <TextView
         android:id="@+id/text_preview"

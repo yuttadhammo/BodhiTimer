@@ -134,7 +134,5 @@ class SoundService : Service() {
         }
     }
 
-    companion object {
-    }
 
 }

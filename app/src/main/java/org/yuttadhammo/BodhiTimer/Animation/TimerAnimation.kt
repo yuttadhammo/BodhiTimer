@@ -101,7 +101,8 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
             createDrawings(context)
             configure()
         }
-        mDrawings[mIndex].updateImage(canvas, mLastTime, mLastMax)
+        val drawing = mDrawings[mIndex]
+        drawing.updateImage(canvas, mLastTime, mLastMax)
     }
 
     fun configure() {
