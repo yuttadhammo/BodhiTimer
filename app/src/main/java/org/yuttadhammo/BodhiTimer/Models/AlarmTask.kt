@@ -5,6 +5,10 @@ import android.app.AlarmManager.AlarmClockInfo
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import androidx.core.content.ContextCompat
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
 import org.yuttadhammo.BodhiTimer.Const.SessionTypes
 import org.yuttadhammo.BodhiTimer.Service.TimerReceiver
@@ -25,6 +29,7 @@ data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
 
 
     fun run() {
+        if (!ensureNecessaryPermission()) return
         val intent = Intent(context, TimerReceiver::class.java)
         intent.putExtra("offset", offset)
         intent.putExtra("duration", duration)
@@ -45,6 +50,22 @@ data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
         val pendingAlarmInfo = PendingIntent.getBroadcast(context, id + 1000, alarmInfoIntent, 0)
         val info = AlarmClockInfo(System.currentTimeMillis() + time, pendingAlarmInfo)
         mAlarmMgr.setAlarmClock(info, mPendingIntent)
+    }
+
+    private fun ensureNecessaryPermission(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = ContextCompat.getSystemService(context, AlarmManager::class.java)
+            if (alarmManager?.canScheduleExactAlarms() == false) {
+                Intent().also { intent ->
+                    intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                    intent.data = Uri.fromParts("package", context.packageName, null)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    context.startActivity(intent)
+                }
+                return false
+            }
+        }
+        return true
     }
 
     fun cancel() {
