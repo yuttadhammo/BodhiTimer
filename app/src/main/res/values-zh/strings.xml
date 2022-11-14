@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">菩提计时器</string>
-    <string name="Start">设置计时器</string>
     <string name="Stop">清除</string>
 
     <string name="Notification">菩提计时器已结束</string>
-    <string name="InputTitle">时:分:秒</string>
-
-    <string name="warning_text">手机处于静音模式！通知发出的振动和声音将受限</string>
-    <string name="warning_title">警告</string>
-    <string name="warning_button">确定</string>
 
     <string name="timer_for_x">计时器: %s</string>
 
@@ -35,9 +29,6 @@
     <string name="prefs">首选项</string>
 
     <!-- Widget -->
-
-    <string name="choose_widget">选择小部件主题</string>
-    <string name="theme">小部件主题</string>
 
     <!-- Preferences -->
 
@@ -66,14 +57,7 @@
 
 
     <string name="notification">通知</string>
-    <string name="notification_vibrate">开启震动</string>
-    <string name="notification_vibrate_desc">让计时器触发振动</string>
 
-    <string name="led_notification">开启LED闪烁</string>
-    <string name="led_notification_desc">有消息时LED闪烁</string>
-
-    <string name="auto_clear">自动清理消息</string>
-    <string name="auto_clear_desc">几秒钟之后自动清理消息</string>
     <string name="auto_restart">自动重启计时器</string>
     <string name="auto_restart_desc">计时器结束后自动重启</string>
 
@@ -84,11 +68,6 @@
     <string name="bmp_or_circle">动画类型</string>
 
     <string name="custom_bmp">使用自定义图片</string>
-
-    <string name="invert_colors">界面反色</string>
-
-    <string name="circle_theme">圆圈动画</string>
-    <string name="circle_theme_desc">选择圆圈动画样式</string>
 
     <string name="fullscreen">全屏</string>
     <string name="fullscreen_desc">计时器运行时隐藏状态栏</string>
@@ -101,14 +80,7 @@
     <string name="settings.theme_day_night">白天 &amp; 晚上</string>
     <string name="settings.theme_light">亮色</string>
     <string name="settings.theme_dark">暗色</string>
-    <string name="settings.theme_black">黑色</string>
     <string name="settings.theme_title">颜色主题</string>
-
-    <string name="nag_dialog">静音弹框</string>
-    <string name="nag_dialog_desc">当手机设为静音时，弹出一个对话框</string>
-
-    <string name="repeat_timer">重复计时器</string>
-    <string name="repeat_timer_desc">计时器结束后自动重新开始计时</string>
 
     <string name="stay_awake">禁止休眠</string>
     <string name="stay_awake_desc">禁止手机休眠</string>
@@ -178,7 +150,6 @@ https://github.com/yuttadhammo/BodhiTimer
     <string name="longclick">长按按钮设置预设时间</string>
     <string name="notset">设置预设时间之前需选择时间</string>
 
-    <string name="zero">00</string>
     <string name="set">设置</string>
     <string name="pause">暂停</string>
 
@@ -200,15 +171,9 @@ https://github.com/yuttadhammo/BodhiTimer
 
     <string name="sys_def">系统默认</string>
     <string name="get_file_man">请安装一个文件管理器</string>
-    <string name="sys_tone">系统铃声</string>
-    <string name="sound_file">铃声文件</string>
     <string name="speak_time_desc">识别语音时播放声音</string>
     <string name="speak_time">说出识别时间</string>
-    <string name="timer_done">计时器结束</string>
-    <string name="input_text">文本转语音</string>
-    <string name="input_text_desc">输入要朗读的文本</string>
     <string name="NoVoiceRecognitionInstalled">请安装一个语音识别软件</string>
-    <string name="general">常规</string>
 
     <string name="alarm_channel_name">报警</string>
     <string name="alarm_channel_description">计时器是应用程序的主要用途</string>

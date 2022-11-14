@@ -7,6 +7,8 @@
 
     <string name="prefs">Einstellungen</string>
 
+    <!-- Widget -->
+
     <!-- Preferences -->
 
     <string name="preferences">Einstellungen</string>
@@ -73,6 +75,6 @@
 
     <string name="NoVoiceRecognitionInstalled">Bitte installieren Sie eine Spracherkennungs-App!</string>
 
-</resources>
+    </resources>
 
 
