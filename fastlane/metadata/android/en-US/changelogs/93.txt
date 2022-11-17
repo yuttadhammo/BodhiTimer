@@ -1,0 +1,13 @@
+6.1.2
+
+Fix two crashes
+
+6.1.0
+
+Update App for newer Android versions. Use Material design.
+This update removes rarely used features like the colored circle animation.
+
+6.0.0
+
+* Update app to support latest Android versions.
+* Add support for other app to start an alarm using an URL like bodhi://timer?times=60,120
