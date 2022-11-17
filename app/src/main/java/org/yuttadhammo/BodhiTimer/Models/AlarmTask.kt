@@ -47,7 +47,7 @@ data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
         )
 
         val alarmInfoIntent = Intent(context, TimerReceiver::class.java)
-        val pendingAlarmInfo = PendingIntent.getBroadcast(context, id + 1000, alarmInfoIntent, 0)
+        val pendingAlarmInfo = PendingIntent.getBroadcast(context, id + 1000, alarmInfoIntent, PendingIntent.FLAG_IMMUTABLE)
         val info = AlarmClockInfo(System.currentTimeMillis() + time, pendingAlarmInfo)
         mAlarmMgr.setAlarmClock(info, mPendingIntent)
     }
@@ -59,7 +59,8 @@ data class AlarmTask(val context: Context, val offset: Int, val duration: Int) {
                 Intent().also { intent ->
                     intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
                     intent.data = Uri.fromParts("package", context.packageName, null)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
                     context.startActivity(intent)
                 }
                 return false
