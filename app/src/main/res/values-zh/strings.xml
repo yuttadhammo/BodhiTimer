@@ -96,52 +96,81 @@
     <string name="about">关于</string>
     <string name="about_title">关于菩提计时器</string>
     <string name="about_text">
-
 <![CDATA[
 
 <style>
-  a {color: rgb(255,87,34); text-decoration: none;}
+a {color: rgb(255,87,34); text-decoration: none;}
 </style>
 
-菩提计时器是一款优雅、极简的倒计时计时器，主要用于冥想，也可以用于其它
-类似情形。
+<body style=\"text-align:justify;font-size:16px;color:white;background-color:black;\">
 
-点击左上角闹钟按钮可以设置时间，选择某个时间，然后长按四个预设时间按钮
-中的任意一个可以设置预设时间，长按闹钟按钮可以使用语音设置时间功能，首选项中可切换按键模式。
+<div>
 
-点击 “高级” 按钮可以设置多个连续计时器，手动输入或使用语音识别创建时间
-列表，使用语音识别时，用单词 “again” 分隔每个时间，比如：说 “thirty
-minutes again one hour”，可以设置两个连续计时器，第一个30分钟，第二个1
-小时。
+<h4>简介</h4>
 
-左下角按钮暂停/恢复计时，右下角按键停止计时，右上角按钮为首选项。
+<div>
 
-计时动画可以选择淡出菩提叶或者四个圆圈动画，菩提叶可以替换为自定义图像。
+<p>
+菩提计时器是一款优雅、极简的计时器，主要用于冥想时倒计时，也可以用于其它类似情形。
+</p>
 
+<p>
+点击左上角闹钟按钮可以设置时间，选择某个时间，然后长按预设时间按钮中的任意一个可以设置预设时间，长按闹钟按钮可以启动语音设置时间功能，不过这个按键模式可以首选项中设置。
+</p>
+
+<p>
+点击 “高级” 按钮可以设置多个连续计时器，使用语音识别时，用单词 “again” 分隔每个时间，比如：说 “thirty minutes again one hour”，可以设置两个连续计时器，第一个30分钟，第二个1小时。
+</p>
+
+<p>
+左下角按钮可以暂停/恢复计时，右下角按键可以停止计时，右上角按钮进入首选项页面。
+</p>
+
+<p>
+计时动画可以选择淡出菩提叶或圆圈，菩提叶可以替换为用户自定义图像。
+</p>
+
+<p>
 用户可以通过APP抽屉功能在桌面添加一个计时器小部件，或者添加到锁屏界面(Android 4.2+)。
+</p>
 
-菩提计时器是一款自由软件，用户可以根据自由软件基金会发布的GNU通用公共
-许可证版本3或任何更高版本的条款重新分发和/或修改它。GPL许可证见：
-http://www.gnu.org/licenses/gpl.html
+<p>
+菩提计时器是一款自由软件，用户可以根据自由软件基金会发布的 GNU 通用公共许可证版本3或任何更高版本的条款重新分发和/或修改它。GPL许可证见：
+<a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/gpl.html</a>
+</p>
 
+<p>
+获取菩提计时器最新版的源代码可以访问：
+<a href=\"https://github.com/yuttadhammo/BodhiTimer\">https://github.com/yuttadhammo/BodhiTimer</a>
+</p>
+</div>
+</div>
 
-获取最新版本的源代码可以通过：
-https://github.com/yuttadhammo/BodhiTimer
+<div>
 
+<h4>感谢</h2>
+<div>
 
-感谢
+<p>菩提计时器是 TeaTimer 的一个分支，这个应用由 Ralph Gootee “rgootee@gmail.com” 开发，具体见：
+<a href=\"https://github.com/ralphleon/TeaTimer\">https://github.com/ralphleon/TeaTimer</a></p>
 
-1. 菩提计时器是 TeaTimer 的一个分支，这个应用由 Ralph Gootee
-   \'rgootee@gmail.com\' 开发，具体见：
-   https://github.com/ralphleon/TeaTimer
+<p>
+Enso 图像由 Ryōnen Gensō (1646-1711) 绘制，然后她在 Enso 图像下面写道：
+</p>
 
-2. Enso 图像由 Ryōnen Gensō (1646-1711) 绘制，接着 Enso 她写道：
+<p>
+\"When you do understand yourself fully,
+there is not one thing.\" 
+</p>
 
-   \"When you do understand yourself fully,
-    there is not one thing.\" 
+<p>低音钵声由 juskiddink 录制, 使用 CC-BY-SA 3.0 许可，具体见：
+<a href=\"https://freesound.org/people/juskiddink/sounds/122647/\">https://freesound.org/people/juskiddink/sounds/122647/</a>
+</p>
 
-3. 低音钵声 https://freesound.org/people/juskiddink/sounds/122647/, 由 juskiddink 录制, 使用 CC-BY-SA 3.0 许可
+</div>
+</div>
 
+</body>
 
 ]]></string>
 
@@ -171,8 +200,8 @@ https://github.com/yuttadhammo/BodhiTimer
 
     <string name="sys_def">系统默认</string>
     <string name="get_file_man">请安装一个文件管理器</string>
-    <string name="speak_time_desc">识别语音时播放声音</string>
-    <string name="speak_time">说出识别时间</string>
+    <string name="speak_time_desc">语音识别时朗读已识别的声音</string>
+    <string name="speak_time">朗读已识别时间</string>
     <string name="NoVoiceRecognitionInstalled">请安装一个语音识别软件</string>
 
     <string name="alarm_channel_name">报警</string>
@@ -183,7 +212,7 @@ https://github.com/yuttadhammo/BodhiTimer
     <string name="show_system_settings">自定义通知</string>
     <string name="show_system_settings_desc">消息可以在安卓系统设置中设置</string>
     <string name="do_not_disturb">请勿打扰</string>
-    <string name="do_not_disturb_desc">冥想时进入“请勿打扰”模式</string>
+    <string name="do_not_disturb_desc">禅修时进入“请勿打扰”模式</string>
     <string name="open_timer">打开菩提计时器</string>
     <string name="service_channel_name">服务</string>
     <string name="service_channel_description">菩提计时器正在运行的通知</string>
