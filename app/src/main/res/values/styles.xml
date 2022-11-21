@@ -23,7 +23,6 @@
     </style>
 
     <style name="BodhiTheme.Dark" parent="Theme.Material3.DynamicColors.Dark">
-        <item name="colorPrimaryDark">?attr/colorSurface</item>
         <item name="colorControlNormal">?attr/colorOnSurface</item>
         <item name="colorControlHighlight">?attr/colorSecondary</item>
     </style>
@@ -33,18 +32,12 @@
         <item name="colorControlHighlight">?attr/colorSecondary</item>
     </style>
 
-
-    <!--    <style name="NoTitleBar" parent="BodhiTheme.Base">-->
-    <!--        <item name="android:windowNoTitle">true</item>-->
-    <!--    </style>-->
-
-    <!--    <style name="Theme.Transparent" parent="BodhiTheme.Base">-->
-    <!--        <item name="android:windowIsTranslucent">true</item>-->
-    <!--        <item name="android:windowBackground">@android:color/transparent</item>-->
-    <!--        <item name="android:windowContentOverlay">@null</item>-->
-    <!--        <item name="windowNoTitle">true</item>-->
-    <!--        <item name="android:windowIsFloating">true</item>-->
-    <!--    </style>-->
+    <style name="BodhiTheme.Black" parent="Theme.Material3.Dark">
+        <item name="colorSurface">@android:color/black</item>
+        <item name="colorSurfaceInverse">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlHighlight">?attr/colorSecondary</item>
+    </style>
 
     <style name="themeOverlay_timePicker" parent="ThemeOverlay.AppCompat">
         <item name="colorControlActivated">?attr/colorPrimary</item>

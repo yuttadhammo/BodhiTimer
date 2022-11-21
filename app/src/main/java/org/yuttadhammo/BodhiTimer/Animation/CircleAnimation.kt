@@ -128,7 +128,7 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
             lightTheme = (dayNightMode == Configuration.UI_MODE_NIGHT_NO)
 
             // Manually set light theme to false if we are during day but in forced dark mode
-            if (Settings.theme == mContext.getString(R.string.setting_key_theme_dark)) {
+            if (Settings.isDarkTheme) {
                     lightTheme = false
             }
         }

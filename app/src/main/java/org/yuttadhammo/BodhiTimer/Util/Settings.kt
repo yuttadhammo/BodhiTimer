@@ -89,6 +89,10 @@ object Settings {
         getKey(R.string.setting_key_theme_day_night)
     )
 
+    val isDarkTheme: Boolean
+        get() = (theme == getKey(R.string.setting_key_theme_dark) ||
+                theme == getKey(R.string.setting_key_theme_black))
+
     var circleTheme by StringIntSetting(
         "CircleTheme",
         3

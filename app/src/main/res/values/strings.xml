@@ -2,9 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">Bodhi Timer</string>
     <string name="Stop">Clear</string>
-
     <string name="Notification">Bodhi Timer Finished</string>
-
     <string name="timer_for_x">Timer for %s</string>
 
     <plurals name="x_hours">
@@ -20,7 +18,6 @@
         <item quantity="other">%d seconds</item>
     </plurals>
 
-
     <string name="hour">hour</string>
     <string name="minute">minute</string>
     <string name="second">second</string>
@@ -29,12 +26,8 @@
     <string name="adv_speech_recognized">Recognized time list</string>
     <string name="speech_recognized">Recognized: %s</string>
 
-    <string name="prefs">Preferences</string>
-
-    <!-- Widget -->
-
     <!-- Preferences -->
-
+    <string name="prefs">Preferences</string>
     <string name="preferences">Preferences</string>
     <string name="sound">Sound</string>
     <string name="notification_sound">Timer Sound</string>
@@ -54,43 +47,30 @@
 
     <string name="play_pre_sound">Test Start Sound</string>
     <string name="play_pre_sound_desc">Play the current start sound.</string>
-
     <string name="volume">Sound Volume</string>
     <string name="volume_desc">as percent of media volume setting</string>
-
-
     <string name="notification">Notification</string>
-
     <string name="auto_restart">Auto-Restart Timer</string>
     <string name="auto_restart_desc">Restart timer automatically when finished.</string>
-
     <string name="visual">Visual</string>
-
     <string name="is_bitmap">Fade-in image</string>
     <string name="is_circle">Circle animation</string>
     <string name="bmp_or_circle">Animation Type</string>
-
     <string name="custom_bmp">Use Custom Image</string>
-
     <string name="fullscreen">Full Screen</string>
     <string name="fullscreen_desc">Hide the status bar when timer is running.</string>
-
     <string name="hide_time">Hide Time Left</string>
     <string name="hide_time_desc">Don\'t show time left.</string>
-
     <string name="misc">Misc</string>
-
     <string name="settings.theme_day_night">Day &amp; Night</string>
     <string name="settings.theme_light">Light</string>
     <string name="settings.theme_dark">Dark</string>
+    <string name="settings.theme_black">Black</string>
     <string name="settings.theme_title">Color theme</string>
-
     <string name="stay_awake">Stay Awake</string>
     <string name="stay_awake_desc">Don\'t allow the phone to go to sleep.</string>
-
     <string name="switch_time">Switch Time Input Mode</string>
     <string name="switch_time_desc">Clicking on clock opens speech input (otherwise on long-click).</string>
-
     <string name="about_desc">About Bodhi Timer</string>
 
 
@@ -103,18 +83,18 @@
 		    <style>
 		        a {color: rgb(255,87,34); text-decoration: none;}
 		    </style>
-			<body style="text-align:justify;font-size:16px;color:white;background-color:black;>
+			<body style="text-align:justify;font-size:16px;">
 				<p><b>Bodhi Timer</b> is an elegant, minimalist countdown timer.  It was designed mainly for use as a meditation timer but can easily be used for any similar purpose.</p>
 				<p><b>Set the time</b> via the clock button in the top left corner.  You may <b>set presets</b> by choosing a time then holding down on one of the three preset buttons.</p>
 				<p>You may alternatively <b>use speech to set the time</b> by long-pressing the clock button.  These behaviours can be swapped via the preference screen.</p>
 				<p><b>To set multiple consecutive timers</b>, long-click on the "adv" button in the time set screen, then create a list of times, or simply use the speech recognition, separating each time with the word "again". For example, say &quot;<b>thirty minutes again one hour</b>&quot; to set two consecutive timers, first for thirty minutes then for one hour.</p>
 				<p><b>Pause/resume</b> via the buttons in the bottom left corner and stop the timer via the button in the bottom right.  <b>Change preferences</b> via the top-right button.</p>
-				<p>Animation may be toggled between a fade-in Bodhi Leaf and one of four circle animations, chosen from the preferences screen.  The Bodhi leaf may also be substituted for a custom image via the preferences screen.</p>
+				<p>Animation may be toggled between a fade-in Bodhi Leaf or a animated Enso brush drawing, chosen from the preferences screen.  The Bodhi leaf may also be substituted for a custom image via the preferences screen.</p>
 				<p>You may <b>add a timer widget</b> to your desktop via the App Drawer, or on your lockscreen (Android 4.2+).</p>
 				<p><b>Bodhi Timer</b> is free and open source software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version. <b><a href="http://www.gnu.org/licenses/gpl.html">GPL License</a></b></p>
 				<p>Get the latest version of the source code <b><a href="https://github.com/yuttadhammo/BodhiTimer">on GitHub</a></b>.</p>
 				<h4>Credits</h4>
-				<p>Bodhi Timer is a fork of the open source TeaTimer app by Ralph Gootee &lt;rgootee@gmail.com&gt;, which is also available <b><a href="https://github.com/ralphleon/TeaTimer">on GitHub</a></b>.</p>
+				<p>Bodhi Timer is a fork of the open source TeaTimer app by Ralph Gootee, which is also available <b><a href="https://github.com/ralphleon/TeaTimer">on GitHub</a></b>.</p>
 				<p>The Enso image was drawn by Ryōnen Gensō (1646-1711). Next to the Enso she has written:<br>
                     "When you do understand yourself fully,<br>
                     there is not one thing."<br><br>
@@ -169,7 +149,6 @@
     <string name="service_text">This notification ensures correct playback of your timer tones</string>
     <string name="use_old_notification">Use old Notification Method</string>
     <string name="use_old_notification_desc">If you experience crashes or unreliable alarms, try to check this.</string>
-
 </resources>
 
 

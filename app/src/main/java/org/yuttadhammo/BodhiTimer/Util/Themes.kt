@@ -28,6 +28,9 @@ object Themes {
             context.getString(R.string.setting_key_theme_light) -> {
                 R.style.BodhiTheme_Light
             }
+            context.getString(R.string.setting_key_theme_black) -> {
+                R.style.BodhiTheme_Black
+            }
             else -> {
                 R.style.BodhiTheme_DayNight
             }
