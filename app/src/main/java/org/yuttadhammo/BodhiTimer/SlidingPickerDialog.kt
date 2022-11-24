@@ -123,7 +123,7 @@ open class SlidingPickerDialog(context: Context) : Dialog(context), View.OnClick
     }
 
     internal fun setFromPreset(ts: String?) {
-        if (ts == null) {
+        if (ts.isNullOrEmpty()) {
             Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG)
                 .show()
             return
