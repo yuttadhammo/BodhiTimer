@@ -17,7 +17,6 @@ import org.yuttadhammo.BodhiTimer.R
  * Contains convenience functions for reading and writing preferences
  */
 const val DEFAULT_DURATION = 120000
-const val DEFAULT_TIME_STRING = "$DEFAULT_DURATION#sys_def"
 
 object Settings {
 
@@ -123,7 +122,7 @@ object Settings {
 
     var advTimeString by StringSetting(
         "advTimeString",
-        DEFAULT_TIME_STRING
+        ""
     )
 
     var timeString by StringSetting(
