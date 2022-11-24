@@ -58,10 +58,10 @@ open class SlidingPickerDialog(context: Context) : Dialog(context), View.OnClick
         i2 = Settings.preset2
         i3 = Settings.preset3
         i4 = Settings.preset4
-        if (i1 == "") pre1.text = i1
-        if (i2 == "") pre2.text = i2
-        if (i3 == "") pre3.text = i3
-        if (i4 == "") pre4.text = i4
+        if (i1 != "") pre1.text = i1
+        if (i2 != "") pre2.text = i2
+        if (i3 != "") pre3.text = i3
+        if (i4 != "") pre4.text = i4
         pre1.setOnClickListener(this)
         pre2.setOnClickListener(this)
         pre3.setOnClickListener(this)
