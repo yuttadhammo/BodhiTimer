@@ -464,8 +464,6 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
         // Update labels
         if (alarms.empty()) {
-            stopDND()
-            stopService()
             stopAlarmsAndTicker()
             loadLastTimers()
             // Send message to activity,
