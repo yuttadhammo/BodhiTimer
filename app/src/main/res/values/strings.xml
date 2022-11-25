@@ -144,6 +144,7 @@
     <string name="do_not_disturb">Do not Disturb</string>
     <string name="do_not_disturb_desc">Enter "Do Not Disturb" Mode when meditating</string>
     <string name="open_timer">Open BodhiTimer</string>
+    <string name="run_app_in_background">Run BodhiTimer in background</string>
     <string name="service_channel_name">Service</string>
     <string name="service_channel_description">Notification that Bodhi Timer is running</string>
     <string name="service_text">This notification ensures correct playback of your timer tones</string>
