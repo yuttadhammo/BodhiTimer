@@ -250,6 +250,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             tts!!.shutdown()
             Timber.d("TTSService Destroyed")
         }
+        mAlarmTaskManager!!.stopAlarmsAndTicker()
         unregisterReceiver(alarmEndReceiver)
         super.onDestroy()
     }
@@ -319,6 +320,15 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             return true
         }
         return super.onKeyDown(keycode, e)
+    }
+
+    override fun onBackPressed(){
+        // NOTE: Let back key act as home key, so auto-restarting
+        // feature can work well when user press back key.
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.addCategory(Intent.CATEGORY_HOME)
+        startActivity(intent)
     }
 
     private fun setLowProfile() {
