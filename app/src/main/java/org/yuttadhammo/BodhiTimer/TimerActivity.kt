@@ -325,6 +325,8 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     override fun onBackPressed(){
         // NOTE: Let back key act as home key, so auto-restarting
         // feature can work well when user press back key.
+        Toast.makeText(this, getString(R.string.run_app_in_background),
+                       Toast.LENGTH_SHORT).show()
         val intent = Intent(Intent.ACTION_MAIN)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.addCategory(Intent.CATEGORY_HOME)

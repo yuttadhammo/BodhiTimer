@@ -214,6 +214,7 @@ there is not one thing.\"
     <string name="do_not_disturb">请勿打扰</string>
     <string name="do_not_disturb_desc">禅修时进入“请勿打扰”模式</string>
     <string name="open_timer">打开菩提计时器</string>
+    <string name="run_app_in_background">后台运行菩提计时器</string>
     <string name="service_channel_name">服务</string>
     <string name="service_channel_description">菩提计时器正在运行的通知</string>
     <string name="service_text">菩提只向心觅，何劳向外求玄？</string>
