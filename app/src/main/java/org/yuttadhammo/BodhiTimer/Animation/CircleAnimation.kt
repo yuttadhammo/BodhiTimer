@@ -105,66 +105,26 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
         return bitmap
     }
 
-//    @ColorInt
-//    fun Context.getColorFromAttr(
-//        @AttrRes attrColor: Int,
-//        typedValue: TypedValue = TypedValue(),
-//        resolveRefs: Boolean = true
-//    ): Int {
-//        theme.resolveAttribute(attrColor, typedValue, resolveRefs)
-//        return typedValue.data
-//    }
-
     override fun configure(isEditMode: Boolean) {
         val resources = mContext.resources
         var lightTheme = true
 
-        // Load the correct theme
-        if (isEditMode) {
-            theme = 3
-        } else {
-            theme = Settings.circleTheme
-            val dayNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-            lightTheme = (dayNightMode == Configuration.UI_MODE_NIGHT_NO)
+        val dayNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        lightTheme = (dayNightMode == Configuration.UI_MODE_NIGHT_NO)
 
-            // Manually set light theme to false if we are during day but in forced dark mode
-            if (Settings.isDarkTheme) {
-                    lightTheme = false
-            }
+        // Manually set light theme to false if we are during day but in forced dark mode
+        if (Settings.isDarkTheme) {
+            lightTheme = false
         }
 
         val colors: IntArray
 
-        colors = when (theme) {
-            0 -> intArrayOf(
-                resources.getColor(R.color.themeA1),
-                resources.getColor(R.color.themeA2),
-                resources.getColor(R.color.themeA3),
-                resources.getColor(R.color.themeA4),
-                resources.getColor(R.color.themeA5)
-            )
-            1 -> intArrayOf(
-                resources.getColor(R.color.themeB1),
-                resources.getColor(R.color.themeB2),
-                resources.getColor(R.color.themeB3),
-                resources.getColor(R.color.themeB4),
-                resources.getColor(R.color.themeB5)
-            )
-            2 -> intArrayOf(
-                resources.getColor(R.color.themeC1),
-                resources.getColor(R.color.themeC2),
-                resources.getColor(R.color.themeC3),
-                resources.getColor(R.color.themeC4),
-                resources.getColor(R.color.themeC5)
-            )
-            else -> intArrayOf(
-                MaterialColors.getColor(mContext, R.attr.colorSurface, 0),
-                MaterialColors.getColor(mContext, R.attr.colorOnSurface, 1),
-                MaterialColors.getColor(mContext, R.attr.colorSurface, 0),
-                MaterialColors.getColor(mContext, R.attr.colorSurfaceVariant, 0),
-                MaterialColors.getColor(mContext, R.attr.colorOnSurface, 1)
-            )
-        }
+        colors = intArrayOf(
+            MaterialColors.getColor(mContext, R.attr.colorSurface, 0),
+            MaterialColors.getColor(mContext, R.attr.colorOnSurface, 1),
+            MaterialColors.getColor(mContext, R.attr.colorSurface, 0),
+            MaterialColors.getColor(mContext, R.attr.colorSurfaceVariant, 0),
+            MaterialColors.getColor(mContext, R.attr.colorOnSurface, 1))
 
         mEnsoBitmap = getBitmapFromVector(mContext, R.drawable.enso)
         eHeight = mEnsoBitmap!!.height
@@ -211,20 +171,8 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
         mRadius = mMsRadius * .93f
         mInnerRadius = mMsRadius * 0.4f
 
-        // gradient
-        if (theme != 3) {
-            val offset = 75
-            val r = Color.red(mInnerColor) - offset
-            val g = Color.green(mInnerColor) - offset
-            val b = Color.blue(mInnerColor) - offset
-            val start = Color.rgb(r, g, b)
-            val shader: Shader =
-                RadialGradient(0F, 0F, mRadius, start, mInnerColor, Shader.TileMode.CLAMP)
-            mArcPaint!!.shader = shader
-        } else {
-            val shader: Shader = SweepGradient(0F, 0F, mInnerColor, mInnerColor)
-            mArcPaint!!.shader = shader
-        }
+        val shader: Shader = SweepGradient(0F, 0F, mInnerColor, mInnerColor)
+        mArcPaint!!.shader = shader
     }
 
     /**
@@ -249,11 +197,7 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
         mSecondRect[-mSecondRadius, -mSecondRadius, mSecondRadius] = mSecondRadius
         mArcRect[-mRadius, -mRadius, mRadius] = mRadius
         mLastTime = timeVec
-        if (theme == 3) {
-            drawEnso(canvas, progress)
-        } else {
-            drawGenericCircle(canvas, progress, thetaSecond)
-        }
+        drawEnso(canvas, progress)
     }
 
     /**
@@ -286,41 +230,6 @@ internal class CircleAnimation(private val mContext: Context) : TimerDrawing {
 //        mArcPaint!!.color = MaterialColors.getColor(mContext, R.attr.colorPrimary, 0)
         if (ucAngle > 360) ucAngle -= 360
         canvas.drawArc(mArcRect, ucAngle, 360 - 360 * (1 - progress), true, mArcPaint!!)
-    }
-
-    /**
-     * Draws a circle based on the current time
-     *
-     * @param canvas   The canvas to draw on
-     * @param progress the original time set in milliseconds
-     */
-    private fun drawGenericCircle(canvas: Canvas, progress: Float, thetaSecond: Float) {
-        val START_ANGLE = 90
-
-        // We want to draw a very thin border
-        canvas.drawCircle(0f, 0f, mMsRadius, mMsPaint!!)
-
-        // Gap between the ms and seconds
-        canvas.drawCircle(0f, 0f, mMsGap, mTransparentPaint!!)
-
-        // Second arc
-        canvas.drawCircle(0f, 0f, mSecondRadius, mSecondBgPaint!!)
-        canvas.drawArc(mSecondRect, START_ANGLE.toFloat(), thetaSecond, true, mSecondPaint!!)
-
-        // Gap between the seconds and the inner radius
-        canvas.drawCircle(0f, 0f, mSecondGap, mTransparentPaint!!)
-
-
-        // Background fill
-        canvas.drawCircle(0f, 0f, mRadius, mCirclePaint!!)
-
-        // Main arc
-        canvas.drawArc(mArcRect, START_ANGLE.toFloat(), 360 * (1 - progress), true, mArcPaint!!)
-
-        // Inner paint
-        canvas.drawCircle(0f, 0f, mInnerRadius, mTransparentPaint!!)
-
-        canvas.restore()
     }
 
     companion object {

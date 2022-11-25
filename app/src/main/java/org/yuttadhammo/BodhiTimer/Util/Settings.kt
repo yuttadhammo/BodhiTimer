@@ -92,11 +92,6 @@ object Settings {
         get() = (theme == getKey(R.string.setting_key_theme_dark) ||
                 theme == getKey(R.string.setting_key_theme_black))
 
-    var circleTheme by StringIntSetting(
-        "CircleTheme",
-        3
-    )
-
     var drawingIndex by IntSetting(
         "DrawingIndex",
         1

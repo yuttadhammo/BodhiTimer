@@ -112,9 +112,5 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        if (key == "CircleTheme") {
-            configure()
-            invalidate()
-        }
     }
 }
