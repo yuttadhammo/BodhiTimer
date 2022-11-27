@@ -12,8 +12,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.AudioManager
 import android.net.Uri
@@ -70,8 +68,6 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     private lateinit var mTimerLabel: TextView
     private lateinit var mPreviewLabel: TextView
 
-    private var mPlayBitmap: Bitmap? = null
-    private var mPauseBitmap: Bitmap? = null
     var mAlarmTaskManager: AlarmTaskManager? = null
 
     private var widget = false
@@ -153,12 +149,6 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         mPauseButton.setOnClickListener(this)
         mPrefButton = findViewById(R.id.prefButton)
         mPrefButton.setOnClickListener(this)
-        mPauseBitmap = BitmapFactory.decodeResource(
-            resources, R.drawable.pause
-        )
-        mPlayBitmap = BitmapFactory.decodeResource(
-            resources, R.drawable.play
-        )
         mTimerLabel = findViewById(R.id.text_top)
         mPreviewLabel = findViewById(R.id.text_preview)
         mTimerAnimation = findViewById(R.id.mainImage)
@@ -238,7 +228,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
 
     public override fun onDestroy() {
         Timber.d("DESTROY")
-        //Close the Text to Speech Library
+        // Close the Text to Speech Library
         if (tts != null) {
             tts!!.stop()
             tts!!.shutdown()
@@ -458,11 +448,11 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
                 mSetButton.visibility = View.GONE
                 mStopButton.visibility = View.VISIBLE
                 mPauseButton.visibility = View.VISIBLE
-                mPauseButton.setImageBitmap(mPauseBitmap)
+                mPauseButton.setImageResource(R.drawable.pause)
                 setButtonAlpha(127)
             }
             STOPPED -> {
-                mPauseButton.setImageBitmap(mPlayBitmap)
+                mPauseButton.setImageResource(R.drawable.play)
                 mStopButton.visibility = View.GONE
                 mSetButton.visibility = View.VISIBLE
                 setButtonAlpha(255)
@@ -471,7 +461,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
                 mSetButton.visibility = View.GONE
                 mPauseButton.visibility = View.VISIBLE
                 mStopButton.visibility = View.VISIBLE
-                mPauseButton.setImageBitmap(mPlayBitmap)
+                mPauseButton.setImageResource(R.drawable.play)
                 setButtonAlpha(255)
             }
         }
