@@ -466,8 +466,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         if (alarms.empty()) {
             stopAlarmsAndTicker()
             loadLastTimers()
-            // Send message to activity,
-            // in case AutoRepeat is on.
+            // Reschedule alarms in case AutoRepeat is active
             handleAutoRepeat()
         } else {
             switchToTimer(alarms.firstElement())
@@ -477,7 +476,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     }
 
     private fun handleAutoRepeat() {
-        if (prefs.getBoolean("AutoRestart", false)) {
+        if (Settings.autoRestart) {
             Timber.i("AUTO RESTART")
             startAlarms(retrieveTimerList())
             setCurrentState(RUNNING)

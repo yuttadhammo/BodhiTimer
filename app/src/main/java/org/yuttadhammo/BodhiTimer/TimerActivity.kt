@@ -8,10 +8,7 @@
 package org.yuttadhammo.BodhiTimer
 
 import android.content.ActivityNotFoundException
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
@@ -30,11 +27,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.Animation.TimerAnimation
-import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_END
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_UPDATE
 import org.yuttadhammo.BodhiTimer.Const.SessionTypes
 import org.yuttadhammo.BodhiTimer.Const.TimerState.PAUSED
@@ -92,7 +88,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         Timber.i("CREATE")
         super.onCreate(savedInstanceState)
         context = this
-        mAlarmTaskManager = ViewModelProvider(this)[AlarmTaskManager::class.java]
+        mAlarmTaskManager = BodhiApp.instance!!.alarmTaskManager
 
         Themes.applyTheme(this)
 
@@ -100,9 +96,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         prefs.registerOnSharedPreferenceChangeListener(this)
         setupObservers()
         prepareUI()
-        val filter2 = IntentFilter()
-        filter2.addAction(BROADCAST_END)
-        registerReceiver(alarmEndReceiver, filter2)
+
         createNotificationChannel(context!!)
     }
 
@@ -250,8 +244,6 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             tts!!.shutdown()
             Timber.d("TTSService Destroyed")
         }
-        mAlarmTaskManager!!.stopAlarmsAndTicker()
-        unregisterReceiver(alarmEndReceiver)
         super.onDestroy()
     }
 
@@ -259,15 +251,13 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         try {
             mTimerAnimation.index = animationIndex
         } catch (e: FileNotFoundException) {
-            e.printStackTrace()
+            Timber.e(e)
         }
-        if (Settings.hideTime) mTimerLabel.visibility =
-            View.INVISIBLE else mTimerLabel.visibility = View.VISIBLE
 
+        mTimerLabel.isVisible = !Settings.hideTime
 
         Timber.i("Configuring animation")
         mTimerAnimation.configure()
-
 
         updateFontColor(0F)
 
@@ -322,24 +312,12 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         return super.onKeyDown(keycode, e)
     }
 
-    override fun onBackPressed(){
-        // NOTE: Let back key act as home key, so auto-restarting
-        // feature can work well when user press back key.
-        Toast.makeText(this, getString(R.string.run_app_in_background),
-                       Toast.LENGTH_SHORT).show()
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.addCategory(Intent.CATEGORY_HOME)
-        startActivity(intent)
-    }
-
     private fun setLowProfile() {
         val rootView = window.decorView
         rootView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
 
     private fun showNumberPicker() {
-
         val view = SlidingPickerDialog(context!!)
         val lastTimePicked = Settings.lastSimpleTime
         view.mTimes = time2Array(lastTimePicked)
@@ -595,55 +573,24 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         for (match in matches!!) {
             val match = match.lowercase(Locale.getDefault())
             Timber.d("Got speech: $match")
+
+            var found = false
+
             if (match.contains(Time.TIME_SEPARATOR)) {
-                val complexTime = str2complexTimeString(this, match)
-                if (complexTime.isNotEmpty()) {
-                    Settings.timeString = complexTime
-                    if (Settings.speakTime) {
-                        tts = TextToSpeech(this) { status: Int ->
-                            if (status == TextToSpeech.SUCCESS) {
-                                tts!!.speak(
-                                    getString(R.string.adv_speech_recognized),
-                                    TextToSpeech.QUEUE_ADD,
-                                    null
-                                )
-                            } else Timber.tag("error").e("Initialization failed!")
-                        }
-                    }
-                    Toast.makeText(
-                        this,
-                        getString(R.string.adv_speech_recognized),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    val values = intArrayOf(-1, -1, -1)
-                    onNumbersPicked(values)
-                    break
-                }
+                handleSpeechList(match)
+                found = true
             } else {
                 val speechTime = str2timeString(this, match)
                 if (speechTime != 0) {
-                    val values = time2Array(speechTime)
-                    Toast.makeText(
-                        this,
-                        String.format(
-                            getString(R.string.speech_recognized),
-                            time2humanStr(this, speechTime)
-                        ),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    if (Settings.speakTime) {
-                        Timber.d("Speaking time")
-                        tts!!.speak(
-                            String.format(
-                                getString(R.string.speech_recognized), time2humanStr(
-                                    context!!, speechTime
-                                )
-                            ), TextToSpeech.QUEUE_ADD, null
-                        )
-                    }
-                    onNumbersPicked(values)
-                    break
-                } else Toast.makeText(
+                    handleSpeechSimple(speechTime)
+                    found = true
+                }
+            }
+
+            if (found) {
+                break
+            } else {
+                Toast.makeText(
                     this,
                     getString(R.string.speech_not_recognized),
                     Toast.LENGTH_SHORT
@@ -652,13 +599,51 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         }
     }
 
-    // Should move to Manager....
-    // receiver to get restart
-    private val alarmEndReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            Timber.v("Received app alarm callback")
-            Timber.d("id " + intent.getIntExtra("id", -1))
-            mAlarmTaskManager!!.onAlarmEnd(intent.getIntExtra("id", -1))
+    private fun handleSpeechSimple(speechTime: Int) {
+        val values = time2Array(speechTime)
+        Toast.makeText(
+            this,
+            String.format(
+                getString(R.string.speech_recognized),
+                time2humanStr(this, speechTime)
+            ),
+            Toast.LENGTH_SHORT
+        ).show()
+        if (Settings.speakTime) {
+            Timber.d("Speaking time")
+            tts!!.speak(
+                String.format(
+                    getString(R.string.speech_recognized), time2humanStr(
+                        context!!, speechTime
+                    )
+                ), TextToSpeech.QUEUE_ADD, null
+            )
+        }
+        onNumbersPicked(values)
+    }
+
+    private fun handleSpeechList(match: String) {
+        val complexTime = str2complexTimeString(this, match)
+        if (complexTime.isNotEmpty()) {
+            Settings.timeString = complexTime
+            if (Settings.speakTime) {
+                tts = TextToSpeech(this) { status: Int ->
+                    if (status == TextToSpeech.SUCCESS) {
+                        tts!!.speak(
+                            getString(R.string.adv_speech_recognized),
+                            TextToSpeech.QUEUE_ADD,
+                            null
+                        )
+                    } else Timber.tag("error").e("Initialization failed!")
+                }
+            }
+            Toast.makeText(
+                this,
+                getString(R.string.adv_speech_recognized),
+                Toast.LENGTH_SHORT
+            ).show()
+            val values = intArrayOf(-1, -1, -1)
+            onNumbersPicked(values)
         }
     }
 }

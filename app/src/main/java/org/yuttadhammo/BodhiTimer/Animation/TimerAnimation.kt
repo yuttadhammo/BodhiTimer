@@ -18,23 +18,20 @@ package org.yuttadhammo.BodhiTimer.Animation
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.Canvas
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.preference.PreferenceManager
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.util.Vector
 
-class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
+class TimerAnimation : AppCompatImageView {
     var mDrawings = Vector<TimerDrawing>()
     var mIndex = 1
     var mLastTime = 0
     var mLastMax = 0
     var prefs: SharedPreferences? = null
     private val mContext: Context
-
 
     interface TimerDrawing {
         /**
@@ -49,18 +46,12 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
 
     constructor(context: Context) : super(context) {
         mContext = context
-        prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
-        prefs!!.registerOnSharedPreferenceChangeListener(this)
         createDrawings(mContext)
-        //setOnClickListener(this);
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         mContext = context
-        val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
-        prefs.registerOnSharedPreferenceChangeListener(this)
         createDrawings(mContext)
-        //setOnClickListener(this);
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -69,8 +60,6 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
         defStyleAttr
     ) {
         mContext = context
-        val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
-        prefs.registerOnSharedPreferenceChangeListener(this)
         createDrawings(mContext)
     }
 
@@ -84,7 +73,7 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
     var index: Int
         get() = mIndex
         set(i) {
-            Timber.e("Calling Set $i")
+            Timber.d("Setting animation index to $i")
             mIndex = i.coerceAtLeast(0).coerceAtMost(mDrawings.size)
             invalidate()
         }
@@ -109,8 +98,5 @@ class TimerAnimation : AppCompatImageView, OnSharedPreferenceChangeListener {
         for (drawing in mDrawings) {
             drawing.configure(isInEditMode)
         }
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
     }
 }

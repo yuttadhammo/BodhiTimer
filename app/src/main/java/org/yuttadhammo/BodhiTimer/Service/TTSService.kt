@@ -23,9 +23,6 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
 import timber.log.Timber
 
-/**
- * Created by noah on 10/6/14.
- */
 class TTSService : Service(), OnInitListener {
     private var mTts: TextToSpeech? = null
     private var spokenText: String? = null

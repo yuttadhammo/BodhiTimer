@@ -130,6 +130,11 @@ object Settings {
         true
     )
 
+    var autoRestart by BooleanSetting(
+        "AutoRestart",
+        false
+    )
+
     fun hasKey(key: String): Boolean {
         return preferences.contains(key)
     }

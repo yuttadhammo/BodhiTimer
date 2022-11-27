@@ -17,13 +17,11 @@ import java.lang.ref.WeakReference
 
 class SoundService : Service() {
 
-
     private var stop: Boolean = false
     private var lastStamp: Long = 0L
     private var active: Int = 0
 
     private lateinit var soundManager: Sounds
-
 
     // Create the instance on the service.
     private val binder = LocalBinder()
@@ -34,9 +32,7 @@ class SoundService : Service() {
         Timber.v("here")
     }
 
-
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Timber.v("there")
         startForeground(1312, getServiceNotification(this))
 
         soundManager = Sounds(applicationContext)
@@ -64,7 +60,6 @@ class SoundService : Service() {
         val stamp = intent.getLongExtra("stamp", 0L)
         val volume = prefs.getInt("tone_volume", 90)
         val uri = intent.getStringExtra("uri")
-
 
         if (uri != null && stamp != lastStamp) {
             lastStamp = stamp
@@ -94,7 +89,6 @@ class SoundService : Service() {
         binder.onBind(this)
         return binder
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -133,6 +127,4 @@ class SoundService : Service() {
             return weakService?.get()
         }
     }
-
-
 }
