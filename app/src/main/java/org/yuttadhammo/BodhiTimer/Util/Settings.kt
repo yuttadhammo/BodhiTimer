@@ -20,6 +20,11 @@ const val DEFAULT_DURATION = 120000
 
 object Settings {
 
+    val toneVolume by IntSetting(
+        "tone_volume",
+        90
+    )
+
     val customBmp by BooleanSetting(
         "custom_bmp",
         false

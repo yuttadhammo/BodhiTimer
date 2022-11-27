@@ -5,18 +5,20 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
-import androidx.preference.PreferenceManager
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
 import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes.BROADCAST_PLAY
 import org.yuttadhammo.BodhiTimer.Util.Notifications.getServiceNotification
+import org.yuttadhammo.BodhiTimer.Util.Settings
 import org.yuttadhammo.BodhiTimer.Util.Sounds
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
 class SoundService : Service() {
 
+    private var lastMediaPlayer: MediaPlayer? = null
     private var stop: Boolean = false
     private var lastStamp: Long = 0L
     private var active: Int = 0
@@ -56,18 +58,17 @@ class SoundService : Service() {
     }
 
     fun playIntent(intent: Intent) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val volume = Settings.toneVolume
         val stamp = intent.getLongExtra("stamp", 0L)
-        val volume = prefs.getInt("tone_volume", 90)
         val uri = intent.getStringExtra("uri")
 
         if (uri != null && stamp != lastStamp) {
             lastStamp = stamp
             active++
 
-            val mediaPlayer = soundManager.play(uri, volume)
+            lastMediaPlayer = soundManager.play(uri, volume)
 
-            mediaPlayer?.setOnCompletionListener { mp ->
+            lastMediaPlayer?.setOnCompletionListener { mp ->
                 Timber.v("Resetting media player...")
                 mp.reset()
                 mp.release()
@@ -83,7 +84,6 @@ class SoundService : Service() {
             Timber.v("Skipping play")
         }
     }
-
 
     override fun onBind(intent: Intent): IBinder {
         binder.onBind(this)

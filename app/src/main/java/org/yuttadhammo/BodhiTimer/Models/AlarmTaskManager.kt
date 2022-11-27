@@ -388,7 +388,8 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
         if (timeLeft < 0) {
             if (alarms.size > 0) {
-                Timber.e("Tick cycled ended")
+                // TODO: If the tick cycle has ended trigger the broadcast ourselve?
+                Timber.v("Tick cycled ended.")
             } else {
                 Timber.e("Error: Time up. This probably means that the Broadcast was not received")
                 stopTicker()
