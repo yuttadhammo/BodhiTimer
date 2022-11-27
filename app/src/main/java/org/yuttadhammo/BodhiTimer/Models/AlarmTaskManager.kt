@@ -138,7 +138,8 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         uri: String,
         sessionType: SessionTypes
     ): AlarmTask {
-        Timber.i("Creating new alarm task, uri " + uri + " type: " + sessionType + " due in " + (duration + offset))
+        Timber.i("Creating new alarm task, uri: $uri, " +
+                "type: $sessionType due in ${duration + offset}")
         val alarm = AlarmTask(mApp.applicationContext, offset, duration)
         alarm.uri = uri
         alarm.sessionType = sessionType
@@ -258,7 +259,6 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
             TIMER_TIC.toLong(),
             TIMER_TIC.toLong()
         )
-
         startDND()
         startService()
     }

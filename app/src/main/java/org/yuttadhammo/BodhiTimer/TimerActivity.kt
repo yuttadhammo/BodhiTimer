@@ -382,8 +382,8 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         var preUriString = Settings.preSoundUri
         val tL = TimerList()
 
-        // Add a preparatory timer if the user picked a tone
-        if (preUriString != "") {
+        // Add a preparatory timer if the user has set it
+        if (prepTime > 0) {
             when (preUriString) {
                 "system" -> preUriString = Settings.preSystemUri
                 "file" -> preUriString = Settings.preFileUri
