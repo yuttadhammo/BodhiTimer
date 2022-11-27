@@ -8,12 +8,16 @@
 package org.yuttadhammo.BodhiTimer
 
 import android.app.Application
-
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.os.StrictMode.VmPolicy
+import org.yuttadhammo.BodhiTimer.Const.BroadcastTypes
+import org.yuttadhammo.BodhiTimer.Models.AlarmTaskManager
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -23,6 +27,7 @@ import timber.log.Timber.DebugTree
 
 class BodhiApp : Application() {
 
+    var alarmTaskManager: AlarmTaskManager? = null
     private var initiated: Boolean = false
 
     init {
@@ -44,8 +49,23 @@ class BodhiApp : Application() {
 
         Timber.d("onCreate called")
 
+        alarmTaskManager = AlarmTaskManager(this)
+
+        val filter = IntentFilter()
+        filter.addAction(BroadcastTypes.BROADCAST_END)
+        registerReceiver(alarmEndReceiver, filter)
     }
 
+
+    // Should move to Manager....
+    // receiver to get restart
+    private val alarmEndReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Timber.v("Received app alarm callback in App scope")
+            Timber.d("id " + intent.getIntExtra("id", -1))
+            alarmTaskManager!!.onAlarmEnd(intent.getIntExtra("id", -1))
+        }
+    }
 
     companion object {
         var instance: BodhiApp? = null

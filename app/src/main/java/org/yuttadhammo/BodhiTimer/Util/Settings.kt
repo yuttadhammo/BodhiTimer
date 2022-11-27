@@ -17,9 +17,13 @@ import org.yuttadhammo.BodhiTimer.R
  * Contains convenience functions for reading and writing preferences
  */
 const val DEFAULT_DURATION = 120000
-const val DEFAULT_TIME_STRING = "$DEFAULT_DURATION#sys_def"
 
 object Settings {
+
+    val toneVolume by IntSetting(
+        "tone_volume",
+        90
+    )
 
     val customBmp by BooleanSetting(
         "custom_bmp",
@@ -93,11 +97,6 @@ object Settings {
         get() = (theme == getKey(R.string.setting_key_theme_dark) ||
                 theme == getKey(R.string.setting_key_theme_black))
 
-    var circleTheme by StringIntSetting(
-        "CircleTheme",
-        3
-    )
-
     var drawingIndex by IntSetting(
         "DrawingIndex",
         1
@@ -123,7 +122,7 @@ object Settings {
 
     var advTimeString by StringSetting(
         "advTimeString",
-        DEFAULT_TIME_STRING
+        ""
     )
 
     var timeString by StringSetting(
@@ -134,6 +133,11 @@ object Settings {
     var lastWasSimple by BooleanSetting(
         "LastWasSimple",
         true
+    )
+
+    var autoRestart by BooleanSetting(
+        "AutoRestart",
+        false
     )
 
     fun hasKey(key: String): Boolean {

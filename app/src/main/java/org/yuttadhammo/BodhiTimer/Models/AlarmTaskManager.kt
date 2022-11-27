@@ -388,7 +388,8 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
         if (timeLeft < 0) {
             if (alarms.size > 0) {
-                Timber.e("Tick cycled ended")
+                // TODO: If the tick cycle has ended trigger the broadcast ourselve?
+                Timber.v("Tick cycled ended.")
             } else {
                 Timber.e("Error: Time up. This probably means that the Broadcast was not received")
                 stopTicker()
@@ -464,12 +465,9 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
         // Update labels
         if (alarms.empty()) {
-            stopDND()
-            stopService()
             stopAlarmsAndTicker()
             loadLastTimers()
-            // Send message to activity,
-            // in case AutoRepeat is on.
+            // Reschedule alarms in case AutoRepeat is active
             handleAutoRepeat()
         } else {
             switchToTimer(alarms.firstElement())
@@ -479,7 +477,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     }
 
     private fun handleAutoRepeat() {
-        if (prefs.getBoolean("AutoRestart", false)) {
+        if (Settings.autoRestart) {
             Timber.i("AUTO RESTART")
             startAlarms(retrieveTimerList())
             setCurrentState(RUNNING)

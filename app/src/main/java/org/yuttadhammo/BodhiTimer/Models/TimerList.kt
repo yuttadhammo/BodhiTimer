@@ -41,7 +41,7 @@ class TimerList {
             val list = ArrayList<Timer>()
             val advTime = advTimeString.split("^").toTypedArray()
             for (s in advTime) {
-                //  advTime[n] will be of format timeInMs#pathToSound
+                // advTime[n] will be of format timeInMs#pathToSound
                 val thisAdvTime = s.split("#").toTypedArray()
                 var duration: Int
                 try {

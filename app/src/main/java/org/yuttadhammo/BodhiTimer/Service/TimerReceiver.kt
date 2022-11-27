@@ -34,13 +34,11 @@ class TimerReceiver : BroadcastReceiver() {
     private var volume: Int = 100
     lateinit var mContext: Context
 
-
     override fun onReceive(context: Context, mIntent: Intent) {
         Timber.v("Received system alarm callback ")
 
         stamp = System.currentTimeMillis()
         mContext = context
-
 
         // Send Broadcast to main activity
         // This will be only received if the app is not stopped (or destroyed)...
