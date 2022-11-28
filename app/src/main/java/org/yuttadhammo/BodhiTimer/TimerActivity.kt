@@ -369,7 +369,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     }
 
     private fun startSimpleAlarm(time: Int, startAll: Boolean) {
-        val tL = createSimpleTimerList(time)
+        val tL = copyTimerList(createSimpleTimerList(time))
         mAlarmTaskManager!!.saveTimerList(tL)
         mAlarmTaskManager!!.addAlarms(tL, 0)
         if (startAll) {
@@ -404,8 +404,19 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         return tL
     }
 
+    private fun copyTimerList(tl: TimerList): TimerList {
+        val tl_new = TimerList()
+        var n = Settings.copyTimer + 1
+        for (i in 0 until n) {
+            for (timer in tl.timers) {
+                tl_new.timers.add(timer)
+            }
+        }
+        return tl_new
+    }
+
     private fun startAdvancedAlarm(advTimeString: String) {
-        val list = TimerList(advTimeString)
+        val list = copyTimerList(TimerList(advTimeString))
         Timber.v("advString: $advTimeString")
         Timber.v("advString2: " + list.string)
         mAlarmTaskManager!!.startAlarms(list)

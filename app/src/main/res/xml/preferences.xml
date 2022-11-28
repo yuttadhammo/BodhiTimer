@@ -123,6 +123,16 @@
         a:summary="@string/auto_restart_desc"
         a:title="@string/auto_restart"
         app:iconSpaceReserved="false" />
+
+    <SeekBarPreference
+        a:defaultValue="0"
+        a:key="CopyTimer"
+        a:max="100"
+        a:summary="@string/copy_timer_desc"
+        a:title="@string/copy_timer"
+        app:iconSpaceReserved="false"
+        app:showSeekBarValue="true" />
+
     <CheckBoxPreference
         a:defaultValue="False"
         a:key="SwitchTimeMode"

@@ -140,6 +140,11 @@ object Settings {
         false
     )
 
+    var copyTimer by IntSetting(
+        "CopyTimer",
+        0
+    )
+
     fun hasKey(key: String): Boolean {
         return preferences.contains(key)
     }

@@ -61,6 +61,9 @@
     <string name="auto_restart">自动重启计时器</string>
     <string name="auto_restart_desc">计时器结束后自动重启</string>
 
+    <string name="copy_timer">复制计时器</string>
+    <string name="copy_timer_desc">将用户设置的计时器复制多次</string>
+
     <string name="visual">视觉效果</string>
 
     <string name="is_bitmap">淡入图像</string>

@@ -52,6 +52,8 @@
     <string name="notification">Notification</string>
     <string name="auto_restart">Auto-Restart Timer</string>
     <string name="auto_restart_desc">Restart timer automatically when finished.</string>
+    <string name="copy_timer">Copy Timer</string>
+    <string name="copy_timer_desc">Copy user timer multiple times.</string>
     <string name="visual">Visual</string>
     <string name="is_bitmap">Fade-in image</string>
     <string name="is_circle">Circle animation</string>
