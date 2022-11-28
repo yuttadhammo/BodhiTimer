@@ -174,3 +174,4 @@ lint/tmp/
 # Android Profiling
 *.hprof
 /key.properties
+/.idea/deploymentTargetDropDown.xml

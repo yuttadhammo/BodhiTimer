@@ -1,0 +1,10 @@
+6.2.0
+Fix small bugs, add high-res graphics.
+
+6.1.3
+Add black theme for AMOLED screens,
+fix preset names
+
+6.1.0
+Update App for newer Android versions. Use Material design.
+This update removes rarely used features like the colored circle animation.
