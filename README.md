@@ -10,7 +10,7 @@ Bodhi Timer is free and [open-source](https://github.com/yuttadhammo/BodhiTimer)
 
 # Screenshots
 
-| Timer | Setting up timer | Customization | Settings |
+| Timer&nbsp; &nbsp; &nbsp;  | Setting up timer | Customization | Settings |
 | :--: | :--: | :--: | :--: |
 | ![Timer](/fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png) | ![Setting up timer](/fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png) | ![Customization](/fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png) | ![Settings](/fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png) | 
 
