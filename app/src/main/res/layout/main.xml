@@ -45,6 +45,10 @@
         app:layout_constraintVertical_chainStyle="packed"
         app:lineHeight="10sp"
         tools:targetApi="p"
+        android:shadowColor="#B1000000"
+        android:shadowDx="1"
+        android:shadowDy="0.8"
+        android:shadowRadius="7"
         tools:text="30:00" />
 
     <TextView
@@ -67,6 +71,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_top"
+        android:shadowColor="#B1000000"
+        android:shadowDx="0.8"
+        android:shadowDy="0.6"
+        android:shadowRadius="5"
         tools:text="10:00" />
 
     <ImageButton

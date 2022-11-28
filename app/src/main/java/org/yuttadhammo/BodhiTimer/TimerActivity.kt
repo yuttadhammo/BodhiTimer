@@ -11,7 +11,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import android.content.res.Configuration
 import android.graphics.Color
 import android.media.AudioManager
 import android.net.Uri
@@ -346,21 +345,13 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
      */
     private fun updateFontColor(p: Float) {
         if (Settings.drawingIndex == 0) {
-            val dayNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-            val isLightTheme = (dayNightMode == Configuration.UI_MODE_NIGHT_NO)
-            val textColor = when {
-                isLightTheme && p < 0.5 -> {
-                    Color.WHITE
-                }
-                isLightTheme && p >= 0.5 -> {
-                    Color.BLACK
-                }
-                else -> Color.WHITE
-            }
-            if (lastColor == textColor) return
-            findViewById<TextView>(R.id.text_top).setTextColor(textColor)
-            findViewById<TextView>(R.id.text_preview).setTextColor(textColor)
-            lastColor = textColor
+            findViewById<TextView>(R.id.text_top).setTextColor(Color.WHITE)
+            findViewById<TextView>(R.id.text_preview).setTextColor(Color.WHITE)
+            findViewById<TextView>(R.id.text_top).setShadowLayer(7f, 1f, 0.8f, Color.parseColor("#B1000000"))
+            findViewById<TextView>(R.id.text_preview).setShadowLayer(7f, 1f, 0.8f, Color.parseColor("#B1000000"))
+        } else {
+            findViewById<TextView>(R.id.text_top).setShadowLayer(0f, 0f, 0f, Color.TRANSPARENT)
+            findViewById<TextView>(R.id.text_preview).setShadowLayer(0f, 0f, 0f, Color.TRANSPARENT)
         }
     }
 
