@@ -30,7 +30,7 @@ It uses Android's built-in notification system to trigger the alarm, which means
 - uses scroll and fling gestures to set the time
 - set up to three presets on the time chooser
 
-- option for timer auto-repeating
+- option for timer auto-restarting
 - option to set multiple consecutive timers via the "adv" button
 - speech recognition via long-press on clock button (set multiple timers separated by the word "again")
 
