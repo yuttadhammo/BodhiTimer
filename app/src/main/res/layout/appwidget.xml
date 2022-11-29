@@ -8,14 +8,6 @@
     android:padding="@dimen/widget_margin">
 
     <ImageView
-        android:id="@+id/backImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@null"
-        android:padding="0dp"
-        app:srcCompat="@drawable/widget_background_black_square" />
-
-    <ImageView
         android:id="@+id/mainImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,7 +16,9 @@
         android:gravity="center"
         android:padding="6dp"
         android:scaleType="centerInside"
-        app:srcCompat="@drawable/leaf" />
+        android:src="@drawable/leaf" />
+
+<!--    android:background="@color/material_dynamic_neutral_variant90"-->
 
     <TextView
         android:id="@+id/time"
