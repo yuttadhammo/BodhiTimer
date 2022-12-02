@@ -2,9 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">菩提计时器</string>
     <string name="Stop">清除</string>
-
     <string name="Notification">菩提计时器已结束</string>
-
     <string name="timer_for_x">计时器: %s</string>
 
     <plurals name="x_hours">
@@ -17,7 +15,6 @@
         <item quantity="other">%d秒钟</item>
     </plurals>
 
-
     <string name="hour">小时</string>
     <string name="minute">分钟</string>
     <string name="second">秒钟</string>
@@ -26,12 +23,8 @@
     <string name="adv_speech_recognized">已识别的时间列表</string>
     <string name="speech_recognized">已识别: %s</string>
 
-    <string name="prefs">首选项</string>
-
-    <!-- Widget -->
-
     <!-- Preferences -->
-
+    <string name="prefs">首选项</string>
     <string name="preferences">首选项</string>
     <string name="sound">铃声</string>
     <string name="notification_sound">计时器铃声</string>
@@ -51,37 +44,26 @@
 
     <string name="play_pre_sound">测试计时器启动铃声</string>
     <string name="play_pre_sound_desc">播放当前计时器启动铃声</string>
-
     <string name="volume">铃声音量</string>
     <string name="volume_desc">大小为媒体音量大小的百分比</string>
-
-
     <string name="notification">通知</string>
-
     <string name="auto_restart">自动重启计时器</string>
-    <string name="auto_restart_desc">计时器结束后自动重启</string>
-
+    <string name="auto_restart_desc">计时器运行结束后自动重启</string>
     <string name="visual">视觉效果</string>
-
     <string name="is_bitmap">淡入图像</string>
     <string name="is_circle">圆圈动画</string>
     <string name="bmp_or_circle">动画类型</string>
-
     <string name="custom_bmp">使用自定义图片</string>
-
     <string name="fullscreen">全屏</string>
     <string name="fullscreen_desc">计时器运行时隐藏状态栏</string>
-
     <string name="hide_time">隐藏剩余时间</string>
     <string name="hide_time_desc">不显示剩余时间</string>
-
     <string name="misc">杂项</string>
-
     <string name="settings.theme_day_night">白天 &amp; 晚上</string>
     <string name="settings.theme_light">亮色</string>
     <string name="settings.theme_dark">暗色</string>
+    <string name="settings.theme_black">黑色</string>
     <string name="settings.theme_title">颜色主题</string>
-
     <string name="setting.sound_name_no_sound">无声</string>
     <string name="setting.sound_name_three_bells">风铃(三声)</string>
     <string name="setting.sound_name_one_bell">风铃(一声)</string>
@@ -91,13 +73,10 @@
     <string name="setting.sound_name_bird_song">鸟叫</string>
     <string name="setting.sound_name_system_tone">系统铃声</string>
     <string name="setting.sound_name_sound_file">声音文件</string>
-
     <string name="stay_awake">禁止休眠</string>
     <string name="stay_awake_desc">禁止手机休眠</string>
-
     <string name="switch_time">切换时间输入模式</string>
     <string name="switch_time_desc">点击闹钟图标开启语音输入(或长按开启)</string>
-
     <string name="about_desc">关于菩提计时器</string>
 
 
@@ -152,7 +131,7 @@ a {color: rgb(255,87,34); text-decoration: none;}
 
 <p>
 菩提计时器是 TeaTimer 的一个分支，此应用由 Ralph Gootee 开发，具体见:
-<a href=\"https://github.com/ralphleon/TeaTimer\">TeaTimer</a>, 电子邮件: rgootee@gmail.com。
+<a href=\"https://github.com/ralphleon/TeaTimer\">TeaTimer</a>, 邮箱: rgootee@gmail.com。
 </p>
 
 <p>
@@ -165,7 +144,7 @@ there is not one thing.\"
 </p>
 
 <p>
-低音钵声由 juskiddink 录制, 使用 CC-BY-SA 3.0 许可, 具体见:
+低音钵声由 juskiddink 录制, 使用 CC-BY-SA 3.0 许可，见:
 <a href=\"https://freesound.org/people/juskiddink/sounds/122647/\">Freesound-122647</a>。
 </p>
 
@@ -175,8 +154,8 @@ there is not one thing.\"
 
     <!-- Timer -->
 
-    <string name="longclick">长按按钮设置预设时间</string>
-    <string name="notset">设置预设时间之前需选择时间</string>
+    <string name="longclick">长按预设时间按钮设置预设时间</string>
+    <string name="notset">设置预设时间之前需要选择时间</string>
 
     <string name="set">设置</string>
     <string name="pause">暂停</string>
@@ -197,28 +176,27 @@ there is not one thing.\"
     <string name="cancel_short">清除</string>
     <string name="empty_list">空白</string>
 
-    <string name="sys_def">系统默认</string>
+    <string name="sys_def">默认铃声</string>
     <string name="get_file_man">请安装一个文件管理器</string>
-    <string name="speak_time_desc">语音识别时朗读已识别的声音</string>
+    <string name="speak_time_desc">语音识别时朗读已识别的时间</string>
     <string name="speak_time">朗读已识别时间</string>
-    <string name="NoVoiceRecognitionInstalled">请安装一个语音识别软件</string>
+    <string name="NoVoiceRecognitionInstalled">请安装一个语音识别应用</string>
 
     <string name="alarm_channel_name">报警</string>
-    <string name="alarm_channel_description">计时器是应用程序的主要用途</string>
+    <string name="alarm_channel_description">此应用的主要用途是计时</string>
     <string name="custom_sound">自定义</string>
     <string name="notification_always">总是显示一个通知</string>
     <string name="notification_always_desc">即使某个铃声已经播放</string>
     <string name="show_system_settings">自定义通知</string>
     <string name="show_system_settings_desc">消息可以在安卓系统设置中设置</string>
     <string name="do_not_disturb">请勿打扰</string>
-    <string name="do_not_disturb_desc">禅修时进入“请勿打扰”模式</string>
+    <string name="do_not_disturb_desc">冥想时进入“请勿打扰”模式</string>
     <string name="open_timer">打开菩提计时器</string>
     <string name="service_channel_name">服务</string>
     <string name="service_channel_description">菩提计时器正在运行的通知</string>
     <string name="service_text">菩提只向心觅，何劳向外求玄？</string>
     <string name="use_old_notification">使用旧的通知方法</string>
-    <string name="use_old_notification_desc">如遇到崩溃或提醒不及时，请检查此项</string>
-
+    <string name="use_old_notification_desc">如遇到崩溃或提醒不可靠，可尝试此选项</string>
 </resources>
 
 

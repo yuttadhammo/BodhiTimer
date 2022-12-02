@@ -11,7 +11,7 @@
 🔶 minimalist full screen UI, no clutter
 🔶 uses scroll and fling gestures to set the time
 🔶 set up to three presets on the time chooser
-🔶 option for timer auto-repeating
+🔶 option for timer auto-restarting
 🔶 option to set multiple consecutive timers via the "adv" button
 🔶 speech recognition via long-press on clock button (set multiple timers separated by the word "again")
 🔶 displays two animation types: fade in static image (defaults to Bodhi leaf) and animated circle

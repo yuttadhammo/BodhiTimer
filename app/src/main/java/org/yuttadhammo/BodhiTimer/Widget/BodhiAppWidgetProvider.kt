@@ -23,16 +23,15 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.BitmapFactory
 import android.widget.RemoteViews
 import org.yuttadhammo.BodhiTimer.R
 import org.yuttadhammo.BodhiTimer.TimerActivity
 import timber.log.Timber
 
+
 class BodhiAppWidgetProvider : AppWidgetProvider() {
     private var isRegistered = false
 
-    //private boolean stopTicking;
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -79,7 +78,6 @@ class BodhiAppWidgetProvider : AppWidgetProvider() {
 
         //stopTicking = action.equals(BROADCAST_STOP) || action.equals(Intent.ACTION_SCREEN_OFF);
         doUpdate(context)
-        doTick()
     }
 
     private fun doUpdate(context: Context) {
@@ -96,7 +94,6 @@ class BodhiAppWidgetProvider : AppWidgetProvider() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val resources = context.resources
-        val originalBitmap = BitmapFactory.decodeResource(resources, R.drawable.leaf)
         appWidgetManager = AppWidgetManager.getInstance(context)
         val appWidgets = ComponentName(
             context.packageName,
@@ -107,41 +104,20 @@ class BodhiAppWidgetProvider : AppWidgetProvider() {
         if (widgetIds.isNotEmpty()) {
             for (widgetId in widgetIds) {
 
+
                 // Get the layout for the App Widget and attach an on-click listener
                 // to the button
                 views!!.setOnClickPendingIntent(R.id.mainImage, pendingIntent)
+                views!!.setImageViewResource(R.id.mainImage, R.drawable.leaf);
 
-                // set background
-                views!!.setImageViewResource(R.id.backImage, themeId)
-                backgrounds[widgetId] = themeId
                 appWidgetManager?.updateAppWidget(widgetId, views)
             }
         }
-    }
-
-    private fun doTick() {
-
-//        if (widgetIds.length == 0)
-//            return;
-//
-//        views = new RemoteViews(mContext.getPackageName(), R.layout.appwidget);
-//
-//        Bitmap bmp = originalBitmap;
-//
-//        views.setImageViewBitmap(R.id.mainImage, bmp);
-//
-//        // Tell the widget manager
-//        for (int widgetId : widgetIds) {
-//            // set background
-//            views.setImageViewResource(R.id.backImage, themeId);
-//            appWidgetManager.updateAppWidget(widgetId, views);
-//        }
     }
 
     companion object {
         private var appWidgetManager: AppWidgetManager? = null
         const val ACTION_CLOCK_UPDATE = "org.yuttadhammo.BodhiTimer.ACTION_CLOCK_UPDATE"
         private var views: RemoteViews? = null
-        private const val themeId = R.drawable.widget_background_black
     }
 }
