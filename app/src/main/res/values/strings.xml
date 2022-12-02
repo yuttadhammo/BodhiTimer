@@ -67,6 +67,17 @@
     <string name="settings.theme_dark">Dark</string>
     <string name="settings.theme_black">Black</string>
     <string name="settings.theme_title">Color theme</string>
+
+    <string name="setting.sound_name_no_sound">No Sound</string>
+    <string name="setting.sound_name_three_bells">Three Bells</string>
+    <string name="setting.sound_name_one_bell">One Bell</string>
+    <string name="setting.sound_name_gong">Gong</string>
+    <string name="setting.sound_name_singing_bowl_high">Singing Bowl High</string>
+    <string name="setting.sound_name_singing_bowl_low">Singing Bowl Low</string>
+    <string name="setting.sound_name_bird_song">Bird Song</string>
+    <string name="setting.sound_name_system_tone">System Tone</string>
+    <string name="setting.sound_name_sound_file">Sound File</string>
+
     <string name="stay_awake">Stay Awake</string>
     <string name="stay_awake_desc">Don\'t allow the phone to go to sleep.</string>
     <string name="switch_time">Switch Time Input Mode</string>
