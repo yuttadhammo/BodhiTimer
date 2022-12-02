@@ -63,16 +63,16 @@
         <item>two</item>
         <item>one</item>
     </string-array>
-    <string-array name="sound_names">
-        <item>No Sound</item>
-        <item>Three Bells</item>
-        <item>One Bell</item>
-        <item>Gong</item>
-        <item>Singing Bowl High</item>
-        <item>Singing Bowl Low</item>
-        <item>Bird Song</item>
-        <item>System Tone</item>
-        <item>Sound File</item>
+    <string-array name="sound_names" translatable="false">
+      <item>@string/setting.sound_name_no_sound</item>
+      <item>@string/setting.sound_name_three_bells</item>
+      <item>@string/setting.sound_name_one_bell</item>
+      <item>@string/setting.sound_name_gong</item>
+      <item>@string/setting.sound_name_singing_bowl_high</item>
+      <item>@string/setting.sound_name_singing_bowl_low</item>
+      <item>@string/setting.sound_name_bird_song</item>
+      <item>@string/setting.sound_name_system_tone</item>
+      <item>@string/setting.sound_name_sound_file</item>
     </string-array>
     <!--suppress CheckTagEmptyBody -->
     <string-array name="sound_uris">

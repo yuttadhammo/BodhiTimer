@@ -82,6 +82,16 @@
     <string name="settings.theme_dark">暗色</string>
     <string name="settings.theme_title">颜色主题</string>
 
+    <string name="setting.sound_name_no_sound">无声</string>
+    <string name="setting.sound_name_three_bells">风铃(三声)</string>
+    <string name="setting.sound_name_one_bell">风铃(一声)</string>
+    <string name="setting.sound_name_gong">锣声</string>
+    <string name="setting.sound_name_singing_bowl_high">高音颂钵</string>
+    <string name="setting.sound_name_singing_bowl_low">低音颂钵</string>
+    <string name="setting.sound_name_bird_song">鸟叫</string>
+    <string name="setting.sound_name_system_tone">系统铃声</string>
+    <string name="setting.sound_name_sound_file">声音文件</string>
+
     <string name="stay_awake">禁止休眠</string>
     <string name="stay_awake_desc">禁止手机休眠</string>
 
