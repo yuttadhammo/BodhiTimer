@@ -69,12 +69,20 @@
     <string name="settings.theme_title">Color theme</string>
 
     <string name="setting.sound_name_no_sound">No Sound</string>
-    <string name="setting.sound_name_three_bells">Three Bells</string>
-    <string name="setting.sound_name_one_bell">One Bell</string>
-    <string name="setting.sound_name_gong">Gong</string>
-    <string name="setting.sound_name_singing_bowl_high">Singing Bowl High</string>
-    <string name="setting.sound_name_singing_bowl_low">Singing Bowl Low</string>
-    <string name="setting.sound_name_bird_song">Bird Song</string>
+    <string name="setting.sound_name_bell_3">Bell 1 (3 times)</string>
+    <string name="setting.sound_name_bell_2">Bell 1 (2 times)</string>
+    <string name="setting.sound_name_bell_1">Bell 1 (1 times)</string>
+    <string name="setting.sound_name_bell1">Bell 2</string>
+    <string name="setting.sound_name_bell2">Bell 3</string>
+    <string name="setting.sound_name_bell3">Bell 4</string>
+    <string name="setting.sound_name_bell4">Bell 5</string>
+    <string name="setting.sound_name_gong">Gong 1</string>
+    <string name="setting.sound_name_gong1">Gong 2</string>
+    <string name="setting.sound_name_gong2">Gong 3</string>
+    <string name="setting.sound_name_bowl">Singing Bowl 1</string>
+    <string name="setting.sound_name_bowl1">Singing Bowl 2</string>
+    <string name="setting.sound_name_bowl2">Singing Bowl 3</string>
+    <string name="setting.sound_name_birds">Bird Song 1</string>
     <string name="setting.sound_name_system_tone">System Tone</string>
     <string name="setting.sound_name_sound_file">Sound File</string>
 
