@@ -1,0 +1,7 @@
+6.2.1
+Fix the widget to work again
+
+Previous changes:
+- Make graphics higher resolution
+- Add black theme for AMOLED screens
+- Update App for newer Android versions. Use Material design.
