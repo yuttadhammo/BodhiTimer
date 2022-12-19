@@ -65,23 +65,49 @@
     </string-array>
     <string-array name="sound_names" translatable="false">
       <item>@string/setting.sound_name_no_sound</item>
-      <item>@string/setting.sound_name_three_bells</item>
-      <item>@string/setting.sound_name_one_bell</item>
+      <item>@string/setting.sound_name_bell_3</item>
+      <item>@string/setting.sound_name_bell_2</item>
+      <item>@string/setting.sound_name_bell_1</item>
+      <item>@string/setting.sound_name_bell1</item>
+      <item>@string/setting.sound_name_bell2</item>
+      <item>@string/setting.sound_name_bell3</item>
+      <item>@string/setting.sound_name_bell4</item>
       <item>@string/setting.sound_name_gong</item>
-      <item>@string/setting.sound_name_singing_bowl_high</item>
-      <item>@string/setting.sound_name_singing_bowl_low</item>
-      <item>@string/setting.sound_name_bird_song</item>
+      <item>@string/setting.sound_name_gong1</item>
+      <item>@string/setting.sound_name_gong2</item>
+      <item>@string/setting.sound_name_bowl</item>
+      <item>@string/setting.sound_name_bowl1</item>
+      <item>@string/setting.sound_name_bowl2</item>
+      <item>@string/setting.sound_name_birds</item>
       <item>@string/setting.sound_name_system_tone</item>
       <item>@string/setting.sound_name_sound_file</item>
     </string-array>
     <!--suppress CheckTagEmptyBody -->
     <string-array name="sound_uris">
         <item></item>
+        <!--
+             For consistent naming, we should use 'bell_3' instead of
+             'bell'. The reason why we didn't do this is for backward
+             compatibility,
+        -->
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell_2</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell_1</item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell1</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell2</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell3</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bell4</item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/gong</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/gong1</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/gong2</item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bowl</item>
+        <!--
+             For consistent naming, we should use 'bowl1' instead of
+             'bowl_low'. The reason why we didn't do this is for
+             backward compatibility,
+        -->
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bowl_low</item>
+        <item>android.resource://org.yuttadhammo.BodhiTimer/raw/bowl2</item>
         <item>android.resource://org.yuttadhammo.BodhiTimer/raw/birds</item>
         <item>system</item>
         <item>file</item>

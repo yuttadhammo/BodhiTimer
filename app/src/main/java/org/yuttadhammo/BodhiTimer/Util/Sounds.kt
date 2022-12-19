@@ -75,7 +75,7 @@ class Sounds(private val mContext: Context) {
     }
 
     companion object {
-        const val DEFAULT_SOUND = "android.resource://org.yuttadhammo.BodhiTimer/${R.raw.bowl_low}"
+        const val DEFAULT_SOUND = "android.resource://org.yuttadhammo.BodhiTimer/${R.raw.bowl1}"
 
         fun resolveUri(mUri: String, mContext: Context): String {
             val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
