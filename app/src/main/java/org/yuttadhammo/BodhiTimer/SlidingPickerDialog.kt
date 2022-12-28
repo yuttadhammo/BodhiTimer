@@ -122,20 +122,24 @@ open class SlidingPickerDialog(context: Context) : Dialog(context), View.OnClick
         }
     }
 
-    internal fun setFromPreset(ts: String?) {
+    private fun setFromPreset(ts: String?) {
         if (ts.isNullOrEmpty()) {
             Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG)
                 .show()
             return
         }
-        val h = ts.substring(0, 2).toInt()
-        val m = ts.substring(3, 5).toInt()
-        var s = 0
-        if (ts.length > 5) s = ts.substring(6, 8).toInt()
-        if (h != 0 || m != 0 || s != 0) {
-            val values = intArrayOf(h, m, s)
-            returnResults(values)
-        } else Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG)
+        if (ts.length > 4) {
+            val h = ts.substring(0, 2).toInt()
+            val m = ts.substring(3, 5).toInt()
+            var s = 0
+            if (ts.length > 5) s = ts.substring(6, 8).toInt()
+            if (h != 0 || m != 0 || s != 0) {
+                val values = intArrayOf(h, m, s)
+                returnResults(values)
+                return
+            }
+        }
+        Toast.makeText(context, context.getString(R.string.longclick), Toast.LENGTH_LONG)
             .show()
     }
 
