@@ -1,7 +1,8 @@
 # About
 Bodhi Timer is an elegant, minimalist countdown timer.
 It is designed mainly for use as a meditation timer but can easily be used for any similar purpose.
-Bodhi Timer is free and [open-source](https://github.com/yuttadhammo/BodhiTimer) software. It collects no data and uses the minimal permissions necessary.
+This app is free and developed as [open-source](https://github.com/yuttadhammo/BodhiTimer) software. 
+It collects no data and uses the minimal permissions necessary.
 
 **Want to help with translating the app? [It's easy](https://www.transifex.com/bodhi-timer/bodhi-timer-app/)**
 
@@ -30,18 +31,16 @@ It uses Android's built-in notification system to trigger the alarm, which means
 - uses scroll and fling gestures to set the time
 - set up to three presets on the time chooser
 
+- displays two animation types: fade in static image (defaults to Bodhi leaf) and animated Zen Enso (brush circle)
+- option to use custom image for fade in
+
 - option for timer auto-restarting
 - option to set multiple consecutive timers via the "adv" button
 - speech recognition via long-press on clock button (set multiple timers separated by the word "again")
 
-- displays two animation types: fade in static image (defaults to Bodhi leaf) and animated circle
-- option to use custom image for fade in
-- four themes for the animated circle: three colour themes and a draw in Zen Enso (brush circle)
-
 - includes different meditation timer sounds (Burmese bell, Tibetan bell, Tibetan singing bowls, Zen gong, and bird song)
 - option to use any ring tone as timer sound
 - option to use custom sound file as timer sound
-- vibration and LED blinking options
 - other apps can start an alarm using a deep link like `bodhi://timer?times=60,120`
 
 - licensed under the [GPL 3+](https://www.gnu.org/licenses/gpl.html)
