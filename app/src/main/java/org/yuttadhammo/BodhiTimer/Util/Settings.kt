@@ -40,6 +40,10 @@ object Settings {
         "hideTime",
         false
     )
+    val showClockTime by BooleanSetting(
+        "clockTime",
+        false
+    )
     val switchTimeMode by BooleanSetting(
         "SwitchTimeMode",
         false

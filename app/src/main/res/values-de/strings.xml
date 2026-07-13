@@ -54,6 +54,9 @@
     <string name="hide_time">Zeit verstecken</string>
     <string name="hide_time_desc">Nicht die verbleibende Zeit anzeigen.</string>
 
+    <string name="clock_time">Uhrzeiten anzeigen</string>
+    <string name="clock_time_desc">Uhrzeiten für Beginn und Ende vom eingestellten und laufenden Timer anzeigen.</string>
+
     <string name="misc">Sonstiges</string>
 
     <string name="stay_awake">Wach bleiben</string>

@@ -7,6 +7,7 @@
 
 package org.yuttadhammo.BodhiTimer
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
@@ -66,6 +67,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     private lateinit var mTimerAnimation: TimerAnimation
     private lateinit var mTimerLabel: TextView
     private lateinit var mPreviewLabel: TextView
+    private lateinit var mClocktimesLabel: TextView
 
     var mAlarmTaskManager: AlarmTaskManager? = null
 
@@ -150,6 +152,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         mPrefButton.setOnClickListener(this)
         mTimerLabel = findViewById(R.id.text_top)
         mPreviewLabel = findViewById(R.id.text_preview)
+        mClocktimesLabel = findViewById(R.id.text_clocktimes)
         mTimerAnimation = findViewById(R.id.mainImage)
         mTimerAnimation.setOnClickListener(this)
         animationIndex = Settings.drawingIndex
@@ -173,6 +176,8 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
             )
         }
 
+        val intervalObserver = Observer { interval: String? -> mClocktimesLabel.text = interval}
+
         val stateObserver = Observer { newState: Int -> hasEnteredState(newState) }
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
@@ -180,6 +185,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
         mAlarmTaskManager!!.getPreviewText().observe(this, previewLabelObserver)
         mAlarmTaskManager!!.curTimerDuration.observe(this, durationObserver)
         mAlarmTaskManager!!.curTimerLeft.observe(this, timeLeftObserver)
+        mAlarmTaskManager!!.curClocktimes.observe(this, intervalObserver)
         mAlarmTaskManager!!.currentState.observe(this, stateObserver)
     }
 
@@ -267,6 +273,7 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
     /**
      * {@inheritDoc}
      */
+    @SuppressLint("TimberArgCount")
     override fun onClick(v: View) {
         setLowProfile()
         when (v.id) {

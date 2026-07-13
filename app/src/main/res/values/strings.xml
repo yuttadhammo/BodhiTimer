@@ -61,6 +61,8 @@
     <string name="fullscreen_desc">Hide the status bar when app is running.</string>
     <string name="hide_time">Hide Time Left</string>
     <string name="hide_time_desc">Don\'t show time left.</string>
+    <string name="clock_time">Show Wall Clock Time</string>
+    <string name="clock_time_desc">Display start and end times of prepared and running timers.</string>
     <string name="misc">Misc</string>
     <string name="settings.theme_day_night">Day &amp; Night</string>
     <string name="settings.theme_light">Light</string>

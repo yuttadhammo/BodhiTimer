@@ -114,6 +114,12 @@
         a:summary="@string/hide_time_desc"
         a:title="@string/hide_time"
         app:iconSpaceReserved="false" />
+    <CheckBoxPreference
+        a:defaultValue="False"
+        a:key="clockTime"
+        a:summary="@string/clock_time_desc"
+        a:title="@string/clock_time"
+        app:iconSpaceReserved="false" />
     <PreferenceCategory
         a:title="@string/misc"
         app:iconSpaceReserved="false" />

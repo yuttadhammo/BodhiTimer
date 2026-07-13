@@ -24,6 +24,15 @@ import org.yuttadhammo.BodhiTimer.Service.SoundService
 import org.yuttadhammo.BodhiTimer.Util.Settings
 import org.yuttadhammo.BodhiTimer.Util.Time
 import timber.log.Timber
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.time.temporal.ChronoUnit
 import java.util.Date
 import java.util.Stack
 import java.util.Timer
@@ -33,6 +42,7 @@ import java.util.TimerTask
 class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
     private val mTimer = Timer()
+    private val bgTimer = Timer()
     private val alarms: Stack<AlarmTask> = Stack()
     private var lastId = 0
 
@@ -44,10 +54,12 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     private var sessionTimeStamp: Long = 0
     private var sessionDuration = 0
     private var sessionTimeLeft = 0
+    private var sessionTimeStart: LocalTime = LocalTime.now()
 
     // Live Data
     private val currentTimerLeft = MutableLiveData(-1)
     private val currentTimerDuration = MutableLiveData(-1)
+    private val currentClocktimes = MutableLiveData("")
     private val mIndex = MutableLiveData<Int>()
     private val timerText = MutableLiveData<String>()
     private val previewText = MutableLiveData<String>()
@@ -59,6 +71,8 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         get() = currentTimerLeft
     val curTimerDuration: LiveData<Int>
         get() = currentTimerDuration
+    val curClocktimes: LiveData<String>
+        get() = currentClocktimes
     val currentState: LiveData<Int>
         get() = mCurrentState
 
@@ -93,6 +107,10 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         currentTimerLeft.value = Integer.valueOf(newElapsed)
     }
 
+    private fun setCurClocktimes(newClocktimes: String?) {
+        currentClocktimes.value = newClocktimes
+    }
+
     private fun setIndex(newIndex: Int) {
         mIndex.value = Integer.valueOf(newIndex)
     }
@@ -103,23 +121,30 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         super.onCleared()
         Timber.e("View model cleared")
         saveState()
+        bgTimer.cancel()
+        bgTimer.purge()
     }
 
     private fun saveState() {
         val editor = prefs.edit()
         editor.putInt("CurrentTimerDuration", curTimerDurationVal)
         editor.putInt("CurrentTimeLeft", curTimerLeftVal)
+        editor.putString("CurrentClocktimes", curClocktimes.value!!)
         editor.putInt("State", mCurrentState.value!!)
         editor.putInt("SessionDuration", sessionDuration)
         editor.putInt("SessionTimeLeft", sessionTimeLeft)
+        editor.putLong("SessionTimeStart", sessionTimeStart.atDate(LocalDate.now()).toInstant(
+            ZoneOffset.UTC).toEpochMilli())
         editor.apply()
     }
 
     private fun restoreState() {
         setCurTimerDuration(prefs.getInt("CurrentTimerDuration", DEFAULT_DURATION))
         setCurTimerLeft(prefs.getInt("CurrentTimeLeft", DEFAULT_DURATION))
+        setCurClocktimes(prefs.getString("CurrentClocktimes", ""))
         sessionDuration = prefs.getInt("SessionDuration", DEFAULT_DURATION)
         sessionTimeLeft = prefs.getInt("SessionTimeLeft", DEFAULT_DURATION)
+        sessionTimeStart = Instant.ofEpochMilli(prefs.getLong("SessionTimeStart", 0)).atZone(ZoneOffset.UTC).toLocalTime()
         mCurrentState.value = prefs.getInt("State", 1)
     }
 
@@ -148,6 +173,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         alarms.push(alarm)
         updateTimerText()
         updatePreviewText()
+        updateClocktimesText()
         return alarm
     }
 
@@ -180,6 +206,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     }
 
     fun startAll() {
+        sessionTimeStart = LocalTime.now()
         var sessionDur = 0
         for (alarm in alarms) {
             alarm.run()
@@ -199,6 +226,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
             setCurTimerLeft(dur)
         }
         updateTimerText()
+        updateClocktimesText()
     }
 
     private val currentAlarmDuration: Int
@@ -227,6 +255,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         }
         updateTimerText()
         updatePreviewText()
+        updateClocktimesText()
     }
 
     private val previewTimes: ArrayList<Int>
@@ -397,6 +426,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         } else {
             currentTimerLeft.value = timeLeft.toInt()
             updateTimerText(timeLeft.toInt())
+            updateClocktimesText()
 
             // Internal thread to properly update the GUI
             mTimer.schedule(object : TimerTask() {
@@ -425,6 +455,23 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         }
     }
 
+    private fun updateClocktimesText() {
+        val oldText = currentClocktimes.value
+        var newText = ""
+        if (Settings.showClockTime) {
+            val timeStart =
+                if (currentState.value == STOPPED) LocalTime.now() else sessionTimeStart;
+            val timeEnd = LocalTime.now().plus(
+                Duration.of(curTimerLeft.value!!.toLong(), ChronoUnit.MILLIS)
+            )
+            val formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)
+            newText = formatter.format(timeStart) + " ➜ " + formatter.format(timeEnd)
+        }
+        if (newText != oldText) {
+            currentClocktimes.value = newText
+        }
+    }
+
     private fun makePreviewArray(): ArrayList<String?> {
         val arr = ArrayList<String?>()
         val previewTimes = previewTimes
@@ -444,6 +491,12 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             doTick()
+        }
+    }
+
+    private val bgHandler: Handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            updateClocktimesText()
         }
     }
 
@@ -474,6 +527,7 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
         }
         updateTimerText()
         updatePreviewText()
+        updateClocktimesText()
     }
 
     private fun handleAutoRestart() {
@@ -563,6 +617,15 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(mApp.applicationContext)
         restoreState()
+        bgTimer.schedule(
+            object : TimerTask() {
+                override fun run() {
+                    bgHandler.sendEmptyMessage(0)
+                }
+            },
+            BG_TIC.toLong(),
+            BG_TIC.toLong()
+        )
 
         when (mCurrentState.value) {
             RUNNING -> {
@@ -622,6 +685,8 @@ class AlarmTaskManager(private val mApp: Application) : AndroidViewModel(mApp) {
     companion object {
         // Update rate of the internal timer
         const val TIMER_TIC = 100
+
+        const val BG_TIC = 250
 
         const val DEFAULT_DURATION = 120000
     }
