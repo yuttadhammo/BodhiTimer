@@ -303,7 +303,10 @@ class TimerActivity : AppCompatActivity(), View.OnClickListener, OnSharedPrefere
 
     private fun setLowProfile() {
         val rootView = window.decorView
-        rootView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
+        if (Settings.fullscreen)
+            rootView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
+        else
+            rootView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
     }
 
     private fun showNumberPicker() {

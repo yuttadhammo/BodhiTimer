@@ -58,7 +58,7 @@
     <string name="bmp_or_circle">Animation Type</string>
     <string name="custom_bmp">Use Custom Image</string>
     <string name="fullscreen">Full Screen</string>
-    <string name="fullscreen_desc">Hide the status bar when timer is running.</string>
+    <string name="fullscreen_desc">Hide the status bar when app is running.</string>
     <string name="hide_time">Hide Time Left</string>
     <string name="hide_time_desc">Don\'t show time left.</string>
     <string name="misc">Misc</string>
